@@ -2,14 +2,14 @@ name: Bug report
 description: Create a report to help us improve
 labels: ['bug']
 body:
-  - type: markdown
+  - type: textarea
     id: description
     attributes:
       label: Describe the bug
       description: A clear and concise description of what the bug is.
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     id: reproduction
     attributes:
       label: To Reproduce
@@ -22,12 +22,12 @@ body:
       4. See error
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     id: screenshots
     attributes:
       label: Screenshots
       description: If applicable, add screenshots to help explain your problem.
-  - type: markdown
+  - type: textarea
     id: context
     attributes:
       label: Additional context

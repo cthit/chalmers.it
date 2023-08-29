@@ -3,14 +3,14 @@ description: Suggest an idea for this project as a user story
 title: 'As a ____, I want ____, so that I can ____'
 labels: ['suggestion']
 body:
-  - type: markdown
+  - type: textarea
     id: description
     attributes:
       label: Description
       description: Describe your suggestion more in detail - what do you want to happen?
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     id: dod
     attributes:
       label: Definition of Done
