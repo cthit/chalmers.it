@@ -6,7 +6,9 @@ require github.com/go-chi/chi/v5 v5.0.10
 
 require (
 	github.com/go-chi/chi v1.5.4 // indirect
+	github.com/lmittmann/tint v1.0.1 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 )
 
 require (
@@ -18,6 +20,6 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/rs/zerolog v1.29.1 // indirect
 	go.uber.org/zap v1.25.0
-	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 	moul.io/chizap v1.0.3
 )
