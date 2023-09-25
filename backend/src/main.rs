@@ -1,13 +1,13 @@
-use std::sync::Arc;
-
 use axum::{extract::State, routing::get};
 use dotenv::dotenv;
 use http::StatusCode;
+use std::sync::Arc;
 use tower_request_id::RequestIdLayer;
 use tracing::info;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
+mod api;
 mod logging;
 
 struct AppState {
@@ -40,7 +40,7 @@ async fn main() {
     axum::Server::bind(
         &"0.0.0.0:3000"
             .parse()
-            .expect("I can see that it is correct"),
+            .expect("IP address and port are not valid."),
     )
     .serve(app.into_make_service())
     .await
@@ -48,8 +48,8 @@ async fn main() {
 }
 
 #[utoipa::path(get, path = "/", responses((status = 200, description = "Todo item created successfully", body = String),))]
-async fn hello_world(State(state): State<Arc<AppState>>) -> String {
-    state.name.clone()
+async fn hello_world(State(app_state): State<Arc<AppState>>) -> String {
+    app_state.name.clone()
 }
 
 async fn fail() -> Result<String, (StatusCode, String)> {
