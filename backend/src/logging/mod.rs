@@ -1,3 +1,4 @@
+mod formatter;
 pub mod http;
 
 use tracing::*;
@@ -14,7 +15,11 @@ pub fn setup_logging() -> WorkerGuard {
     let (non_blocking, guard) = tracing_appender::non_blocking(appender);
 
     let subscriber = tracing_subscriber::registry()
-        .with(fmt::Layer::new().with_writer(std::io::stdout.with_max_level(LOG_LEVEL)))
+        .with(
+            fmt::Layer::new()
+                .with_writer(std::io::stdout.with_max_level(LOG_LEVEL))
+                .event_format(formatter::CustomFormatter),
+        )
         .with(
             fmt::Layer::new()
                 .with_writer(non_blocking.with_max_level(LOG_LEVEL))

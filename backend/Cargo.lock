@@ -171,6 +171,7 @@ dependencies = [
  "tower-request-id",
  "tracing",
  "tracing-appender",
+ "tracing-core",
  "tracing-subscriber",
  "utoipa",
  "utoipa-swagger-ui",
