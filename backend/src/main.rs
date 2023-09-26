@@ -4,8 +4,6 @@ use http::StatusCode;
 use std::sync::Arc;
 use tower_request_id::RequestIdLayer;
 use tracing::info;
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
 
 mod api;
 mod logging;
@@ -13,10 +11,6 @@ mod logging;
 struct AppState {
     name: String,
 }
-
-#[derive(OpenApi)]
-#[openapi(paths(hello_world))]
-struct ApiDoc;
 
 #[tokio::main]
 async fn main() {
@@ -27,16 +21,13 @@ async fn main() {
     let trace_layer = logging::http::trace_layer();
 
     let app = axum::Router::new()
-        .merge(SwaggerUi::new("/api/swagger").url("/api/v1/openapi.json", ApiDoc::openapi()))
-        .route("/", get(hello_world))
-        .route("/fail", get(fail))
+        .merge(api::swagger_router())
+        .nest("/api", api::router())
+        .nest("/", test_router())
         .layer(trace_layer)
-        .layer(RequestIdLayer)
-        .with_state(Arc::new(AppState {
-            name: "Hello, world!".into(),
-        }));
+        .layer(RequestIdLayer);
 
-    info!("Starting server on 0.0.0.0:3000");
+    info!("Starting server on localhost:3000");
     axum::Server::bind(
         &"0.0.0.0:3000"
             .parse()
@@ -45,6 +36,15 @@ async fn main() {
     .serve(app.into_make_service())
     .await
     .expect("Axum crashed.")
+}
+
+fn test_router() -> axum::Router {
+    axum::Router::new()
+        .route("/", get(hello_world))
+        .route("/fail", get(fail))
+        .with_state(Arc::new(AppState {
+            name: "Hello, world!".into(),
+        }))
 }
 
 #[utoipa::path(get, path = "/", responses((status = 200, description = "Todo item created successfully", body = String),))]
