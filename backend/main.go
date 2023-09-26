@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	api "github.com/cthit/chalmers.it/backend/api/v1"
 	loghandler "github.com/cthit/chalmers.it/backend/logging"
 	"github.com/go-chi/chi/v5"
 	chi_middleware "github.com/go-chi/chi/v5/middleware"
@@ -30,15 +31,14 @@ func main() {
 	r.Use(chi_middleware.Recoverer)
 	r.Use(chi_middleware.Heartbeat("/ping"))
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		slog.Warn("This is a warning")
-		slog.Debug("This is a debug message")
-		slog.Info("This is an info message")
-		slog.Error("This is an error message")
-		//panic("This was definitely not meant to happen")
-		w.Write([]byte("welcome"))
-	})
+	r.Mount("/api/v1", ApiV1())
 
 	slog.Info("Starting server")
 	http.ListenAndServe(":3000", r)
+}
+
+func ApiV1() chi.Router {
+	r := chi.NewRouter()
+	r.Mount("/news", api.News())
+	return r
 }
