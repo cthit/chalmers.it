@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	api "github.com/cthit/chalmers.it/backend/api/v1"
+	apiv1 "github.com/cthit/chalmers.it/backend/api/v1"
 	loghandler "github.com/cthit/chalmers.it/backend/logging"
 	"github.com/go-chi/chi/v5"
 	chi_middleware "github.com/go-chi/chi/v5/middleware"
@@ -31,14 +31,8 @@ func main() {
 	r.Use(chi_middleware.Recoverer)
 	r.Use(chi_middleware.Heartbeat("/ping"))
 
-	r.Mount("/api/v1", ApiV1())
+	r.Mount("/api/v1", apiv1.Router())
 
 	slog.Info("Starting server")
 	http.ListenAndServe(":3000", r)
-}
-
-func ApiV1() chi.Router {
-	r := chi.NewRouter()
-	r.Mount("/news", api.News())
-	return r
 }

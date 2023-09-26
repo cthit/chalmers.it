@@ -1,4 +1,4 @@
-package api
+package apiv1
 
 import (
 	"log/slog"
