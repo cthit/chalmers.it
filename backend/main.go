@@ -1,38 +1,45 @@
 package main
 
 import (
-	"log/slog"
 	"net/http"
-	"os"
 
+	"github.com/charmbracelet/log"
 	apiv1 "github.com/cthit/chalmers.it/backend/api/v1"
-	loghandler "github.com/cthit/chalmers.it/backend/logging"
+	"github.com/cthit/chalmers.it/backend/logging"
+
 	"github.com/go-chi/chi/v5"
 	chi_middleware "github.com/go-chi/chi/v5/middleware"
+
+	_ "github.com/cthit/chalmers.it/backend/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+//	@title			Chalmers.it
+//	@version		1.0
+//	@description	The API for the main site of the Software Engineering (IT) section at Chalmers University of Technology.
+
+//	@contact.name	digIT
+//	@contact.url	https://digit.chalmers.it
+//	@contact.email	digit@chalmers.it
+
+//	@BasePath	/api/v1
 func main() {
 	r := chi.NewRouter()
 
-	handler := loghandler.New(os.Stdout, nil)
-	//handler := slog.Default().Handler()
-	logger := slog.New(handler)
-	slog.SetDefault(logger)
-
-	// Human readable logger
-	chi_middleware.DefaultLogger = chi_middleware.RequestLogger(&chi_middleware.DefaultLogFormatter{Logger: loghandler.SLogger{Logger: *logger}})
-
-	// Structured logger
-	//chi_middleware.DefaultLogger = middleware.NewStructuredLogger(handler)
+	logging.SetupColors()
 
 	r.Use(chi_middleware.RequestID)
 	r.Use(chi_middleware.RealIP)
-	r.Use(chi_middleware.Logger)
+	r.Use(logging.RequestLogger())
 	r.Use(chi_middleware.Recoverer)
 	r.Use(chi_middleware.Heartbeat("/ping"))
 
 	r.Mount("/api/v1", apiv1.Router())
 
-	slog.Info("Starting server")
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"), //The url pointing to API definition
+	))
+
+	log.Info("Starting server")
 	http.ListenAndServe(":3000", r)
 }
