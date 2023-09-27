@@ -1,0 +1,36 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "The API for the main site of the Software Engineering (IT) section at Chalmers University of Technology.",
+        "title": "Chalmers.it",
+        "contact": {
+            "name": "digIT",
+            "url": "https://digit.chalmers.it",
+            "email": "digit@chalmers.it"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/news": {
+            "get": {
+                "description": "Gets a list of the latest news posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "news"
+                ],
+                "summary": "News posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

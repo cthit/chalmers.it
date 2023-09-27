@@ -1,0 +1,25 @@
+basePath: /api/v1
+info:
+  contact:
+    email: digit@chalmers.it
+    name: digIT
+    url: https://digit.chalmers.it
+  description: The API for the main site of the Software Engineering (IT) section
+    at Chalmers University of Technology.
+  title: Chalmers.it
+  version: "1.0"
+paths:
+  /news:
+    get:
+      description: Gets a list of the latest news posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: News posts
+      tags:
+      - news
+swagger: "2.0"
