@@ -12,6 +12,22 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+var reqStyle lipgloss.Style
+var methodStyle lipgloss.Style
+var pathStyle lipgloss.Style
+var remoteStyle lipgloss.Style
+var timeStyle lipgloss.Style
+var sizeStyle lipgloss.Style
+
+func init() {
+	reqStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#666666"))
+	methodStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#4dd2ff"))
+	pathStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#09cdda"))
+	remoteStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#a8feff")).Align(lipgloss.Left).Width(16)
+	timeStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#aaff80"))
+	sizeStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#ccffb3"))
+}
+
 func SetupColors() {
 	log.SetTimeFormat("2006-01-02 15:04:05")
 	log.TimestampStyle = lipgloss.NewStyle().
@@ -30,15 +46,15 @@ func RequestLogger() func(next http.Handler) http.Handler {
 			defer func() {
 				duration := time.Since(t1)
 
-				req := lipgloss.NewStyle().Background(statusToTextBackground(ww.Status())).Foreground(lipgloss.Color("#666666")).Render(strconv.Itoa(ww.Status()))
-				method := lipgloss.NewStyle().Foreground(lipgloss.Color("#4dd2ff")).Render(r.Method)
-				path := lipgloss.NewStyle().Foreground(lipgloss.Color("#09cdda")).Render(r.URL.Path)
-				remote := lipgloss.NewStyle().Foreground(lipgloss.Color("#a8feff")).Align(lipgloss.Left).Width(16).Render(strings.Split(r.RemoteAddr, ":")[0])
-				dur := lipgloss.NewStyle().Foreground(lipgloss.Color("#aaff80")).Render(duration.String())
-				size := lipgloss.NewStyle().Foreground(lipgloss.Color("#ccffb3")).Render(strconv.Itoa(ww.BytesWritten()) + "B")
+				req := reqStyle.Background(httpStatusToTextBackground(ww.Status())).Render(strconv.Itoa(ww.Status()))
+				method := methodStyle.Render(r.Method)
+				path := pathStyle.Render(r.URL.Path)
+				remote := remoteStyle.Render(strings.Split(r.RemoteAddr, ":")[0])
+				dur := timeStyle.Render(duration.String())
+				size := sizeStyle.Render(strconv.Itoa(ww.BytesWritten()) + "B")
 
 				msg := fmt.Sprintf("%s %s%s %s %s %s", req, remote, method, path, dur, size)
-				statusToLevelLogger(ww.Status())(msg)
+				httpStatusToLevelLogger(ww.Status())(msg)
 			}()
 
 			next.ServeHTTP(ww, r)
@@ -47,14 +63,14 @@ func RequestLogger() func(next http.Handler) http.Handler {
 	}
 }
 
-func statusToLevelLogger(status int) func(msg interface{}, keyvals ...interface{}) {
+func httpStatusToLevelLogger(status int) func(msg interface{}, keyvals ...interface{}) {
 	if status >= 500 {
 		return log.Error
 	}
 	return log.Info
 }
 
-func statusToTextBackground(status int) lipgloss.Color {
+func httpStatusToTextBackground(status int) lipgloss.Color {
 	if status >= 500 {
 		return lipgloss.Color("#FF0000")
 	}
