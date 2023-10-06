@@ -44,6 +44,11 @@ func RequestLogger() func(next http.Handler) http.Handler {
 
 			t1 := time.Now()
 			defer func() {
+				// We might want to log this if the request is external
+				if r.URL.Path == "/ping" {
+					return
+				}
+
 				duration := time.Since(t1)
 
 				req := reqStyle.Background(httpStatusToTextBackground(ww.Status())).Render(strconv.Itoa(ww.Status()))

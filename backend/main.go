@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/charmbracelet/log"
 	apiv1 "github.com/cthit/chalmers.it/backend/api/v1"
@@ -24,6 +25,10 @@ import (
 
 //	@BasePath	/api/v1
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "healthcheck" {
+		healthCheck()
+	}
+
 	r := chi.NewRouter()
 
 	logging.SetupColors()
@@ -42,4 +47,12 @@ func main() {
 
 	log.Info("Starting server")
 	http.ListenAndServe(":3000", r)
+}
+
+func healthCheck() {
+	_, err := http.Get("http://127.0.0.1:3000/ping")
+	if err != nil {
+		os.Exit(1)
+	}
+	os.Exit(0)
 }
