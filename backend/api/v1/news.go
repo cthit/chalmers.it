@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func News() chi.Router {
+func newsRouter() chi.Router {
 	r := chi.NewRouter()
 	r.Get("/", getNews)
 	return r
