@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NewsPost {
+  id              Int            @id @default(autoincrement())
+  titleSv         String
+  titleEn         String
+  contentSv       String
+  contentEn       String
+  writtenByCid    String
+  writtenFor      DivisionGroup? @relation(fields: [divisionGroupId], references: [id])
+  mainImage       Media?         @relation(fields: [mediaSha256], references: [sha256])
+  connectedEvents Event[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  divisionGroupId Int?
+  mediaSha256     String?
+}
+
+model DivisionGroup {
+  id                Int        @id @default(autoincrement())
+  gammaSuperGroupId String
+  prettyName        String
+  descriptionSv     String
+  descriptionEn     String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  NewsPost          NewsPost[]
+  Banner            Banner[]
+}
+
+model Event {
+  id            Int       @id @default(autoincrement())
+  titleSv       String
+  titleEn       String
+  descriptionEn String
+  descriptionSv String
+  fullDay       Boolean
+  startTime     DateTime
+  endTime       DateTime
+  location      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  NewsPost      NewsPost? @relation(fields: [newsPostId], references: [id])
+  newsPostId    Int?
+}
+
+model Sponsor {
+  id            Int      @id @default(autoincrement())
+  nameSv        String
+  nameEn        String
+  descriptionSv String
+  descriptionEn String
+  logo          Media?   @relation(fields: [mediaSha256], references: [sha256])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  mediaSha256   String?
+}
+
+model Banner {
+  id              Int           @id @default(autoincrement())
+  divisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id])
+  image           Media?        @relation(fields: [mediaSha256], references: [sha256])
+  createdAt       DateTime      @default(now())
+  divisionGroupId Int
+  mediaSha256     String?
+}
+
+model Media {
+  sha256    String     @id
+  extension String
+  createdAt DateTime   @default(now())
+  NewsPost  NewsPost[]
+  Sponsor   Sponsor[]
+  Banner    Banner[]
+}

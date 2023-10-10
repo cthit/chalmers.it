@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "next": "13.5.4",
+    "pino": "^8.16.0",
+    "pino-pretty": "^10.2.3",
+    "prisma": "^5.4.2",
     "react": "^18",
     "react-dom": "^18"
   },
