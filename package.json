@@ -1,5 +1,5 @@
 {
-  "name": "chalmers.it-test",
+  "name": "chalmers.it",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,16 +10,16 @@
   },
   "dependencies": {
     "next": "13.5.4",
-    "pino": "^8.16.0",
+    "next-logger": "^3.0.2",
     "pino-pretty": "^10.2.3",
     "prisma": "^5.4.2",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.2",
+    "react-dom": "^18.2"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.2",
+    "@types/react-dom": "^18.2",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "sass": "^1.69.1",

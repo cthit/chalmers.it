@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+require("next-logger")
 const path = require('path')
 
 const nextConfig = {
