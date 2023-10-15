@@ -5,7 +5,7 @@ const logger = (defaultConfig) =>
     ...defaultConfig,
     messageKey: "message",
     transport: {
-      target: "./src/logging/pino-pretty-transport",
+      target: "./pino-pretty-transport",
       options: {
         colorize: true,
         messageKey: "message",
