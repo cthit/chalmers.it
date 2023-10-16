@@ -24,6 +24,7 @@ FROM node:20.8.0-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 ENV HOSTNAME 0.0.0.0
+ENV FORCE_COLOR 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
