@@ -15,7 +15,6 @@ RUN yarn build
 FROM node:20.8.0-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
-ENV NODE_OPTIONS '-r next-logger'
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public

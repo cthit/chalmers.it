@@ -1,9 +1,3 @@
-// Import packages for standalone build
-import 'next-logger'
-import 'pino'
-import 'pino-pretty'
-import 'colorette'
-
 import './globals.scss'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'

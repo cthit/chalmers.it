@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-require("next-logger")
 const path = require('path')
 
 const nextConfig = {
@@ -8,8 +7,8 @@ const nextConfig = {
     },
     output: "standalone",
     experimental: {
-      serverComponentsExternalPackages: ['next-logger', 'pino', 'pino-pretty', 'colorette'],
-   }
+      instrumentationHook: true
+    }
 }
 
 module.exports = nextConfig
