@@ -16,7 +16,6 @@
     "next-logger": "^3.0.2",
     "pino": "^8.16.0",
     "pino-pretty": "^10.2.3",
-    "prisma": "^5.4.2",
     "react": "^18.2",
     "react-dom": "^18.2"
   },
@@ -26,6 +25,7 @@
     "@types/react-dom": "^18.2",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
+    "prisma": "^5.4.2",
     "sass": "^1.69.1",
     "typescript": "^5"
   }
