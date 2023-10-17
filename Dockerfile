@@ -14,6 +14,7 @@ FROM node:20.8.0-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN yarn prisma generate
 RUN yarn build
 
 ##########################
