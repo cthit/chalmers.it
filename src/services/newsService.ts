@@ -1,24 +1,33 @@
 import { prisma } from '@/prisma';
+import NotifyService from './notifyService';
 
 export default class NewsService {
-    static getAll() {
-        return prisma.newsPost.findMany();
+    static async getAll() {
+        return await prisma.newsPost.findMany();
     }
 
-    static post() {
-        return prisma.newsPost.create({
-            data: {
-                titleEn: 'Test',
-                titleSv: 'Test',
-                contentEn: 'Test',
-                contentSv: 'Test',
-                writtenByCid: 'Test'
+    static async getById(id: number) {
+        return await prisma.newsPost.findUnique({
+            where: {
+                id: id
             }
         });
     }
 
-    static edit() {
-        return prisma.newsPost.update({
+    static async post() {
+        const res = prisma.newsPost.create({
+            data: {
+                titleEn: 'Test (but english)',
+                titleSv: 'Testnyhet',
+                contentEn: 'Test but in english',
+                contentSv: 'Detta är en testnyhet för att testa nyheter.\nDet finns även stöd för emojis! 😀',
+                writtenByCid: 'Goose'
+            }
+        }).then(res => NotifyService.notifyNewsPost(res));
+    }
+
+    static async edit() {
+        return await prisma.newsPost.update({
             where: {
                 id: 1
             },
@@ -31,8 +40,8 @@ export default class NewsService {
         });
     }
 
-    static remove() {
-        return prisma.newsPost.delete({
+    static async remove() {
+        return await prisma.newsPost.delete({
             where: {
                 id: 1
             }

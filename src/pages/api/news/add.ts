@@ -5,9 +5,9 @@ import NewsService from '@/services/newsService';
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
 router
-  .get(async (_, res) => {
-    const news = await NewsService.getAll();
-    res.status(200).json(news);
+  .get((_, res) => {
+    NewsService.post();
+    res.status(200).end();
   });
 
 export default router.handler();

@@ -1,9 +1,9 @@
 import { prisma } from '@/prisma';
 
-export default class NewsService {
+export default class EventService {
 
-    static getAll() {
-        return prisma.newsPost.findMany();
+    static async getAll() {
+        return await prisma.event.findMany();
     }
 
 }
