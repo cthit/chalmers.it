@@ -1,4 +1,4 @@
-import NewsService from "@/services/newsService";
+import NewsService from '@/services/newsService';
 
 type Post = {
   title: string;
@@ -7,21 +7,17 @@ type Post = {
 };
 
 async function getData(postId: number) {
-  const postRaw = await NewsService.getById(
-    postId
-  );
+  const postRaw = await NewsService.getById(postId);
   return postRaw === null
-      ? { title: "Not found", text: "Not found", postedBy: "Nobody" }
-      : {
-          title: postRaw.titleSv,
-          text: postRaw.contentSv,
-          postedBy: postRaw.writtenByCid,
-        };
+    ? { title: 'Not found', text: 'Not found', postedBy: 'Nobody' }
+    : {
+        title: postRaw.titleSv,
+        text: postRaw.contentSv,
+        postedBy: postRaw.writtenByCid
+      };
 }
 
-export default async function Page(
-  { params }: { params: { id: string } },
-) {
+export default async function Page({ params }: { params: { id: string } }) {
   const post = await getData(Number.parseInt(params.id));
 
   return (
