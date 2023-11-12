@@ -1,4 +1,3 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import NewsService from "@/services/newsService";
 
 type Post = {
@@ -7,27 +6,24 @@ type Post = {
   postedBy: string;
 };
 
-export const getServerSideProps: GetServerSideProps<{
-  post: Post;
-}> = async (context) => {
-  const { id } = context.query;
+async function getData(postId: number) {
   const postRaw = await NewsService.getById(
-    Number.parseInt(Array.isArray(id) ? id[0] : id || "0")
+    postId
   );
-  const post: Post =
-    postRaw === null
+  return postRaw === null
       ? { title: "Not found", text: "Not found", postedBy: "Nobody" }
       : {
           title: postRaw.titleSv,
           text: postRaw.contentSv,
           postedBy: postRaw.writtenByCid,
         };
-  return { props: { post } };
-};
+}
 
-export default function Page({
-  post,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default async function Page(
+  { params }: { params: { id: string } },
+) {
+  const post = await getData(Number.parseInt(params.id));
+
   return (
     <main>
       <title>{post.title}</title>
