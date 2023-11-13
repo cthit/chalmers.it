@@ -7,7 +7,7 @@ type Post = {
 };
 
 async function getData(postId: number) {
-  const postRaw = await NewsService.getById(postId);
+  const postRaw = await NewsService.get(postId);
   return postRaw === null
     ? { title: 'Not found', text: 'Not found', postedBy: 'Nobody' }
     : {
