@@ -13,7 +13,11 @@ type Props = {
 const DropdownLink = ({ text, children }: Props) => {
   return (
     <div className={styles.dropdown}>
-      <p className={`${styles.navLink} ${playfair.className}`}>{text}</p>
+      <div className={styles.navLink}>
+        <p className={playfair.className}>{text}</p>
+        <img className={styles.dropdownIcon} src="/dropdown.svg" />
+      </div>
+
       <div className={`${styles.dropdownContent}  ${playfair.className}`}>
         {children}
       </div>
