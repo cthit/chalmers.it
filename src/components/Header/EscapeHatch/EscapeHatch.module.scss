@@ -1,0 +1,25 @@
+.escapeHatch {
+  max-height: 128px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.itlogo {
+  margin: 1.5rem;
+  height: 4rem;
+}
+
+.title {
+  font-size: 32px;
+}
+
+.subtitle {
+  font-size: 16px;
+}
