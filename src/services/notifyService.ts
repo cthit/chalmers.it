@@ -30,7 +30,9 @@ class DiscordWebhookNotifier implements Notifier {
         embeds: [
           {
             title: post.titleSv,
-            url: `http://localhost:3000/post/${post.id}`,
+            url: `http://${process.env.BASE_URL || 'localhost:3000'}/post/${
+              post.id
+            }`,
             description: post.contentSv,
             color: 0x00a8d3,
             image: {
@@ -74,7 +76,9 @@ class SlackWebhookNotifier implements Notifier {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `*<http://localhost:3000/post/${post.id}|${post.titleSv}>*`
+                  text: `*<http://${
+                    process.env.BASE_URL || 'localhost:3000'
+                  }/post/${post.id}|${post.titleSv}>*`
                 }
               },
               {
