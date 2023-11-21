@@ -7,17 +7,20 @@ const poppins = Poppins({ subsets: ['latin'], weight: '400' });
 
 const EscapeHatch = () => {
   return (
-    <Link href="/" className={styles.escapeHatch}>
-      <img className={styles.itlogo} src="/itlogo.svg" />
-      <div className={styles.textContainer}>
+    <div className={styles.escapeHatch}>
+      <Link href="/">
+        <img className={styles.itlogo} src="/itlogo.svg" />
+      </Link>
+
+      <Link href="/" className={styles.textContainer}>
         <h1 className={`${styles.title} ${playfair.className}`}>
           Informationsteknik
         </h1>
         <h2 className={`${styles.subtitle} ${poppins.className}`}>
           Chalmers Studentkår
         </h2>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 
