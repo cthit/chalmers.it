@@ -12,7 +12,7 @@ const EscapeHatch = () => {
         <img className={styles.itlogo} src="/itlogo.svg" />
       </Link>
 
-      <Link href="/" className={styles.textContainer}>
+      <Link href="/">
         <h1 className={`${styles.title} ${playfair.className}`}>
           Informationsteknik
         </h1>

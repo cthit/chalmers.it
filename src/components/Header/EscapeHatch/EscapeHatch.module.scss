@@ -1,14 +1,8 @@
 .escapeHatch {
-  max-height: 8rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   flex-grow: 1;
-}
-
-.textContainer {
-  display: flex;
-  flex-direction: column;
 }
 
 .itlogo {
@@ -19,8 +13,10 @@
 .title {
   font-size: 2rem;
   line-height: 1.75rem;
+  color: var(--text-color);
 }
 
 .subtitle {
   font-size: 1rem;
+  color: var(--text-color);
 }

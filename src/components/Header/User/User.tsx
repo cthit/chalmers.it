@@ -1,4 +1,5 @@
 import styles from './User.module.scss';
+import { FaCog } from "react-icons/fa";
 
 const User = () => {
   const isLogged: boolean = true;
@@ -14,9 +15,9 @@ const User = () => {
 const LoggedIn = () => {
   return (
     <div className={styles.name}>
-      <p>User</p>
+      <p>ALongUsernameForTesting</p>
       <a href="https://gamma.chalmers.it/me/edit">
-        <img src="/settings.svg" />
+        <FaCog className={styles.settings} />
       </a>
     </div>
   );

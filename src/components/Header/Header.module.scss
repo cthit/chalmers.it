@@ -1,7 +1,8 @@
 .header {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  background-color: #474242;
+  background-color: var(--header-color);
   height: 8rem;
   max-height: 8rem;
   padding-right: 1.5rem;

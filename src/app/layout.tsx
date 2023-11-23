@@ -1,25 +1,29 @@
-import Header from "@/components/Header/Header";
-import "./globals.scss";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Header from '@/components/Header/Header';
+import './colors.scss';
+import './globals.scss';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "IT på Chalmers",
-  description: "Teknologsektionen Informationsteknik",
+  title: 'IT på Chalmers',
+  description: 'Teknologsektionen Informationsteknik'
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        {children}
+        <ThemeProvider>
+          <Header />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

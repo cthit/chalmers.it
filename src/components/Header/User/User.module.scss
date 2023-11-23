@@ -1,9 +1,7 @@
 .user {
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .pfp {
@@ -18,12 +16,12 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  color: var(--text-color);
 }
 
-.name img {
+.settings {
   height: 1.28rem;
   width: 1.28rem;
   padding-left: 0.25rem;
-  filter: invert(100%);
-  vertical-align:middle;
+  vertical-align: middle;
 }

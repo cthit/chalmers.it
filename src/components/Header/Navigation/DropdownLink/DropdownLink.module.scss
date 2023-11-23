@@ -23,6 +23,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  color: var(--text-color);
 }
 
 .dropdownContent > a {
@@ -36,9 +37,7 @@
 }
 
 .dropdownIcon {
-  height: 1.5rem;
-  width: 1.5rem;
+  font-size: 1.6rem;
   padding-left: 0.25rem;
   display: inline-block;
-  filter: invert(100%);
 }
