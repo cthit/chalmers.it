@@ -27,13 +27,3 @@ $darkgray-600: #3b3b3b;
 $darkgray-700: #2e2e2e;
 $darkgray-800: #212121;
 $darkgray-900: #141414;
-
-:root {
-  --text-color: #{$darkgray-900};
-  --header-color: #{$lightgray-500};
-}
-
-[data-theme='dark'] {
-  --text-color: #{$lightgray-200};
-  --header-color: #{$darkgray-500};
-}

@@ -1,5 +1,5 @@
 import Header from '@/components/Header/Header';
-import './colors.scss';
+import './styles/themes.scss';
 import './globals.scss';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
