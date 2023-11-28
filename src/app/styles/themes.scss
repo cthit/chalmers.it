@@ -1,0 +1,16 @@
+@import './colors.scss';
+@import './theme-toggle.scss';
+
+:root {
+  @include light {
+    --text-color: #{$darkgray-900};
+    --header-color: #{$lightgray-500};
+  }
+
+  @include dark {
+    --text-color: #{$lightgray-200};
+    --header-color: #{$darkgray-500};
+  }
+
+  --primary-color: #{$turquoise-500};
+}

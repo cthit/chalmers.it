@@ -1,0 +1,10 @@
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--header-color);
+  height: 8rem;
+  max-height: 8rem;
+  padding-right: 1.5rem;
+  gap: 1rem;
+}
