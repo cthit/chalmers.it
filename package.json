@@ -27,6 +27,7 @@
     "@types/react-dom": "^18.2",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "prisma": "^5.4.2",
     "sass": "^1.69.1",
     "typescript": "^5"
