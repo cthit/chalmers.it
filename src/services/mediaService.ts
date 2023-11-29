@@ -1,4 +1,4 @@
-import { prisma } from '@/prisma';
+import prisma from '@/prisma';
 import { readFile, writeFile } from 'fs/promises';
 
 // TODO: Use a config down the line

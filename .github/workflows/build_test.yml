@@ -1,0 +1,94 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  WORKFLOW_NODE_VERSION: 20.x
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        uses: actions/checkout@v3
+      -
+        name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.WORKFLOW_NODE_VERSION }}
+      -
+        name: pnpm install
+        run: npm install -g pnpm
+      - 
+        run: pnpm install prettier
+      -
+        run: pnpm install --frozen-lockfile
+      -
+        name: ESLint
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: file
+          level: warning
+      -
+        name: Prettier
+        uses: EPMatt/reviewdog-action-prettier@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: file
+          level: warning
+
+  test:
+    name: Test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        uses: actions/checkout@v3
+      -
+        name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.WORKFLOW_NODE_VERSION }}
+      -
+        name: pnpm install
+        run: npm install -g pnpm
+      -
+        run: pnpm install --frozen-lockfile
+      -
+        run: pnpm test
+
+  build:
+    name: Build docker container
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+      -
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to GitHub Container Registry
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build Docker image (and push on main)
+        uses: docker/build-push-action@v4.0.0
+        with:
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/cthit/chalmers.it:latest
