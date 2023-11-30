@@ -37,6 +37,7 @@ jobs:
           reporter: github-pr-check
           filter_mode: file
           level: warning
+          tool_name: ESLint
       -
         name: Prettier
         uses: EPMatt/reviewdog-action-prettier@v1
@@ -45,6 +46,7 @@ jobs:
           reporter: github-pr-check
           filter_mode: file
           level: warning
+          tool_name: Prettier
 
   test:
     name: Test
