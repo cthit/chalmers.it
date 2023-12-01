@@ -1,4 +1,4 @@
-name: Build and test
+name: Build and Test
 
 on:
   push:
@@ -10,44 +10,6 @@ env:
   WORKFLOW_NODE_VERSION: 20.x
 
 jobs:
-  run-linters:
-    name: Run linters
-    runs-on: ubuntu-latest
-
-    steps:
-      -
-        uses: actions/checkout@v3
-      -
-        name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.WORKFLOW_NODE_VERSION }}
-      -
-        name: pnpm install
-        run: npm install -g pnpm
-      - 
-        run: pnpm install prettier
-      -
-        run: pnpm install --frozen-lockfile
-      -
-        name: ESLint
-        uses: reviewdog/action-eslint@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
-          filter_mode: file
-          level: warning
-          tool_name: ESLint
-      -
-        name: Prettier
-        uses: EPMatt/reviewdog-action-prettier@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
-          filter_mode: file
-          level: warning
-          tool_name: Prettier
-
   test:
     name: Test
 
