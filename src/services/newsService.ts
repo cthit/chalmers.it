@@ -1,4 +1,4 @@
-import { prisma } from '@/prisma';
+import prisma from '@/prisma';
 import NotifyService from './notifyService';
 
 export default class NewsService {
