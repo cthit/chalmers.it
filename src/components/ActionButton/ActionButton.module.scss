@@ -1,4 +1,6 @@
 .button {
+  display: flex;
+  text-wrap: nowrap;
   background-color: var(--primary-color);
   font-size: 18px;
   border: none;
