@@ -1,3 +1,4 @@
+
 import styles from './Search.module.scss';
 import { BsSearchHeartFill } from "react-icons/bs";
 
