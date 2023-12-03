@@ -5,11 +5,13 @@
   @include light {
     --text-color: #{$darkgray-900};
     --header-color: #{$lightgray-500};
+    --dropdown-hover-color: #{$turquoise-200};
   }
 
   @include dark {
     --text-color: #{$lightgray-200};
     --header-color: #{$darkgray-900};
+    --dropdown-hover-color: #{$turquoise-900};
   }
 
   --primary-color: #{$turquoise-500};
