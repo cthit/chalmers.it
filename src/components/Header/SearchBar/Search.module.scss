@@ -1,7 +1,19 @@
-.search {
+.searchBarContainer {
+  display: flex;
+  align-items: center;
   font-size: 1.5rem;
   line-height: 1.2rem;
   cursor: pointer;
   color: var(--text-color);
-  padding: 0 1rem;
-  }
+}
+  
+.searchIcon {
+  cursor: pointer;
+}
+  
+.expandedSearchBar {
+  width: 13rem; 
+  height: 2rem;
+  margin-left: 1rem; 
+  transition: width 0.3s ease; 
+}

@@ -7,13 +7,12 @@
   display: none;
   position: absolute;
   background-color: var(--header-color);
+  padding: 1.7rem 0 0 0;
   min-width: 10rem;
-  // box-shadow: 0rem 0.5rem 1rem 0rem rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
 .dropdown:hover .dropdownContent {
-  margin: 1.6rem 0 0 0;
   display: block;
   z-index: 3;
 }
