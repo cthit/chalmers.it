@@ -10,10 +10,19 @@
 .searchIcon {
   cursor: pointer;
 }
-  
+
 .expandedSearchBar {
-  width: 13rem; 
   height: 2rem;
-  margin-left: 1rem; 
-  transition: width 0.3s ease; 
+  margin-left: 1rem;
+  padding: 1rem;
+  box-sizing: border-box; 
+  border: none;
+  border-radius: 1rem; 
+  width: 13rem;
+  transition: width 0.7s ease;
+}
+
+.expandedSearchBar:focus {
+  outline: none;
+  width: 20rem; 
 }
