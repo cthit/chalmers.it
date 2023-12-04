@@ -4,12 +4,14 @@
 :root {
   @include light {
     --text-color: #{$darkgray-900};
+    --text-hover-color: #{$turquoise-700};
     --header-color: #{$lightgray-500};
     --dropdown-hover-color: #{$turquoise-200};
   }
 
   @include dark {
     --text-color: #{$lightgray-200};
+    --text-hover-color: #{$turquoise-300};
     --header-color: #{$darkgray-900};
     --dropdown-hover-color: #{$turquoise-900};
   }

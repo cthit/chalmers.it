@@ -31,6 +31,10 @@
   font-size: 10px;
 }
 
+.navLink:hover {
+  color: var(--text-hover-color);
+}
+
 .dropdownContent > a {
   display: block;
   padding: 0.5rem 0.5rem;
