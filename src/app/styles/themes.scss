@@ -8,6 +8,7 @@
     --header-color: #{$lightorange-200};
     --dropdown-hover-color: #{$turquoise-200};
     --background-color: #{$lightorange-100};
+    --border-color: #{$darkgray-200};
   }
 
   @include dark {
@@ -16,6 +17,7 @@
     --header-color: #{$darkgray-800};
     --dropdown-hover-color: #{$turquoise-900};
     --background-color: #{$darkgray-900};
+    --border-color: #{$lightgray-800};
   }
 
   --primary-color: #{$turquoise-500};
