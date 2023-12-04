@@ -13,7 +13,10 @@ const Search = () => {
 
   return (
     <div className={styles.searchBarContainer}>
-      <BsSearchHeartFill className={styles.searchIcon} onClick={handleIconClick} />
+      <BsSearchHeartFill
+        className={styles.searchIcon}
+        onClick={handleIconClick}
+      />
       {isExpanded && (
         <input
           className={styles.expandedSearchBar}

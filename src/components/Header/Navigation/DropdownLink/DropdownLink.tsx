@@ -1,6 +1,5 @@
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
-import Link from 'next/link';
 import { ReactNode } from 'react';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
