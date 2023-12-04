@@ -47,10 +47,14 @@ const Navigation = () => {
         </Link>
       </DropdownLink>
       <Link
+        href="/services"
+        className={`${styles.navLink} ${playfair.className}`}>
+        Tjänster
+      </Link>
+      <Link
         href="/business"
-        className={`${styles.navLink} ${playfair.className}`}
-      >
-        Företag&nbsp;&#8599;
+        className={`${styles.navLink} ${playfair.className}`}>
+        Företag
       </Link>
       <Link href="/contact" className={`${styles.navLink} ${playfair.className}`}>
         Kontakt
