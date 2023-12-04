@@ -2,7 +2,7 @@ import { Playfair_Display } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
 import { ReactNode } from 'react';
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const playfair = Playfair_Display({ subsets: ['latin'], weight: '500' });
 
 type Props = {
   children: ReactNode;
