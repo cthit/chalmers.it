@@ -1,0 +1,26 @@
+.escapeHatch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  line-height: 1.3rem;
+  margin-top: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.itlogo {
+  height: 3.125rem;
+  width: 3.125rem;
+  margin-right: 0.625rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 100;
+  color: var(--text-color);
+}
