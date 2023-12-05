@@ -3,7 +3,7 @@ import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: '500' });
+const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
 const Navigation = () => {
   return (
