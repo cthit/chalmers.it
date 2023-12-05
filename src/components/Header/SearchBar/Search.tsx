@@ -4,18 +4,17 @@ import React, { useState } from 'react';
 import styles from './Search.module.scss';
 import { BsSearchHeartFill } from 'react-icons/bs';
 
-const Search = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface SearchProps {
+  onSearchIconClick: () => void;
+  isExpanded: boolean;
+}
 
-  const handleIconClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
+const Search: React.FC<SearchProps> = ({ onSearchIconClick, isExpanded }) => {
   return (
     <div className={styles.searchBarContainer}>
       <BsSearchHeartFill
         className={styles.searchIcon}
-        onClick={handleIconClick}
+        onClick={onSearchIconClick}
       />
       {isExpanded && (
         <input

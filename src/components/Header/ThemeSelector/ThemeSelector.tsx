@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import styles from './ThemeSelector.module.scss';
-import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
+import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs';
 import React from 'react';
 
 function ThemeSelector() {
@@ -18,14 +18,14 @@ function ThemeSelector() {
     window.localStorage.setItem('theme', newTheme);
     setTheme();
   };
-  
+
   const getTheme = () => {
     const preference = window.localStorage.getItem('theme');
     if (preference) return preference;
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
     return darkQuery.matches ? 'dark' : 'light';
   };
-  
+
   const setTheme = () => {
     const theme = getTheme();
     document.documentElement.setAttribute('data-theme', theme);
