@@ -14,7 +14,6 @@ const LoggedIn = () => {
   return (
     <>
       <div className={styles.name}>
-        {/* <p>ALongUsernameForTesting</p> */}
         <a href="https://gamma.chalmers.it/me/edit">
           <Image
             src="/smurf.svg"
