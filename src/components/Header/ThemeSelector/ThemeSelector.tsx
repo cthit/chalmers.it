@@ -8,15 +8,9 @@ import React from 'react';
 function ThemeSelector() {
   const [isDark, setIsDark] = React.useState(false);
 
-  const setTheme = () => {
-    const theme = getTheme();
-    document.documentElement.setAttribute('data-theme', theme);
-    setIsDark(theme === 'dark');
-  };
-
   useEffect(() => {
     setTheme();
-  }, [setTheme]);
+  }, []);
 
   const toggleTheme = () => {
     const theme = getTheme();
@@ -30,6 +24,12 @@ function ThemeSelector() {
     if (preference) return preference;
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
     return darkQuery.matches ? 'dark' : 'light';
+  };
+
+  const setTheme = () => {
+    const theme = getTheme();
+    document.documentElement.setAttribute('data-theme', theme);
+    setIsDark(theme === 'dark');
   };
 
   return (
