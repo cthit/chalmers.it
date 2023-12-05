@@ -1,5 +1,6 @@
 import style from "./NewsPost.module.scss";
 import { Prisma } from "@prisma/client";
+import Link from "next/link";
 import { FC } from "react";
 
 interface ActionButtonProps {
@@ -20,7 +21,7 @@ interface ActionButtonProps {
 const NewsPost: FC<ActionButtonProps> = ({ post }) => {
     return (
       <div className={style.post}>
-        <h2>{post.titleSv}</h2>
+        <h2><Link href={`/post/${post.id}`}>{post.titleSv}</Link></h2>
         <p className={style.subtitle}>Publicerad {post.createdAt.toLocaleString()} {post.divisionGroupId != null && `för ${post.divisionGroupId}`} av {post.writtenByCid}</p>
         <p>{post.contentSv}</p>
       </div>
