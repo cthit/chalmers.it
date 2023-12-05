@@ -1,9 +1,9 @@
 import ActionButton from '@/components/ActionButton/ActionButton';
 import styles from './User.module.scss';
-import { FaCog } from 'react-icons/fa';
+import Image from 'next/image';
 
 const User = () => {
-  const isLogged: boolean = true;
+  const isLogged: boolean = false;
 
   return (
     <div className={styles.user}>{isLogged ? <LoggedIn /> : <NotLogged />}</div>
@@ -13,11 +13,13 @@ const User = () => {
 const LoggedIn = () => {
   return (
     <>
-      <img src="/smurf.svg" className={styles.pfp} />
       <div className={styles.name}>
-        <p>ALongUsernameForTesting</p>
         <a href="https://gamma.chalmers.it/me/edit">
-          <FaCog className={styles.settings} />
+          <Image
+            src="/smurf.svg"
+            className={styles.pfp}
+            alt="profile picture"
+          />
         </a>
       </div>
     </>

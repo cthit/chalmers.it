@@ -1,10 +1,8 @@
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
-import Link from 'next/link';
 import { ReactNode } from 'react';
-import { BsFillCaretDownFill } from "react-icons/bs";
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
 type Props = {
   children: ReactNode;
@@ -15,8 +13,8 @@ const DropdownLink = ({ text, children }: Props) => {
   return (
     <div className={styles.dropdown}>
       <div className={styles.navLink}>
-        <p className={playfair.className}>{text}</p>
-        <BsFillCaretDownFill className={styles.dropdownIcon} />
+        <p className={playfair.className}>{text} </p>
+        <p className={styles.navLinkArrow}>&nbsp;&#9660; </p>
       </div>
 
       <div className={`${styles.dropdownContent}  ${playfair.className}`}>

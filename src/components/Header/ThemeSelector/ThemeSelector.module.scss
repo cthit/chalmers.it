@@ -1,7 +1,12 @@
 .toggle {
-    font-size: 1.5rem;
-    line-height: 1.2rem;
-    cursor: pointer;
-    color: var(--text-color);
-    padding: 0 1rem;
+  font-size: 1.5rem;
+  line-height: 1.2rem;
+  color: var(--text-color);
+  padding: 0 1rem;
+  margin-left: auto;
+}
+
+.toggle:hover {
+  cursor: pointer;
+  color: var(--text-hover-color);
 }

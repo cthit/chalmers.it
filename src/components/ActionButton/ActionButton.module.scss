@@ -1,4 +1,6 @@
 .button {
+  display: flex;
+  text-wrap: nowrap;
   background-color: var(--primary-color);
   font-size: 18px;
   border: none;
@@ -6,4 +8,8 @@
   border-radius: 0.4rem;
   color: black;
   cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--primary-color-highlight);
 }

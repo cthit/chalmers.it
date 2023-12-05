@@ -1,0 +1,38 @@
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  line-height: 1.2rem;
+  position: absolute;
+  top: 50%;
+  right: 12.25rem;
+  transform: translateY(-50%);
+}
+
+.searchIcon {
+  color: var(--text-color);
+}
+
+.searchIcon:hover {
+  cursor: pointer;
+  color: var(--text-hover-color);
+}
+
+.expandedSearchBar {
+  height: 2rem;
+  margin-left: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  border: solid;
+  border-color: var(--border-color);
+  border-radius: 1rem;
+  width: 18rem;
+  transition: width 0.7s ease;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.expandedSearchBar:focus {
+  outline: none;
+  width: 52rem;
+}
