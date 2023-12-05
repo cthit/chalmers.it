@@ -16,7 +16,11 @@ const LoggedIn = () => {
       <div className={styles.name}>
         {/* <p>ALongUsernameForTesting</p> */}
         <a href="https://gamma.chalmers.it/me/edit">
-          <Image src="/smurf.svg" className={styles.pfp} alt='profile picture' />
+          <Image
+            src="/smurf.svg"
+            className={styles.pfp}
+            alt="profile picture"
+          />
         </a>
       </div>
     </>
