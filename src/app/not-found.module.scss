@@ -1,0 +1,12 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.header {
+    font-size: 16rem;
+    color: var(--border-color);
+}
