@@ -17,7 +17,10 @@ export default function NotFound() {
         This is not the site you're looking for!
         <br />
         If you believe it is, please contact{' '}
-        <a href="mailto:digit@chalmers.it">digit@chalmers.it</a>
+        <a className={styles.actionLink} href="mailto:digit@chalmers.it">digit@chalmers.it</a> or{' '}
+        <a className={styles.actionLink} href="https://github.com/cthit/chalmers.it/issues/new/choose">
+          create an issue
+        </a>
       </p>
       <Link className={styles.homeLink} href="/">
         Return Home
