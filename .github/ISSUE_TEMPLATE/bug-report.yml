@@ -1,18 +1,18 @@
-name: Bug report
+name: 🐞 Bug Report
 description: Create a report to help us improve
 labels: ['bug']
 body:
   - type: textarea
     id: description
     attributes:
-      label: Describe the bug
+      label: 📝 Describe the bug
       description: A clear and concise description of what the bug is.
     validations:
       required: true
   - type: textarea
     id: reproduction
     attributes:
-      label: To Reproduce
+      label: 🔄 To Reproduce
       description: How is the behavior reproduced?
       placeholder: |
         Steps to reproduce:
@@ -25,10 +25,10 @@ body:
   - type: textarea
     id: screenshots
     attributes:
-      label: Screenshots
+      label: 📷 Screenshots
       description: If applicable, add screenshots to help explain your problem.
   - type: textarea
     id: context
     attributes:
-      label: Additional context
+      label: 💡 Additional context
       description: Add any other context or screenshots about the suggestion here.
