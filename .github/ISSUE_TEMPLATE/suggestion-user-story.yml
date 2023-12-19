@@ -13,8 +13,8 @@ body:
   - type: textarea
     id: dod
     attributes:
-      label: Definition of Done
-      description: What needs to be done for this user story to be considered done?
+      label: Acceptance Criteria
+      description: What needs to be done for this user story to be considered finished?
       placeholder: |
         - [ ] Does the horse donkey?
         - [ ] Flux capacitor charged
