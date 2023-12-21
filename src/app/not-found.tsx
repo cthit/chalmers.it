@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './not-found.module.scss';
+import styles from './error.module.scss';
 import Image from 'next/image';
 
 export default function NotFound() {
@@ -14,7 +14,7 @@ export default function NotFound() {
         height={261}
       />
       <p>
-        This is not the site you're looking for!
+        This is <i>not</i> the site you're looking for!
         <br />
         If you believe it is, please contact{' '}
         <a className={styles.actionLink} href="mailto:digit@chalmers.it">digit@chalmers.it</a> or{' '}
