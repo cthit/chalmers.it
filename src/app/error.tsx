@@ -2,11 +2,9 @@
 
 import Link from 'next/link';
 import styles from './error.module.scss';
-import Image from 'next/image';
 
 export default function Error({
-  error,
-  reset
+  error
 }: {
   error: Error & { digest?: string };
   reset: () => void;
@@ -30,9 +28,16 @@ export default function Error({
         </a>
         .
       </p>
+      {digestError(error)}
       <Link className={styles.homeLink} href="/">
         Return Home
       </Link>
     </div>
   );
 }
+
+const digestError = (error: { digest?: string }) => {
+  if (error.digest != undefined) {
+    return <p>Digest: {error.digest}</p>;
+  }
+};
