@@ -67,7 +67,7 @@ export default class DivisionGroupService {
     });
   }
 
-  static async isUserActive(cid: string): Promise<boolean> {
+  static async isUserActive(_cid: string): Promise<boolean> {
     return false;
   }
 }
