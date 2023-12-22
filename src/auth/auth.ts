@@ -1,14 +1,16 @@
 import type { NextAuthOptions } from 'next-auth';
 import GammaProvider from '@/auth/GammaProvider';
 
+const gammaUrl = process.env.GAMMA_ROOT_URL?.replace(/\/$/, '');
+
 export const authConfig: NextAuthOptions = {
   providers: [
     GammaProvider({
-      authorizationURL: 'http://localhost:8081/api/oauth/authorize',
+      authorizationURL: gammaUrl + '/api/oauth/authorize',
       clientId: 'id',
       clientSecret: 'secret',
-      profileUrl: 'http://localhost:8081/api/users/me',
-      tokenURL: 'http://localhost:8081/api/oauth/token'
+      profileUrl: gammaUrl + '/api/users/me',
+      tokenURL: gammaUrl + '/api/oauth/token'
     })
   ]
 };
