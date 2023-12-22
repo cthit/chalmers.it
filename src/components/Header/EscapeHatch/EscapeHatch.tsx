@@ -10,7 +10,11 @@ const EscapeHatch = () => {
     <div className={styles.escapeHatch}>
       <Link href="/">
         <picture>
-          <img className={styles.itlogo} src="/itlogo.svg" alt="IT-sektionens logga" />
+          <img
+            className={styles.itlogo}
+            src="/itlogo.svg"
+            alt="IT-sektionens logga"
+          />
         </picture>
       </Link>
 
