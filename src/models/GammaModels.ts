@@ -50,3 +50,26 @@ export interface GammaUser {
     accessToken?: string;
     gameOwnerId: string;
 }
+
+export interface GammaGroupMember {
+    post: GammaPost
+    fkitGroupDTO: GammaGroup
+    unofficialPostName: string
+    id: string
+    cid: string
+    nick: string
+    firstName: string
+    lastName: string
+    avatarUrl: string
+    acceptanceYear: number
+    gdpr: boolean
+    language: string
+    authorities: any
+}
+
+export interface GammaPost {
+    id: string
+    sv: string
+    en: string
+    emailPrefix: string
+}

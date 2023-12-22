@@ -1,4 +1,4 @@
-import { GammaUser, GammaSuperGroup } from '@/models/GammaModels';
+import { GammaUser, GammaSuperGroup, GammaGroup, GammaGroupMember } from '@/models/GammaModels';
 
 const apiKey = process.env.GAMMA_API_KEY;
 const gammaUrl = process.env.GAMMA_ROOT_URL?.replace(/\/$/, '');
@@ -11,6 +11,30 @@ export default class GammaService {
 
   static async getAllSuperGroups() {
     return gammaGetRequest<GammaSuperGroup[]>('/superGroups');
+  }
+
+  static async getSuperGroupMembers(sgid: string) {
+    let activeGroups = await this.getSuperGroupSubGroups(sgid);
+    let membersWithDuplicates = (await Promise.all(activeGroups.map(async (group) => {
+      return await this.getGroupMembers(group.id);
+    }))).flat();
+
+    return membersWithDuplicates.filter((member, index, self) => {
+      return index === self.findIndex((t) => (
+        t.cid === member.cid
+      ))
+    });
+  }
+
+  static async getGroupMembers(gid: string) {
+    interface GroupMembersResponse {
+      members: GammaGroupMember[]
+    }
+        return (await gammaGetRequest<GroupMembersResponse>(`/groups/${gid}/members`)).members;
+  }
+
+  static async getSuperGroupSubGroups(sgid: string) {
+    return gammaGetRequest<GammaGroup[]>(`/superGroups/${sgid}/subgroups`);
   }
 }
 
