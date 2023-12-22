@@ -1,6 +1,5 @@
 import type { NextAuthOptions } from 'next-auth';
 import GammaProvider from '@/auth/GammaProvider';
-import NextAuth from 'next-auth';
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -10,7 +9,6 @@ export const authConfig: NextAuthOptions = {
       clientSecret: 'secret',
       profileUrl: 'http://localhost:8081/api/users/me',
       tokenURL: 'http://localhost:8081/api/oauth/token'
-
     })
   ]
 };

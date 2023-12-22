@@ -9,8 +9,9 @@ export interface GammaProviderConfig extends OAuthUserConfig<GammaUser> {
   profileUrl: string;
 }
 
-
-export default function GammaProvider(gammaConfig: GammaProviderConfig): OAuthConfig<GammaUser> {
+export default function GammaProvider(
+  gammaConfig: GammaProviderConfig
+): OAuthConfig<GammaUser> {
   return {
     id: 'gamma',
     name: 'Gamma',
@@ -25,20 +26,18 @@ export default function GammaProvider(gammaConfig: GammaProviderConfig): OAuthCo
     userinfo: {
       url: gammaConfig.profileUrl,
       async request(context) {
-        const response = await fetch(gammaConfig.profileUrl,
-          {
-            headers: {
-              Authorization: `Bearer ${context.tokens.access_token}`
-            }
-          });
+        const response = await fetch(gammaConfig.profileUrl, {
+          headers: {
+            Authorization: `Bearer ${context.tokens.access_token}`
+          }
+        });
 
         if (!response.ok) {
           throw new Error('Failed to fetch user data!');
         }
 
-        return await response.json() as GammaUser;
+        return (await response.json()) as GammaUser;
       }
-
     },
     profile(profile: GammaUser) {
       return {
