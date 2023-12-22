@@ -50,7 +50,7 @@ export default class NewsService {
     contentSv: string;
     writtenByCid: string;
   }) {
-    const res = prisma.newsPost
+    prisma.newsPost
       .create({
         data: {
           titleEn: post.titleEn,
