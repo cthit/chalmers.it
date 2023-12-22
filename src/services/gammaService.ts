@@ -22,15 +22,16 @@ export default class GammaService {
     return membersWithDuplicates.filter((member, index, self) => {
       return index === self.findIndex((t) => (
         t.cid === member.cid
-      ))
+      ));
     });
   }
 
   static async getGroupMembers(gid: string) {
     interface GroupMembersResponse {
-      members: GammaGroupMember[]
+      members: GammaGroupMember[];
     }
-        return (await gammaGetRequest<GroupMembersResponse>(`/groups/${gid}/members`)).members;
+
+    return (await gammaGetRequest<GroupMembersResponse>(`/groups/${gid}/members`)).members;
   }
 
   static async getSuperGroupSubGroups(sgid: string) {
