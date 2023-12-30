@@ -10,7 +10,10 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ onSearchIconClick, isExpanded }) => {
   return (
-    <div className={styles.searchBarContainer}>
+    <div
+      className={styles.searchBarContainer}
+      style={{ flexGrow: isExpanded ? 1 : 0 }}
+    >
       <BsSearchHeartFill
         className={styles.searchIcon}
         onClick={onSearchIconClick}
