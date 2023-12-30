@@ -1,28 +1,30 @@
 import ActionButton from '@/components/ActionButton/ActionButton';
 import styles from './User.module.scss';
-import Image from 'next/image';
+import { getServerSession } from 'next-auth/next';
+import { authConfig } from '@/auth/auth';
 
-const User = () => {
-  const isLogged: boolean = false;
+const User = async () => {
+  const session = await getServerSession(authConfig);
+  const image = session?.user?.image;
 
   return (
-    <div className={styles.user}>{isLogged ? <LoggedIn /> : <NotLogged />}</div>
+    <div className={styles.user}>
+      {image === undefined ? (
+        <NotLogged />
+      ) : (
+        <LoggedIn image={session?.user?.image!} />
+      )}
+    </div>
   );
 };
 
-const LoggedIn = () => {
+const LoggedIn = ({ image }: { image: string }) => {
   return (
-    <>
-      <div className={styles.name}>
-        <a href="https://gamma.chalmers.it/me/edit">
-          <Image
-            src="/smurf.svg"
-            className={styles.pfp}
-            alt="profile picture"
-          />
-        </a>
-      </div>
-    </>
+    <a href="https://gamma.chalmers.it/me/edit">
+      <picture>
+        <img src={image} className={styles.pfp} alt="Profile Picture" />
+      </picture>
+    </a>
   );
 };
 
