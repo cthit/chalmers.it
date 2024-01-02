@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Teknologsektionen Informationsteknik'
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode;
