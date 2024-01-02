@@ -26,7 +26,13 @@ const LoggedIn = ({ image }: { image: string }) => {
       parent={
         <a href="https://gamma.chalmers.it/me/edit">
           <object data={image}>
-            <img src="/smurf.svg" className={styles.pfp} alt="Profile Picture" />
+            <picture>
+              <img
+                src="/smurf.svg"
+                className={styles.pfp}
+                alt="Profile Picture"
+              />
+            </picture>
           </object>
         </a>
       }
