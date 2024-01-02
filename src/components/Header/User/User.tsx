@@ -25,9 +25,9 @@ const LoggedIn = ({ image }: { image: string }) => {
     <Dropdown
       parent={
         <a href="https://gamma.chalmers.it/me/edit">
-          <picture>
-            <img src={image} className={styles.pfp} alt="Profile Picture" />
-          </picture>
+          <object data={image}>
+            <img src="/smurf.svg" className={styles.pfp} alt="Profile Picture" />
+          </object>
         </a>
       }
     >
