@@ -14,17 +14,11 @@ interface ActionButtonProps {
 const ActionButton: FC<ActionButtonProps> = ({ children, href, onClick }) => {
   const classes = `${styles.button} ${playfair.className}`;
   return href ? (
-    <Link
-      href={href!}
-      className={classes}
-    >
+    <Link href={href!} className={classes}>
       {children}
     </Link>
   ) : (
-    <a
-      onClick={onClick}
-      className={classes}
-    >
+    <a onClick={onClick} className={classes}>
       {children}
     </a>
   );

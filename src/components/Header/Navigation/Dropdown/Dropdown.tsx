@@ -13,7 +13,7 @@ const Dropdown = ({ children, parent }: Props) => {
   return (
     <div className={styles.dropdown}>
       {parent}
-      <div className={styles.dropdownHitbox}/>
+      <div className={styles.dropdownHitbox} />
 
       <div className={`${styles.dropdownContent}  ${playfair.className}`}>
         {children}
