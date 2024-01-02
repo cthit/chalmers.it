@@ -4,7 +4,7 @@ import SearchSwitcher from './SearchSwitcher/SearchSwitcher';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import User from './User/User';
 
-const Header = async () => {
+const Header = () => {
   return (
     <header className={styles.header}>
       <EscapeHatch />
