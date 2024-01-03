@@ -7,14 +7,20 @@ const playfair = Playfair_Display({ subsets: ['latin'] });
 
 interface ActionButtonProps {
   children: React.ReactNode;
-  href: string;
+  href?: string;
+  onClick?: () => void;
 }
 
-const ActionButton: FC<ActionButtonProps> = ({ children, href }) => {
-  return (
-    <Link href={href} className={`${styles.button} ${playfair.className}`}>
+const ActionButton: FC<ActionButtonProps> = ({ children, href, onClick }) => {
+  const classes = `${styles.button} ${playfair.className}`;
+  return href ? (
+    <Link href={href!} className={classes}>
       {children}
     </Link>
+  ) : (
+    <a onClick={onClick} className={classes}>
+      {children}
+    </a>
   );
 };
 

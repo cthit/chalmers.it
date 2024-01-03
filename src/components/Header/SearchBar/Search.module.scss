@@ -1,12 +1,9 @@
 .searchBarContainer {
   display: flex;
   align-items: center;
+  justify-content: right;
   font-size: 1.5rem;
   line-height: 1.2rem;
-  position: absolute;
-  top: 50%;
-  right: 12.25rem;
-  transform: translateY(-50%);
 }
 
 .searchIcon {
