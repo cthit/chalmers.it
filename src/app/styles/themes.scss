@@ -9,6 +9,8 @@
     --dropdown-hover-color: #{$turquoise-200};
     --background-color: #{$lightorange-100};
     --border-color: #{$darkgray-200};
+
+    --divider-color: #{$turquoise-400};
   }
 
   @include dark {
@@ -18,6 +20,8 @@
     --dropdown-hover-color: #{$turquoise-900};
     --background-color: #{$darkgray-900};
     --border-color: #{$lightgray-800};
+
+    --divider-color: #{$turquoise-800};
   }
 
   --primary-color: #{$turquoise-500};
