@@ -4,14 +4,45 @@ import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
 
-const NewsList = () => {
-  const news = use(NewsService.getPage(1, 10));
+interface NewsPost {
+  id: number;
+  titleSv: string;
+  titleEn: string;
+  contentSv: string;
+  contentEn: string;
+  writtenByCid: string;
+  createdAt: Date;
+  updatedAt: Date;
+  divisionGroupId: number | null;
+  mediaSha256: string | null;
+}
 
+const NewsList = async () => {
+  try {
+    const news = await NewsService.getPage(1, 10);
+    return <News news={news} />;
+  } catch {
+    return <NewsError />;
+  }
+};
+
+const News = ({ news }: { news: NewsPost[] }) => {
   return (
     <div>
-      <h1>Nyheter</h1> 
+      <h1>Nyheter</h1>
       <ActionButton href="/post/new">Posta nyhet</ActionButton>
-      {news.map((newsPost) => ( <NewsPost post={newsPost} key={newsPost.id} /> ))}
+      {news.map((newsPost) => (
+        <NewsPost post={newsPost} key={newsPost.id} />
+      ))}
+    </div>
+  );
+};
+
+const NewsError = () => {
+  return (
+    <div>
+      <h1>Nyheter</h1>
+      <p>Det gick inte att hämta nyheter</p>
     </div>
   );
 };
