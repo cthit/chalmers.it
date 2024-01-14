@@ -1,3 +1,4 @@
+import Divider from "@/components/Divider/Divider";
 import style from "./NewsPost.module.scss";
 import { Prisma } from "@prisma/client";
 import Link from "next/link";
@@ -20,11 +21,15 @@ interface ActionButtonProps {
 
 const NewsPost: FC<ActionButtonProps> = ({ post }) => {
     return (
-      <div className={style.post}>
-        <h2><Link href={`/post/${post.id}`}>{post.titleSv}</Link></h2>
-        <p className={style.subtitle}>Publicerad {post.createdAt.toLocaleString()} {post.divisionGroupId != null && `för ${post.divisionGroupId}`} av {post.writtenByCid}</p>
-        <p>{post.contentSv}</p>
-      </div>
+      <>
+        <Divider />
+        <div>
+          <h2 className={style.title} ><Link href={`/post/${post.id}`}>{post.titleSv}</Link></h2>
+          <p className={style.subtitle}>{post.createdAt.toLocaleString()} | Skriven {post.divisionGroupId != null && `för ${post.divisionGroupId}`} av {post.writtenByCid}</p>
+          <p>{post.contentSv}</p>
+        </div>
+      </>
+      
     );
   };
   

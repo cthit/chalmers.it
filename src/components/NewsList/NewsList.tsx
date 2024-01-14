@@ -1,4 +1,3 @@
-import { use } from 'react';
 import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
@@ -28,9 +27,11 @@ const NewsList = async () => {
 
 const News = ({ news }: { news: NewsPost[] }) => {
   return (
-    <div>
-      <h1>Nyheter</h1>
-      <ActionButton href="/post/new">Posta nyhet</ActionButton>
+    <div className={styles.list}>
+      <div className={styles.title}>
+        <h1>Nyheter</h1>
+        <ActionButton href="/post/new">Posta nyhet</ActionButton>
+      </div>
       {news.map((newsPost) => (
         <NewsPost post={newsPost} key={newsPost.id} />
       ))}
@@ -40,7 +41,7 @@ const News = ({ news }: { news: NewsPost[] }) => {
 
 const NewsError = () => {
   return (
-    <div>
+    <div className={styles.list}>
       <h1>Nyheter</h1>
       <p>Det gick inte att hämta nyheter</p>
     </div>
