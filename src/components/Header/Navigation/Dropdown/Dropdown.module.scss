@@ -1,0 +1,33 @@
+.dropdownContent {
+  display: none;
+  position: absolute;
+  top: 4.75rem;
+  min-width: 10rem;
+  z-index: 3;
+}
+
+.dropdown:hover .dropdownContent,
+.dropdown:hover .dropdownHitbox {
+  display: block;
+}
+
+.dropdownContent > a {
+  background-color: var(--header-color);
+  display: block;
+  padding: 0.5rem 0.5rem;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.dropdownContent > a:hover {
+  background-color: var(--dropdown-hover-color);
+}
+
+.dropdownHitbox {
+  display: none;
+  position: absolute;
+  overflow: hidden;
+  height: 2rem;
+  width: 6rem;
+  z-index: 2;
+}
