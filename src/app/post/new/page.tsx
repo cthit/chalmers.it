@@ -14,8 +14,7 @@ export default function Page({ params }: { params: { id: string } }) {
       titleEn,
       titleSv,
       contentEn,
-      contentSv,
-      'Test'
+      contentSv
     );
   }
 

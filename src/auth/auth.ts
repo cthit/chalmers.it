@@ -12,5 +12,19 @@ export const authConfig: NextAuthOptions = {
       profileUrl: gammaUrl + '/api/users/me',
       tokenURL: gammaUrl + '/api/oauth/token'
     })
-  ]
+  ],
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.cid = account.providerAccountId;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.cid as string | null;
+      }
+      return session;
+    }
+  }
 };
