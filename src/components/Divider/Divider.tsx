@@ -1,6 +1,6 @@
 import styles from './Divider.module.scss';
 
-const Divider = async () => {
+const Divider = () => {
   return <hr className={styles.divider} />;
 };
 
