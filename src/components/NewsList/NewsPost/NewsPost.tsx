@@ -1,8 +1,8 @@
 import Divider from '@/components/Divider/Divider';
 import style from './NewsPost.module.scss';
 import Link from 'next/link';
-import { FC } from 'react';
 import GammaService from '@/services/gammaService';
+import { marked } from 'marked';
 
 interface ActionButtonProps {
   post: {
@@ -19,11 +19,21 @@ interface ActionButtonProps {
   };
 }
 
-const NewsPost: FC<ActionButtonProps> = async ({ post }) => {
+const NewsPost = async ({ post }: ActionButtonProps) => {
   let nick = post.writtenByCid;
   try {
     nick = (await GammaService.getUser(post.writtenByCid)).nick;
   } catch {}
+
+  marked.use({
+    pedantic: false,
+    gfm: true,
+  });
+
+  const getMarkdownText = () => {
+    var rawMarkup = marked.parse(post.contentSv);
+    return { __html: rawMarkup };
+  };
 
   return (
     <>
@@ -37,7 +47,7 @@ const NewsPost: FC<ActionButtonProps> = async ({ post }) => {
           {post.divisionGroupId != null && `för ${post.divisionGroupId}`} av{' '}
           {nick}
         </p>
-        <p>{post.contentSv}</p>
+        <div className={style.content} dangerouslySetInnerHTML={getMarkdownText()} />
       </div>
     </>
   );
