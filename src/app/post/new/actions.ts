@@ -3,6 +3,7 @@
 import NewsService from '@/services/newsService';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
+import { redirect } from 'next/navigation';
 
 export async function post(
   titleEn: string,
@@ -18,4 +19,5 @@ export async function post(
     contentSv: contentSv,
     writtenByCid: session?.user?.id!
   });
+  redirect('/');
 }

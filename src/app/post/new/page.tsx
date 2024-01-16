@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { post } from './actions';
 import style from './page.module.scss';
 import Divider from '@/components/Divider/Divider';
+import ActionButton from '@/components/ActionButton/ActionButton';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [titleEn, setTitleEn] = useState('');
@@ -45,7 +46,7 @@ export default function Page({ params }: { params: { id: string } }) {
         />
 
         <br />
-        <button onClick={(e) => send()}>Post</button>
+        <ActionButton onClick={(e) => send()}>Post</ActionButton>
       </div>
     </main>
   );
