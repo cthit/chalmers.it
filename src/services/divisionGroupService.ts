@@ -1,4 +1,5 @@
 import prisma from '@/prisma';
+import GammaService from './gammaService';
 
 export default class DivisionGroupService {
   static async getAll() {
@@ -68,6 +69,8 @@ export default class DivisionGroupService {
   }
 
   static async isUserActive(_cid: string): Promise<boolean> {
-    return false;
+    return GammaService.getUser(_cid).then((user) => {
+      return user.groups.some((group) => group.active);
+    });
   }
 }

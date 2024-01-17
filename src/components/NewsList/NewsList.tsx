@@ -2,6 +2,7 @@ import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
+import AuthenticationService from '@/services/authenticationService';
 
 interface NewsPost {
   id: number;
@@ -19,18 +20,19 @@ interface NewsPost {
 const NewsList = async () => {
   try {
     const news = await NewsService.getPage(1, 10);
-    return <News news={news} />;
+    const canPost = await AuthenticationService.canPostNews();
+    return <News news={news} canPost={canPost} />;
   } catch {
     return <NewsError />;
   }
 };
 
-const News = ({ news }: { news: NewsPost[] }) => {
+const News = ({ news, canPost }: { news: NewsPost[]; canPost: boolean }) => {
   return (
     <div className={styles.list}>
       <div className={styles.title}>
         <h1>Nyheter</h1>
-        <ActionButton href="/post/new">Posta nyhet</ActionButton>
+        {canPost && <ActionButton href="/post/new">Posta nyhet</ActionButton>}
       </div>
       {news.map((newsPost) => (
         <NewsPost post={newsPost} key={newsPost.id} />
