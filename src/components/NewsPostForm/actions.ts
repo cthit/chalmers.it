@@ -21,3 +21,22 @@ export async function post(
   });
   redirect('/');
 }
+
+export async function postForGroup(
+  titleEn: string,
+  titleSv: string,
+  contentEn: string,
+  contentSv: string,
+  divisionSuperGroupId: string
+) {
+  const session = await getServerSession(authConfig);
+  await NewsService.post({
+    titleEn: titleEn,
+    titleSv: titleSv,
+    contentEn: contentEn,
+    contentSv: contentSv,
+    writtenByCid: session?.user?.id!,
+    divisionSuperGroupId: divisionSuperGroupId
+  });
+  redirect('/');
+}

@@ -10,6 +10,13 @@ export default class SessionService {
     return await getServerSession(authConfig);
   }
 
+  static async getActiveGroups() {
+    const session = await this.getSession();
+    return session?.user?.id
+      ? await DivisionGroupService.getUserActiveGroups(session?.user?.id!)
+      : [];
+  }
+
   static async canPostNews() {
     const session = await this.getSession();
     return session?.user?.id

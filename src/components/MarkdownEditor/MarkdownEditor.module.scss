@@ -1,0 +1,19 @@
+.editor {
+    border: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    padding: 0.5rem;
+    min-height: 200px;
+    font-size: var(--text-normal);
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--header-color);
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    &:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+}
