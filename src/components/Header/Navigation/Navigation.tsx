@@ -8,9 +8,6 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 const Navigation = () => {
   return (
     <nav className={styles.nav}>
-      <Link href="/posts" className={`${styles.navLink} ${playfair.className}`}>
-        Nyheter
-      </Link>
       <DropdownLink text="Sektionen">
         <Link href="/committees">
           Kommittéer, föreningar och andra instanser
