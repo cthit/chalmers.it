@@ -4,7 +4,7 @@ import Link from 'next/link';
 import GammaService from '@/services/gammaService';
 import { marked } from 'marked';
 
-interface ActionButtonProps {
+interface NewsPostProps {
   post: {
     id: number;
     titleSv: string;
@@ -13,13 +13,14 @@ interface ActionButtonProps {
     contentEn: string;
     writtenByCid: string;
     createdAt: Date;
-    updatedAt: Date;
-    divisionGroupId: number | null;
-    mediaSha256: string | null;
+    writtenFor: {
+        prettyName: string;
+    } | null;
   };
 }
 
-const NewsPost = async ({ post }: ActionButtonProps) => {
+const NewsPost = async ({ post }: NewsPostProps) => {
+  const group = post.writtenFor?.prettyName;
   let nick = post.writtenByCid;
   try {
     nick = (await GammaService.getUser(post.writtenByCid)).nick;
@@ -27,7 +28,7 @@ const NewsPost = async ({ post }: ActionButtonProps) => {
 
   marked.use({
     pedantic: false,
-    gfm: true,
+    gfm: true
   });
 
   const getMarkdownText = () => {
@@ -43,11 +44,13 @@ const NewsPost = async ({ post }: ActionButtonProps) => {
           <Link href={`/post/${post.id}`}>{post.titleSv}</Link>
         </h2>
         <p className={style.subtitle}>
-          {post.createdAt.toLocaleString()} | Skriven{' '}
-          {post.divisionGroupId != null && `för ${post.divisionGroupId}`} av{' '}
-          {nick}
+          {post.createdAt.toLocaleString()} | Skriven {group && `för ${group}`}{' '}
+          av {nick}
         </p>
-        <div className={style.content} dangerouslySetInnerHTML={getMarkdownText()} />
+        <div
+          className={style.content}
+          dangerouslySetInnerHTML={getMarkdownText()}
+        />
       </div>
     </>
   );

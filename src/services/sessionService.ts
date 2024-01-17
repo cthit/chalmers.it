@@ -2,7 +2,10 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import DivisionGroupService from './divisionGroupService';
 
-export default class AuthenticationService {
+/**
+ * Service for handling the session of the current user
+ */
+export default class SessionService {
   private static async getSession() {
     return await getServerSession(authConfig);
   }
@@ -10,7 +13,7 @@ export default class AuthenticationService {
   static async canPostNews() {
     const session = await this.getSession();
     return session?.user?.id
-      ? DivisionGroupService.isUserActive(session?.user?.id!)
+      ? await DivisionGroupService.isUserActive(session?.user?.id!)
       : false;
   }
 }

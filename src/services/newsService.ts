@@ -39,6 +39,20 @@ export default class NewsService {
       take: pageSize,
       orderBy: {
         createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        contentEn: true,
+        contentSv: true,
+        createdAt: true,
+        writtenByCid: true,
+        writtenFor: {
+          select: {
+            prettyName: true
+          }
+        }
       }
     });
   }
@@ -49,17 +63,30 @@ export default class NewsService {
     contentEn: string;
     contentSv: string;
     writtenByCid: string;
+    divisionSuperGroupId?: string;
   }) {
-    prisma.newsPost
-      .create({
-        data: {
-          titleEn: post.titleEn,
-          titleSv: post.titleSv,
-          contentEn: post.contentEn,
-          contentSv: post.contentSv,
-          writtenByCid: post.writtenByCid
+    const data = {
+      data: {
+        titleEn: post.titleEn,
+        titleSv: post.titleSv,
+        contentEn: post.contentEn,
+        contentSv: post.contentSv,
+        writtenByCid: post.writtenByCid,
+        writtenFor: {}
+      }
+    };
+
+    if (post.divisionSuperGroupId) {
+      console.log('Connecting to division super group', post.divisionSuperGroupId);
+      data.data.writtenFor = {
+        connect: {
+          gammaSuperGroupId: post.divisionSuperGroupId
         }
-      })
+      };
+    }
+
+    prisma.newsPost
+      .create(data)
       .then((res) => NotifyService.notifyNewsPost(res));
   }
 

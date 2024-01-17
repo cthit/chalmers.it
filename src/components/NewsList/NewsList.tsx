@@ -2,9 +2,9 @@ import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
-import AuthenticationService from '@/services/authenticationService';
+import SessionService from '@/services/sessionService';
 
-interface NewsPost {
+interface NewsPostInterface {
   id: number;
   titleSv: string;
   titleEn: string;
@@ -12,22 +12,22 @@ interface NewsPost {
   contentEn: string;
   writtenByCid: string;
   createdAt: Date;
-  updatedAt: Date;
-  divisionGroupId: number | null;
-  mediaSha256: string | null;
+  writtenFor: {
+      prettyName: string;
+  } | null;
 }
 
 const NewsList = async () => {
   try {
     const news = await NewsService.getPage(1, 10);
-    const canPost = await AuthenticationService.canPostNews();
+    const canPost = await SessionService.canPostNews();
     return <News news={news} canPost={canPost} />;
   } catch {
     return <NewsError />;
   }
 };
 
-const News = ({ news, canPost }: { news: NewsPost[]; canPost: boolean }) => {
+const News = ({ news, canPost }: { news: NewsPostInterface[]; canPost: boolean }) => {
   return (
     <div className={styles.list}>
       <div className={styles.title}>
