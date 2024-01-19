@@ -3,6 +3,9 @@ import style from './NewsPost.module.scss';
 import Link from 'next/link';
 import GammaService from '@/services/gammaService';
 import { marked } from 'marked';
+import { getServerSession } from 'next-auth/next';
+import { authConfig } from '@/auth/auth';
+import ActionButton from '@/components/ActionButton/ActionButton';
 
 interface NewsPostProps {
   post: {
@@ -14,7 +17,7 @@ interface NewsPostProps {
     writtenByCid: string;
     createdAt: Date;
     writtenFor: {
-        prettyName: string;
+      prettyName: string;
     } | null;
   };
 }
@@ -22,8 +25,11 @@ interface NewsPostProps {
 const NewsPost = async ({ post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
   let nick = post.writtenByCid;
+  let ownsPost = false;
   try {
     nick = (await GammaService.getUser(post.writtenByCid)).nick;
+    ownsPost =
+      (await getServerSession(authConfig))?.user?.id === post.writtenByCid;
   } catch {}
 
   marked.use({
@@ -43,6 +49,10 @@ const NewsPost = async ({ post }: NewsPostProps) => {
         <h2 className={style.title}>
           <Link href={`/post/${post.id}`}>{post.titleSv}</Link>
         </h2>
+        {ownsPost && (
+          <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
+        )}
+        {ownsPost && <ActionButton>Radera</ActionButton>}
         <p className={style.subtitle}>
           {post.createdAt.toLocaleString()} | Skriven {group && `för ${group}`}{' '}
           av {nick}
