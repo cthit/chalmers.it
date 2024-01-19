@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { post, postForGroup } from './actions';
 import Divider from '@/components/Divider/Divider';
@@ -7,9 +7,9 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { GammaGroup } from '@/models/GammaModels';
 import { useState } from 'react';
+import DropdownList from '../DropdownList/DropdownList';
 
-const NewsPostForm = ({groups}: {groups: GammaGroup[]}) => {
-
+const NewsPostForm = ({ groups }: { groups: GammaGroup[] }) => {
   const [group, setGroup] = useState('self');
   const [titleEn, setTitleEn] = useState('');
   const [titleSv, setTitleSv] = useState('');
@@ -28,43 +28,40 @@ const NewsPostForm = ({groups}: {groups: GammaGroup[]}) => {
     }
   }
 
-  return (<>
-    <h1>Posta nyhet</h1>
-    <Divider />
-    <h2>Posta för</h2>
-    <select onChange={(e) => setGroup(e.target.value)} >
-      <option value='self'>Mig själv</option>
-      {groups.map((group) => (
-        <option key={group.id} value={group.id}>
-          {group.superGroup?.prettyName ?? group.prettyName}
-        </option>
-      ))}
-    </select>
-    <h2>Titel (Eng)</h2>
-    <TextArea
-      value={titleEn}
-      onChange={(e) => setTitleEn(e.target.value)}
-    />
-    <h2>Innehåll (Eng)</h2>
-    <MarkdownEditor
-      value={contentEn}
-      onChange={(e) => setContentEn(e.target.value)}
-    />
+  return (
+    <>
+      <h1>Skapa nyhet</h1>
+      <Divider />
+      <h2>Posta som</h2>
+      <DropdownList onChange={(e) => setGroup(e.target.value)}>
+        <option value="self">Mig själv</option>
+        {groups.map((group) => (
+          <option key={group.id} value={group.id}>
+            {group.superGroup?.prettyName ?? group.prettyName}
+          </option>
+        ))}
+      </DropdownList>
+      
+      <h2>Titel (Eng)</h2>
+      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
+      <h2>Innehåll (Eng)</h2>
+      <MarkdownEditor
+        value={contentEn}
+        onChange={(e) => setContentEn(e.target.value)}
+      />
 
-    <h2>Titel (Sv)</h2>
-    <TextArea
-      value={titleSv}
-      onChange={(e) => setTitleSv(e.target.value)}
-    />
-    <h2>Innehåll (Sv)</h2>
-    <MarkdownEditor
-      value={contentSv}
-      onChange={(e) => setContentSv(e.target.value)}
-    />
+      <h2>Titel (Sv)</h2>
+      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
+      <h2>Innehåll (Sv)</h2>
+      <MarkdownEditor
+        value={contentSv}
+        onChange={(e) => setContentSv(e.target.value)}
+      />
 
-    <br />
-    <ActionButton onClick={send}>Post</ActionButton>
-  </>)
-}
+      <br />
+      <ActionButton onClick={send}>Skapa</ActionButton>
+    </>
+  );
+};
 
 export default NewsPostForm;
