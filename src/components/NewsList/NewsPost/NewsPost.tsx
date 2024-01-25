@@ -45,7 +45,7 @@ const NewsPost = async ({ post }: NewsPostProps) => {
   return (
     <>
       <Divider />
-      <div>
+      <div className={style.titleArea}>
         <h2 className={style.title}>
           <Link href={`/post/${post.id}`}>{post.titleSv}</Link>
         </h2>
@@ -53,6 +53,7 @@ const NewsPost = async ({ post }: NewsPostProps) => {
           <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
         )}
         {ownsPost && <ActionButton>Radera</ActionButton>}
+      </div>
         <p className={style.subtitle}>
           {post.createdAt.toLocaleString()} | Skriven {group && `för ${group}`}{' '}
           av {nick}
@@ -61,7 +62,6 @@ const NewsPost = async ({ post }: NewsPostProps) => {
           className={style.content}
           dangerouslySetInnerHTML={getMarkdownText()}
         />
-      </div>
     </>
   );
 };

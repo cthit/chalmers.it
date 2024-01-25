@@ -1,16 +1,15 @@
 .list {
-    background-color: var(--content-background-color);
-    padding: 1rem;
-    border-radius: 0.5rem;
+  background-color: var(--content-background-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 .title {
-    font-size: var(--text-large);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  font-size: var(--text-large);
+  display: flex;
+  align-items: center;
 }
 
 .title > h1 {
-    flex-grow: 1;
+  flex-grow: 1;
 }
