@@ -47,6 +47,7 @@ export default class NewsService {
         contentEn: true,
         contentSv: true,
         createdAt: true,
+        updatedAt: true,
         writtenByCid: true,
         writtenFor: {
           select: {

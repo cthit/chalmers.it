@@ -12,6 +12,7 @@ interface NewsPostInterface {
   contentEn: string;
   writtenByCid: string;
   createdAt: Date;
+  updatedAt: Date;
   writtenFor: {
       prettyName: string;
   } | null;

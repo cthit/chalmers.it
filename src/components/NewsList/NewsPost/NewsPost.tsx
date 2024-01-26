@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import DeletePostButton from './DeletePostButton';
 
 interface NewsPostProps {
   post: {
@@ -16,11 +17,20 @@ interface NewsPostProps {
     contentEn: string;
     writtenByCid: string;
     createdAt: Date;
+    updatedAt: Date;
     writtenFor: {
       prettyName: string;
     } | null;
   };
 }
+
+type PropsThing = {
+  day: 'numeric';
+  month: 'numeric';
+  year: 'numeric';
+  hour: '2-digit';
+  minute: '2-digit';
+};
 
 const NewsPost = async ({ post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
@@ -42,6 +52,14 @@ const NewsPost = async ({ post }: NewsPostProps) => {
     return { __html: rawMarkup };
   };
 
+  const propsThing: PropsThing = {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+
   return (
     <>
       <Divider />
@@ -52,16 +70,20 @@ const NewsPost = async ({ post }: NewsPostProps) => {
         {ownsPost && (
           <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
         )}
-        {ownsPost && <ActionButton>Radera</ActionButton>}
+        {ownsPost && <DeletePostButton id={post.id} />}
       </div>
-        <p className={style.subtitle}>
-          {post.createdAt.toLocaleString()} | Skriven {group && `för ${group}`}{' '}
-          av {nick}
-        </p>
-        <div
-          className={style.content}
-          dangerouslySetInnerHTML={getMarkdownText()}
-        />
+      <p className={style.subtitle}>
+        {post.createdAt.toLocaleString([], propsThing).replace(',', '')} |
+        Skriven {group && `för ${group}`} av {nick}{' '}
+        {post.updatedAt.getTime() - post.createdAt.getTime() > 5000 &&
+          ` | Redigerad ${post.updatedAt
+            .toLocaleString([], propsThing)
+            .replace(',', '')}`}
+      </p>
+      <div
+        className={style.content}
+        dangerouslySetInnerHTML={getMarkdownText()}
+      />
     </>
   );
 };

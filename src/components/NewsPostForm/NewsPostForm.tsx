@@ -1,6 +1,6 @@
 'use client';
 
-import { post, postForGroup } from './actions';
+import { edit, post, postForGroup } from './actions';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -11,12 +11,22 @@ import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
 
-const NewsPostForm = ({ groups }: { groups: GammaGroup[] }) => {
-  const [group, setGroup] = useState('self');
-  const [titleEn, setTitleEn] = useState('');
-  const [titleSv, setTitleSv] = useState('');
-  const [contentEn, setContentEn] = useState('');
-  const [contentSv, setContentSv] = useState('');
+interface NewPostFormProps {
+  groups: GammaGroup[];
+  id?: number;
+  group?: string;
+  titleEn?: string;
+  titleSv?: string;
+  contentEn?: string;
+  contentSv?: string;
+}
+
+const NewsPostForm = (newsPost: NewPostFormProps) => {
+  const [group, setGroup] = useState(newsPost.group ?? 'self');
+  const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
+  const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
+  const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
+  const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -27,8 +37,15 @@ const NewsPostForm = ({ groups }: { groups: GammaGroup[] }) => {
 
   async function send() {
     try {
+      console.log("ID", newsPost.id);
+      if (newsPost.id !== undefined) {
+        await edit(newsPost.id!, titleEn, titleSv, contentEn, contentSv);
+        return;
+      }
+
       if (group !== 'self') {
         await postForGroup(titleEn, titleSv, contentEn, contentSv, group);
+        return;
       } else {
         await post(titleEn, titleSv, contentEn, contentSv);
       }
@@ -53,7 +70,7 @@ const NewsPostForm = ({ groups }: { groups: GammaGroup[] }) => {
       <h2>Posta som</h2>
       <DropdownList onChange={(e) => setGroup(e.target.value)}>
         <option value="self">Mig själv</option>
-        {groups.map((group) => (
+        {newsPost.groups.map((group) => (
           <option key={group.id} value={group.id}>
             {group.superGroup?.prettyName ?? group.prettyName}
           </option>
@@ -77,8 +94,10 @@ const NewsPostForm = ({ groups }: { groups: GammaGroup[] }) => {
       />
 
       <br />
-      <ActionButton onClick={send}>Skapa</ActionButton>
-      <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
+      <div className={style.actions}>
+        <ActionButton onClick={send}>{newsPost.id !== undefined ? "Redigera" : "Skapa"}</ActionButton>
+        <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
+      </div>
 
       <dialog className={style.dialog} open={showPreview}>
         <h1>Förhandsgranskning</h1>

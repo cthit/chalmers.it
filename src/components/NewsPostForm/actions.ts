@@ -22,6 +22,23 @@ export async function post(
   redirect('/');
 }
 
+export async function edit(
+  id: number,
+  titleEn: string,
+  titleSv: string,
+  contentEn: string,
+  contentSv: string
+) {
+  await NewsService.edit({
+    titleEn: titleEn,
+    titleSv: titleSv,
+    contentEn: contentEn,
+    contentSv: contentSv,
+    id: id
+  });
+  redirect('/');
+}
+
 export async function postForGroup(
   titleEn: string,
   titleSv: string,
