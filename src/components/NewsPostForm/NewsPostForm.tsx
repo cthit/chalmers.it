@@ -10,6 +10,11 @@ import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
+import Popup from 'reactjs-popup';
+
+const PreviewContentStyle = {
+  backgroundColor: '#000000AA'
+};
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -38,9 +43,15 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   async function send() {
     try {
-      console.log("ID", newsPost.id);
       if (newsPost.id !== undefined) {
-        await edit(newsPost.id!, newsPost.writtenByCid!, titleEn, titleSv, contentEn, contentSv);
+        await edit(
+          newsPost.id!,
+          newsPost.writtenByCid!,
+          titleEn,
+          titleSv,
+          contentEn,
+          contentSv
+        );
         return;
       }
 
@@ -96,25 +107,33 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
       <br />
       <div className={style.actions}>
-        <ActionButton onClick={send}>{newsPost.id !== undefined ? "Redigera" : "Skapa"}</ActionButton>
+        <ActionButton onClick={send}>
+          {newsPost.id !== undefined ? 'Redigera' : 'Skapa'}
+        </ActionButton>
         <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>
 
-      <dialog className={style.dialog} open={showPreview}>
-        <h1>Förhandsgranskning</h1>
-        <Divider />
-        <h2>{titleSv}</h2>
-        <p dangerouslySetInnerHTML={previewContentSv} />
-        <Divider />
-        <h2>{titleEn}</h2>
-        <p dangerouslySetInnerHTML={previewContentEn} />
+      <Popup
+        modal
+        className={style.dialog}
+        open={showPreview}
+        onClose={() => setShowPreview(false)}
+        overlayStyle={PreviewContentStyle}
+      >
+        <div className={style.dialog}>
+          <h1>Förhandsgranskning</h1>
+          <Divider />
+          <h2>{titleEn}</h2>
+          <p dangerouslySetInnerHTML={previewContentEn} />
+          <Divider />
+          <h2>{titleSv}</h2>
+          <p dangerouslySetInnerHTML={previewContentSv} />
 
-        <form method="dialog">
           <ActionButton onClick={() => setShowPreview(false)}>
             Stäng
           </ActionButton>
-        </form>
-      </dialog>
+        </div>
+      </Popup>
     </>
   );
 };

@@ -1,18 +1,8 @@
-.dialog[open] {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-.dialog::backdrop {
-  background-image: linear-gradient(
-    45deg,
-    magenta,
-    rebeccapurple,
-    dodgerblue,
-    green
-  );
-  opacity: 0.75;
+.dialog {
+  min-width: 50vw;
+  background-color: var(--content-background-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 .actions {
