@@ -24,11 +24,16 @@ export async function post(
 
 export async function edit(
   id: number,
+  writtenByCid: string,
   titleEn: string,
   titleSv: string,
   contentEn: string,
   contentSv: string
 ) {
+  if ((await getServerSession(authConfig))?.user?.id !== writtenByCid) {
+    redirect('/');
+  }
+
   await NewsService.edit({
     titleEn: titleEn,
     titleSv: titleSv,

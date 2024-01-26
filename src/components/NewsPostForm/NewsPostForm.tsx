@@ -19,6 +19,7 @@ interface NewPostFormProps {
   titleSv?: string;
   contentEn?: string;
   contentSv?: string;
+  writtenByCid?: string;
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
@@ -39,7 +40,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     try {
       console.log("ID", newsPost.id);
       if (newsPost.id !== undefined) {
-        await edit(newsPost.id!, titleEn, titleSv, contentEn, contentSv);
+        await edit(newsPost.id!, newsPost.writtenByCid!, titleEn, titleSv, contentEn, contentSv);
         return;
       }
 

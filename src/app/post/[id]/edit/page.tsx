@@ -3,12 +3,20 @@ import style from './page.module.scss';
 import SessionService from '@/services/sessionService';
 import NewsService from '@/services/newsService';
 import { notFound } from 'next/navigation';
+import { getServerSession } from 'next-auth/next';
+import { authConfig } from '@/auth/auth';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const groups = await SessionService.getActiveGroups();
   const newsPost = await NewsService.get(Number.parseInt(params.id));
 
   if (newsPost === null) {
+    return notFound();
+  }
+
+  if (
+    !((await getServerSession(authConfig))?.user?.id === newsPost.writtenByCid)
+  ) {
     return notFound();
   }
 
@@ -22,6 +30,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           titleSv={newsPost!.titleSv}
           contentEn={newsPost!.contentEn}
           contentSv={newsPost!.contentSv}
+          writtenByCid={newsPost!.writtenByCid}
         />
       </div>
     </main>
