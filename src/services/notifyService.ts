@@ -1,39 +1,81 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, NotifierType, Language } from '@prisma/client';
+import prisma from '@/prisma';
 
 interface Notifier {
   notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>): void;
+  readonly language: Language;
+  readonly webhook: string;
+  readonly type: NotifierType;
 }
 
 export default class NotifyService {
-  static notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
-    notifiers.forEach((notifier) => {
-      notifier.notifyNewsPost(post);
+  static async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    for (const notifier of await NotifyService.getNotifiers()) {
+      switch (notifier.type) {
+        case NotifierType.DISCORD:
+          new DiscordWebhookNotifier(
+            notifier.url,
+            notifier.language
+          ).notifyNewsPost(post);
+          break;
+        case NotifierType.SLACK:
+          new SlackWebhookNotifier(
+            notifier.url,
+            notifier.language
+          ).notifyNewsPost(post);
+          break;
+      }
+    }
+  }
+
+  static async getNotifiers() {
+    return await prisma.eventNotifiers.findMany();
+  }
+
+  static async addNotifier(notifier: Notifier) {
+    await prisma.eventNotifiers.create({
+      data: {
+        type: notifier.type,
+        url: notifier.webhook,
+        language: notifier.language
+      }
     });
   }
 }
 
 class DiscordWebhookNotifier implements Notifier {
-  private webhook: string;
+  public readonly webhook: string;
+  public readonly language: Language;
+  public readonly type: NotifierType = NotifierType.DISCORD;
 
-  public constructor(webhook: string) {
+  public constructor(webhook: string, language: Language) {
     this.webhook = webhook;
+    this.language = language;
   }
 
   notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    const title = this.language === Language.EN ? post.titleEn : post.titleSv;
+    const content =
+      this.language === Language.EN ? post.contentEn : post.contentSv;
+    const msg =
+      this.language === Language.EN
+        ? `News published by **${post.writtenByCid}**`
+        : `Nyhet publicerad av **${post.writtenByCid}**`;
+
     fetch(this.webhook, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        content: `Nyhet publicerad av **${post.writtenByCid}**`,
+        content: msg,
         embeds: [
           {
-            title: post.titleSv,
+            title: title,
             url: `http://${process.env.BASE_URL || 'localhost:3000'}/post/${
               post.id
             }`,
-            description: post.contentSv,
+            description: content,
             color: 0x00a8d3,
             image: {
               url: 'https://chalmers.it/assets/logo-dark-txt-61b29abd5e9c8df2f6c500817b0dad65e86bd177cc29d88df9ee1507f9e8ebff.png'
@@ -46,13 +88,24 @@ class DiscordWebhookNotifier implements Notifier {
 }
 
 class SlackWebhookNotifier implements Notifier {
-  private webhook: string;
+  public readonly webhook: string;
+  public readonly language: Language;
+  public readonly type: NotifierType = NotifierType.SLACK;
 
-  public constructor(webhook: string) {
+  public constructor(webhook: string, language: Language) {
     this.webhook = webhook;
+    this.language = language;
   }
 
   notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    const title = this.language === Language.EN ? post.titleEn : post.titleSv;
+    const content =
+      this.language === Language.EN ? post.contentEn : post.contentSv;
+    const msg =
+      this.language === Language.EN
+        ? `News published by *${post.writtenByCid}*`
+        : `Nyhet publicerad av *${post.writtenByCid}*`;
+
     fetch(this.webhook, {
       method: 'POST',
       headers: {
@@ -64,7 +117,7 @@ class SlackWebhookNotifier implements Notifier {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `Nyhet publicerad av *${post.writtenByCid}*`
+              text: msg
             }
           }
         ],
@@ -78,14 +131,14 @@ class SlackWebhookNotifier implements Notifier {
                   type: 'mrkdwn',
                   text: `*<http://${
                     process.env.BASE_URL || 'localhost:3000'
-                  }/post/${post.id}|${post.titleSv}>*`
+                  }/post/${post.id}|${title}>*`
                 }
               },
               {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `${post.contentSv}`
+                  text: `${content}`
                 }
               },
               {
@@ -101,5 +154,3 @@ class SlackWebhookNotifier implements Notifier {
     });
   }
 }
-
-const notifiers: Notifier[] = [];
