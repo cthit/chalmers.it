@@ -5,6 +5,17 @@ export default class DivisionGroupService {
     return await prisma.divisionGroup.findMany();
   }
 
+  static async addGroup(gammaSuperGroupId: string, prettyName: string) {
+    return await prisma.divisionGroup.create({
+      data: {
+        gammaSuperGroupId,
+        prettyName,
+        descriptionEn: 'yeppers peppers',
+        descriptionSv: 'yeppers peppers'
+      }
+    });
+  }
+
   static async getBanners(groupId: number) {
     return await prisma.divisionGroup.findUnique({
       where: {
