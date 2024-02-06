@@ -10,7 +10,7 @@ interface DeletePostButtonProps {
 const DeletePostButton = ({ id }: DeletePostButtonProps) => {
   async function remove() {
     try {
-        await deletePost(id);
+      await deletePost(id);
     } catch {
       console.log('Failed to remove news article');
     }

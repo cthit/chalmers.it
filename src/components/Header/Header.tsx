@@ -10,7 +10,6 @@ const Header = () => {
       <EscapeHatch />
       <SearchSwitcher />
       <ThemeSelector />
-      {/* @ts-expect-error Server Component */}
       <User />
     </header>
   );

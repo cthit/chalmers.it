@@ -1,18 +1,14 @@
-import style from "./MarkdownEditor.module.scss";
-import { ChangeEventHandler } from "react";
+import style from './MarkdownEditor.module.scss';
+import { ChangeEventHandler } from 'react';
 
 interface MarkdownEditorProps {
-    value: string | undefined;
-    onChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  value: string | undefined;
+  onChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
 }
 
-const MarkdownEditor = ({value, onChange}: MarkdownEditorProps) => {
+const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   return (
-    <textarea
-      className={style.editor}
-      value={value}
-      onChange={onChange}
-    />
+    <textarea className={style.editor} value={value} onChange={onChange} />
   );
 };
 

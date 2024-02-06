@@ -78,7 +78,10 @@ export default class NewsService {
     };
 
     if (post.divisionSuperGroupId) {
-      console.log('Connecting to division super group', post.divisionSuperGroupId);
+      console.log(
+        'Connecting to division super group',
+        post.divisionSuperGroupId
+      );
       data.data.writtenFor = {
         connect: {
           gammaSuperGroupId: post.divisionSuperGroupId

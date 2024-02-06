@@ -14,7 +14,7 @@ interface NewsPostInterface {
   createdAt: Date;
   updatedAt: Date;
   writtenFor: {
-      prettyName: string;
+    prettyName: string;
   } | null;
 }
 
@@ -28,7 +28,13 @@ const NewsList = async () => {
   }
 };
 
-const News = ({ news, canPost }: { news: NewsPostInterface[]; canPost: boolean }) => {
+const News = ({
+  news,
+  canPost
+}: {
+  news: NewsPostInterface[];
+  canPost: boolean;
+}) => {
   return (
     <div className={styles.list}>
       <div className={styles.title}>
