@@ -5,19 +5,27 @@
   @include light {
     --text-color: #{$darkgray-900};
     --text-hover-color: #{$turquoise-700};
+    --link-color: #{$turquoise-700};
     --header-color: #{$lightorange-200};
     --dropdown-hover-color: #{$turquoise-200};
     --background-color: #{$lightorange-100};
+    --content-background-color: #{$lightorange-300};
     --border-color: #{$darkgray-200};
+
+    --divider-color: #{$turquoise-400};
   }
 
   @include dark {
     --text-color: #{$lightgray-200};
     --text-hover-color: #{$turquoise-300};
+    --link-color: #{$turquoise-600};
     --header-color: #{$darkgray-800};
     --dropdown-hover-color: #{$turquoise-900};
     --background-color: #{$darkgray-900};
+    --content-background-color: #{$darkgray-500};
     --border-color: #{$lightgray-800};
+
+    --divider-color: #{$turquoise-800};
   }
 
   --primary-color: #{$turquoise-500};
