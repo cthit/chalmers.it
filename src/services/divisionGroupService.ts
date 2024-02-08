@@ -17,6 +17,14 @@ export default class DivisionGroupService {
     });
   }
 
+  static async removeGroup(gammaSuperGroupId: string) {
+    return await prisma.divisionGroup.delete({
+      where: {
+        gammaSuperGroupId
+      }
+    });
+  }
+
   static async getBanners(groupId: number) {
     return await prisma.divisionGroup.findUnique({
       where: {
