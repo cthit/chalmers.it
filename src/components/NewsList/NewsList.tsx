@@ -21,8 +21,12 @@ interface NewsPostInterface {
 const NewsList = async () => {
   try {
     const news = await NewsService.getPage(1, 10);
-    const canPost = await SessionService.canPostNews();
-    return <News news={news} canPost={canPost} />;
+    let canPost = false;
+    try {
+      canPost = await SessionService.canPostNews();
+    } finally {
+      return <News news={news} canPost={canPost} />;
+    }
   } catch {
     return <NewsError />;
   }
