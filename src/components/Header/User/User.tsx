@@ -1,33 +1,46 @@
-import ActionButton from '@/components/ActionButton/ActionButton';
 import styles from './User.module.scss';
-import Image from 'next/image';
+import { getServerSession } from 'next-auth/next';
+import { authConfig } from '@/auth/auth';
+import LogoutLink from './LogoutLink/LogoutLink';
+import LoginButton from './LoginButton/LoginButton';
+import Dropdown from '../Navigation/Dropdown/Dropdown';
 
-const User = () => {
-  const isLogged: boolean = false;
+const User = async () => {
+  const session = await getServerSession(authConfig);
+  const image = session?.user?.image;
 
   return (
-    <div className={styles.user}>{isLogged ? <LoggedIn /> : <NotLogged />}</div>
+    <div className={styles.user}>
+      {image === undefined ? (
+        <LoginButton />
+      ) : (
+        <LoggedIn image={session?.user?.image!} />
+      )}
+    </div>
   );
 };
 
-const LoggedIn = () => {
+const LoggedIn = ({ image }: { image: string }) => {
   return (
-    <>
-      <div className={styles.name}>
+    <Dropdown
+      parent={
         <a href="https://gamma.chalmers.it/me/edit">
-          <Image
-            src="/smurf.svg"
-            className={styles.pfp}
-            alt="profile picture"
-          />
+          <object data={image}>
+            <picture>
+              <img
+                src="/smurf.svg"
+                className={styles.pfp}
+                alt="Profile Picture"
+              />
+            </picture>
+          </object>
         </a>
-      </div>
-    </>
+      }
+    >
+      <a href="https://gamma.chalmers.it/me/edit">Min profil</a>
+      <LogoutLink />
+    </Dropdown>
   );
-};
-
-const NotLogged = () => {
-  return <ActionButton href="/login">Logga in</ActionButton>;
 };
 
 export default User;

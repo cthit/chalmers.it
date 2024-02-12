@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest, ctx: { params?: unknown }) {
+export async function GET(_request: NextRequest, _ctx: { params?: unknown }) {
   return NextResponse.json({ status: 'ok' });
 }

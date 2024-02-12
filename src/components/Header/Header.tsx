@@ -1,30 +1,14 @@
-'use client';
-
-import React, { useState } from 'react';
 import styles from './Header.module.scss';
 import EscapeHatch from './EscapeHatch/EscapeHatch';
-import Navigation from './Navigation/Navigation';
-import User from './User/User';
+import SearchSwitcher from './SearchSwitcher/SearchSwitcher';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
-import Search from './SearchBar/Search';
+import User from './User/User';
 
 const Header = () => {
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
-  const handleSearchIconClick = () => {
-    setIsSearchExpanded(!isSearchExpanded);
-  };
-
   return (
     <header className={styles.header}>
       <EscapeHatch />
-      {isSearchExpanded ? null : <Navigation />}
-      <div>
-        <Search
-          onSearchIconClick={handleSearchIconClick}
-          isExpanded={isSearchExpanded}
-        />
-      </div>
+      <SearchSwitcher />
       <ThemeSelector />
       <User />
     </header>

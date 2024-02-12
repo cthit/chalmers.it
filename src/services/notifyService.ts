@@ -102,5 +102,4 @@ class SlackWebhookNotifier implements Notifier {
   }
 }
 
-const notifiers: Notifier[] = [
-];
+const notifiers: Notifier[] = [];
