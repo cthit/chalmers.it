@@ -1,8 +1,9 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@/prisma';
 
 export default class SponsorService {
   static async getAll() {
-    return await prisma.divisionGroup.findMany();
+    return await prisma.sponsor.findMany();
   }
 
   static async getLogo(id: number) {

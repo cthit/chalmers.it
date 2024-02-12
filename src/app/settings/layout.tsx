@@ -16,6 +16,14 @@ const pages = [
   {
     path: '/settings/groups',
     name: 'Division Groups'
+  },
+  {
+    path: '/settings/banners',
+    name: 'Banner Images'
+  },
+  {
+    path: '/settings/sponsors',
+    name: 'Sponsors'
   }
 ];
 
