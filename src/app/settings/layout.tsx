@@ -24,6 +24,10 @@ const pages = [
   {
     path: '/settings/sponsors',
     name: 'Sponsors'
+  },
+  {
+    path: '/settings/media',
+    name: 'Media'
   }
 ];
 

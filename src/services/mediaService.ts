@@ -1,5 +1,5 @@
 import prisma from '@/prisma';
-import { readFile, writeFile } from 'fs/promises';
+import { stat, readdir, readFile, writeFile } from 'fs/promises';
 
 // TODO: Use a config down the line
 const MEDIA_PATH = './media/';
@@ -49,5 +49,20 @@ export default class MediaService {
       }
     });
     return await readFile(MEDIA_PATH + sha256 + extension);
+  }
+
+  static async getStats() {
+    const dir = await readdir(MEDIA_PATH, { withFileTypes: true });
+
+    let size = 0;
+    for (const dirent of dir) {
+      if (dirent.isFile()) {
+        size += (await stat(MEDIA_PATH + dirent.name)).size;
+      }
+    }
+
+    const used = await prisma.media.count();
+
+    return { count: dir.length, size, used };
   }
 }
