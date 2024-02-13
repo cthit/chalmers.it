@@ -9,14 +9,14 @@ export async function addSponsor(
     nameEn: string;
     descriptionSv: string;
     descriptionEn: string;
-    logoSha?: string;
   },
   form: FormData
 ) {
   const file: File | null = form.get('file') as unknown as File;
 
+  let logoSha = undefined;
   if (file) {
-    MediaService.save(file);
+    logoSha = (await MediaService.save(file))?.sha256;
   }
 
   await SponsorService.create({
@@ -24,6 +24,6 @@ export async function addSponsor(
     nameEn: sponsor.nameEn,
     descriptionSv: sponsor.descriptionSv,
     descriptionEn: sponsor.descriptionEn,
-    logoSha: sponsor.logoSha
+    logoSha
   });
 }
