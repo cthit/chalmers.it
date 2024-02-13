@@ -32,7 +32,11 @@ export default class NotifyService {
     return await prisma.eventNotifiers.findMany();
   }
 
-  static async addNotifier(type: NotifierType, language: Language, webhook: string) {
+  static async addNotifier(
+    type: NotifierType,
+    language: Language,
+    webhook: string
+  ) {
     await prisma.eventNotifiers.create({
       data: {
         type: type,

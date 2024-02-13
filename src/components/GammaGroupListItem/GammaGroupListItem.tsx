@@ -13,12 +13,12 @@ const GammaGroupListItem = ({
   superGroupId: string;
   prettyName: string;
 }) => {
-    const router = useRouter();
+  const router = useRouter();
 
-    const remove = async () => {
-        removeGroup(superGroupId);
-        router.refresh();
-    }
+  const remove = async () => {
+    removeGroup(superGroupId);
+    router.refresh();
+  };
 
   return (
     <li>
@@ -29,9 +29,7 @@ const GammaGroupListItem = ({
       <p>
         <strong>Local ID:</strong> {id}
       </p>
-      <ActionButton onClick={remove}>
-        Ta bort
-      </ActionButton>
+      <ActionButton onClick={remove}>Ta bort</ActionButton>
     </li>
   );
 };
