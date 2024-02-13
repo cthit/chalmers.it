@@ -1,8 +1,7 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
 
-// TODO: Use a config down the line
-const MEDIA_PATH = './media/';
+const mediaPath = process.env.MEDIA_PATH || './media/';
 
 const convertMimeType = (mimeType: string) => {
   switch (mimeType) {
@@ -47,7 +46,7 @@ export default class MediaService {
     if (!extension) return null;
 
     await writeFile(
-      MEDIA_PATH + shaString + '.' + extension,
+      mediaPath + shaString + '.' + extension,
       Buffer.from(await file.arrayBuffer())
     );
     return await prisma.media.create({
@@ -67,16 +66,16 @@ export default class MediaService {
         extension: true
       }
     });
-    return await readFile(MEDIA_PATH + sha256 + extension);
+    return await readFile(mediaPath + sha256 + extension);
   }
 
   static async getStats() {
-    const dir = await readdir(MEDIA_PATH, { withFileTypes: true });
+    const dir = await readdir(mediaPath, { withFileTypes: true });
 
     let size = 0;
     for (const dirent of dir) {
       if (dirent.isFile()) {
-        size += (await stat(MEDIA_PATH + dirent.name)).size;
+        size += (await stat(mediaPath + dirent.name)).size;
       }
     }
 
