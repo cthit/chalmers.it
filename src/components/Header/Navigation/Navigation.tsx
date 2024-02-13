@@ -9,7 +9,7 @@ const Navigation = () => {
   return (
     <nav className={styles.nav}>
       <DropdownLink text="Sektionen">
-        <Link href="/committees">
+        <Link href="/groups">
           Kommittéer, föreningar och andra instanser
         </Link>
         <Link href="https://dokument.chalmers.it/">Dokument</Link>
