@@ -21,7 +21,7 @@ export default class MediaService {
     });
   }
 
-  static async upload(file: Blob) {
+  static async save(file: Blob) {
     const sha256 = await crypto.subtle.digest(
       'SHA-256',
       await file.arrayBuffer()
@@ -39,7 +39,7 @@ export default class MediaService {
     });
   }
 
-  static async download(sha256: string) {
+  static async load(sha256: string) {
     const extension = await prisma.media.findUnique({
       where: {
         sha256

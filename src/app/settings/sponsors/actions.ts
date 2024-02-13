@@ -16,7 +16,7 @@ export async function addSponsor(
   const file: File | null = form.get('file') as unknown as File;
 
   if (file) {
-    MediaService.upload(file);
+    MediaService.save(file);
   }
 
   await SponsorService.create({
