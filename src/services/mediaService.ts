@@ -4,6 +4,21 @@ import { stat, readdir, readFile, writeFile } from 'fs/promises';
 // TODO: Use a config down the line
 const MEDIA_PATH = './media/';
 
+const convertMimeType = (mimeType: string) => {
+  switch (mimeType) {
+    case 'image/jpeg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
+    case 'image/gif':
+      return 'gif';
+    case 'image/webp':
+      return 'webp';
+    default:
+      return null;
+  }
+};
+
 export default class MediaService {
   static async get(sha256: string) {
     return await prisma.media.findUnique({
@@ -27,8 +42,12 @@ export default class MediaService {
       await file.arrayBuffer()
     );
     const shaString = Array.from(new Uint8Array(sha256)).join('');
+
+    const extension = convertMimeType(file.type);
+    if (!extension) return null;
+
     await writeFile(
-      MEDIA_PATH + shaString + file.type,
+      MEDIA_PATH + shaString + '.' + extension,
       Buffer.from(await file.arrayBuffer())
     );
     return await prisma.media.create({

@@ -40,7 +40,7 @@ export default class DivisionGroupService {
     });
   }
 
-  static async addBanner(groupId: number, bannerSha?: string) {
+  static async addBanner(groupId: number, bannerSha: string) {
     return await prisma.divisionGroup.update({
       where: {
         id: groupId
