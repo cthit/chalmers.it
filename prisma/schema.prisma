@@ -66,10 +66,10 @@ model Sponsor {
 model Banner {
   id              Int           @id @default(autoincrement())
   divisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id])
-  image           Media?        @relation(fields: [mediaSha256], references: [sha256])
+  image           Media         @relation(fields: [mediaSha256], references: [sha256])
   createdAt       DateTime      @default(now())
   divisionGroupId Int
-  mediaSha256     String?
+  mediaSha256     String
 }
 
 model Media {
@@ -79,4 +79,21 @@ model Media {
   NewsPost  NewsPost[]
   Sponsor   Sponsor[]
   Banner    Banner[]
+}
+
+model EventNotifiers {
+  id       Int          @id @default(autoincrement())
+  type     NotifierType
+  url      String
+  language Language
+}
+
+enum NotifierType {
+  DISCORD
+  SLACK
+}
+
+enum Language {
+  SV
+  EN
 }

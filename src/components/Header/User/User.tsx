@@ -4,6 +4,7 @@ import { authConfig } from '@/auth/auth';
 import LogoutLink from './LogoutLink/LogoutLink';
 import LoginButton from './LoginButton/LoginButton';
 import Dropdown from '../Navigation/Dropdown/Dropdown';
+import Link from 'next/link';
 
 const User = async () => {
   const session = await getServerSession(authConfig);
@@ -37,7 +38,8 @@ const LoggedIn = ({ image }: { image: string }) => {
         </a>
       }
     >
-      <a href="https://gamma.chalmers.it/me/edit">Min profil</a>
+      <Link href="https://gamma.chalmers.it/me/edit">Min profil</Link>
+      <Link href="/settings">Inställningar</Link>
       <LogoutLink />
     </Dropdown>
   );

@@ -1,8 +1,22 @@
 import prisma from '@/prisma';
-import { readFile, writeFile } from 'fs/promises';
+import { stat, readdir, readFile, writeFile } from 'fs/promises';
 
-// TODO: Use a config down the line
-const MEDIA_PATH = './media/';
+const mediaPath = process.env.MEDIA_PATH || './media/';
+
+const convertMimeType = (mimeType: string) => {
+  switch (mimeType) {
+    case 'image/jpeg':
+      return 'jpg';
+    case 'image/png':
+      return 'png';
+    case 'image/gif':
+      return 'gif';
+    case 'image/webp':
+      return 'webp';
+    default:
+      return null;
+  }
+};
 
 export default class MediaService {
   static async get(sha256: string) {
@@ -21,14 +35,18 @@ export default class MediaService {
     });
   }
 
-  static async upload(file: Blob) {
+  static async save(file: Blob) {
     const sha256 = await crypto.subtle.digest(
       'SHA-256',
       await file.arrayBuffer()
     );
     const shaString = Array.from(new Uint8Array(sha256)).join('');
+
+    const extension = convertMimeType(file.type);
+    if (!extension) return null;
+
     await writeFile(
-      MEDIA_PATH + shaString + file.type,
+      mediaPath + shaString + '.' + extension,
       Buffer.from(await file.arrayBuffer())
     );
     return await prisma.media.create({
@@ -39,7 +57,7 @@ export default class MediaService {
     });
   }
 
-  static async download(sha256: string) {
+  static async load(sha256: string) {
     const extension = await prisma.media.findUnique({
       where: {
         sha256
@@ -48,6 +66,21 @@ export default class MediaService {
         extension: true
       }
     });
-    return await readFile(MEDIA_PATH + sha256 + extension);
+    return await readFile(mediaPath + sha256 + extension);
+  }
+
+  static async getStats() {
+    const dir = await readdir(mediaPath, { withFileTypes: true });
+
+    let size = 0;
+    for (const dirent of dir) {
+      if (dirent.isFile()) {
+        size += (await stat(mediaPath + dirent.name)).size;
+      }
+    }
+
+    const used = await prisma.media.count();
+
+    return { count: dir.length, size, used };
   }
 }

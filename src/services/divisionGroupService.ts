@@ -6,7 +6,30 @@ export default class DivisionGroupService {
     return await prisma.divisionGroup.findMany();
   }
 
-  static async getBanners(groupId: number) {
+  static async addGroup(gammaSuperGroupId: string, prettyName: string) {
+    return await prisma.divisionGroup.create({
+      data: {
+        gammaSuperGroupId,
+        prettyName,
+        descriptionEn: 'yeppers peppers',
+        descriptionSv: 'yeppers peppers'
+      }
+    });
+  }
+
+  static async removeGroup(gammaSuperGroupId: string) {
+    return await prisma.divisionGroup.delete({
+      where: {
+        gammaSuperGroupId
+      }
+    });
+  }
+
+  static async getBanners() {
+    return await prisma.banner.findMany();
+  }
+
+  static async getBannerForGroup(groupId: number) {
     return await prisma.divisionGroup.findUnique({
       where: {
         id: groupId
@@ -17,15 +40,15 @@ export default class DivisionGroupService {
     });
   }
 
-  static async addBanner(groupId: number, bannerId: number) {
+  static async addBanner(groupId: number, bannerSha: string) {
     return await prisma.divisionGroup.update({
       where: {
         id: groupId
       },
       data: {
         Banner: {
-          connect: {
-            id: bannerId
+          create: {
+            mediaSha256: bannerSha
           }
         }
       }
