@@ -17,12 +17,16 @@ A few things are required to run the project:
 2. Docker for running other services
 3. pnpm (installed with `npm install -g pnpm`)
 
-## Running in development
+## Development
+
+In order to run the project in development mode, a few steps are required:
 
 1. Install packages with `pnpm install`
 2. Start services by running `docker-compose -f docker-compose.dev.yml up -d`
 3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
 4. Run `pnpm run dev` to start the development server
+
+If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
 
 ## Production use
 
@@ -33,3 +37,9 @@ The project can also be compiled into a minimized file structure, which can be r
 This is done by running `pnpm run build`, which will build the project to `.next/standalone`.
 Services will however be needed to be started separately.
 The project is also compiled this way when building the docker image.
+
+## UTF-8 symbols
+
+There is a known issue where `pino-pretty` handles UTF-8 symbols incorrectly on Windows.
+For example, checkmarks may display as `Ô£ô` instead of `✓`.
+Should these symbols appear, change the current code page to UTF-8 by running `chcp 65001` in the terminal that will be used to run the project.
