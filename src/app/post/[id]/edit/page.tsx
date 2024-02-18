@@ -5,6 +5,7 @@ import NewsService from '@/services/newsService';
 import { notFound } from 'next/navigation';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
+import ContentPane from '@/components/ContentPane/ContentPane';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const groups = await SessionService.getActiveGroups();
@@ -22,7 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main className={style.main}>
-      <div className={style.content}>
+      <ContentPane>
         <NewsPostForm
           groups={groups}
           id={newsPost!.id}
@@ -32,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           contentSv={newsPost!.contentSv}
           writtenByCid={newsPost!.writtenByCid}
         />
-      </div>
+      </ContentPane>
     </main>
   );
 }
