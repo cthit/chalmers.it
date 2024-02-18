@@ -10,7 +10,7 @@ import GroupMember from '@/components/GroupMember/GroupMember';
 export default async function Page({ params }: { params: { id: string } }) {
   const main = await mainContent(params);
   const left = <DivisionNavigation />;
-  const right = <div>Test</div>;
+  const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;
 }

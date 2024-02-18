@@ -1,8 +1,12 @@
+.main {
+  margin: 4rem;
+}
+
 .settingsPane {
   display: flex;
   flex-direction: row;
-  margin: 6rem;
   min-height: 100dvh;
+  margin: -1rem;
 }
 
 .navPane {
@@ -26,5 +30,4 @@
 .settingsContent {
   flex-grow: 1;
   padding: 2rem;
-  background-color: rgb(63, 63, 63);
 }
