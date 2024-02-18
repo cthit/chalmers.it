@@ -4,3 +4,12 @@
     min-height: 100vh;
     background-color: rgb(82, 82, 82);
 }
+
+.memberList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.memberList > li {
+    list-style: none;
+}

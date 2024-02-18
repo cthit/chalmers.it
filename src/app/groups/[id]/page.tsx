@@ -5,6 +5,7 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
 import Divider from '@/components/Divider/Divider';
 import ContentPane from '@/components/ContentPane/ContentPane';
+import GroupMember from '@/components/GroupMember/GroupMember';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const main = await mainContent(params);
@@ -27,16 +28,15 @@ const mainContent = async ({ id }: { id: string }) => {
       <h3>{group.descriptionSv}</h3>
       <Divider />
       <h2>Nuvarande medlemmar</h2>
-      <ul>
+      <ul className={style.memberList}>
         {groupMembers.map((member) => (
           <li key={member.id}>
-            <img src={member.avatarUrl} />
-            <h3>{member.nick}</h3>
-            <p>
-              {member.unofficialPostName
-                ? `${member.unofficialPostName} (${member.post.sv})`
-                : member.post.sv}
-            </p>
+            <GroupMember
+              pfp={member.avatarUrl}
+              name={member.nick}
+              post={member.post.sv}
+              postStyled={member.unofficialPostName}
+            />
           </li>
         ))}
       </ul>
