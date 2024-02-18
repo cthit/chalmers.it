@@ -6,7 +6,7 @@ export default async function Groups() {
   const groups = await DivisionGroupService.getAll();
 
   return (
-    <main>
+    <main className={styles.main}>
       <h1>Groups</h1>
       <ul>
         {groups.map((group) => (

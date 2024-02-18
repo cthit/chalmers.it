@@ -1,25 +1,38 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import GammaService from '@/services/gammaService';
+import style from './page.module.scss';
+import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
+import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
+import Divider from '@/components/Divider/Divider';
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const main = await mainContent(params);
+  const left=<DivisionNavigation />;
+  const right = <div>Test</div>
+
+  return <ThreePaneLayout left={left} middle={main} right={right} />;
+}
+
+const mainContent = async ({id}: {id: string}) => {
   const group = (await DivisionGroupService.getInfo(
-    Number.parseInt(params.id)
+    Number.parseInt(id)
   ))!;
   const groupMembers = await GammaService.getSuperGroupMembers(
     group.gammaSuperGroupId
   );
 
   return (
-    <main>
+    <div className={style.main}>
       <title>{group.prettyName}</title>
       <h1>{group.prettyName}</h1>
+      <Divider />
       <p>{group.descriptionSv}</p>
-      <h2>Members</h2>
+      <h2>Nuvarande medlemmar</h2>
       <ul>
         {groupMembers.map((member) => (
           <li key={member.id}>
             <img src={member.avatarUrl} />
-            <p>{member.nick}</p>
+            <h3>{member.nick}</h3>
             <p>
               {member.unofficialPostName
                 ? `${member.unofficialPostName} (${member.post.sv})`
@@ -28,6 +41,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
-}
+};
