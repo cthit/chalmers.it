@@ -27,6 +27,8 @@ model DivisionGroup {
   id                Int        @id @default(autoincrement())
   gammaSuperGroupId String     @unique
   prettyName        String
+  titleSv           String
+  titleEn           String
   descriptionSv     String
   descriptionEn     String
   createdAt         DateTime   @default(now())

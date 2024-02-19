@@ -6,6 +6,9 @@ import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigati
 import Divider from '@/components/Divider/Divider';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import GroupMember from '@/components/GroupMember/GroupMember';
+import MarkdownView from '@/components/MarkdownView/MarkdownView';
+import ActionButton from '@/components/ActionButton/ActionButton';
+import VerticalDivider from '@/components/VerticalDivider/VerticalDivider';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const main = await mainContent(params);

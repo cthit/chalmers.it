@@ -11,6 +11,8 @@ export default class DivisionGroupService {
       data: {
         gammaSuperGroupId,
         prettyName,
+        titleEn: 'yeppers peppers',
+        titleSv: 'yeppers peppers',
         descriptionEn: 'yeppers peppers',
         descriptionSv: 'yeppers peppers'
       }
@@ -63,6 +65,8 @@ export default class DivisionGroupService {
       select: {
         gammaSuperGroupId: true,
         prettyName: true,
+        titleEn: true,
+        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -100,6 +104,26 @@ export default class DivisionGroupService {
   static async isUserActive(cid: string): Promise<boolean> {
     return GammaService.getUser(cid).then((user) => {
       return user.groups.some((group) => group.active);
+    });
+  }
+
+  static async editInfo(edited: {
+    titleEn: string;
+    titleSv: string;
+    contentEn: string;
+    contentSv: string;
+    id: number;
+  }) {
+    return await prisma.divisionGroup.update({
+      where: {
+        id: edited.id
+      },
+      data: {
+        titleEn: edited.titleEn,
+        titleSv: edited.titleSv,
+        descriptionEn: edited.contentEn,
+        descriptionSv: edited.contentSv
+      }
     });
   }
 }
