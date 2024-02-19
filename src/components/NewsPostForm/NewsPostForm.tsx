@@ -28,6 +28,12 @@ interface NewPostFormProps {
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
+  marked.use({
+    pedantic: false,
+    breaks: true,
+    gfm: true
+  });
+  
   const [group, setGroup] = useState(newsPost.group ?? 'self');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');

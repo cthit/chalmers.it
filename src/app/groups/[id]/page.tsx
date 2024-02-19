@@ -27,9 +27,14 @@ const mainContent = async ({ id }: { id: string }) => {
   return (
     <ContentPane>
       <title>{group.prettyName}</title>
-      <h1>{group.prettyName}</h1>
-      <h3>{group.descriptionSv}</h3>
+      <div className={style.title}>
+        <h1>{group.prettyName}</h1>
+        <VerticalDivider />
+        <h3>{group.titleSv}</h3>
+        <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>
+      </div>
       <Divider />
+      <MarkdownView content={group.descriptionSv} />
       <h2>Nuvarande medlemmar</h2>
       <ul className={style.memberList}>
         {groupMembers.map((member) => (
