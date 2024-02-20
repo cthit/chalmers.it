@@ -9,6 +9,7 @@ import GroupMember from '@/components/GroupMember/GroupMember';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import VerticalDivider from '@/components/VerticalDivider/VerticalDivider';
+import SessionService from '@/services/sessionService';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const main = await mainContent(params);
@@ -24,6 +25,8 @@ const mainContent = async ({ id }: { id: string }) => {
     group.gammaSuperGroupId
   );
 
+  const canEdit = await SessionService.canEditGroup(group.gammaSuperGroupId);
+
   return (
     <ContentPane>
       <title>{group.prettyName}</title>
@@ -31,7 +34,7 @@ const mainContent = async ({ id }: { id: string }) => {
         <h1>{group.prettyName}</h1>
         <VerticalDivider />
         <h3>{group.titleSv}</h3>
-        <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>
+        {canEdit && <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>}
       </div>
       <Divider />
       <MarkdownView content={group.descriptionSv} />
