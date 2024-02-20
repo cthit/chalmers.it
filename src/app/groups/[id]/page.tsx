@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 }
 
 const mainContent = async ({ id }: { id: string }) => {
-  const group = (await DivisionGroupService.getInfo(Number.parseInt(id)))!;
+  const group = (await DivisionGroupService.getInfoBySlug(id))!;
   const groupMembers = await GammaService.getSuperGroupMembers(
     group.gammaSuperGroupId
   );

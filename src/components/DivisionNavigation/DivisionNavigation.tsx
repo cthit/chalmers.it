@@ -14,7 +14,7 @@ const DivisionNavigation = async () => {
       <ul className={styles.links}>
         {groups.map((group) => (
           <li key={group.id}>
-            <Link href={`/groups/${group.id}`}>{group.prettyName}</Link>
+            <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
           </li>
         ))}
       </ul>

@@ -6,7 +6,11 @@ export default class DivisionGroupService {
     return await prisma.divisionGroup.findMany();
   }
 
-  static async addGroup(gammaSuperGroupId: string, prettyName: string) {
+  static async addGroup(
+    gammaSuperGroupId: string,
+    prettyName: string,
+    slug: string
+  ) {
     return await prisma.divisionGroup.create({
       data: {
         gammaSuperGroupId,
@@ -14,7 +18,8 @@ export default class DivisionGroupService {
         titleEn: 'yeppers peppers',
         titleSv: 'yeppers peppers',
         descriptionEn: 'yeppers peppers',
-        descriptionSv: 'yeppers peppers'
+        descriptionSv: 'yeppers peppers',
+        slug
       }
     });
   }
@@ -53,6 +58,23 @@ export default class DivisionGroupService {
             mediaSha256: bannerSha
           }
         }
+      }
+    });
+  }
+
+  static async getInfoBySlug(slug: string) {
+    return await prisma.divisionGroup.findUnique({
+      where: {
+        slug
+      },
+      select: {
+        id: true,
+        gammaSuperGroupId: true,
+        prettyName: true,
+        titleEn: true,
+        titleSv: true,
+        descriptionEn: true,
+        descriptionSv: true
       }
     });
   }

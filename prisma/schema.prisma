@@ -26,6 +26,7 @@ model NewsPost {
 model DivisionGroup {
   id                Int        @id @default(autoincrement())
   gammaSuperGroupId String     @unique
+  slug              String     @unique
   prettyName        String
   titleSv           String
   titleEn           String
