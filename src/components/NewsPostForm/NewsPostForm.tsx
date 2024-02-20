@@ -33,7 +33,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     breaks: true,
     gfm: true
   });
-  
+
   const [group, setGroup] = useState(newsPost.group ?? 'self');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
@@ -89,7 +89,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <DropdownList onChange={(e) => setGroup(e.target.value)}>
         <option value="self">Mig själv</option>
         {newsPost.groups.map((group) => (
-          <option key={group.id} value={group.id}>
+          <option key={group.superGroup!.id} value={group.superGroup!.id}>
             {group.superGroup?.prettyName ?? group.prettyName}
           </option>
         ))}
