@@ -80,7 +80,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <h1>Skapa nyhet</h1>
       <Divider />
       <h2>Posta som</h2>
-      <DropdownList onChange={(e) => setGroup(e.target.value)}>
+      <DropdownList onChange={(e) => setGroup(e.target.value)} className={style.field}>
         <option value="self">Mig själv</option>
         {newsPost.groups.map((group) => (
           <option key={group.id} value={group.id}>
@@ -90,19 +90,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       </DropdownList>
 
       <h2>Titel (Eng)</h2>
-      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
+      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={style.field} />
       <h2>Innehåll (Eng)</h2>
       <MarkdownEditor
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
+        className={style.field}
       />
 
       <h2>Titel (Sv)</h2>
-      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
+      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} className={style.field} />
       <h2>Innehåll (Sv)</h2>
       <MarkdownEditor
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
+        className={style.field}
       />
 
       <br />

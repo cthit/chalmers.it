@@ -1,3 +1,7 @@
+@import "../MarkdownEditor/MarkdownEditor.module.scss";
+@import "../DropdownList/DropdownList.module.scss";
+@import "../TextArea/TextArea.module.scss";
+
 .dialog {
   min-width: 50vw;
   background-color: var(--content-background-color);
@@ -8,4 +12,8 @@
 .actions {
   display: flex;
   gap: 1rem;
+}
+
+.field {
+  margin: 0.5rem 0;
 }

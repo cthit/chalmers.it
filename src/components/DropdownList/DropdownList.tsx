@@ -4,11 +4,12 @@ import { ChangeEventHandler } from 'react';
 interface DropdownListProps {
   children: React.ReactNode;
   onChange: ChangeEventHandler<HTMLSelectElement> | undefined;
+  className?: string;
 }
 
-const DropdownList = ({ children, onChange }: DropdownListProps) => {
+const DropdownList = ({ children, onChange, className }: DropdownListProps) => {
   return (
-    <select className={style.list} onChange={onChange}>
+    <select className={`${style.list} ${className}`} onChange={onChange}>
       {children}
     </select>
   );
