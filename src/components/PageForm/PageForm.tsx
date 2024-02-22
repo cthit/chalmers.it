@@ -20,6 +20,7 @@ interface NewPostFormProps {
   titleSv: string;
   contentEn: string;
   contentSv: string;
+  slug: string;
 }
 
 const PageForm = (description: NewPostFormProps) => {
@@ -32,6 +33,7 @@ const PageForm = (description: NewPostFormProps) => {
   const [titleSv, setTitleSv] = useState(description.titleSv ?? '');
   const [contentEn, setContentEn] = useState(description.contentEn ?? '');
   const [contentSv, setContentSv] = useState(description.contentSv ?? '');
+  const [slug, setSlug] = useState(description.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -42,7 +44,7 @@ const PageForm = (description: NewPostFormProps) => {
 
   async function send() {
     try {
-      await edit(description.id, titleEn, titleSv, contentEn, contentSv);
+      await edit(description.id, titleEn, titleSv, contentEn, contentSv, slug);
     } catch {
       console.log('Failed to edit group description');
     }
@@ -61,6 +63,9 @@ const PageForm = (description: NewPostFormProps) => {
     <>
       <h1>Ändra grupp</h1>
       <Divider />
+
+      <h2>URL-slug</h2>
+      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
       <h2>Titel (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />

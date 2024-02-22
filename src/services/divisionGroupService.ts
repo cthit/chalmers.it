@@ -135,6 +135,7 @@ export default class DivisionGroupService {
     contentEn: string;
     contentSv: string;
     id: number;
+    slug: string;
   }) {
     return await prisma.divisionGroup.update({
       where: {
@@ -144,7 +145,8 @@ export default class DivisionGroupService {
         titleEn: edited.titleEn,
         titleSv: edited.titleSv,
         descriptionEn: edited.contentEn,
-        descriptionSv: edited.contentSv
+        descriptionSv: edited.contentSv,
+        slug: edited.slug
       }
     });
   }

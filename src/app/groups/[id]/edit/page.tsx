@@ -19,6 +19,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           titleSv={group.titleSv}
           contentEn={group.descriptionEn}
           contentSv={group.descriptionSv}
+          slug={params.id}
         />
       </ContentPane>
     );
