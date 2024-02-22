@@ -5,7 +5,11 @@ import NewsList from '@/components/NewsList/NewsList';
 export default function Home() {
   return (
     <main className={styles.main}>
-      <ThreePaneLayout left={<div></div>} middle={<NewsList />} right={<div></div>} />
+      <ThreePaneLayout
+        left={<div></div>}
+        middle={<NewsList />}
+        right={<div></div>}
+      />
     </main>
   );
 }

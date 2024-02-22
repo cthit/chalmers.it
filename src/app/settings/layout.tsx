@@ -41,25 +41,24 @@ export default function SettingsLayout({
 
   return (
     <div className={style.main}>
-    <ContentPane>
-      <div className={style.settingsPane}>
-        <div className={style.navPane}>
-          {pages.map((page) => (
-            <Link
-              className={`${style.navLink} ${
-                pathname === page.path && style.currentLink
-              }`}
-              href={page.path}
-              key={page.path}
-            >
-              {page.name}
-            </Link>
-          ))}
+      <ContentPane>
+        <div className={style.settingsPane}>
+          <div className={style.navPane}>
+            {pages.map((page) => (
+              <Link
+                className={`${style.navLink} ${
+                  pathname === page.path && style.currentLink
+                }`}
+                href={page.path}
+                key={page.path}
+              >
+                {page.name}
+              </Link>
+            ))}
+          </div>
+          <div className={style.settingsContent}>{children}</div>
         </div>
-        <div className={style.settingsContent}>{children}</div>
-      </div>
-    </ContentPane>
+      </ContentPane>
     </div>
-
   );
 }
