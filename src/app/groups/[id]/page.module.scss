@@ -6,12 +6,16 @@
 
 .title > h3 {
   flex-grow: 1;
-  color: #A7EBEB;
+  color: #a7ebeb;
 }
 
 .memberList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, max-content));
+  justify-content: center;
+  grid-auto-flow: column;
+  gap: 1rem;
+  width: 100%;
 }
 
 .memberList > li {
