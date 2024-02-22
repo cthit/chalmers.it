@@ -9,8 +9,8 @@ export default async function Groups() {
   return (
     <main className={styles.main}>
       <ContentPane>
-        <h1>Groups</h1>
-        <ul>
+        <h1>Kommitter, föreningar och andra instanser</h1>
+        <ul className={styles.groupList}>
           {groups.map((group) => (
             <li key={group.id}>
               <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
