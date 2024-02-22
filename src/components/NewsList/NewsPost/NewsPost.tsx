@@ -48,11 +48,6 @@ const NewsPost = async ({ post }: NewsPostProps) => {
     gfm: true
   });
 
-  const getMarkdownText = () => {
-    var rawMarkup = marked.parse(post.contentSv);
-    return { __html: rawMarkup };
-  };
-
   const propsThing: PropsThing = {
     day: 'numeric',
     month: 'numeric',
