@@ -9,23 +9,18 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const canEdit = await SessionService.canEditGroup(group.gammaSuperGroupId);
 
-  if (canEdit) return await mainContent(params);
+  if (canEdit)
+    return (
+      <ContentPane>
+        <title>{group.prettyName}</title>
+        <PageForm
+          id={group.id}
+          titleEn={group.titleEn}
+          titleSv={group.titleSv}
+          contentEn={group.descriptionEn}
+          contentSv={group.descriptionSv}
+        />
+      </ContentPane>
+    );
   else redirect('.');
 }
-
-const mainContent = async ({ id }: { id: string }) => {
-  const group = (await DivisionGroupService.getInfo(Number.parseInt(id)))!;
-
-  return (
-    <ContentPane>
-      <title>{group.prettyName}</title>
-      <PageForm
-        id={parseInt(id)}
-        titleEn={group.titleEn}
-        titleSv={group.titleSv}
-        contentEn={group.descriptionEn}
-        contentSv={group.descriptionSv}
-      />
-    </ContentPane>
-  );
-};
