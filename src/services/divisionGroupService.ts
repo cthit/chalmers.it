@@ -29,6 +29,12 @@ export default class DivisionGroupService {
     return await prisma.banner.findMany();
   }
 
+  static async getRandomBanner() {
+    return await prisma.banner.findMany().then((banners) => {
+      return banners[Math.floor(Math.random() * banners.length)];
+    });
+  }
+
   static async getBannerForGroup(groupId: number) {
     return await prisma.divisionGroup.findUnique({
       where: {
