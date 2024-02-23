@@ -65,7 +65,7 @@ model Sponsor {
 
 model Banner {
   id              Int           @id @default(autoincrement())
-  divisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id])
+  divisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id], onDelete: Cascade)
   image           Media         @relation(fields: [mediaSha256], references: [sha256])
   createdAt       DateTime      @default(now())
   divisionGroupId Int
