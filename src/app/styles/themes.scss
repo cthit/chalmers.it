@@ -13,6 +13,7 @@
     --border-color: #{$darkgray-200};
 
     --divider-color: #{$turquoise-400};
+    --banner-top-opacity: 0.0;
   }
 
   @include dark {
@@ -26,8 +27,11 @@
     --border-color: #{$lightgray-800};
 
     --divider-color: #{$turquoise-800};
+    --banner-top-opacity: 0.6;
   }
 
   --primary-color: #{$turquoise-500};
   --primary-color-highlight: #{$turquoise-400};
+
+  --banner-bottom-opacity: 0.6;
 }
