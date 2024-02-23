@@ -66,7 +66,7 @@ export default class MediaService {
         extension: true
       }
     });
-    const filename = sha256 + "." + convertMimeType(extension!.extension);
+    const filename = sha256 + '.' + convertMimeType(extension!.extension);
     return [await readFile(mediaPath + filename), filename];
   }
 

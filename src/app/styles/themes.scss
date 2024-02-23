@@ -13,7 +13,7 @@
     --border-color: #{$darkgray-200};
 
     --divider-color: #{$turquoise-400};
-    --banner-top-opacity: 0.0;
+    --banner-top-opacity: 0;
   }
 
   @include dark {
