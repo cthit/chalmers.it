@@ -31,3 +31,7 @@
   --primary-color: #{$turquoise-500};
   --primary-color-highlight: #{$turquoise-400};
 }
+
+* {
+  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
