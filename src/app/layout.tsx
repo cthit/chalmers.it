@@ -4,6 +4,7 @@ import '@/styles/themes.scss';
 import '@/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
+import Banner from '@/components/Banner/Banner';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <Header />
+        <Banner />
         {children}
       </body>
     </html>
