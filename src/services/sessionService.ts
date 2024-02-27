@@ -56,7 +56,9 @@ export default class SessionService {
     const groups = SessionService.getActiveGroups();
 
     return session?.user?.id
-      ? (await groups).some((g) => g.superGroup!.name === corporateRelationsGroup)
+      ? (await groups).some(
+          (g) => g.superGroup!.name === corporateRelationsGroup
+        )
       : false;
   }
 }
