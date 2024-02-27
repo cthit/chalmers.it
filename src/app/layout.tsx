@@ -1,7 +1,7 @@
 import Header from '@/components/Header/Header';
-import './styles/dimensions.scss';
-import './styles/themes.scss';
-import './globals.scss';
+import '@/styles/dimensions.scss';
+import '@/styles/themes.scss';
+import '@/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
