@@ -21,7 +21,11 @@ const Banner = async () => {
     <div className={`${styles.banner} ${playfair.className}`}>
       <BannerTitle />
       <div className={styles.bannerImg}>
-        {banner && <img src={`/api/media/${banner.mediaSha256}`} />}
+        {banner && (
+          <picture>
+            <img src={`/api/media/${banner.mediaSha256}`} alt="Page banner" />
+          </picture>
+        )}
       </div>
     </div>
   );
