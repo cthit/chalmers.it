@@ -4,6 +4,7 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import { useState } from 'react';
 import { addNotifier } from './actions';
 import { useRouter } from 'next/navigation';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
 const NewNotifierForm = () => {
   const router = useRouter();
@@ -22,15 +23,15 @@ const NewNotifierForm = () => {
   return (
     <form>
       <p>Type</p>
-      <select onChange={(e) => setType(e.target.value)}>
+      <DropdownList onChange={(e) => setType(e.target.value)}>
         <option value="DISCORD">Discord</option>
         <option value="SLACK">Slack</option>
-      </select>
+      </DropdownList>
       <p>Language</p>
-      <select onChange={(e) => setLanguage(e.target.value)}>
+      <DropdownList onChange={(e) => setLanguage(e.target.value)}>
         <option value="EN">English</option>
         <option value="SV">Swedish</option>
-      </select>
+      </DropdownList>
       <p>Webhook URL</p>
       <input type="text" onChange={(e) => setWebhook(e.target.value)} />
       <ActionButton onClick={newNotifier}>Add</ActionButton>
