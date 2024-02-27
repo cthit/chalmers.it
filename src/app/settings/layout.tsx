@@ -28,7 +28,9 @@ const pages = [
   {
     path: '/settings/sponsors',
     name: 'Sponsors',
-    authFunc: SessionService.isCorporateRelations
+    authFunc: async () =>
+      (await SessionService.isCorporateRelations()) ||
+      (await SessionService.isAdmin())
   },
   {
     path: '/settings/media',
