@@ -67,7 +67,12 @@ export default class MediaService {
       }
     });
     const filename = sha256 + '.' + convertMimeType(extension!.extension);
-    return [await readFile(mediaPath + filename), filename];
+
+    return {
+      data: await readFile(mediaPath + filename),
+      filename,
+      extension: extension!.extension
+    };
   }
 
   static async getStats() {
