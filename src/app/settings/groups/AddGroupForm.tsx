@@ -13,8 +13,9 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   async function importGroup() {
     const group = gammaGroups.find((g) => g.id === newGroup);
     const prettyName = group?.prettyName || group?.name || 'Unnamed Group';
+    const slug = group?.name.toLowerCase() || 'unnamed-group';
 
-    await addGroup(newGroup, prettyName);
+    await addGroup(newGroup, prettyName, slug);
     router.refresh();
   }
 

@@ -6,13 +6,20 @@ export default class DivisionGroupService {
     return await prisma.divisionGroup.findMany();
   }
 
-  static async addGroup(gammaSuperGroupId: string, prettyName: string) {
+  static async addGroup(
+    gammaSuperGroupId: string,
+    prettyName: string,
+    slug: string
+  ) {
     return await prisma.divisionGroup.create({
       data: {
         gammaSuperGroupId,
         prettyName,
+        titleEn: 'yeppers peppers',
+        titleSv: 'yeppers peppers',
         descriptionEn: 'yeppers peppers',
-        descriptionSv: 'yeppers peppers'
+        descriptionSv: 'yeppers peppers',
+        slug
       }
     });
   }
@@ -61,6 +68,23 @@ export default class DivisionGroupService {
     });
   }
 
+  static async getInfoBySlug(slug: string) {
+    return await prisma.divisionGroup.findUnique({
+      where: {
+        slug
+      },
+      select: {
+        id: true,
+        gammaSuperGroupId: true,
+        prettyName: true,
+        titleEn: true,
+        titleSv: true,
+        descriptionEn: true,
+        descriptionSv: true
+      }
+    });
+  }
+
   static async getInfo(id: number) {
     return await prisma.divisionGroup.findUnique({
       where: {
@@ -69,6 +93,8 @@ export default class DivisionGroupService {
       select: {
         gammaSuperGroupId: true,
         prettyName: true,
+        titleEn: true,
+        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -106,6 +132,28 @@ export default class DivisionGroupService {
   static async isUserActive(cid: string): Promise<boolean> {
     return GammaService.getUser(cid).then((user) => {
       return user.groups.some((group) => group.active);
+    });
+  }
+
+  static async editInfo(edited: {
+    titleEn: string;
+    titleSv: string;
+    contentEn: string;
+    contentSv: string;
+    id: number;
+    slug: string;
+  }) {
+    return await prisma.divisionGroup.update({
+      where: {
+        id: edited.id
+      },
+      data: {
+        titleEn: edited.titleEn,
+        titleSv: edited.titleSv,
+        descriptionEn: edited.contentEn,
+        descriptionSv: edited.contentSv,
+        slug: edited.slug
+      }
     });
   }
 }

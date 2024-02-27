@@ -3,6 +3,7 @@ import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
+import ContentPane from '../ContentPane/ContentPane';
 
 interface NewsPostInterface {
   id: number;
@@ -40,7 +41,7 @@ const News = ({
   canPost: boolean;
 }) => {
   return (
-    <div className={styles.list}>
+    <ContentPane>
       <div className={styles.title}>
         <h1>Nyheter</h1>
         {canPost && <ActionButton href="/post/new">Posta nyhet</ActionButton>}
@@ -48,7 +49,7 @@ const News = ({
       {news.map((newsPost) => (
         <NewsPost post={newsPost} key={newsPost.id} />
       ))}
-    </div>
+    </ContentPane>
   );
 };
 

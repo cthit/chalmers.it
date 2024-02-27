@@ -1,15 +1,13 @@
 'use client';
 
-import { edit, post, postForGroup } from './actions';
+import { edit } from './actions';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/models/GammaModels';
 import { useState } from 'react';
-import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
-import style from './NewsPostForm.module.scss';
+import style from './PageForm.module.scss';
 import Popup from 'reactjs-popup';
 
 const PreviewContentStyle = {
@@ -17,28 +15,25 @@ const PreviewContentStyle = {
 };
 
 interface NewPostFormProps {
-  groups: GammaGroup[];
-  id?: number;
-  group?: string;
-  titleEn?: string;
-  titleSv?: string;
-  contentEn?: string;
-  contentSv?: string;
-  writtenByCid?: string;
+  id: number;
+  titleEn: string;
+  titleSv: string;
+  contentEn: string;
+  contentSv: string;
+  slug: string;
 }
 
-const NewsPostForm = (newsPost: NewPostFormProps) => {
+const PageForm = (description: NewPostFormProps) => {
   marked.use({
-    pedantic: false,
-    breaks: true,
-    gfm: true
+    gfm: true,
+    breaks: true
   });
 
-  const [group, setGroup] = useState(newsPost.group ?? 'self');
-  const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
+  const [titleEn, setTitleEn] = useState(description.titleEn ?? '');
+  const [titleSv, setTitleSv] = useState(description.titleSv ?? '');
+  const [contentEn, setContentEn] = useState(description.contentEn ?? '');
+  const [contentSv, setContentSv] = useState(description.contentSv ?? '');
+  const [slug, setSlug] = useState(description.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -49,26 +44,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   async function send() {
     try {
-      if (newsPost.id !== undefined) {
-        await edit(
-          newsPost.id!,
-          newsPost.writtenByCid!,
-          titleEn,
-          titleSv,
-          contentEn,
-          contentSv
-        );
-        return;
-      }
-
-      if (group !== 'self') {
-        await postForGroup(titleEn, titleSv, contentEn, contentSv, group);
-        return;
-      } else {
-        await post(titleEn, titleSv, contentEn, contentSv);
-      }
+      await edit(description.id, titleEn, titleSv, contentEn, contentSv, slug);
     } catch {
-      console.log('Failed to post news article');
+      console.log('Failed to edit group description');
     }
   }
 
@@ -83,17 +61,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   return (
     <>
-      <h1>Skapa nyhet</h1>
+      <h1>Ändra grupp</h1>
       <Divider />
-      <h2>Posta som</h2>
-      <DropdownList onChange={(e) => setGroup(e.target.value)}>
-        <option value="self">Mig själv</option>
-        {newsPost.groups.map((group) => (
-          <option key={group.superGroup!.id} value={group.superGroup!.id}>
-            {group.superGroup?.prettyName ?? group.prettyName}
-          </option>
-        ))}
-      </DropdownList>
+
+      <h2>URL-slug</h2>
+      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
       <h2>Titel (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
@@ -114,7 +86,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <br />
       <div className={style.actions}>
         <ActionButton onClick={send}>
-          {newsPost.id !== undefined ? 'Redigera' : 'Skapa'}
+          {description.id !== undefined ? 'Redigera' : 'Skapa'}
         </ActionButton>
         <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>
@@ -144,4 +116,4 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
 };
 
-export default NewsPostForm;
+export default PageForm;
