@@ -40,8 +40,8 @@ const ContactCard = () => {
       <p>styrit@chalmers.it</p>
       <Divider />
       <p>
-        Utvecklad av <Link href="https://digit.chalmers.it">digIT</Link> |{' '}
-        <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">mer info</Link>{' '}
+        Utvecklad av <Link className={styles.link} href="https://digit.chalmers.it">digIT</Link> |{' '}
+        <Link className={styles.link} href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">mer info</Link>{' '}
       </p>
     </div>
   );
