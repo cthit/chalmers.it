@@ -7,6 +7,7 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import DeletePostButton from './DeletePostButton';
+import MarkdownView from '@/components/MarkdownView/MarkdownView';
 
 interface NewsPostProps {
   post: {
@@ -47,11 +48,6 @@ const NewsPost = async ({ post }: NewsPostProps) => {
     gfm: true
   });
 
-  const getMarkdownText = () => {
-    var rawMarkup = marked.parse(post.contentSv);
-    return { __html: rawMarkup };
-  };
-
   const propsThing: PropsThing = {
     day: 'numeric',
     month: 'numeric',
@@ -80,10 +76,7 @@ const NewsPost = async ({ post }: NewsPostProps) => {
             .toLocaleString([], propsThing)
             .replace(',', '')}`}
       </p>
-      <div
-        className={style.content}
-        dangerouslySetInnerHTML={getMarkdownText()}
-      />
+      <MarkdownView content={post.contentSv} />
     </>
   );
 };

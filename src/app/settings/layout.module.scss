@@ -1,3 +1,12 @@
+.main {
+  margin: 4rem;
+}
+
+.settingsPane {
+  display: flex;
+  flex-direction: row;
+  min-height: 100dvh;
+  margin: -1rem;
 .settingsPane {
   display: flex;
   flex-direction: row;
