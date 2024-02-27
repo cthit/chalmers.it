@@ -1,0 +1,23 @@
+.languageToggle {
+    position: relative;
+    display: inline-flex;
+    justify-content: space-between;
+    min-width: 100%;
+}
+
+.swedish {
+    display: inline-flex;
+
+}
+
+.english {
+    display: inline-flex;
+    justify-self: end;
+}
+
+.flag {
+    width: 1rem;
+    height: 1rem;
+    margin: 0 5px;
+    cursor: pointer;
+}
