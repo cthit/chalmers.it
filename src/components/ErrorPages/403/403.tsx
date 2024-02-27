@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styles from './403.module.scss';
 
-export default function NotFound() {
+export default function Forbidden() {
   return (
     <div className={styles.content}>
       <h1 className={styles.header}>403</h1>
