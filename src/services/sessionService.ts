@@ -22,19 +22,19 @@ export default class SessionService {
       : [];
   }
 
-  static async canPostNews() {
-    const session = await SessionService.getSession();
-    return session?.user?.id
-      ? await DivisionGroupService.isUserActive(session?.user?.id!)
-      : false;
-  }
-
   static async canEditGroup(gammaSuperGroupId: string) {
     const session = await SessionService.getSession();
     const activeGroups = session?.user?.id
       ? await DivisionGroupService.getUserActiveGroups(session?.user?.id!)
       : [];
     return activeGroups.some((g) => g.superGroup!.id === gammaSuperGroupId);
+  }
+
+  static async isActive() {
+    const session = await SessionService.getSession();
+    return session?.user?.id
+      ? await DivisionGroupService.isUserActive(session?.user?.id!)
+      : false;
   }
 
   static async isAdmin() {

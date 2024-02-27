@@ -23,7 +23,7 @@ const pages = [
   {
     path: '/settings/banners',
     name: 'Banner Images',
-    authFunc: SessionService.canPostNews
+    authFunc: SessionService.isActive
   },
   {
     path: '/settings/sponsors',
