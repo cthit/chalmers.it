@@ -43,6 +43,14 @@
   );
 }
 
+.currentLink:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 35%,
+    white
+  );
+}
+
 .settingsContent {
   flex-grow: 1;
   padding: 2rem;
