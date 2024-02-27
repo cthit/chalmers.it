@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { addGroup } from './actions';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { useRouter } from 'next/navigation';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
 const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
 
   return (
     <>
-      <select onChange={(e) => setNewGroup(e.target.value)}>
+      <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
         {gammaGroups
           .filter((g) => g.type !== 'ALUMNI')
           .map((group) => (
@@ -29,7 +30,7 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
               {group.prettyName}
             </option>
           ))}
-      </select>
+      </DropdownList>
       <ActionButton onClick={importGroup}>Lägg till</ActionButton>
     </>
   );

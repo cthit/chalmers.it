@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { addBanner } from './actions';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
 const AddBannerForm = ({
   groups
@@ -44,13 +45,13 @@ const AddBannerForm = ({
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="sponsorName">Gamma Group:</label>
-        <select onChange={handleGroupChange}>
+        <DropdownList onChange={handleGroupChange}>
           {groups.map((group) => (
             <option key={group.id} value={group.id}>
               {group.prettyName}
             </option>
           ))}
-        </select>
+        </DropdownList>
       </div>
       <div>
         <label htmlFor="sponsorImage">Banner Image:</label>

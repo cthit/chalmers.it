@@ -1,64 +1,61 @@
-'use client';
+'use server';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import style from './layout.module.scss';
-import ContentPane from '@/components/ContentPane/ContentPane';
+import Unauthorized from '@/components/ErrorPages/401/401';
+import SettingsPanel from '@/components/SettingsPanel/SettingsPanel';
+import SessionService from '@/services/sessionService';
 
 const pages = [
   {
     path: '/settings',
-    name: 'General'
+    name: 'General',
+    authFunc: async () => true
   },
   {
     path: '/settings/notifiers',
-    name: 'Notifiers'
+    name: 'Notifiers',
+    authFunc: SessionService.isAdmin
   },
   {
     path: '/settings/groups',
-    name: 'Division Groups'
+    name: 'Division Groups',
+    authFunc: SessionService.isAdmin
   },
   {
     path: '/settings/banners',
-    name: 'Banner Images'
+    name: 'Banner Images',
+    authFunc: SessionService.isActive
   },
   {
     path: '/settings/sponsors',
-    name: 'Sponsors'
+    name: 'Sponsors',
+    authFunc: async () =>
+      (await SessionService.isCorporateRelations()) ||
+      (await SessionService.isAdmin())
   },
   {
     path: '/settings/media',
-    name: 'Media'
+    name: 'Media',
+    authFunc: SessionService.isAdmin
   }
 ];
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const session = await SessionService.getUser();
 
-  return (
-    <div className={style.main}>
-      <ContentPane>
-        <div className={style.settingsPane}>
-          <div className={style.navPane}>
-            {pages.map((page) => (
-              <Link
-                className={`${style.navLink} ${
-                  pathname === page.path && style.currentLink
-                }`}
-                href={page.path}
-                key={page.path}
-              >
-                {page.name}
-              </Link>
-            ))}
-          </div>
-          <div className={style.settingsContent}>{children}</div>
-        </div>
-      </ContentPane>
-    </div>
-  );
+  if (!session) {
+    return <Unauthorized />;
+  }
+
+  let authPages = [];
+  for (const page of pages) {
+    if (await page.authFunc()) {
+      authPages.push({ path: page.path, name: page.name });
+    }
+  }
+
+  return <SettingsPanel pages={authPages}>{children}</SettingsPanel>;
 }

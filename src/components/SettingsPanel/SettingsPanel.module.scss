@@ -1,0 +1,57 @@
+.main {
+  margin: 4rem;
+}
+
+.settingsPane {
+  display: flex;
+  flex-direction: row;
+  margin: -1rem;
+  min-height: 100dvh;
+}
+
+.navPane {
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 80%,
+    white
+  );
+}
+
+.navLink {
+  display: block;
+  padding: 1rem;
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 65%,
+    white
+  );
+}
+
+.navLink:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 55%,
+    white
+  );
+}
+
+.currentLink {
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 45%,
+    white
+  );
+}
+
+.currentLink:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--content-background-color) 35%,
+    white
+  );
+}
+
+.settingsContent {
+  flex-grow: 1;
+  padding: 2rem;
+}

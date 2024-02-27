@@ -24,7 +24,7 @@ const NewsList = async () => {
     const news = await NewsService.getPage(1, 10);
     let canPost = false;
     try {
-      canPost = await SessionService.canPostNews();
+      canPost = await SessionService.isActive();
     } finally {
       return <News news={news} canPost={canPost} />;
     }
