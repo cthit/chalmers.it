@@ -6,22 +6,18 @@ const ContactCard = () => {
   return (
     <div>
       <div className={styles.languageToggle}>
-        <div className={styles.swedish}>
-          <button className={styles.button}>
-            <picture className={styles.flag}>
-              <img src="/sweden.svg" alt="Swedish flag"/>
-            </picture>
-            <p>Svenska</p>
-          </button>
-        </div>
-        <div className={styles.english}>
-          <button className={styles.button}>
-            <picture className={styles.flag}>
-              <img src="/uk.svg" alt="English flag"/>
-            </picture>
-            <p>English</p>
-          </button>
-        </div>
+        <a className={styles.button}>
+          <picture className={styles.flag}>
+            <img src="/sweden.svg" alt="Swedish flag"/>
+          </picture>
+          <p>Svenska</p>
+        </a>
+        <a className={styles.button}>
+          <picture className={styles.flag}>
+            <img src="/uk.svg" alt="English flag"/>
+          </picture>
+          <p>English</p>
+        </a>
       </div>
       <Divider />
       <p>
