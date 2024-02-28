@@ -7,16 +7,20 @@ const ContactCard = () => {
     <div>
       <div className={styles.languageToggle}>
         <div className={styles.swedish}>
-          <picture>
-            <img className={styles.flag} src="/sweden.svg" alt="Swedish flag"/>
-          </picture>
-          <p>Svenska</p>
+          <button className={styles.button}>
+            <picture className={styles.flag}>
+              <img src="/sweden.svg" alt="Swedish flag"/>
+            </picture>
+            <p>Svenska</p>
+          </button>
         </div>
         <div className={styles.english}>
-          <picture>
-            <img className={styles.flag} src="/uk.svg" alt="English flag"/>
-          </picture>
-          <p>English</p>
+          <button className={styles.button}>
+            <picture className={styles.flag}>
+              <img src="/uk.svg" alt="English flag"/>
+            </picture>
+            <p>English</p>
+          </button>
         </div>
       </div>
       <Divider />
