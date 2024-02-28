@@ -27,7 +27,7 @@ const ContactCard = () => {
       <p>
         <strong>POSTADRESS</strong>
       </p>
-      <p>Teknologsektion Informationsteknik</p>
+      <p>Teknologsektionen Informationsteknik</p>
       <p>Toknologgården 2</p>
       <p>412 58 Göteborg</p>
       <br />
