@@ -7,8 +7,8 @@ export const authConfig: NextAuthOptions = {
   providers: [
     GammaProvider({
       authorizationURL: gammaUrl + '/api/oauth/authorize',
-      clientId: 'id',
-      clientSecret: 'secret',
+      clientId: process.env.GAMMA_CLIENT_ID || 'id',
+      clientSecret: process.env.GAMMA_CLIENT_SECRET || 'secret',
       profileUrl: gammaUrl + '/api/users/me',
       tokenURL: gammaUrl + '/api/oauth/token'
     })
