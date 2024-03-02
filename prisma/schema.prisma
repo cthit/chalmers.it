@@ -73,6 +73,7 @@ model Banner {
   createdAt       DateTime      @default(now())
   divisionGroupId Int
   mediaSha256     String
+  @@unique([divisionGroupId, mediaSha256])
 }
 
 model Media {

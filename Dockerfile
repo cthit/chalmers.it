@@ -26,6 +26,7 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV HOSTNAME 0.0.0.0
 ENV FORCE_COLOR 1
+ENV MEDIA_PATH /app/media
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -38,6 +39,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy logger configs
 COPY --chown=nextjs:nodejs next-logger.config.js /app/
 COPY --chown=nextjs:nodejs pino-pretty-transport.js /app/
+
+# Create media directory
+RUN mkdir -p $MEDIA_PATH
+RUN chown -R nextjs:nodejs $MEDIA_PATH
 
 USER nextjs
 

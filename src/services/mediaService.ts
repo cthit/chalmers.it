@@ -1,7 +1,7 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
 
-const mediaPath = process.env.MEDIA_PATH || './media/';
+const mediaPath = process.env.MEDIA_PATH || './media';
 
 const convertMimeType = (mimeType: string) => {
   switch (mimeType) {
