@@ -23,6 +23,9 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   return (
     <>
       <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
+        <option value={undefined} hidden>
+          Select a group
+        </option>
         {gammaGroups
           .filter((g) => g.type !== 'ALUMNI')
           .map((group) => (
