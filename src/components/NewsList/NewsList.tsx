@@ -4,6 +4,7 @@ import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
+import Divider from '../Divider/Divider';
 
 interface NewsPostInterface {
   id: number;
@@ -22,12 +23,8 @@ interface NewsPostInterface {
 const NewsList = async () => {
   try {
     const news = await NewsService.getPage(1, 10);
-    let canPost = false;
-    try {
-      canPost = await SessionService.isActive();
-    } finally {
-      return <News news={news} canPost={canPost} />;
-    }
+    const canPost = await SessionService.isActive().catch(() => false);
+    return <News news={news} canPost={canPost} />;
   } catch {
     return <NewsError />;
   }
@@ -46,6 +43,12 @@ const News = ({
         <h1>Nyheter</h1>
         {canPost && <ActionButton href="/post/new">Posta nyhet</ActionButton>}
       </div>
+      {news.length === 0 && (
+        <>
+          <Divider />
+          <p>Inga nyheter att visa</p>
+        </>
+      )}
       {news.map((newsPost) => (
         <NewsPost post={newsPost} key={newsPost.id} />
       ))}
@@ -57,6 +60,7 @@ const NewsError = () => {
   return (
     <div className={styles.list}>
       <h1>Nyheter</h1>
+      <Divider />
       <p>Det gick inte att hämta nyheter</p>
     </div>
   );

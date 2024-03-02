@@ -50,12 +50,22 @@ export default async function SettingsLayout({
     return <Unauthorized />;
   }
 
-  let authPages = [];
+  let authPages: any[] | undefined = [];
   for (const page of pages) {
-    if (await page.authFunc()) {
+    const res = await page.authFunc().catch(() => undefined);
+    if (res === undefined) {
+      authPages = undefined;
+      break;
+    }
+
+    if (res) {
       authPages.push({ path: page.path, name: page.name });
     }
   }
 
-  return <SettingsPanel pages={authPages}>{children}</SettingsPanel>;
+  return authPages === undefined ? (
+    <Unauthorized />
+  ) : (
+    <SettingsPanel pages={authPages}>{children}</SettingsPanel>
+  );
 }
