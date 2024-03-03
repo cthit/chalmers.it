@@ -9,7 +9,7 @@ export default function Home() {
       <ThreePaneLayout
         left={<div></div>}
         middle={<NewsList />}
-        right={<div><ContactCard /></div>}
+        right={<ContactCard />}
       />
     </main>
   );

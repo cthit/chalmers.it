@@ -1,4 +1,7 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -9,5 +12,4 @@
   padding-left: 3.125rem;
   justify-content: space-between;
   padding-right: 3.125rem;
-  position: relative;
 }

@@ -4,17 +4,17 @@ import styles from './ContactCard.module.scss';
 
 const ContactCard = () => {
   return (
-    <div>
+    <div className={styles.contactCard}>
       <div className={styles.languageToggle}>
         <a className={styles.button}>
           <picture className={styles.flag}>
-            <img src="/sweden.svg" alt="Swedish flag"/>
+            <img src="/sweden.svg" alt="Swedish flag" />
           </picture>
           <p>Svenska</p>
         </a>
         <a className={styles.button}>
           <picture className={styles.flag}>
-            <img src="/uk.svg" alt="English flag"/>
+            <img src="/uk.svg" alt="English flag" />
           </picture>
           <p>English</p>
         </a>
@@ -40,8 +40,17 @@ const ContactCard = () => {
       <p>styrit@chalmers.it</p>
       <Divider />
       <p>
-        Utvecklad av <Link className={styles.link} href="https://digit.chalmers.it">digIT</Link> |{' '}
-        <Link className={styles.link} href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">mer info</Link>{' '}
+        Utvecklad av{' '}
+        <Link className={styles.link} href="https://digit.chalmers.it">
+          digIT
+        </Link>{' '}
+        |{' '}
+        <Link
+          className={styles.link}
+          href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        >
+          mer info
+        </Link>{' '}
       </p>
     </div>
   );
