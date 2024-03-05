@@ -8,6 +8,7 @@ import { authConfig } from '@/auth/auth';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
+import SessionService from '@/services/sessionService';
 
 interface NewsPostProps {
   post: {
@@ -20,6 +21,7 @@ interface NewsPostProps {
     createdAt: Date;
     updatedAt: Date;
     writtenFor: {
+      gammaSuperGroupId: string;
       prettyName: string;
     } | null;
   };
@@ -35,18 +37,18 @@ type PropsThing = {
 
 const NewsPost = async ({ post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
-  let nick = post.writtenByCid;
-  let ownsPost = false;
-  try {
-    nick = (await GammaService.getUser(post.writtenByCid)).nick;
-    ownsPost =
-      (await getServerSession(authConfig))?.user?.id === post.writtenByCid;
-  } catch {}
 
-  marked.use({
-    pedantic: false,
-    gfm: true
-  });
+  const nick =
+    (await GammaService.getUser(post.writtenByCid).catch(() => undefined))?.user
+      .nick || post.writtenByCid;
+
+  const ownsPost =
+    (await getServerSession(authConfig))?.user?.id === post.writtenByCid ||
+    post.writtenFor?.gammaSuperGroupId
+      ? await SessionService.canEditGroup(post.writtenFor!.gammaSuperGroupId)
+      : false;
+
+  const canDeletePost = ownsPost || (await SessionService.isAdmin());
 
   const propsThing: PropsThing = {
     day: 'numeric',
@@ -66,7 +68,7 @@ const NewsPost = async ({ post }: NewsPostProps) => {
         {ownsPost && (
           <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
         )}
-        {ownsPost && <DeletePostButton id={post.id} />}
+        {canDeletePost && <DeletePostButton id={post.id} />}
       </div>
       <p className={style.subtitle}>
         {post.createdAt.toLocaleString([], propsThing).replace(',', '')} |

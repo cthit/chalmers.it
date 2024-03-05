@@ -5,21 +5,10 @@ export interface Authority {
 
 export interface GammaGroup {
   id: string;
-  becomesActive?: number;
-  becomesInactive?: number;
-  description: {
-    sv: string;
-    en: string;
-  };
-  function?: {
-    sv: string;
-    en: string;
-  };
-  email: string;
   name: string;
   prettyName: string;
-  superGroup?: GammaSuperGroup;
-  active?: boolean;
+  groupMembers?: GammaGroupMember[];
+  superGroup: GammaSuperGroup;
 }
 
 export interface GammaSuperGroup {
@@ -27,49 +16,45 @@ export interface GammaSuperGroup {
   name: string;
   prettyName: string;
   type: string;
-  email: string;
+  svDescription: string;
+  enDescription: string;
+}
+
+export interface GammaUserInfo {
+  user: GammaUser;
+  groups: {
+    group: GammaGroup;
+    post: GammaPost;
+  }[];
 }
 
 export interface GammaUser {
-  cid: string;
+  id: string;
   nick: string;
   firstName: string;
   lastName: string;
-
-  email: string;
-  phone: string;
-  avatarUrl?: string;
   acceptanceYear: number;
-  gdpr: boolean;
-  language: string;
-  authorities: [{ id: string; authority: string }];
-  groups: GammaGroup[];
-  websiteURLs?: string;
-  //Internal extension
-  isSiteAdmin: boolean;
-  accessToken?: string;
-  gameOwnerId: string;
 }
 
 export interface GammaGroupMember {
+  user: GammaUser;
   post: GammaPost;
-  fkitGroupDTO: GammaGroup;
-  unofficialPostName: string;
-  id: string;
-  cid: string;
-  nick: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string;
-  acceptanceYear: number;
-  gdpr: boolean;
-  language: string;
-  authorities: any;
+  unofficialPostName?: string;
 }
 
 export interface GammaPost {
   id: string;
-  sv: string;
-  en: string;
+  svName: string;
+  enName: string;
   emailPrefix: string;
+}
+
+export interface GammaProfile {
+  sub: string;
+  picture: string;
+  email?: string;
+  given_name: string;
+  family_name: string;
+  nickname: string;
+  locale: string;
 }

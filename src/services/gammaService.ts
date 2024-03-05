@@ -2,48 +2,50 @@ import {
   GammaGroup,
   GammaGroupMember,
   GammaSuperGroup,
-  GammaUser
+  GammaUser,
+  GammaUserInfo
 } from '@/models/GammaModels';
 
-const apiKey = process.env.GAMMA_API_KEY;
+const apiKey =
+  process.env.GAMMA_API_KEY_ID + ':' + process.env.GAMMA_API_KEY_TOKEN;
 const gammaUrl = process.env.GAMMA_ROOT_URL?.replace(/\/$/, '');
 
 export default class GammaService {
-  static async getUser(cid: string) {
-    return gammaGetRequest<GammaUser>(`/users/${cid}`);
+  static async getUser(uuid: string) {
+    return await gammaGetRequest<GammaUserInfo>(`/info/v1/users/${uuid}`);
+  }
+
+  static getUserAvatar(uuid: string) {
+    return `${gammaUrl}/images/user/avatar/${uuid}`;
+  }
+
+  static getGroupAvatar(gid: string) {
+    return `${gammaUrl}/images/group/avatar/${gid}`;
   }
 
   static async getAllSuperGroups() {
-    return gammaGetRequest<GammaSuperGroup[]>('/superGroups');
+    return await gammaGetRequest<
+      {
+        type: string;
+        superGroups: {
+          superGroup: GammaSuperGroup;
+          members: GammaGroupMember[];
+        }[];
+      }[]
+    >('/info/v1/blob');
+  }
+
+  static async getAllActiveSuperGroups() {
+    return (await this.getAllSuperGroups())
+      .filter((sg) => sg.type === 'committee')
+      .flatMap((sg) => sg.superGroups);
   }
 
   static async getSuperGroupMembers(sgid: string) {
-    let activeGroups = await this.getSuperGroupSubGroups(sgid);
-    let membersWithDuplicates = (
-      await Promise.all(
-        activeGroups.map(async (group) => {
-          return await this.getGroupMembers(group.id);
-        })
-      )
-    ).flat();
-
-    return membersWithDuplicates.filter((member, index, self) => {
-      return index === self.findIndex((t) => t.cid === member.cid);
-    });
-  }
-
-  static async getGroupMembers(gid: string) {
-    interface GroupMembersResponse {
-      members: GammaGroupMember[];
-    }
-
+    let activeGroups = await this.getAllActiveSuperGroups();
     return (
-      await gammaGetRequest<GroupMembersResponse>(`/groups/${gid}/members`)
-    ).members;
-  }
-
-  static async getSuperGroupSubGroups(sgid: string) {
-    return gammaGetRequest<GammaGroup[]>(`/superGroups/${sgid}/subgroups`);
+      activeGroups.find((group) => group.superGroup.id === sgid)?.members || []
+    );
   }
 }
 
@@ -55,7 +57,7 @@ const gammaGetRequest = async <T>(path: string): Promise<T> => {
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData = await response.json().catch(() => response.statusText);
     throw new Error(`Gamma request failed with status ${response.status}`, {
       cause: errorData
     });

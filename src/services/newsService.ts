@@ -51,6 +51,7 @@ export default class NewsService {
         writtenByCid: true,
         writtenFor: {
           select: {
+            gammaSuperGroupId: true,
             prettyName: true
           }
         }
