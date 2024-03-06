@@ -2,7 +2,6 @@ import Divider from '@/components/Divider/Divider';
 import style from './NewsPost.module.scss';
 import Link from 'next/link';
 import GammaService from '@/services/gammaService';
-import { marked } from 'marked';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import ActionButton from '@/components/ActionButton/ActionButton';
