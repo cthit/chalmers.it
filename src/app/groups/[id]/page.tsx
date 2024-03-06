@@ -43,7 +43,7 @@ const mainContent = async ({ id }: { id: string }) => {
         {groupMembers.map((member) => (
           <li key={member.user.id}>
             <GroupMember
-              pfp={GammaService.getUserAvatar(member.user.id)}
+              pfp={GammaService.getUserAvatarURL(member.user.id)}
               name={member.user.nick}
               post={member.post.svName}
               postStyled={member.unofficialPostName}

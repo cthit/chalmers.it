@@ -1,20 +1,31 @@
-import { GammaSuperGroupBlob, GammaUserInfo } from '@/types/gamma';
+import { GammaSuperGroupBlob, GammaUserInfo, GammaGroup } from '@/types/gamma';
 
 const apiKey =
   process.env.GAMMA_API_KEY_ID + ':' + process.env.GAMMA_API_KEY_TOKEN;
 const gammaUrl = process.env.GAMMA_ROOT_URL?.replace(/\/$/, '');
+const activeGroupTypes = (
+  process.env.ACTIVE_GROUP_TYPES || 'committee,society'
+).split(',');
 
 export default class GammaService {
   static async getUser(uuid: string) {
     return await gammaGetRequest<GammaUserInfo>(`/info/v1/users/${uuid}`);
   }
 
-  static getUserAvatar(uuid: string) {
+  static getUserAvatarURL(uuid: string) {
     return `${gammaUrl}/images/user/avatar/${uuid}`;
   }
 
-  static getGroupAvatar(gid: string) {
+  static getGroupAvatarURL(gid: string) {
     return `${gammaUrl}/images/group/avatar/${gid}`;
+  }
+
+  static isSuperGroupActive(sg: { type: string }) {
+    return activeGroupTypes.includes(sg.type);
+  }
+
+  static isGroupActive(g: GammaGroup) {
+    return this.isSuperGroupActive(g.superGroup);
   }
 
   static async getAllSuperGroups() {
@@ -24,7 +35,7 @@ export default class GammaService {
   static async getAllActiveSuperGroups() {
     return (
       (await this.getAllSuperGroups())
-        .filter((sg) => sg.type === 'committee')
+        .filter((sg) => this.isSuperGroupActive(sg))
         .flatMap((sg) => sg.superGroups) || []
     );
   }
