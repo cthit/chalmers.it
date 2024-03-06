@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { addBanner } from './actions';
+import { addBanner } from '@/actions/banners';
 import DropdownList from '@/components/DropdownList/DropdownList';
 
 const AddBannerForm = ({

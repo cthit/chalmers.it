@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import { deleteBanner } from './actions';
+import { deleteBanner } from '@/actions/banners';
 
 const DeleteBannerButton = ({
   banner

@@ -2,7 +2,7 @@
 
 import { GammaSuperGroup } from '@/models/GammaModels';
 import { useState } from 'react';
-import { addGroup } from './actions';
+import { addGroup } from '@/actions/groups';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';

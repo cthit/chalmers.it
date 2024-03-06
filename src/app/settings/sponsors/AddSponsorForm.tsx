@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { addSponsor } from './actions';
+import { addSponsor } from '@/actions/sponsors';
 
 const AddSponsorForm = () => {
   const [sponsorName, setSponsorName] = useState('');
