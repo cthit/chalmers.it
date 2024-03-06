@@ -17,20 +17,20 @@ export async function post(
     titleSv: titleSv,
     contentEn: contentEn,
     contentSv: contentSv,
-    writtenByCid: session?.user?.id!
+    writtenByGammaUserId: session?.user?.id!
   });
   redirect('/');
 }
 
 export async function edit(
   id: number,
-  writtenByCid: string,
+  writtenByGammaUserId: string,
   titleEn: string,
   titleSv: string,
   contentEn: string,
   contentSv: string
 ) {
-  if ((await getServerSession(authConfig))?.user?.id !== writtenByCid) {
+  if ((await getServerSession(authConfig))?.user?.id !== writtenByGammaUserId) {
     redirect('/');
   }
 
@@ -57,7 +57,7 @@ export async function postForGroup(
     titleSv: titleSv,
     contentEn: contentEn,
     contentSv: contentSv,
-    writtenByCid: session?.user?.id!,
+    writtenByGammaUserId: session?.user?.id!,
     divisionSuperGroupId: divisionSuperGroupId
   });
   redirect('/');

@@ -8,19 +8,19 @@ datasource db {
 }
 
 model NewsPost {
-  id              Int            @id @default(autoincrement())
-  titleSv         String
-  titleEn         String
-  contentSv       String
-  contentEn       String
-  writtenByCid    String
-  writtenFor      DivisionGroup? @relation(fields: [divisionGroupId], references: [id])
-  mainImage       Media?         @relation(fields: [mediaSha256], references: [sha256])
-  connectedEvents Event[]
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  divisionGroupId Int?
-  mediaSha256     String?
+  id                   Int            @id @default(autoincrement())
+  titleSv              String
+  titleEn              String
+  contentSv            String
+  contentEn            String
+  writtenByGammaUserId String
+  writtenFor           DivisionGroup? @relation(fields: [divisionGroupId], references: [id])
+  mainImage            Media?         @relation(fields: [mediaSha256], references: [sha256])
+  connectedEvents      Event[]
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  divisionGroupId      Int?
+  mediaSha256          String?
 }
 
 model DivisionGroup {
@@ -73,6 +73,7 @@ model Banner {
   createdAt       DateTime      @default(now())
   divisionGroupId Int
   mediaSha256     String
+
   @@unique([divisionGroupId, mediaSha256])
 }
 

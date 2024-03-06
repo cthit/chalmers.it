@@ -28,7 +28,7 @@ export default class NewsService {
   static async getByCid(cid: string) {
     return await prisma.newsPost.findMany({
       where: {
-        writtenByCid: cid
+        writtenByGammaUserId: cid
       }
     });
   }
@@ -48,7 +48,7 @@ export default class NewsService {
         contentSv: true,
         createdAt: true,
         updatedAt: true,
-        writtenByCid: true,
+        writtenByGammaUserId: true,
         writtenFor: {
           select: {
             prettyName: true
@@ -63,7 +63,7 @@ export default class NewsService {
     titleSv: string;
     contentEn: string;
     contentSv: string;
-    writtenByCid: string;
+    writtenByGammaUserId: string;
     divisionSuperGroupId?: string;
   }) {
     const data = {
@@ -72,7 +72,7 @@ export default class NewsService {
         titleSv: post.titleSv,
         contentEn: post.contentEn,
         contentSv: post.contentSv,
-        writtenByCid: post.writtenByCid,
+        writtenByGammaUserId: post.writtenByGammaUserId,
         writtenFor: {}
       }
     };

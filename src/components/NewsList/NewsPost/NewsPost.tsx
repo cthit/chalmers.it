@@ -16,7 +16,7 @@ interface NewsPostProps {
     titleEn: string;
     contentSv: string;
     contentEn: string;
-    writtenByCid: string;
+    writtenByGammaUserId: string;
     createdAt: Date;
     updatedAt: Date;
     writtenFor: {
@@ -35,12 +35,13 @@ type PropsThing = {
 
 const NewsPost = async ({ post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
-  let nick = post.writtenByCid;
+  let nick = post.writtenByGammaUserId;
   let ownsPost = false;
   try {
-    nick = (await GammaService.getUser(post.writtenByCid)).nick;
+    nick = (await GammaService.getUser(post.writtenByGammaUserId)).nick;
     ownsPost =
-      (await getServerSession(authConfig))?.user?.id === post.writtenByCid;
+      (await getServerSession(authConfig))?.user?.id ===
+      post.writtenByGammaUserId;
   } catch {}
 
   marked.use({

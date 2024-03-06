@@ -12,7 +12,7 @@ interface NewsPostInterface {
   titleEn: string;
   contentSv: string;
   contentEn: string;
-  writtenByCid: string;
+  writtenByGammaUserId: string;
   createdAt: Date;
   updatedAt: Date;
   writtenFor: {

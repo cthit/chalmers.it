@@ -63,8 +63,8 @@ class DiscordWebhookNotifier implements Notifier {
       this.language === Language.EN ? post.contentEn : post.contentSv;
     const msg =
       this.language === Language.EN
-        ? `News published by **${post.writtenByCid}**`
-        : `Nyhet publicerad av **${post.writtenByCid}**`;
+        ? `News published by **${post.writtenByGammaUserId}**`
+        : `Nyhet publicerad av **${post.writtenByGammaUserId}**`;
 
     fetch(this.webhook, {
       method: 'POST',
@@ -107,8 +107,8 @@ class SlackWebhookNotifier implements Notifier {
       this.language === Language.EN ? post.contentEn : post.contentSv;
     const msg =
       this.language === Language.EN
-        ? `News published by *${post.writtenByCid}*`
-        : `Nyhet publicerad av *${post.writtenByCid}*`;
+        ? `News published by *${post.writtenByGammaUserId}*`
+        : `Nyhet publicerad av *${post.writtenByGammaUserId}*`;
 
     fetch(this.webhook, {
       method: 'POST',
