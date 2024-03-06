@@ -1,6 +1,5 @@
 import prisma from '@/prisma';
 import GammaService from './gammaService';
-import { deleteBanner } from '@/app/settings/banners/actions';
 
 export default class DivisionGroupService {
   static async getAll() {

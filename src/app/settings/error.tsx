@@ -2,10 +2,10 @@
 
 export default function Page({
   error,
-  reset
+  _reset
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  _reset: () => void;
 }) {
   return (
     <div>

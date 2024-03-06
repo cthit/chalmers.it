@@ -1,7 +1,6 @@
 import Divider from '@/components/Divider/Divider';
 import AddBannerForm from './AddBannerForm';
 import DivisionGroupService from '@/services/divisionGroupService';
-import Link from 'next/link';
 import DeleteBannerButton from './DeleteBannerButton';
 import ActionButton from '@/components/ActionButton/ActionButton';
 
