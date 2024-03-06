@@ -16,7 +16,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   if (
-    !((await getServerSession(authConfig))?.user?.id === newsPost.writtenByGammaUserId)
+    !(
+      (await getServerSession(authConfig))?.user?.id ===
+      newsPost.writtenByGammaUserId
+    )
   ) {
     return notFound();
   }

@@ -2,7 +2,7 @@ import { Prisma, NotifierType, Language } from '@prisma/client';
 import prisma from '@/prisma';
 
 interface Notifier {
-  notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>): void;
+  notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
   readonly language: Language;
   readonly webhook: string;
   readonly type: NotifierType;
