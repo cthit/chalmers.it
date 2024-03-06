@@ -1,6 +1,6 @@
 'use client';
 
-import { GammaSuperGroup } from '@/models/GammaModels';
+import { GammaSuperGroup } from '@/types/gamma';
 import { useState } from 'react';
 import { addGroup } from './actions';
 import ActionButton from '@/components/ActionButton/ActionButton';

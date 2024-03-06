@@ -1,5 +1,5 @@
 import { OAuthConfig, OAuthUserConfig } from 'next-auth/providers/oauth';
-import { GammaProfile } from '@/models/GammaModels';
+import { GammaProfile } from '@/types/gamma';
 
 export interface GammaProviderConfig extends OAuthUserConfig<GammaProfile> {
   url: string;

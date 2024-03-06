@@ -1,10 +1,4 @@
-import {
-  GammaGroup,
-  GammaGroupMember,
-  GammaSuperGroup,
-  GammaUser,
-  GammaUserInfo
-} from '@/models/GammaModels';
+import { GammaSuperGroupBlob, GammaUserInfo } from '@/types/gamma';
 
 const apiKey =
   process.env.GAMMA_API_KEY_ID + ':' + process.env.GAMMA_API_KEY_TOKEN;
@@ -24,21 +18,15 @@ export default class GammaService {
   }
 
   static async getAllSuperGroups() {
-    return await gammaGetRequest<
-      {
-        type: string;
-        superGroups: {
-          superGroup: GammaSuperGroup;
-          members: GammaGroupMember[];
-        }[];
-      }[]
-    >('/info/v1/blob');
+    return await gammaGetRequest<GammaSuperGroupBlob>('/info/v1/blob');
   }
 
   static async getAllActiveSuperGroups() {
-    return (await this.getAllSuperGroups())
-      .filter((sg) => sg.type === 'committee')
-      .flatMap((sg) => sg.superGroups);
+    return (
+      (await this.getAllSuperGroups())
+        .filter((sg) => sg.type === 'committee')
+        .flatMap((sg) => sg.superGroups) || []
+    );
   }
 
   static async getSuperGroupMembers(sgid: string) {
