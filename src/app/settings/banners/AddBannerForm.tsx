@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { addBanner } from './actions';
+import { addBanner } from '@/actions/banners';
 import DropdownList from '@/components/DropdownList/DropdownList';
 
 const AddBannerForm = ({
@@ -16,7 +16,7 @@ const AddBannerForm = ({
     updatedAt: Date;
   }[];
 }) => {
-  const [groupId, setGroupId] = useState(0);
+  const [groupId, setGroupId] = useState<number | undefined>(undefined);
   const [bannerImage, setBannerImage] = useState<File | null>(null);
 
   const handleGroupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,6 +30,8 @@ const AddBannerForm = ({
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
+    if (groupId === undefined) return;
+
     event.preventDefault();
 
     const formData = new FormData();
@@ -46,6 +48,9 @@ const AddBannerForm = ({
       <div>
         <label htmlFor="sponsorName">Gamma Group:</label>
         <DropdownList onChange={handleGroupChange}>
+          <option value={undefined} hidden>
+            Select a group
+          </option>
           {groups.map((group) => (
             <option key={group.id} value={group.id}>
               {group.prettyName}

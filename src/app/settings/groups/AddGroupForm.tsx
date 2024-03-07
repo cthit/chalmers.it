@@ -2,7 +2,7 @@
 
 import { GammaSuperGroup } from '@/types/gamma';
 import { useState } from 'react';
-import { addGroup } from './actions';
+import { addGroup } from '@/actions/groups';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
@@ -23,6 +23,9 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   return (
     <>
       <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
+        <option value={undefined} hidden>
+          Select a group
+        </option>
         {gammaGroups
           .filter((g) => g.type !== 'ALUMNI')
           .map((group) => (

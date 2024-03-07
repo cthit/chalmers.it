@@ -15,7 +15,10 @@ const BannerTitle = () => {
 };
 
 const Banner = async () => {
-  const banner = await DivisionGroupService.getRandomBanner();
+  const banner = await DivisionGroupService.getRandomBanner().catch((e) => {
+    console.error(`${e.name}:`, e.message);
+    return null;
+  });
 
   return (
     <div className={`${styles.banner} ${playfair.className}`}>

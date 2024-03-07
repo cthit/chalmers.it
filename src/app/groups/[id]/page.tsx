@@ -23,9 +23,11 @@ const mainContent = async ({ id }: { id: string }) => {
   const group = (await DivisionGroupService.getInfoBySlug(id))!;
   const groupMembers = await GammaService.getSuperGroupMembers(
     group.gammaSuperGroupId
-  );
+  ).catch(() => undefined);
 
-  const canEdit = await SessionService.canEditGroup(group.gammaSuperGroupId);
+  const canEdit = await SessionService.canEditGroup(
+    group.gammaSuperGroupId
+  ).catch(() => false);
 
   return (
     <ContentPane>
@@ -40,16 +42,20 @@ const mainContent = async ({ id }: { id: string }) => {
       <MarkdownView content={group.descriptionSv} />
       <h2>Nuvarande medlemmar</h2>
       <ul className={style.memberList}>
-        {groupMembers.map((member) => (
-          <li key={member.user.id}>
-            <GroupMember
-              pfp={GammaService.getUserAvatarURL(member.user.id)}
-              name={member.user.nick}
-              post={member.post.svName}
-              postStyled={member.unofficialPostName}
-            />
-          </li>
-        ))}
+        {groupMembers ? (
+          groupMembers.map((member) => (
+            <li key={member.user.id}>
+              <GroupMember
+                pfp={GammaService.getUserAvatarURL(member.user.id)}
+                name={member.user.nick}
+                post={member.post.svName}
+                postStyled={member.unofficialPostName}
+              />
+            </li>
+          ))
+        ) : (
+          <li className={style.memberListError}>Kunde inte hämta medlemmar</li>
+        )}
       </ul>
     </ContentPane>
   );

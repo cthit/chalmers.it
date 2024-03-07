@@ -24,7 +24,7 @@ interface NewPostFormProps {
   titleSv?: string;
   contentEn?: string;
   contentSv?: string;
-  writtenByCid?: string;
+  writtenByGammaUserId?: string;
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
@@ -52,7 +52,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       if (newsPost.id !== undefined) {
         await edit(
           newsPost.id!,
-          newsPost.writtenByCid!,
+          newsPost.writtenByGammaUserId!,
           titleEn,
           titleSv,
           contentEn,

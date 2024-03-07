@@ -13,7 +13,7 @@ async function getData(postId: number): Promise<Post> {
     : {
         title: postRaw.titleSv,
         text: postRaw.contentSv,
-        postedBy: postRaw.writtenByCid
+        postedBy: postRaw.writtenByGammaUserId
       };
 }
 

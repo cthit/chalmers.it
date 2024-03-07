@@ -1,4 +1,5 @@
 'use server';
+
 import NotifyService from '@/services/notifyService';
 import { Language, NotifierType } from '@prisma/client';
 

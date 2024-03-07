@@ -1,7 +1,7 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
 
-const mediaPath = process.env.MEDIA_PATH || './media/';
+const mediaPath = process.env.MEDIA_PATH || './media';
 
 const convertMimeType = (mimeType: string) => {
   switch (mimeType) {
@@ -45,10 +45,23 @@ export default class MediaService {
     const extension = convertMimeType(file.type);
     if (!extension) return null;
 
-    await writeFile(
-      mediaPath + shaString + '.' + extension,
-      Buffer.from(await file.arrayBuffer())
+    // Write file if it doesn't already exist in file system
+    await stat(`${mediaPath}/${shaString}.${extension}`).catch(
+      async () =>
+        await writeFile(
+          `${mediaPath}/${shaString}.${extension}`,
+          Buffer.from(await file.arrayBuffer())
+        )
     );
+
+    // Return file info if it already exists in database
+    const existsDb = await prisma.media.findUnique({
+      where: {
+        sha256: shaString
+      }
+    });
+    if (existsDb) return existsDb;
+
     return await prisma.media.create({
       data: {
         sha256: shaString,
@@ -69,7 +82,7 @@ export default class MediaService {
     const filename = sha256 + '.' + convertMimeType(extension!.extension);
 
     return {
-      data: await readFile(mediaPath + filename),
+      data: await readFile(`${mediaPath}/${filename}`),
       filename,
       extension: extension!.extension
     };

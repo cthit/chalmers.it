@@ -2,7 +2,7 @@
 
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { useState } from 'react';
-import { addNotifier } from './actions';
+import { addNotifier } from '@/actions/notifiers';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
 

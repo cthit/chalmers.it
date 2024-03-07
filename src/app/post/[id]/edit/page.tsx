@@ -16,7 +16,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   if (
-    !((await getServerSession(authConfig))?.user?.id === newsPost.writtenByCid)
+    !(
+      (await getServerSession(authConfig))?.user?.id ===
+      newsPost.writtenByGammaUserId
+    )
   ) {
     return notFound();
   }
@@ -31,7 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           titleSv={newsPost!.titleSv}
           contentEn={newsPost!.contentEn}
           contentSv={newsPost!.contentSv}
-          writtenByCid={newsPost!.writtenByCid}
+          writtenByGammaUserId={newsPost!.writtenByGammaUserId}
         />
       </ContentPane>
     </main>

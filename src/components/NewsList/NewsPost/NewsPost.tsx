@@ -16,7 +16,7 @@ interface NewsPostProps {
     titleEn: string;
     contentSv: string;
     contentEn: string;
-    writtenByCid: string;
+    writtenByGammaUserId: string;
     createdAt: Date;
     updatedAt: Date;
     writtenFor: {
@@ -38,12 +38,15 @@ const NewsPost = async ({ post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
 
   const nick =
-    (await GammaService.getUser(post.writtenByCid).catch(() => undefined))?.user
-      .nick || post.writtenByCid;
+    (
+      await GammaService.getUser(post.writtenByGammaUserId).catch(
+        () => undefined
+      )
+    )?.user.nick || 'Unknown user';
 
   const ownsPost =
-    (await getServerSession(authConfig))?.user?.id === post.writtenByCid ||
-    post.writtenFor?.gammaSuperGroupId
+    (await getServerSession(authConfig))?.user?.id ===
+      post.writtenByGammaUserId || post.writtenFor?.gammaSuperGroupId
       ? await SessionService.canEditGroup(post.writtenFor!.gammaSuperGroupId)
       : false;
 

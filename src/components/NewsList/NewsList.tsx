@@ -4,6 +4,7 @@ import NewsService from '@/services/newsService';
 import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
+import Divider from '../Divider/Divider';
 
 interface NewsPostInterface {
   id: number;
@@ -11,7 +12,7 @@ interface NewsPostInterface {
   titleEn: string;
   contentSv: string;
   contentEn: string;
-  writtenByCid: string;
+  writtenByGammaUserId: string;
   createdAt: Date;
   updatedAt: Date;
   writtenFor: {
@@ -44,6 +45,12 @@ const News = ({
         <h1>Nyheter</h1>
         {canPost && <ActionButton href="/post/new">Posta nyhet</ActionButton>}
       </div>
+      {news.length === 0 && (
+        <>
+          <Divider />
+          <p>Inga nyheter att visa</p>
+        </>
+      )}
       {news.map((newsPost) => (
         <NewsPost post={newsPost} key={newsPost.id} />
       ))}
@@ -55,6 +62,7 @@ const NewsError = () => {
   return (
     <div className={styles.list}>
       <h1>Nyheter</h1>
+      <Divider />
       <p>Det gick inte att hämta nyheter</p>
     </div>
   );

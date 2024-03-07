@@ -33,7 +33,18 @@ export default class DivisionGroupService {
   }
 
   static async getBanners() {
-    return await prisma.banner.findMany();
+    return await prisma.banner.findMany({
+      select: {
+        id: true,
+        divisionGroupId: true,
+        mediaSha256: true,
+        divisionGroup: {
+          select: {
+            prettyName: true
+          }
+        }
+      }
+    });
   }
 
   static async getRandomBanner() {
@@ -64,6 +75,14 @@ export default class DivisionGroupService {
             mediaSha256: bannerSha
           }
         }
+      }
+    });
+  }
+
+  static async deleteBanner(bannerId: number) {
+    return await prisma.banner.delete({
+      where: {
+        id: bannerId
       }
     });
   }
