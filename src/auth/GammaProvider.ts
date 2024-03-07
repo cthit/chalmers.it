@@ -1,50 +1,47 @@
 import { OAuthConfig, OAuthUserConfig } from 'next-auth/providers/oauth';
-import { GammaUser } from '@/models/GammaModels';
+import { GammaProfile } from '@/types/gamma';
 
-export interface GammaProviderConfig extends OAuthUserConfig<GammaUser> {
+export interface GammaProviderConfig extends OAuthUserConfig<GammaProfile> {
+  url: string;
+  profileEndpoint: string;
   clientId: string;
   clientSecret: string;
-  authorizationURL: string;
-  tokenURL: string;
-  profileUrl: string;
 }
 
 export default function GammaProvider(
   gammaConfig: GammaProviderConfig
-): OAuthConfig<GammaUser> {
+): OAuthConfig<GammaProfile> {
   return {
     id: 'gamma',
     name: 'Gamma',
     type: 'oauth',
-    authorization: {
-      url: gammaConfig.authorizationURL,
-      params: {
-        scope: ''
-      }
-    },
-    token: gammaConfig.tokenURL,
+    wellKnown: gammaConfig.url + '/.well-known/openid-configuration',
+    authorization: { params: { scope: 'openid profile' } },
     userinfo: {
-      url: gammaConfig.profileUrl,
       async request(context) {
-        const response = await fetch(gammaConfig.profileUrl, {
-          headers: {
-            Authorization: `Bearer ${context.tokens.access_token}`
+        const response = await fetch(
+          gammaConfig.url + gammaConfig.profileEndpoint,
+          {
+            headers: {
+              Authorization: `Bearer ${context.tokens.access_token}`
+            }
           }
-        });
+        );
 
         if (!response.ok) {
           throw new Error('Failed to fetch user data!');
         }
 
-        return (await response.json()) as GammaUser;
+        return (await response.json()) as GammaProfile;
       }
     },
-    profile(profile: GammaUser) {
+    profile(profile: GammaProfile) {
+      console.log('Received profile', profile);
       return {
-        id: profile.cid,
-        name: profile.nick,
+        id: profile.sub,
+        name: profile.nickname,
         email: profile.email,
-        image: profile.avatarUrl
+        image: profile.picture
       };
     },
     options: gammaConfig

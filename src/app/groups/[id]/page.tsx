@@ -41,11 +41,11 @@ const mainContent = async ({ id }: { id: string }) => {
       <h2>Nuvarande medlemmar</h2>
       <ul className={style.memberList}>
         {groupMembers.map((member) => (
-          <li key={member.id}>
+          <li key={member.user.id}>
             <GroupMember
-              pfp={member.avatarUrl}
-              name={member.nick}
-              post={member.post.sv}
+              pfp={GammaService.getUserAvatarURL(member.user.id)}
+              name={member.user.nick}
+              post={member.post.svName}
               postStyled={member.unofficialPostName}
             />
           </li>

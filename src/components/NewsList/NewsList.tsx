@@ -15,6 +15,7 @@ interface NewsPostInterface {
   createdAt: Date;
   updatedAt: Date;
   writtenFor: {
+    gammaSuperGroupId: string;
     prettyName: string;
   } | null;
 }
@@ -22,12 +23,9 @@ interface NewsPostInterface {
 const NewsList = async () => {
   try {
     const news = await NewsService.getPage(1, 10);
-    let canPost = false;
-    try {
-      canPost = await SessionService.isActive();
-    } finally {
-      return <News news={news} canPost={canPost} />;
-    }
+    const canPost = await SessionService.isActive().catch(() => false);
+
+    return <News news={news} canPost={canPost} />;
   } catch {
     return <NewsError />;
   }

@@ -123,15 +123,19 @@ export default class DivisionGroupService {
     });
   }
 
+  static async getUserActiveGroupsWithPosts(cid: string) {
+    return (await GammaService.getUser(cid)).groups.filter((g) =>
+      GammaService.isGroupActive(g.group)
+    );
+  }
+
   static async getUserActiveGroups(cid: string) {
-    return GammaService.getUser(cid).then((user) => {
-      return user.groups.filter((group) => group.active);
-    });
+    return (await this.getUserActiveGroupsWithPosts(cid)).map((g) => g.group);
   }
 
   static async isUserActive(cid: string): Promise<boolean> {
     return GammaService.getUser(cid).then((user) => {
-      return user.groups.some((group) => group.active);
+      return user.groups.some((g) => GammaService.isGroupActive(g.group));
     });
   }
 
