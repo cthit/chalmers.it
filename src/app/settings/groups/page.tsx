@@ -6,9 +6,13 @@ import Divider from '@/components/Divider/Divider';
 
 export default async function Page() {
   const groups = await DivisionGroupService.getAll();
-  const gammaGroups = (await GammaService.getAllSuperGroups()).filter(
-    (g) => groups.find((d) => d.gammaSuperGroupId === g.id) === undefined
-  );
+  const gammaGroups = (await GammaService.getAllActiveSuperGroups())
+    .filter(
+      (g) =>
+        groups.find((d) => d.gammaSuperGroupId === g.superGroup.id) ===
+        undefined
+    )
+    .flatMap((g) => g.superGroup);
 
   return (
     <main>

@@ -5,7 +5,7 @@ import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/models/GammaModels';
+import { GammaGroup } from '@/types/gamma';
 import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
