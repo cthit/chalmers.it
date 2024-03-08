@@ -1,19 +1,27 @@
 'use client';
 
 import styles from './ThemeSelector.module.scss';
-import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs';
+import { BsFillSunFill, BsFillMoonFill, BsThreeDots } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 const ThemeSelector = () => {
-  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
 
-  const systemTheme = window
-    ? window.matchMedia('(prefers-color-scheme: dark)')
-      ? 'dark'
-      : 'light'
-    : undefined;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const isDark = (theme || systemTheme) === 'dark';
+  if (!mounted) {
+    return (
+      <div className={styles.loading}>
+        <BsThreeDots />
+      </div>
+    );
+  }
+
+  const isDark = resolvedTheme === 'dark';
 
   const toggleTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
