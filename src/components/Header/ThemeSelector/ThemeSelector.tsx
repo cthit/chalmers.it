@@ -1,35 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
 import styles from './ThemeSelector.module.scss';
 import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs';
-import React from 'react';
+import { useTheme } from 'next-themes';
 
-function ThemeSelector() {
-  const [isDark, setIsDark] = React.useState(false);
+const ThemeSelector = () => {
+  const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    setTheme();
-  }, []);
+  const systemTheme = window
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+      ? 'dark'
+      : 'light'
+    : undefined;
+
+  const isDark = (theme || systemTheme) === 'dark';
 
   const toggleTheme = () => {
-    const theme = getTheme();
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    window.localStorage.setItem('theme', newTheme);
-    setTheme();
-  };
-
-  const getTheme = () => {
-    const preference = window.localStorage.getItem('theme');
-    if (preference) return preference;
-    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    return darkQuery.matches ? 'dark' : 'light';
-  };
-
-  const setTheme = () => {
-    const theme = getTheme();
-    document.documentElement.setAttribute('data-theme', theme);
-    setIsDark(theme === 'dark');
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   return (
@@ -37,6 +24,6 @@ function ThemeSelector() {
       {isDark ? <BsFillMoonFill /> : <BsFillSunFill />}
     </a>
   );
-}
+};
 
 export default ThemeSelector;
