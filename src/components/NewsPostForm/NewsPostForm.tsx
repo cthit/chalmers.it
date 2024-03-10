@@ -39,6 +39,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
   const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
   const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
+  const [publish, setPublish] = useState('now');
+  const [scheduledFor, setScheduledFor] = useState(Date.now().toString());
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -49,6 +51,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   async function send() {
     try {
+      const publishDate =
+        publish === 'now' ? undefined : new Date(scheduledFor);
       if (newsPost.id !== undefined) {
         await edit(
           newsPost.id!,
@@ -56,16 +60,24 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           titleEn,
           titleSv,
           contentEn,
-          contentSv
+          contentSv,
+          publishDate
         );
         return;
       }
 
       if (group !== 'self') {
-        await postForGroup(titleEn, titleSv, contentEn, contentSv, group);
+        await postForGroup(
+          titleEn,
+          titleSv,
+          contentEn,
+          contentSv,
+          group,
+          publishDate
+        );
         return;
       } else {
-        await post(titleEn, titleSv, contentEn, contentSv);
+        await post(titleEn, titleSv, contentEn, contentSv, publishDate);
       }
     } catch {
       console.log('Failed to post news article');
@@ -83,7 +95,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   return (
     <>
-      <h1>Skapa nyhet</h1>
+      <h1>{newsPost.id ? 'Redigera nyhet' : 'Skapa nyhet'}</h1>
       <Divider />
       <h2>Posta som</h2>
       <DropdownList onChange={(e) => setGroup(e.target.value)}>
@@ -110,6 +122,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
       />
+
+      <br />
+      <h2>Publiceringstid</h2>
+      <div className={style.actions}>
+        <DropdownList onChange={(e) => setPublish(e.target.value)}>
+          <option value="now">Nu</option>
+          <option value="schedule">Schemalägg</option>
+        </DropdownList>
+        <input
+          disabled={publish === 'now'}
+          type="datetime-local"
+          value={scheduledFor}
+          onChange={(e) => setScheduledFor(e.target.value)}
+        />
+      </div>
 
       <br />
       <div className={style.actions}>

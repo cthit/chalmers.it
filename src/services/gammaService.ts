@@ -12,6 +12,10 @@ export default class GammaService {
     return await gammaGetRequest<GammaUserInfo>(`/info/v1/users/${uuid}`);
   }
 
+  static async getNick(uuid: string) {
+    return (await this.getUser(uuid).catch(() => undefined))?.user.nick;
+  }
+
   static getUserAvatarURL(uuid: string) {
     return `${gammaUrl}/images/user/avatar/${uuid}`;
   }
