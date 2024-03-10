@@ -11,6 +11,7 @@ import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
+import DatePicker from '../DatePicker/DatePicker';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -40,7 +41,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
   const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
   const [publish, setPublish] = useState('now');
-  const [scheduledFor, setScheduledFor] = useState(Date.now().toString());
+  const [scheduledFor, setScheduledFor] = useState(new Date());
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -53,6 +54,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     try {
       const publishDate =
         publish === 'now' ? undefined : new Date(scheduledFor);
+
       if (newsPost.id !== undefined) {
         await edit(
           newsPost.id!,
@@ -128,13 +130,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <div className={style.actions}>
         <DropdownList onChange={(e) => setPublish(e.target.value)}>
           <option value="now">Nu</option>
-          <option value="schedule">Schemalägg</option>
+          <option value="schedule">Schemalagd</option>
         </DropdownList>
-        <input
+        <DatePicker
           disabled={publish === 'now'}
-          type="datetime-local"
           value={scheduledFor}
-          onChange={(e) => setScheduledFor(e.target.value)}
+          onChange={(e) => setScheduledFor(e)}
         />
       </div>
 
