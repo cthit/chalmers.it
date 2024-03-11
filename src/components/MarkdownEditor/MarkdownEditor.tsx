@@ -4,11 +4,12 @@ import { ChangeEventHandler } from 'react';
 interface MarkdownEditorProps {
   value: string | undefined;
   onChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  className?: string;
 }
 
-const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
+const MarkdownEditor = ({ value, onChange, className }: MarkdownEditorProps) => {
   return (
-    <textarea className={style.editor} value={value} onChange={onChange} />
+    <textarea className={`${style.editor} ${className}`} value={value} onChange={onChange} />
   );
 };
 
