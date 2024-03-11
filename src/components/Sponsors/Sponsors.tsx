@@ -8,7 +8,7 @@ const Sponsors = async () => {
   return (
     <ContentPane>
       <h1>Samarbetspartners</h1>
-      {sponsors.length === 0 ?? (
+      {sponsors.length === 0 && (
         <p>
           Vill du synas här? Kontakta{' '}
           <a href="mailto:armit@chalmers.it">armit@chalmers.it</a>
