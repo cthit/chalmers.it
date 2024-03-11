@@ -30,16 +30,14 @@ export default class SponsorService {
   static async create(sponsor: {
     nameSv: string;
     nameEn: string;
-    descriptionSv: string;
-    descriptionEn: string;
+    url: string;
     logoSha?: string;
   }) {
     return await prisma.sponsor.create({
       data: {
         nameSv: sponsor.nameSv,
         nameEn: sponsor.nameEn,
-        descriptionSv: sponsor.descriptionSv,
-        descriptionEn: sponsor.descriptionEn,
+        url: sponsor.url,
         mediaSha256: sponsor.logoSha
       }
     });

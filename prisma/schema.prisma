@@ -57,15 +57,15 @@ model Event {
 }
 
 model Sponsor {
-  id            Int      @id @default(autoincrement())
-  nameSv        String
-  nameEn        String
-  descriptionSv String
-  descriptionEn String
-  logo          Media?   @relation(fields: [mediaSha256], references: [sha256])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  mediaSha256   String?
+  id          Int         @id @default(autoincrement())
+  nameSv      String
+  nameEn      String
+  url         String
+  logo        Media?      @relation(fields: [mediaSha256], references: [sha256])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  mediaSha256 String?
+  type        SponsorType @default(PARTNER)
 }
 
 model Banner {
@@ -110,4 +110,9 @@ enum PostStatus {
   SCHEDULED
   PUBLISHED
   DELETED
+}
+
+enum SponsorType {
+  PARTNER
+  MAIN_PARTNER
 }

@@ -3,11 +3,18 @@ import React, { useState } from 'react';
 import { addSponsor } from '@/actions/sponsors';
 
 const AddSponsorForm = () => {
+  const [sponsorUrl, setSponsorUrl] = useState('');
   const [sponsorName, setSponsorName] = useState('');
   const [sponsorImage, setSponsorImage] = useState<File | null>(null);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSponsorName(event.target.value);
+  };
+
+  const handleSponsorUrlChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSponsorUrl(event.target.value);
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +33,7 @@ const AddSponsorForm = () => {
       {
         nameSv: sponsorName,
         nameEn: sponsorName,
-        descriptionSv: 'yeppers peppers',
-        descriptionEn: 'yeppers peppers'
+        url: sponsorUrl
       },
       formData
     );
@@ -45,6 +51,15 @@ const AddSponsorForm = () => {
           id="sponsorName"
           value={sponsorName}
           onChange={handleNameChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="sponsorName">Sponsor URL:</label>
+        <input
+          type="text"
+          id="sponsorUrl"
+          value={sponsorUrl}
+          onChange={handleSponsorUrlChange}
         />
       </div>
       <div>

@@ -7,8 +7,7 @@ export async function addSponsor(
   sponsor: {
     nameSv: string;
     nameEn: string;
-    descriptionSv: string;
-    descriptionEn: string;
+    url: string;
   },
   form: FormData
 ) {
@@ -22,8 +21,7 @@ export async function addSponsor(
   await SponsorService.create({
     nameSv: sponsor.nameSv,
     nameEn: sponsor.nameEn,
-    descriptionSv: sponsor.descriptionSv,
-    descriptionEn: sponsor.descriptionEn,
+    url: sponsor.url,
     logoSha
   });
 }
