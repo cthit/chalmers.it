@@ -17,6 +17,8 @@ model NewsPost {
   writtenFor           DivisionGroup? @relation(fields: [divisionGroupId], references: [id])
   mainImage            Media?         @relation(fields: [mediaSha256], references: [sha256])
   connectedEvents      Event[]
+  scheduledPublish     DateTime?
+  status               PostStatus     @default(DRAFT)
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
   divisionGroupId      Int?
@@ -101,4 +103,11 @@ enum NotifierType {
 enum Language {
   SV
   EN
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  DELETED
 }

@@ -5,6 +5,7 @@ import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
+import { PostStatus } from '@prisma/client';
 
 interface NewsPostInterface {
   id: number;
@@ -15,6 +16,7 @@ interface NewsPostInterface {
   writtenByGammaUserId: string;
   createdAt: Date;
   updatedAt: Date;
+  status: PostStatus;
   writtenFor: {
     gammaSuperGroupId: string;
     prettyName: string;

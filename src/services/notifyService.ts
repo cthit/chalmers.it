@@ -1,5 +1,6 @@
 import { Prisma, NotifierType, Language } from '@prisma/client';
 import prisma from '@/prisma';
+import GammaService from './gammaService';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -13,13 +14,13 @@ export default class NotifyService {
     for (const notifier of await NotifyService.getNotifiers()) {
       switch (notifier.type) {
         case NotifierType.DISCORD:
-          new DiscordWebhookNotifier(
+          await new DiscordWebhookNotifier(
             notifier.url,
             notifier.language
           ).notifyNewsPost(post);
           break;
         case NotifierType.SLACK:
-          new SlackWebhookNotifier(
+          await new SlackWebhookNotifier(
             notifier.url,
             notifier.language
           ).notifyNewsPost(post);
@@ -57,14 +58,17 @@ class DiscordWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+  async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    const nick =
+      (await GammaService.getNick(post.writtenByGammaUserId)) ||
+      (Language.EN ? 'Unknown user' : 'Okänd användare');
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
     const content =
       this.language === Language.EN ? post.contentEn : post.contentSv;
     const msg =
       this.language === Language.EN
-        ? `News published by **${post.writtenByGammaUserId}**`
-        : `Nyhet publicerad av **${post.writtenByGammaUserId}**`;
+        ? `News published by **${nick}**`
+        : `Nyhet publicerad av **${nick}**`;
 
     fetch(this.webhook, {
       method: 'POST',
@@ -101,14 +105,17 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+  async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    const nick =
+      (await GammaService.getNick(post.writtenByGammaUserId)) ||
+      (Language.EN ? 'Unknown user' : 'Okänd användare');
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
     const content =
       this.language === Language.EN ? post.contentEn : post.contentSv;
     const msg =
       this.language === Language.EN
-        ? `News published by *${post.writtenByGammaUserId}*`
-        : `Nyhet publicerad av *${post.writtenByGammaUserId}*`;
+        ? `News published by *${nick}*`
+        : `Nyhet publicerad av *${nick}*`;
 
     fetch(this.webhook, {
       method: 'POST',
