@@ -2,3 +2,9 @@
   min-height: 100vh;
   height: 100vh;
 }
+
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
