@@ -9,10 +9,19 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <ThreePaneLayout
-        left={<><Lunch /><Sponsors /></>}
+        left={<LeftBar />}
         middle={<NewsList />}
         right={<ContactCard />}
       />
     </main>
   );
 }
+
+const LeftBar = () => {
+  return (
+    <div className={styles.sidePanel}>
+      <Lunch />
+      <Sponsors />
+    </div>
+  );
+};
