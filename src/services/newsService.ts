@@ -1,4 +1,5 @@
 import prisma from '@/prisma';
+import { PostStatus } from '@prisma/client';
 import NotifyService from './notifyService';
 
 export default class NewsService {
@@ -49,6 +50,7 @@ export default class NewsService {
         createdAt: true,
         updatedAt: true,
         writtenByGammaUserId: true,
+        status: true,
         writtenFor: {
           select: {
             gammaSuperGroupId: true,
@@ -66,6 +68,8 @@ export default class NewsService {
     contentSv: string;
     writtenByGammaUserId: string;
     divisionSuperGroupId?: string;
+    scheduledPublish?: Date;
+    status?: PostStatus;
   }) {
     const data = {
       data: {
@@ -74,6 +78,12 @@ export default class NewsService {
         contentEn: post.contentEn,
         contentSv: post.contentSv,
         writtenByGammaUserId: post.writtenByGammaUserId,
+        scheduledPublish: post.scheduledPublish,
+        status: post.status,
+        createdAt:
+          post.status === PostStatus.SCHEDULED
+            ? post.scheduledPublish
+            : undefined,
         writtenFor: {}
       }
     };
@@ -86,9 +96,10 @@ export default class NewsService {
       };
     }
 
-    prisma.newsPost
-      .create(data)
-      .then((res) => NotifyService.notifyNewsPost(res));
+    await prisma.newsPost.create(data).then((res) => {
+      if (post.status === PostStatus.PUBLISHED)
+        NotifyService.notifyNewsPost(res);
+    });
   }
 
   static async edit(edited: {
@@ -97,6 +108,7 @@ export default class NewsService {
     contentEn: string;
     contentSv: string;
     id: number;
+    scheduledPublish?: Date;
   }) {
     return await prisma.newsPost.update({
       where: {
@@ -106,7 +118,8 @@ export default class NewsService {
         titleEn: edited.titleEn,
         titleSv: edited.titleSv,
         contentEn: edited.contentEn,
-        contentSv: edited.contentSv
+        contentSv: edited.contentSv,
+        scheduledPublish: edited.scheduledPublish
       }
     });
   }
@@ -135,6 +148,30 @@ export default class NewsService {
           }
         ]
       }
+    });
+  }
+
+  static async publishScheduled() {
+    const scheduled = await prisma.newsPost.findMany({
+      where: {
+        scheduledPublish: {
+          lte: new Date()
+        },
+        status: PostStatus.SCHEDULED
+      }
+    });
+
+    scheduled.forEach((post) => {
+      prisma.newsPost
+        .update({
+          where: {
+            id: post.id
+          },
+          data: {
+            status: PostStatus.PUBLISHED
+          }
+        })
+        .then((res) => NotifyService.notifyNewsPost(res));
     });
   }
 }
