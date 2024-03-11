@@ -15,10 +15,11 @@ const Sponsors = async () => {
         </p>
       )}
       {sponsors.map((sponsor) => (
-        <Link href={sponsor.url}>
+        <Link key={sponsor.id} href={sponsor.url}>
           <picture key={sponsor.id}>
             <img
               className={styles.sponsorImg}
+              alt={`Sponsorbild för ${sponsor.nameSv}`}
               src={`/api/media/${sponsor.mediaSha256}`}
             />
           </picture>
