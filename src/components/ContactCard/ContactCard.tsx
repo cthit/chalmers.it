@@ -24,11 +24,11 @@ const ContactCard = () => {
         <strong>POSTADRESS</strong>
       </p>
       <p>Teknologsektionen Informationsteknik</p>
-      <p>Toknologgården 2</p>
+      <p>Teknologgården 2</p>
       <p>412 58 Göteborg</p>
       <br />
       <p>
-        <strong>BESÖKSADDRESS</strong>
+        <strong>BESÖKSADRESS</strong>
       </p>
       <p>Hubben 2.2</p>
       <p>Hörsalsvägen 9</p>
