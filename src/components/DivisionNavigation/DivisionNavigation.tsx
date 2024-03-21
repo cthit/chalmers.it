@@ -4,6 +4,7 @@ import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import Link from 'next/link';
 import DivisionPageService from '@/services/divisionPageService';
+import ActionButton from '../ActionButton/ActionButton';
 
 const indent = (depth: number) => {
   return {
@@ -18,28 +19,43 @@ const DivisionNavigation = async () => {
   return (
     <ContentPane>
       <h2>Om Sektionen</h2>
-      <ul className={styles.links}>
-        {pages.map((page) => {
-          const completeSlug = `/pages/${page.completeSlug.join('/')}`;
-          return (
-            <li key={completeSlug} style={indent(page.depth)}>
-              <Link href={completeSlug}>{page.titleSv}</Link>
-            </li>
-          );
-        })}
-      </ul>
       <Divider />
-      <h2>Kommitter, föreningar och andra instanser</h2>
+      <ul className={styles.links}>
+        <GroupPages slug={'/pages'} />
+      </ul>
+      <h2>Kommittéer, föreningar och andra instanser</h2>
       <Divider />
       <ul className={styles.links}>
         {groups.map((group) => (
           <li key={group.id}>
             <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
+            <ul className={styles.links}>
+              <GroupPages group={group.id} slug={`/groups/${group.slug}`} />
+            </ul>
           </li>
         ))}
       </ul>
     </ContentPane>
   );
+};
+
+const GroupPages = async ({
+  group,
+  slug
+}: {
+  group?: number;
+  slug: string;
+}) => {
+  const groupPages = await DivisionPageService.get(group);
+  const depthOffset = group ? 1 : 0;
+  return groupPages.map((page) => {
+    const completeSlug = `${slug}/${page.completeSlug.join('/')}`;
+    return (
+      <li key={completeSlug} style={indent(page.depth + depthOffset)}>
+        <Link href={completeSlug}>{page.titleSv}</Link>
+      </li>
+    );
+  });
 };
 
 export default DivisionNavigation;

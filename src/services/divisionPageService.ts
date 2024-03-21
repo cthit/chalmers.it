@@ -46,7 +46,7 @@ export default class DivisionPageService {
   static async get(id?: number) {
     const pages = await prisma.divisionPage.findMany({
       where: {
-        divisionGroupId: id,
+        divisionGroupId: id || null,
         parent: null
       },
       select: {
