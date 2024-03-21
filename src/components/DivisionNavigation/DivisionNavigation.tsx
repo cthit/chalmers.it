@@ -21,7 +21,7 @@ const DivisionNavigation = async () => {
       <h2>Om Sektionen</h2>
       <Divider />
       <ul className={styles.links}>
-        <GroupPages slug={'/pages'} />
+        <SubPages slug={'/pages'} />
       </ul>
       <h2>Kommittéer, föreningar och andra instanser</h2>
       <Divider />
@@ -30,7 +30,7 @@ const DivisionNavigation = async () => {
           <li key={group.id}>
             <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
             <ul className={styles.links}>
-              <GroupPages group={group.id} slug={`/groups/${group.slug}`} />
+              <SubPages group={group.id} slug={`/groups/${group.slug}`} />
             </ul>
           </li>
         ))}
@@ -39,13 +39,7 @@ const DivisionNavigation = async () => {
   );
 };
 
-const GroupPages = async ({
-  group,
-  slug
-}: {
-  group?: number;
-  slug: string;
-}) => {
+const SubPages = async ({ group, slug }: { group?: number; slug: string }) => {
   const groupPages = await DivisionPageService.get(group);
   const depthOffset = group ? 1 : 0;
   return groupPages.map((page) => {
