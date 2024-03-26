@@ -16,3 +16,12 @@
   height: 100%;
   flex: 3 1 0;
 }
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+  .middle {
+    order: -1;
+  }
+}
