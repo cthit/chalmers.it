@@ -1,36 +1,30 @@
+import ActionButton from '@/components/ActionButton/ActionButton';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import Divider from '@/components/Divider/Divider';
 import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionPageService from '@/services/divisionPageService';
-
-function arrayEquals(a: any[], b: any[]) {
-  return (
-    Array.isArray(a) &&
-    Array.isArray(b) &&
-    a.length === b.length &&
-    a.every((val, index) => val === b[index])
-  );
-}
+import editContent from './edit';
 
 export default async function Page({ params }: { params: { slug: string[] } }) {
-    const main = await mainContent(params.slug);
-    const left = <DivisionNavigation />;
-    const right = <div></div>;
-  
-    return <ThreePaneLayout left={left} middle={main} right={right} />;
-  }
+  const isEditing = params.slug[params.slug.length - 1] === 'edit';
+
+  const main = isEditing ? editContent(params.slug) : mainContent(params.slug);
+  const left = <DivisionNavigation />;
+  const right = <div></div>;
+
+  return <ThreePaneLayout left={left} middle={await main} right={right} />;
+}
 
 async function mainContent(slug: string[]) {
-  const pages = await DivisionPageService.get();
-  const page = pages.find((page) =>
-    arrayEquals(page.completeSlug, slug)
-  );
+  const page = await DivisionPageService.getBySlug(slug);
+  const end = slug[slug.length - 1];
 
   return (
     <main>
       <ContentPane>
         <h1>{page?.titleSv}</h1>
+        <ActionButton href={`./${end}/edit`}>Redigera</ActionButton>
         <Divider />
         <p>{page?.contentSv}</p>
       </ContentPane>

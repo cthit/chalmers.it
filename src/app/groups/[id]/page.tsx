@@ -37,6 +37,9 @@ const mainContent = async ({ id }: { id: string }) => {
         <VerticalDivider />
         <h3>{group.titleSv}</h3>
         {canEdit && <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>}
+        {canEdit && (
+          <ActionButton href={`./${id}/new`}>Skapa undersida</ActionButton>
+        )}
       </div>
       <Divider />
       <MarkdownView content={group.descriptionSv} />

@@ -12,6 +12,7 @@ import style from '../NewsPostForm/NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import { DivisionPage } from '@/services/divisionPageService';
+import { create, edit } from '@/actions/divisionPages';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -19,6 +20,9 @@ const PreviewContentStyle = {
 
 interface DivisionPostFormProps {
   pages: DivisionPage[];
+  editedId?: number;
+  divisionGroupId?: number;
+  slug?: string;
   parentId?: number;
   titleEn?: string;
   titleSv?: string;
@@ -38,6 +42,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [titleSv, setTitleSv] = useState(divisionPost.titleSv ?? '');
   const [contentEn, setContentEn] = useState(divisionPost.contentEn ?? '');
   const [contentSv, setContentSv] = useState(divisionPost.contentSv ?? '');
+  const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
@@ -55,9 +60,35 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     setShowPreview(true);
   }
 
+  function apply() {
+    if (divisionPost.editedId !== undefined) {
+      edit(divisionPost.editedId, titleEn, titleSv, contentEn, contentSv, slug);
+    } else {
+      create(
+        titleEn,
+        titleSv,
+        contentEn,
+        contentSv,
+        slug,
+        divisionPost.divisionGroupId,
+        page
+      );
+    }
+  }
+
+  const maxDepth = divisionPost.divisionGroupId !== undefined ? 1 : 2;
+
   return (
     <>
-      <h1>{divisionPost.parentId ? 'Redigera sida' : 'Skapa sida'}</h1>
+      <h1>
+        {divisionPost.divisionGroupId
+          ? divisionPost.editedId
+            ? 'Redigera undersida'
+            : 'Skapa undersida'
+          : divisionPost.editedId
+          ? 'Redigera sida'
+          : 'Skapa sida'}
+      </h1>
       <Divider />
       <h2>Skapa under</h2>
       <DropdownList onChange={(e) => setPage(+e.target.value)}>
@@ -65,7 +96,11 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         {divisionPost.pages.map((p) => {
           const pad = '\u00A0'.repeat(p.depth);
           return (
-            <option key={p.id} value={p.id}>
+            <option
+              key={p.id}
+              value={p.id}
+              disabled={p.depth >= maxDepth || p.id === divisionPost.editedId}
+            >
               {`${pad}${p.titleSv}`}
             </option>
           );
@@ -73,6 +108,9 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       </DropdownList>
 
       <br />
+      <h2>URL-slug</h2>
+      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
+
       <h2>Titel (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>Innehåll (Eng)</h2>
@@ -91,8 +129,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
 
       <br />
       <div className={style.actions}>
-        <ActionButton onClick={undefined}>
-          {divisionPost.parentId !== undefined ? 'Redigera' : 'Skapa'}
+        <ActionButton onClick={apply}>
+          {divisionPost.editedId !== undefined ? 'Redigera' : 'Skapa'}
         </ActionButton>
         <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>

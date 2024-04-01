@@ -2,6 +2,7 @@ import prisma from '@/prisma';
 
 export type DivisionPage = {
   id: number;
+  parent?: number;
   titleEn: string;
   titleSv: string;
   contentEn: string;
@@ -9,6 +10,15 @@ export type DivisionPage = {
   completeSlug: string[];
   depth: number;
 };
+
+function arrayEquals(a: any[], b: any[]) {
+  return (
+    Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every((val, index) => val === b[index])
+  );
+}
 
 export default class DivisionPageService {
   static async getAll() {
@@ -23,6 +33,7 @@ export default class DivisionPageService {
 
       result.push({
         id: page.id,
+        parent: page.parent,
         titleEn: page.titleEn,
         titleSv: page.titleSv,
         contentEn: page.contentEn,
@@ -53,6 +64,7 @@ export default class DivisionPageService {
       },
       select: {
         id: true,
+        parentId: true,
         titleEn: true,
         titleSv: true,
         contentEn: true,
@@ -61,6 +73,7 @@ export default class DivisionPageService {
         children: {
           select: {
             id: true,
+            parentId: true,
             titleEn: true,
             titleSv: true,
             contentEn: true,
@@ -69,6 +82,7 @@ export default class DivisionPageService {
             children: {
               select: {
                 id: true,
+                parentId: true,
                 titleEn: true,
                 titleSv: true,
                 contentEn: true,
@@ -84,13 +98,22 @@ export default class DivisionPageService {
     return this.flattenPages(pages);
   }
 
+  static async getBySlug(slug: string[], id?: number) {
+    const pages = await this.get(id);
+    return this.findBySlug(slug, pages);
+  }
+
+  static findBySlug(slug: string[], pages: DivisionPage[]) {
+    return pages.find((page) => arrayEquals(page.completeSlug, slug));
+  }
+
   static async post(
     titleEn: string,
     titleSv: string,
     contentEn: string,
     contentSv: string,
     slug: string,
-    divisionGroupId: number,
+    divisionGroupId?: number,
     parentId?: number
   ) {
     return await prisma.divisionPage.create({
