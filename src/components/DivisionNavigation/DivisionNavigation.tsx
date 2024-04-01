@@ -19,6 +19,7 @@ const DivisionNavigation = async () => {
   return (
     <ContentPane>
       <h2>Om Sektionen</h2>
+      <ActionButton href="/pages/new">Skapa</ActionButton>
       <Divider />
       <ul className={styles.links}>
         <SubPages slug={'/pages'} />

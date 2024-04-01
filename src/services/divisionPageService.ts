@@ -1,6 +1,7 @@
 import prisma from '@/prisma';
 
-type DivisionPage = {
+export type DivisionPage = {
+  id: number;
   titleEn: string;
   titleSv: string;
   contentEn: string;
@@ -21,6 +22,7 @@ export default class DivisionPageService {
       const completeSlug = parentSlug.concat(page.slug);
 
       result.push({
+        id: page.id,
         titleEn: page.titleEn,
         titleSv: page.titleSv,
         contentEn: page.contentEn,
@@ -50,6 +52,7 @@ export default class DivisionPageService {
         parent: null
       },
       select: {
+        id: true,
         titleEn: true,
         titleSv: true,
         contentEn: true,
@@ -57,6 +60,7 @@ export default class DivisionPageService {
         slug: true,
         children: {
           select: {
+            id: true,
             titleEn: true,
             titleSv: true,
             contentEn: true,
@@ -64,6 +68,7 @@ export default class DivisionPageService {
             slug: true,
             children: {
               select: {
+                id: true,
                 titleEn: true,
                 titleSv: true,
                 contentEn: true,
