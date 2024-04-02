@@ -14,7 +14,6 @@ const indent = (depth: number) => {
 
 const DivisionNavigation = async () => {
   const groups = await DivisionGroupService.getAll();
-  const pages = await DivisionPageService.get();
 
   return (
     <ContentPane>
