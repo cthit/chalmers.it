@@ -3,13 +3,11 @@ import GammaService from '@/services/gammaService';
 import style from './page.module.scss';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
-import Divider from '@/components/Divider/Divider';
-import ContentPane from '@/components/ContentPane/ContentPane';
 import GroupMember from '@/components/GroupMember/GroupMember';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import VerticalDivider from '@/components/VerticalDivider/VerticalDivider';
 import SessionService from '@/services/sessionService';
+import ContentArticle from '@/components/ContentArticle/ContentArticle';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const main = await mainContent(params);
@@ -29,19 +27,19 @@ const mainContent = async ({ id }: { id: string }) => {
     group.gammaSuperGroupId
   ).catch(() => false);
 
+  const side = canEdit && (
+    <>
+      <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>
+      <ActionButton href={`./${id}/new`}>Skapa undersida</ActionButton>
+    </>
+  );
+
   return (
-    <ContentPane>
-      <title>{group.prettyName}</title>
-      <div className={style.title}>
-        <h1>{group.prettyName}</h1>
-        <VerticalDivider />
-        <h3>{group.titleSv}</h3>
-        {canEdit && <ActionButton href={`./${id}/edit`}>Redigera</ActionButton>}
-        {canEdit && (
-          <ActionButton href={`./${id}/new`}>Skapa undersida</ActionButton>
-        )}
-      </div>
-      <Divider />
+    <ContentArticle
+      title={group.prettyName}
+      subtitle={group.titleSv}
+      titleSide={side}
+    >
       <MarkdownView content={group.descriptionSv} />
       <h2>Nuvarande medlemmar</h2>
       <ul className={style.memberList}>
@@ -60,6 +58,6 @@ const mainContent = async ({ id }: { id: string }) => {
           <li className={style.memberListError}>Kunde inte hämta medlemmar</li>
         )}
       </ul>
-    </ContentPane>
+    </ContentArticle>
   );
 };

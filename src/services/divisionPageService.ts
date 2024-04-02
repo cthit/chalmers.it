@@ -135,13 +135,15 @@ export default class DivisionPageService {
     titleSv: string,
     contentEn: string,
     contentSv: string,
-    slug: string
+    slug: string,
+    parentId?: number
   ) {
     return await prisma.divisionPage.update({
       where: {
         id
       },
       data: {
+        parentId: parentId || null,
         titleEn,
         titleSv,
         contentEn,

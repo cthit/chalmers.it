@@ -1,3 +1,7 @@
+import ContentPane from '@/components/ContentPane/ContentPane';
+import MarkdownView from '@/components/MarkdownView/MarkdownView';
+import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
+import GammaService from '@/services/gammaService';
 import NewsService from '@/services/newsService';
 
 type Post = {
@@ -13,7 +17,9 @@ async function getData(postId: number): Promise<Post> {
     : {
         title: postRaw.titleSv,
         text: postRaw.contentSv,
-        postedBy: postRaw.writtenByGammaUserId
+        postedBy:
+          (await GammaService.getNick(postRaw.writtenByGammaUserId)) ||
+          'Okänd användare'
       };
 }
 
@@ -23,9 +29,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <main>
       <title>{post.title}</title>
-      <h1>{post.title}</h1>
-      <h3>Inlagd av {post.postedBy}</h3>
-      <p>{post.text}</p>
+      <ThreePaneLayout
+        middle={
+          <ContentPane>
+            <h1>{post.title}</h1>
+            <h3>Inlagd av {post.postedBy}</h3>
+            <MarkdownView content={post.text} />
+          </ContentPane>
+        }
+      />
     </main>
   );
 }

@@ -24,14 +24,20 @@ export async function create(
   redirect('.');
 }
 
+export async function deletePage(id: number) {
+  DivisionPageService.delete(id);
+  redirect('.');
+}
+
 export async function edit(
   id: number,
   titleEn: string,
   titleSv: string,
   contentEn: string,
   contentSv: string,
-  slug: string
+  slug: string,
+  parentId?: number
 ) {
-  DivisionPageService.edit(id, titleEn, titleSv, contentEn, contentSv, slug);
+  DivisionPageService.edit(id, titleEn, titleSv, contentEn, contentSv, slug, parentId);
   redirect('.');
 }

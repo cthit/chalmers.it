@@ -4,13 +4,11 @@ import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/types/gamma';
 import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from '../NewsPostForm/NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
-import DatePicker from '../DatePicker/DatePicker';
 import { DivisionPage } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 
@@ -62,7 +60,15 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
 
   function apply() {
     if (divisionPost.editedId !== undefined) {
-      edit(divisionPost.editedId, titleEn, titleSv, contentEn, contentSv, slug);
+      edit(
+        divisionPost.editedId,
+        titleEn,
+        titleSv,
+        contentEn,
+        contentSv,
+        slug,
+        page
+      );
     } else {
       create(
         titleEn,
