@@ -48,3 +48,22 @@
   font-size: 1.5rem;
   margin-bottom: -0.25rem;
 }
+
+@media screen and (max-width: 768px) {
+  .banner {
+    height: 15rem;
+    max-height: 15rem;
+  }
+
+  .title {
+    bottom: 1rem;
+  }
+
+  .title h1 {
+    font-size: 2rem;
+  }
+
+  .title h2 {
+    font-size: 1rem;
+  }
+}
