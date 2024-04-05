@@ -83,6 +83,21 @@ model Sponsor {
   type        SponsorType @default(PARTNER)
 }
 
+model DivisionDocument {
+  id              Int           @id @default(autoincrement())
+  DivisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id])
+  divisionGroupId Int
+  media           Media         @relation(fields: [mediaSha256], references: [sha256])
+  mediaSha256     String
+  titleSv         String
+  titleEn         String
+  descriptionSv   String
+  descriptionEn   String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  type            DocumentType  @default(MISC)
+}
+
 model Media {
   sha256    String     @id
   extension String
@@ -96,6 +111,15 @@ model EventNotifiers {
   type     NotifierType
   url      String
   language Language
+}
+
+enum DocumentType {
+  PROTOCOL
+  BUDGET
+  BUSINESS_PLAN
+  FINANCIAL_REPORT
+  BUSINESS_REPORT
+  MISC
 }
 
 enum NotifierType {
