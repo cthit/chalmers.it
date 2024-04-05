@@ -36,7 +36,6 @@ export default function GammaProvider(
       }
     },
     profile(profile: GammaProfile) {
-      console.log('Received profile', profile);
       return {
         id: profile.sub,
         name: profile.nickname,
