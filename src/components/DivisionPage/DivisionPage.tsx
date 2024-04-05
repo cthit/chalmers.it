@@ -59,7 +59,7 @@ async function editContent(slug: string[], id?: number) {
         <DivisionPageForm
           pages={pages}
           editedId={page.id}
-          parentId={page.parent}
+          parentId={page.parentId}
           slug={page.completeSlug[page.completeSlug.length - 1]}
           divisionGroupId={id}
           titleEn={page.titleEn}

@@ -2,7 +2,7 @@ import prisma from '@/prisma';
 
 export type DivisionPage = {
   id: number;
-  parent?: number;
+  parentId?: number;
   titleEn: string;
   titleSv: string;
   contentEn: string;
@@ -33,7 +33,7 @@ export default class DivisionPageService {
 
       result.push({
         id: page.id,
-        parent: page.parent,
+        parentId: page.parentId,
         titleEn: page.titleEn,
         titleSv: page.titleSv,
         contentEn: page.contentEn,

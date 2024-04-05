@@ -12,6 +12,26 @@ import Popup from 'reactjs-popup';
 import { DivisionPage } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 
+const checkValidPages = (
+  pages: DivisionPage[],
+  maxDepth: number,
+  editedId?: number
+) => {
+  let forbiddenIds = editedId ? [editedId] : [];
+  for (const page of pages) {
+    if (
+      page.depth >= maxDepth ||
+      (page.parentId && forbiddenIds.includes(page.parentId))
+    ) {
+      forbiddenIds.push(page.id);
+    }
+  }
+  return pages.map((p) => ({
+    ...p,
+    disabled: forbiddenIds.includes(p.id)
+  }));
+};
+
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
 };
@@ -83,6 +103,11 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   }
 
   const maxDepth = divisionPost.divisionGroupId !== undefined ? 1 : 2;
+  const validPages = checkValidPages(
+    divisionPost.pages,
+    maxDepth,
+    divisionPost.editedId
+  );
 
   return (
     <>
@@ -99,14 +124,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <h2>Skapa under</h2>
       <DropdownList onChange={(e) => setPage(+e.target.value)}>
         <option value={undefined}>Toppnivå</option>
-        {divisionPost.pages.map((p) => {
+        {validPages.map((p) => {
           const pad = '\u00A0'.repeat(p.depth);
           return (
-            <option
-              key={p.id}
-              value={p.id}
-              disabled={p.depth >= maxDepth || p.id === divisionPost.editedId}
-            >
+            <option key={p.id} value={p.id} disabled={p.disabled}>
               {`${pad}${p.titleSv}`}
             </option>
           );
