@@ -117,8 +117,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             ? 'Redigera undersida'
             : 'Skapa undersida'
           : divisionPost.editedId
-          ? 'Redigera sida'
-          : 'Skapa sida'}
+            ? 'Redigera sida'
+            : 'Skapa sida'}
       </h1>
       <Divider />
       <h2>Skapa under</h2>

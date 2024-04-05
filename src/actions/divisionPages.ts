@@ -38,6 +38,14 @@ export async function edit(
   slug: string,
   parentId?: number
 ) {
-  DivisionPageService.edit(id, titleEn, titleSv, contentEn, contentSv, slug, parentId);
+  DivisionPageService.edit(
+    id,
+    titleEn,
+    titleSv,
+    contentEn,
+    contentSv,
+    slug,
+    parentId
+  );
   redirect('.');
 }
