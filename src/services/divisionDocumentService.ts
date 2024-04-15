@@ -7,6 +7,7 @@ export interface DivisionDocument {
   url: string;
   divisionGroupName: string;
   divisionGroupId: number;
+  createdAt: Date;
 }
 
 export default class DivisionDocumentService {
@@ -18,6 +19,7 @@ export default class DivisionDocumentService {
         titleEn: true,
         descriptionSv: true,
         descriptionEn: true,
+        createdAt: true,
         media: {
           select: {
             sha256: true
@@ -38,7 +40,8 @@ export default class DivisionDocumentService {
       description: document.descriptionEn,
       url: `/api/media/${document.media.sha256}`,
       divisionGroupName: document.DivisionGroup.prettyName,
-      divisionGroupId: document.DivisionGroup.id
+      divisionGroupId: document.DivisionGroup.id,
+      createdAt: document.createdAt
     }));
   }
 

@@ -40,7 +40,7 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="sponsorName">Skapa som: </label>
+        <label htmlFor="sponsorName">Skapa som </label>
         <DropdownList onChange={(e) => setGroupId(e.target.value)}>
           <option value={undefined} hidden>
             Select a group
