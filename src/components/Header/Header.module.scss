@@ -13,3 +13,19 @@
   justify-content: space-between;
   padding-right: 3.125rem;
 }
+.mobile {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: flex;
+  }
+  .header {
+    padding-left: 1.875rem;
+    padding-right: 1.875rem;
+  }
+}
