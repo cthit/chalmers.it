@@ -11,6 +11,7 @@ const Header = () => {
       <div className={`${styles.mobile}`}>
         <NavDrawer>
           <User />
+          <ThemeSelector />
         </NavDrawer>
       </div>
       <EscapeHatch />
