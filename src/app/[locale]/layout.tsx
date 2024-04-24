@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   description: 'Teknologsektionen Informationsteknik'
 };
 
+export async function generateStaticParams() {
+  return [{ lang: 'sv' }, { lang: 'en' }]
+}
+
 export default function RootLayout({
   children
 }: {
