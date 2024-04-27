@@ -6,7 +6,7 @@ import Divider from '../Divider/Divider';
 import styles from './ContactCard.module.scss';
 import i18nService from '@/services/i18nService';
 
-const ContactCard = ({ locale }: { locale: string }) => {
+const ContactCard = ({ locale }: { locale?: string }) => {
   const router = useRouter();
   const currentPathname = usePathname();
 
