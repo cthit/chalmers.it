@@ -5,13 +5,17 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import Lunch from '@/components/Lunch/Lunch';
 import Sponsors from '@/components/Sponsors/Sponsors';
 
-export default function Home() {
+export default function Home({
+  params: { locale }
+}: {
+  params: { locale: string };
+}) {
   return (
     <main className={styles.main}>
       <ThreePaneLayout
         left={<LeftBar />}
         middle={<NewsList />}
-        right={<ContactCard />}
+        right={<ContactCard locale={locale} />}
       />
     </main>
   );

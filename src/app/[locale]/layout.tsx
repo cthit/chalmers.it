@@ -1,3 +1,4 @@
+import i18nConfig from '@/i18nConfig';
 import Header from '@/components/Header/Header';
 import '@/styles/dimensions.scss';
 import '@/styles/themes.scss';
@@ -14,13 +15,19 @@ export const metadata: Metadata = {
   description: 'Teknologsektionen Informationsteknik'
 };
 
+export function generateStaticParams() {
+  return i18nConfig.locales.map((locale) => ({ locale }));
+}
+
 export default function RootLayout({
-  children
+  children,
+  params: { locale }
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body style={{ display: 'unset' }} className={poppins.className}>
         <ThemeProvider>
           <Header />
