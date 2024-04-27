@@ -1,4 +1,4 @@
-import { Config } from "next-i18n-router/dist/types";
+import { Config } from 'next-i18n-router/dist/types';
 
 const i18nConfig: Config = {
   locales: ['sv', 'en'],

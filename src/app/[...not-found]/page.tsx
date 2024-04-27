@@ -1,3 +1,5 @@
 import { notFound } from 'next/navigation';
 
-export default () => notFound();
+export default function Page() {
+  notFound();
+}
