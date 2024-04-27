@@ -1,10 +1,6 @@
-import { Metadata } from 'next';
-import Layout from '@/app/[locale]/layout';
+import Layout, { metadata as data } from '@/app/[locale]/layout';
 
-export const metadata: Metadata = {
-  title: 'IT på Chalmers',
-  description: 'Teknologsektionen Informationsteknik'
-};
+export const metadata = data;
 
 export default function RootLayout({
   children
