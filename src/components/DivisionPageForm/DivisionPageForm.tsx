@@ -104,7 +104,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       </h1>
       <Divider />
       <h2>Skapa under</h2>
-      <DropdownList onChange={(e) => setPage(+e.target.value)}>
+      <DropdownList value={page} onChange={(e) => setPage(+e.target.value)}>
         <option value={undefined}>Toppnivå</option>
         {validPages.map((p) => {
           const pad = '\u00A0'.repeat(p.depth);
