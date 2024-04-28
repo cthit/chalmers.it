@@ -4,6 +4,7 @@ import Divider from '@/components/Divider/Divider';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionDocumentService from '@/services/divisionDocumentService';
 import style from './page.module.scss';
+import ContentArticle from '@/components/ContentArticle/ContentArticle';
 
 export default async function Page() {
   return (
@@ -16,11 +17,11 @@ export default async function Page() {
 const mainContent = async () => {
   const documents = await DivisionDocumentService.get();
   return (
-    <ContentPane>
-      <h1>Dokument</h1>
-      <h3>Se fler dokument på dokument.chalmers.it</h3>
-      <ActionButton href="/documents/new">Ladda upp</ActionButton>
-      <Divider />
+    <ContentArticle
+      title={'Dokument'}
+      subtitle={'Se fler dokument på dokument.chalmers.it'}
+      titleSide={<ActionButton href="/documents/new">Ladda upp</ActionButton>}
+    >
       <ul className={style.documentList}>
         {documents.map((document) => (
           <li key={document.id}>
@@ -33,6 +34,6 @@ const mainContent = async () => {
           </li>
         ))}
       </ul>
-    </ContentPane>
+    </ContentArticle>
   );
 };
