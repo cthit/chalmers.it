@@ -1,6 +1,5 @@
 import ActionButton from '@/components/ActionButton/ActionButton';
 import ContentPane from '@/components/ContentPane/ContentPane';
-import Divider from '@/components/Divider/Divider';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionDocumentService from '@/services/divisionDocumentService';
 import style from './page.module.scss';
@@ -23,6 +22,7 @@ const mainContent = async () => {
       titleSide={<ActionButton href="/documents/new">Ladda upp</ActionButton>}
     >
       <ul className={style.documentList}>
+        {documents.length === 0 && <p>Inga dokument att visa</p>}
         {documents.map((document) => (
           <li key={document.id}>
             <ContentPane>

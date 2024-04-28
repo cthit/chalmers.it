@@ -9,7 +9,6 @@ export default async function Page() {
 
   return (
     <main>
-      <Divider />
       <ThreePaneLayout
         middle={
           <ContentPane>
