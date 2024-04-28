@@ -9,6 +9,7 @@ export type DivisionPage = {
   contentSv: string;
   completeSlug: string[];
   depth: number;
+  deepestChild: number;
 };
 
 function arrayEquals(a: any[], b: any[]) {
@@ -26,12 +27,19 @@ export default class DivisionPageService {
   }
 
   private static flattenPages(pages: any[]) {
-    const result: DivisionPage[] = [];
+    const result: { [key: number]: DivisionPage } = [];
 
     const dfs = (page: any, parentSlug: string[], depth: number) => {
       const completeSlug = parentSlug.concat(page.slug);
 
-      result.push({
+      let parent = result[page.parentId];
+      while (parent) {
+        parent.deepestChild = Math.max(parent.deepestChild, depth);
+        if (parent.depth < 1 || !parent.parentId) break;
+        parent = result[parent.parentId];
+      }
+
+      result[page.id] = {
         id: page.id,
         parentId: page.parentId,
         titleEn: page.titleEn,
@@ -39,8 +47,9 @@ export default class DivisionPageService {
         contentEn: page.contentEn,
         contentSv: page.contentSv,
         completeSlug,
-        depth
-      });
+        depth,
+        deepestChild: depth
+      };
 
       if (page.children) {
         for (const child of page.children) {
@@ -53,7 +62,32 @@ export default class DivisionPageService {
       dfs(page, [], 0);
     }
 
-    return result;
+    return Object.values(result);
+  }
+
+  static checkValidMoveTargets(
+    pages: DivisionPage[],
+    maxDepth: number,
+    editedId?: number
+  ) {
+    let forbiddenIds = editedId ? [editedId] : [];
+    const editedPage = pages.find((p) => p.id === editedId);
+    const editedMoveDepth = editedPage
+      ? editedPage.deepestChild - editedPage.depth
+      : 0;
+
+    for (const page of pages) {
+      if (
+        page.depth + editedMoveDepth >= maxDepth ||
+        (page.parentId && forbiddenIds.includes(page.parentId))
+      ) {
+        forbiddenIds.push(page.id);
+      }
+    }
+    return pages.map((p) => ({
+      ...p,
+      disabled: forbiddenIds.includes(p.id)
+    }));
   }
 
   static async get(id?: number) {

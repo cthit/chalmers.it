@@ -9,28 +9,10 @@ import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from '../NewsPostForm/NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
-import { DivisionPage } from '@/services/divisionPageService';
+import DivisionPageService, {
+  DivisionPage
+} from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
-
-const checkValidPages = (
-  pages: DivisionPage[],
-  maxDepth: number,
-  editedId?: number
-) => {
-  let forbiddenIds = editedId ? [editedId] : [];
-  for (const page of pages) {
-    if (
-      page.depth >= maxDepth ||
-      (page.parentId && forbiddenIds.includes(page.parentId))
-    ) {
-      forbiddenIds.push(page.id);
-    }
-  }
-  return pages.map((p) => ({
-    ...p,
-    disabled: forbiddenIds.includes(p.id)
-  }));
-};
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -103,7 +85,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   }
 
   const maxDepth = divisionPost.divisionGroupId !== undefined ? 1 : 2;
-  const validPages = checkValidPages(
+  const validPages = DivisionPageService.checkValidMoveTargets(
     divisionPost.pages,
     maxDepth,
     divisionPost.editedId
