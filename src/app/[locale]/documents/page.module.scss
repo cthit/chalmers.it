@@ -5,3 +5,18 @@
   grid-gap: 1rem;
   margin-top: 1rem;
 }
+
+.title {
+  display: inline-block;
+}
+
+.subtitle {
+  font-size: var(--text-small);
+  margin-bottom: 0.5rem;
+}
+
+.docType {
+  display: inline-block;
+  font-size: var(--text-small);
+  color: #a7ebeb;
+}

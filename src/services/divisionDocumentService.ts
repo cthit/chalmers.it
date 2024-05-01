@@ -1,4 +1,5 @@
 import prisma from '@/prisma';
+import { DocumentType } from '@prisma/client';
 
 export interface DivisionDocument {
   id: number;
@@ -7,11 +8,30 @@ export interface DivisionDocument {
   url: string;
   divisionGroupName: string;
   divisionGroupId: number;
+  gammaSuperGroupId: string;
   createdAt: Date;
+  type: DocumentType;
 }
 
 export default class DivisionDocumentService {
-  static async get() {
+  static documentPrettyType(type: DocumentType) {
+    switch (type) {
+      case DocumentType.BUDGET:
+        return 'Budget';
+      case DocumentType.BUSINESS_PLAN:
+        return 'Verksamhetsplan';
+      case DocumentType.BUSINESS_REPORT:
+        return 'Verksamhetsrapport';
+      case DocumentType.FINANCIAL_REPORT:
+        return 'Ekonomisk rapport';
+      case DocumentType.MISC:
+        return 'Annat';
+      case DocumentType.PROTOCOL:
+        return 'Protokoll';
+    }
+  }
+
+  static async get(): Promise<DivisionDocument[]> {
     const data = await prisma.divisionDocument.findMany({
       select: {
         id: true,
@@ -20,6 +40,7 @@ export default class DivisionDocumentService {
         descriptionSv: true,
         descriptionEn: true,
         createdAt: true,
+        type: true,
         media: {
           select: {
             sha256: true
@@ -28,6 +49,7 @@ export default class DivisionDocumentService {
         DivisionGroup: {
           select: {
             id: true,
+            gammaSuperGroupId: true,
             prettyName: true
           }
         }
@@ -36,12 +58,14 @@ export default class DivisionDocumentService {
 
     return data.map((document) => ({
       id: document.id,
-      title: document.titleEn,
-      description: document.descriptionEn,
+      title: document.titleSv,
+      description: document.descriptionSv,
       url: `/api/media/${document.media.sha256}`,
       divisionGroupName: document.DivisionGroup.prettyName,
       divisionGroupId: document.DivisionGroup.id,
-      createdAt: document.createdAt
+      createdAt: document.createdAt,
+      type: document.type,
+      gammaSuperGroupId: document.DivisionGroup.gammaSuperGroupId
     }));
   }
 
@@ -51,7 +75,8 @@ export default class DivisionDocumentService {
     titleEn: string,
     descriptionSv: string,
     descriptionEn: string,
-    mediaId: string
+    mediaId: string,
+    type?: DocumentType
   ) {
     return await prisma.divisionDocument.create({
       data: {
@@ -68,7 +93,8 @@ export default class DivisionDocumentService {
         titleSv,
         titleEn,
         descriptionSv,
-        descriptionEn
+        descriptionEn,
+        type
       }
     });
   }

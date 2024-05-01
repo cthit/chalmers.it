@@ -3,6 +3,7 @@
 import MediaService from '@/services/mediaService';
 import DivisionDocumentService from '@/services/divisionDocumentService';
 import { redirect } from 'next/navigation';
+import { DocumentType } from '@prisma/client';
 
 export async function addDocument(
   divisionGroupId: string,
@@ -10,7 +11,8 @@ export async function addDocument(
   titleEn: string,
   descriptionSv: string,
   descriptionEn: string,
-  form: FormData
+  form: FormData,
+  type?: DocumentType
 ) {
   const file: File | null = form.get('file') as unknown as File;
 
@@ -26,7 +28,8 @@ export async function addDocument(
       titleEn,
       descriptionSv,
       descriptionEn,
-      mediaId
+      mediaId,
+      type
     );
   }
   redirect('/documents');

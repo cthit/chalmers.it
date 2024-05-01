@@ -4,10 +4,13 @@ import { addDocument } from '@/actions/documents';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import { GammaGroup } from '@/types/gamma';
 import TextArea from '@/components/TextArea/TextArea';
+import { DocumentType } from '@prisma/client';
+import DivisionDocumentService from '@/services/divisionDocumentService';
 
 const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
   const [groupId, setGroupId] = useState<string | undefined>(undefined);
   const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const [type, setType] = useState<string>(DocumentType.MISC);
   const [titleSv, setTitleSv] = useState('');
   const [titleEn, setTitleEn] = useState('');
   const [descriptionSv, setDescriptionSv] = useState('');
@@ -33,14 +36,15 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
       titleEn,
       descriptionSv,
       descriptionEn,
-      formData
+      formData,
+      type as DocumentType
     );
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="sponsorName">Skapa som </label>
+        <label htmlFor="createAsGroup">Skapa som </label>
         <DropdownList onChange={(e) => setGroupId(e.target.value)}>
           <option value={undefined} hidden>
             Select a group
@@ -48,6 +52,16 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
           {groups.map((group) => (
             <option key={group.superGroup!.id} value={group.superGroup!.id}>
               {group.superGroup?.prettyName ?? group.prettyName}
+            </option>
+          ))}
+        </DropdownList>
+      </div>
+      <div>
+        <label htmlFor="createAsGroup">Dokumenttyp </label>
+        <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
+          {Object.keys(DocumentType).map((type) => (
+            <option key={type} value={type}>
+              {DivisionDocumentService.documentPrettyType(type as DocumentType)}
             </option>
           ))}
         </DropdownList>
