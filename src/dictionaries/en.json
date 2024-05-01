@@ -1,5 +1,6 @@
 {
   "general": {
+    "create": "Create",
     "edit": "Edit",
     "delete": "Delete"
   },
@@ -21,5 +22,15 @@
     "for": "for",
     "by": "by",
     "unknown": "unknown author"
+  },
+  "pages": {
+    "about": "About our division",
+    "groups": "Committees, associations and other instances",
+    "create": "Create page"
+  },
+  "groups": {
+    "members": "Current members",
+    "memberserror": "Could not fetch members",
+    "createsubpage": "Create subpage"
   }
 }

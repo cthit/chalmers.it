@@ -1,5 +1,6 @@
 {
   "general": {
+    "create": "Skapa",
     "edit": "Redigera",
     "delete": "Radera"
   },
@@ -21,5 +22,15 @@
     "for": "for",
     "by": "by",
     "unknown": "okänd användare"
+  },
+  "pages": {
+    "about": "Om sektionen",
+    "groups": "Kommittéer, föreningar och andra instanser",
+    "create": "Skapa sida"
+  },
+  "groups": {
+    "members": "Nuvarande medlemmar",
+    "memberserror": "Kunde inte hämta medlemmar",
+    "createsubpage": "Skapa undersida"
   }
 }
