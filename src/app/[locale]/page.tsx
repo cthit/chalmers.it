@@ -14,7 +14,7 @@ export default function Home({
     <main className={styles.main}>
       <ThreePaneLayout
         left={<LeftBar />}
-        middle={<NewsList />}
+        middle={<NewsList locale={locale} />}
         right={<ContactCard locale={locale} />}
       />
     </main>

@@ -1,9 +1,25 @@
 {
+  "general": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
   "footer": {
     "postadress": "POSTAL ADDRESS",
     "visitadress": "VISITING ADDRESS",
     "contact": "CONTACT",
     "developed": "Developed by",
     "moreinfo": "more info"
+  },
+  "news": {
+    "title": "News",
+    "empty": "No news posts to show",
+    "create": "Create Post",
+    "error": "Could not fetch news posts",
+    "scheduled": "Scheduled",
+    "edited": "Edited",
+    "written": "Written",
+    "for": "for",
+    "by": "by",
+    "unknown": "unknown author"
   }
 }

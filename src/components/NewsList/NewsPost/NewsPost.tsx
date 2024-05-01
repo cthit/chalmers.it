@@ -9,6 +9,7 @@ import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import SessionService from '@/services/sessionService';
 import { PostStatus } from '@prisma/client';
+import i18nService from '@/services/i18nService';
 
 interface NewsPostProps {
   post: {
@@ -26,26 +27,16 @@ interface NewsPostProps {
       prettyName: string;
     } | null;
   };
+  locale: string;
 }
 
-const formatDate = (date: Date) => {
-  return date
-    .toLocaleDateString(['sv-SE'], {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    .replace(',', '');
-};
-
-const NewsPost = async ({ post }: NewsPostProps) => {
+const NewsPost = async ({ locale, post }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
+  const l = i18nService.getLocale(locale);
+  const en = locale === 'en';
 
   const nick =
-    (await GammaService.getNick(post.writtenByGammaUserId)) ||
-    'Okänd användare';
+    (await GammaService.getNick(post.writtenByGammaUserId)) || l.news.unknown;
 
   const ownsPost =
     (await getServerSession(authConfig))?.user?.id ===
@@ -65,21 +56,27 @@ const NewsPost = async ({ post }: NewsPostProps) => {
       <Divider />
       <div className={style.titleArea}>
         <h2 className={style.title}>
-          <Link href={`/post/${post.id}`}>{post.titleSv}</Link>
+          <Link href={`/post/${post.id}`}>
+            {en ? post.titleEn : post.titleSv}
+          </Link>
         </h2>
         {ownsPost && (
-          <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
+          <ActionButton href={`/post/${post.id}/edit`}>
+            {l.general.edit}
+          </ActionButton>
         )}
-        {canDeletePost && <DeletePostButton id={post.id} />}
+        {canDeletePost && (
+          <DeletePostButton text={l.general.delete} id={post.id} />
+        )}
       </div>
       <p className={style.subtitle}>
-        {post.status === PostStatus.SCHEDULED ? 'Schemalagd ' : null}
-        {formatDate(post.createdAt)} | Skriven {group && `för ${group}`} av{' '}
-        {nick}{' '}
+        {post.status === PostStatus.SCHEDULED ? `${l.news.scheduled} ` : null}
+        {`${i18nService.formatDate(post.createdAt)} | ${l.news.written} `}
+        {group && `${l.news.for} ${group}`} {`${l.news.by} ${nick} `}
         {post.updatedAt.getTime() - post.createdAt.getTime() > 5000 &&
-          ` | Redigerad ${formatDate(post.updatedAt)}`}
+          ` | ${l.news.edited} ${i18nService.formatDate(post.updatedAt)}`}
       </p>
-      <MarkdownView content={post.contentSv} />
+      <MarkdownView content={en ? post.contentEn : post.contentSv} />
     </>
   );
 };

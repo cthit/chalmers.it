@@ -1,9 +1,25 @@
 {
+  "general": {
+    "edit": "Redigera",
+    "delete": "Radera"
+  },
   "footer": {
     "postadress": "POSTADRESS",
     "visitadress": "BESÖKSADRESS",
     "contact": "CONTAKT",
     "developed": "Utvecklad av",
     "moreinfo": "mer info"
+  },
+  "news": {
+    "title": "Nyheter",
+    "empty": "Inga nyheter att visa",
+    "create": "Skapa nyhet",
+    "error": "Det gick inte att hämta nyheter",
+    "scheduled": "Schemalagd",
+    "edited": "Redigerad",
+    "written": "Skriven",
+    "for": "for",
+    "by": "by",
+    "unknown": "okänd användare"
   }
 }

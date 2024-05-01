@@ -5,9 +5,10 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 
 interface DeletePostButtonProps {
   id: number;
+  text: string;
 }
 
-const DeletePostButton = ({ id }: DeletePostButtonProps) => {
+const DeletePostButton = ({ id, text }: DeletePostButtonProps) => {
   async function remove() {
     try {
       await deletePost(id);
@@ -16,7 +17,7 @@ const DeletePostButton = ({ id }: DeletePostButtonProps) => {
     }
   }
 
-  return <ActionButton onClick={remove}>Radera</ActionButton>;
+  return <ActionButton onClick={remove}>{text}</ActionButton>;
 };
 
 export default DeletePostButton;
