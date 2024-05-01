@@ -2,66 +2,68 @@ import { Playfair_Display } from 'next/font/google';
 import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
+import i18nService from '@/services/i18nService';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
-const Navigation = () => {
+const Navigation = ({ locale }: { locale?: string }) => {
+  const l = i18nService.getLocale(locale);
   return (
     <nav className={styles.nav}>
-      <DropdownLink text="Sektionen">
-        <Link href="/groups">Kommittéer, föreningar och andra instanser</Link>
-        <Link href="https://dokument.chalmers.it/">Dokument</Link>
-        <Link href="https://wikit.chalmers.it/">Wiki&nbsp;&#8599;</Link>
-        <Link href="https://flashit.chalmers.it/">Bilder&nbsp;&#8599;</Link>
-        <Link href="https://cthit.myspreadshop.it/">Merch&nbsp;&#8599;</Link>
-        <Link href="/honorary-members">Hedersmedlemmar</Link>
-        <Link href="/programledningen">Programledningen</Link>
-        <Link href="/samo">SAMO</Link>
+      <DropdownLink text={l.nav.division}>
+        <Link href="/groups">{l.pages.groups}</Link>
+        <Link href="https://dokument.chalmers.it/">{l.nav.docs}</Link>
+        <Link href="https://wikit.chalmers.it/">{l.nav.wiki}&nbsp;&#8599;</Link>
+        <Link href="https://flashit.chalmers.it/">{l.nav.pictures}&nbsp;&#8599;</Link>
+        <Link href="https://cthit.myspreadshop.it/">{l.nav.merch}&nbsp;&#8599;</Link>
+        <Link href="/honorary-members">{l.nav.honorary}</Link>
+        <Link href="/programledningen">{l.nav.pl}</Link>
+        <Link href="/samo">{l.nav.samo}</Link>
       </DropdownLink>
-      <DropdownLink text="Sökande">
+      <DropdownLink text={l.nav.applicants}>
         <Link href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6">
-          Antagningsstatistik&nbsp;&#8599;
+          {l.nav.stats}&nbsp;&#8599;
         </Link>
-        <Link href="https://nollk.it/">NollKITs hemsida&nbsp;&#8599;</Link>
+        <Link href="https://nollk.it/">{l.nav.nollkit}&nbsp;&#8599;</Link>
         <Link href="https://wiki.chalmers.it/index.php/Nollan">
-          Studentlivet
+          {l.nav.studentlife}
         </Link>
       </DropdownLink>
-      <DropdownLink text="Studenter">
+      <DropdownLink text={l.nav.students}>
         <Link href="https://www.chalmers.se/utbildning/dina-studier/hitta-kurs-och-programplaner/programplaner/TKITE/?acYear=2019%2F2020&year=1&view=year&halftime=">
-          Kurser&nbsp;&#8599;
+          {l.nav.courses}&nbsp;&#8599;
         </Link>
         <Link href="https://cloud.timeedit.net/chalmers/web/b1/">
-          Boka grupprum&nbsp;&#8599;
+          {l.nav.grouprooms}&nbsp;&#8599;
         </Link>
         <Link href="https://cloud.timeedit.net/chalmers/web/public/ri1Q7.html">
-          Schema&nbsp;&#8599;
+          {l.nav.schedule}&nbsp;&#8599;
         </Link>
         <Link href="https://cthit.slack.com/">Slack&nbsp;&#8599;</Link>
         <Link href="https://www.lib.chalmers.se/paa-biblioteket/skriva-ut-och-scanna/">
-          Skriva ut&nbsp;&#8599;
+          {l.nav.print}&nbsp;&#8599;
         </Link>
         <Link href="https://chalmersstudentkar.se/feel_safe/">
-          Studiehälsa&nbsp;&#8599;
+          {l.nav.studenthealth}&nbsp;&#8599;
         </Link>
       </DropdownLink>
       <Link
         href="/services"
         className={`${styles.navLink} ${playfair.className}`}
       >
-        Tjänster
+        {l.nav.services}
       </Link>
       <Link
         href="/business"
         className={`${styles.navLink} ${playfair.className}`}
       >
-        Företag
+        {l.nav.business}
       </Link>
       <Link
         href="/contact"
         className={`${styles.navLink} ${playfair.className}`}
       >
-        Kontakt
+        {l.nav.contact}
       </Link>
     </nav>
   );

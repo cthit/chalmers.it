@@ -4,6 +4,36 @@
     "edit": "Edit",
     "delete": "Delete"
   },
+  "site": {
+    "title": "Software Engineering (IT)",
+    "subtitle": "Chalmers Student Union"
+  },
+  "nav": {
+    "division": "The Division",
+    "docs": "Documents",
+    "wiki": "Wiki",
+    "pictures": "Pictures",
+    "merch": "Merch",
+    "honorary": "Honorary Members",
+    "pl": "Programme Management Team",
+    "samo": "SAMO",
+    "applicants": "Applicants",
+    "stats": "Admission Statistics",
+    "nollkit": "NollKIT's Website",
+    "studentlife": "Student Life",
+    "students": "Students",
+    "courses": "Courses",
+    "grouprooms": "Book a group room",
+    "schedule": "Schedule",
+    "print": "Print",
+    "studenthealth": "Student Health",
+    "services": "Services",
+    "business": "Business",
+    "contact": "Contact"
+  },
+  "banner": {
+    "top": "Student Division"
+  },
   "footer": {
     "postadress": "POSTAL ADDRESS",
     "visitadress": "VISITING ADDRESS",

@@ -32,8 +32,8 @@ export default function RootLayout({
       <body style={{ display: 'unset' }} className={poppins.className}>
         <ThemeProvider>
           <NextTopLoader color="#09CDDA" showSpinner={false} height={2} />
-          <Header />
-          <Banner />
+          <Header locale={locale} />
+          <Banner locale={locale} />
           {children}
         </ThemeProvider>
       </body>

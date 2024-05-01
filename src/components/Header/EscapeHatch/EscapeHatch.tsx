@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import styles from './EscapeHatch.module.scss';
 import { Playfair_Display, Poppins } from 'next/font/google';
+import i18nService from '@/services/i18nService';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 const poppins = Poppins({ subsets: ['latin'], weight: '400' });
 
-const EscapeHatch = () => {
+const EscapeHatch = ({ locale }: { locale?: string }) => {
+  const l = i18nService.getLocale(locale);
   return (
     <div className={styles.escapeHatch}>
       <Link href="/">
@@ -20,10 +22,10 @@ const EscapeHatch = () => {
 
       <Link href="/">
         <h1 className={`${styles.title} ${playfair.className}`}>
-          Informationsteknik
+          {l.site.title}
         </h1>
         <h2 className={`${styles.subtitle} ${poppins.className}`}>
-          Chalmers Studentkår
+          {l.site.subtitle}
         </h2>
       </Link>
     </div>

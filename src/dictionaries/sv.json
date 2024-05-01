@@ -4,6 +4,36 @@
     "edit": "Redigera",
     "delete": "Radera"
   },
+  "site": {
+    "title": "Informationsteknik",
+    "subtitle": "Chalmers Studentkår"
+  },
+  "nav": {
+    "division": "Sektionen",
+    "docs": "Dokument",
+    "wiki": "Wiki",
+    "pictures": "Bilder",
+    "merch": "Merch",
+    "honorary": "Hedersmedlemmar",
+    "pl": "Programledningen",
+    "samo": "SAMO",
+    "applicants": "Sökande",
+    "stats": "Antagningsstatistik",
+    "nollkit": "NollKITs hemsida",
+    "studentlife": "Studentlivet",
+    "students": "Studenter",
+    "courses": "Kurser",
+    "grouprooms": "Boka grupprum",
+    "schedule": "Schema",
+    "print": "Skriva ut",
+    "studenthealth": "Studiehälsa",
+    "services": "Tjänster",
+    "business": "Företag",
+    "contact": "Kontakt"
+  },
+  "banner": {
+    "top": "Teknologsektionen"
+  },
   "footer": {
     "postadress": "POSTADRESS",
     "visitadress": "BESÖKSADRESS",
