@@ -14,8 +14,12 @@ const Navigation = ({ locale }: { locale?: string }) => {
         <Link href="/groups">{l.pages.groups}</Link>
         <Link href="https://dokument.chalmers.it/">{l.nav.docs}</Link>
         <Link href="https://wikit.chalmers.it/">{l.nav.wiki}&nbsp;&#8599;</Link>
-        <Link href="https://flashit.chalmers.it/">{l.nav.pictures}&nbsp;&#8599;</Link>
-        <Link href="https://cthit.myspreadshop.it/">{l.nav.merch}&nbsp;&#8599;</Link>
+        <Link href="https://flashit.chalmers.it/">
+          {l.nav.pictures}&nbsp;&#8599;
+        </Link>
+        <Link href="https://cthit.myspreadshop.it/">
+          {l.nav.merch}&nbsp;&#8599;
+        </Link>
         <Link href="/honorary-members">{l.nav.honorary}</Link>
         <Link href="/programledningen">{l.nav.pl}</Link>
         <Link href="/samo">{l.nav.samo}</Link>
