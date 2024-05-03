@@ -62,5 +62,8 @@
     "members": "Current members",
     "memberserror": "Could not fetch members",
     "createsubpage": "Create subpage"
+  },
+  "lunch": {
+    "nolunch": "No lunch for today"
   }
 }

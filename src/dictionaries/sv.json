@@ -49,8 +49,8 @@
     "scheduled": "Schemalagd",
     "edited": "Redigerad",
     "written": "Skriven",
-    "for": "for",
-    "by": "by",
+    "for": "för",
+    "by": "av",
     "unknown": "okänd användare"
   },
   "pages": {
@@ -62,5 +62,8 @@
     "members": "Nuvarande medlemmar",
     "memberserror": "Kunde inte hämta medlemmar",
     "createsubpage": "Skapa undersida"
+  },
+  "lunch": {
+    "nolunch": "Ingen lunch idag"
   }
 }
