@@ -6,12 +6,12 @@ import DivisionPage from '@/components/DivisionPage/DivisionPage';
 export default async function Page({
   params
 }: {
-  params: { id: string; slug: string[] };
+  params: { locale: string; id: string; slug: string[] };
 }) {
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
-  const main = DivisionPage(params.slug, group.id);
-  const left = <DivisionNavigation />;
+  const main = DivisionPage(params.locale, params.slug, group.id);
+  const left = <DivisionNavigation locale={params.locale} />;
   const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={await main} right={right} />;
