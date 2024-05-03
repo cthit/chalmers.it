@@ -5,11 +5,11 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPageService from '@/services/divisionPageService';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string; locale: string; } }) {
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
   const main = await mainContent(group.id);
-  const left = <DivisionNavigation />;
+  const left = <DivisionNavigation locale={params.locale} />;
   const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;
