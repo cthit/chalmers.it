@@ -3,7 +3,7 @@ import GammaService from './gammaService';
 
 export default class DivisionGroupService {
   static async getAll() {
-    return await prisma.divisionGroup.findMany();
+    return prisma.divisionGroup.findMany();
   }
 
   static async addGroup(
@@ -11,7 +11,7 @@ export default class DivisionGroupService {
     prettyName: string,
     slug: string
   ) {
-    return await prisma.divisionGroup.create({
+    return prisma.divisionGroup.create({
       data: {
         gammaSuperGroupId,
         prettyName,
@@ -25,7 +25,7 @@ export default class DivisionGroupService {
   }
 
   static async removeGroup(gammaSuperGroupId: string) {
-    return await prisma.divisionGroup.delete({
+    return prisma.divisionGroup.delete({
       where: {
         gammaSuperGroupId
       }
@@ -33,7 +33,7 @@ export default class DivisionGroupService {
   }
 
   static async getBanners() {
-    return await prisma.banner.findMany({
+    return prisma.banner.findMany({
       select: {
         id: true,
         divisionGroupId: true,
@@ -54,7 +54,7 @@ export default class DivisionGroupService {
   }
 
   static async getBannerForGroup(groupId: number) {
-    return await prisma.divisionGroup.findUnique({
+    return prisma.divisionGroup.findUnique({
       where: {
         id: groupId
       },
@@ -65,7 +65,7 @@ export default class DivisionGroupService {
   }
 
   static async addBanner(groupId: number, bannerSha: string) {
-    return await prisma.divisionGroup.update({
+    return prisma.divisionGroup.update({
       where: {
         id: groupId
       },
@@ -80,15 +80,28 @@ export default class DivisionGroupService {
   }
 
   static async deleteBanner(bannerId: number) {
-    return await prisma.banner.delete({
+    return prisma.banner.delete({
       where: {
         id: bannerId
       }
     });
   }
 
+  static async getBannerOwner(bannerId: number) {
+    return (
+      await prisma.banner.findUnique({
+        where: {
+          id: bannerId
+        },
+        select: {
+          divisionGroupId: true
+        }
+      })
+    )?.divisionGroupId;
+  }
+
   static async getInfoBySlug(slug: string) {
-    return await prisma.divisionGroup.findUnique({
+    return prisma.divisionGroup.findUnique({
       where: {
         slug
       },
@@ -105,7 +118,7 @@ export default class DivisionGroupService {
   }
 
   static async getInfo(id: number) {
-    return await prisma.divisionGroup.findUnique({
+    return prisma.divisionGroup.findUnique({
       where: {
         id
       },
@@ -129,7 +142,7 @@ export default class DivisionGroupService {
       descriptionSv: string;
     }
   ) {
-    return await prisma.divisionGroup.update({
+    return prisma.divisionGroup.update({
       where: {
         id
       },
@@ -166,7 +179,7 @@ export default class DivisionGroupService {
     id: number;
     slug: string;
   }) {
-    return await prisma.divisionGroup.update({
+    return prisma.divisionGroup.update({
       where: {
         id: edited.id
       },
@@ -178,5 +191,14 @@ export default class DivisionGroupService {
         slug: edited.slug
       }
     });
+  }
+
+  static async getGammaSuperGroupIdFromInternalId(id: number) {
+    return (
+      await prisma.divisionGroup.findUnique({
+        where: { id },
+        select: { gammaSuperGroupId: true }
+      })
+    )?.gammaSuperGroupId;
   }
 }

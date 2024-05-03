@@ -6,17 +6,23 @@ import { addGroup } from '@/actions/groups';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
+import { toast } from 'react-toastify';
 
 const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   const router = useRouter();
   let [newGroup, setNewGroup] = useState('');
 
   async function importGroup() {
-    const group = gammaGroups.find((g) => g.id === newGroup);
-    const prettyName = group?.prettyName || group?.name || 'Unnamed Group';
-    const slug = group?.name.toLowerCase() || 'unnamed-group';
+    try {
+      await toast.promise(addGroup(newGroup), {
+        pending: 'Adding group...',
+        success: 'Group added!',
+        error: 'Failed to add group'
+      });
+    } catch (e) {
+      console.error(e);
+    }
 
-    await addGroup(newGroup, prettyName, slug);
     router.refresh();
   }
 

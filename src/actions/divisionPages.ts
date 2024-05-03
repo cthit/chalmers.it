@@ -2,6 +2,7 @@
 
 import DivisionPageService from '@/services/divisionPageService';
 import { redirect } from 'next/navigation';
+import SessionService from '@/services/sessionService';
 
 export async function create(
   titleEn: string,
@@ -12,7 +13,16 @@ export async function create(
   divisionGroupId?: number,
   parentId?: number
 ) {
-  DivisionPageService.post(
+  //todo: Should corporate relations be able to create non-division group pages?
+  if (!(await SessionService.isAdmin())) {
+    if (
+      divisionGroupId === undefined ||
+      (await SessionService.canEditGroupByInternalId(divisionGroupId))
+    ) {
+      throw new Error('Unauthorized');
+    }
+  }
+  await DivisionPageService.post(
     titleEn,
     titleSv,
     contentEn,
@@ -25,7 +35,7 @@ export async function create(
 }
 
 export async function deletePage(id: number) {
-  DivisionPageService.delete(id);
+  await DivisionPageService.delete(id);
   redirect('.');
 }
 
@@ -38,7 +48,7 @@ export async function edit(
   slug: string,
   parentId?: number
 ) {
-  DivisionPageService.edit(
+  await DivisionPageService.edit(
     id,
     titleEn,
     titleSv,
