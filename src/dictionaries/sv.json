@@ -69,5 +69,11 @@
   "sponsors": {
     "title": "Samarbetspartners",
     "empty": "Vill du synas här? Kontakta"
+  },
+  "user": {
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "profile": "Min profil",
+    "settings": "Inställningar"
   }
 }

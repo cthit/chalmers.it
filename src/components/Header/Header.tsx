@@ -4,13 +4,13 @@ import SearchSwitcher from './SearchSwitcher/SearchSwitcher';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import User from './User/User';
 
-const Header = ({ locale }: { locale?: string }) => {
+const Header = ({ locale }: { locale: string }) => {
   return (
     <header className={styles.header}>
       <EscapeHatch locale={locale} />
       <SearchSwitcher locale={locale} />
       <ThemeSelector />
-      <User />
+      <User locale={locale} />
     </header>
   );
 };

@@ -69,5 +69,11 @@
   "sponsors": {
     "title": "Our Partners",
     "empty": "Would you like to advertise here? Please contact"
+  },
+  "user": {
+    "login": "Log in",
+    "logout": "Log out",
+    "profile": "My profile",
+    "settings": "Settings"
   }
 }
