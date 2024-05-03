@@ -4,9 +4,9 @@ import DivisionPageForm from '@/components/DivisionPageForm/DivisionPageForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionPageService from '@/services/divisionPageService';
 
-export default async function Page() {
+export default async function Page({params: {locale}}: {params: {locale: string}}) {
   const main = await mainContent();
-  const left = <DivisionNavigation />;
+  const left = <DivisionNavigation locale={locale} />;
   const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;
