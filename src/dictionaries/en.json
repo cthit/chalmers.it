@@ -1,9 +1,79 @@
 {
+  "general": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "site": {
+    "title": "Software Engineering (IT)",
+    "subtitle": "Chalmers Student Union"
+  },
+  "nav": {
+    "division": "The Division",
+    "docs": "Documents",
+    "wiki": "Wiki",
+    "pictures": "Pictures",
+    "merch": "Merch",
+    "honorary": "Honorary Members",
+    "pl": "Programme Management Team",
+    "samo": "SAMO",
+    "applicants": "Applicants",
+    "stats": "Admission Statistics",
+    "nollkit": "NollKIT's Website",
+    "studentlife": "Student Life",
+    "students": "Students",
+    "courses": "Courses",
+    "grouprooms": "Book a group room",
+    "schedule": "Schedule",
+    "print": "Print",
+    "studenthealth": "Student Health",
+    "services": "Services",
+    "business": "Business",
+    "contact": "Contact"
+  },
+  "banner": {
+    "top": "Student Division"
+  },
   "footer": {
     "postadress": "POSTAL ADDRESS",
     "visitadress": "VISITING ADDRESS",
     "contact": "CONTACT",
     "developed": "Developed by",
     "moreinfo": "more info"
+  },
+  "news": {
+    "title": "News",
+    "empty": "No news posts to show",
+    "create": "Create Post",
+    "error": "Could not fetch news posts",
+    "scheduled": "Scheduled",
+    "edited": "Edited",
+    "written": "Written",
+    "for": "for",
+    "by": "by",
+    "unknown": "unknown author"
+  },
+  "pages": {
+    "about": "About our division",
+    "groups": "Committees, associations and other instances",
+    "create": "Create page"
+  },
+  "groups": {
+    "members": "Current members",
+    "memberserror": "Could not fetch members",
+    "createsubpage": "Create subpage"
+  },
+  "lunch": {
+    "nolunch": "No lunch for today"
+  },
+  "sponsors": {
+    "title": "Our Partners",
+    "empty": "Would you like to advertise here? Please contact"
+  },
+  "user": {
+    "login": "Log in",
+    "logout": "Log out",
+    "profile": "My profile",
+    "settings": "Settings"
   }
 }

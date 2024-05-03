@@ -5,23 +5,25 @@ import LogoutLink from './LogoutLink/LogoutLink';
 import LoginButton from './LoginButton/LoginButton';
 import Dropdown from '../Navigation/Dropdown/Dropdown';
 import Link from 'next/link';
+import i18nService from '@/services/i18nService';
 
-const User = async () => {
+const User = async ({ locale }: { locale: string }) => {
   const session = await getServerSession(authConfig);
   const image = session?.user?.image;
 
   return (
     <div className={styles.user}>
       {image === undefined ? (
-        <LoginButton />
+        <LoginButton locale={locale} />
       ) : (
-        <LoggedIn image={session?.user?.image!} />
+        <LoggedIn image={session?.user?.image!} locale={locale} />
       )}
     </div>
   );
 };
 
-const LoggedIn = ({ image }: { image: string }) => {
+const LoggedIn = ({ image, locale }: { image: string; locale: string }) => {
+  const l = i18nService.getLocale(locale);
   return (
     <Dropdown
       parent={
@@ -38,9 +40,9 @@ const LoggedIn = ({ image }: { image: string }) => {
         </a>
       }
     >
-      <Link href="https://gamma.chalmers.it/me/edit">Min profil</Link>
-      <Link href="/settings">Inställningar</Link>
-      <LogoutLink />
+      <Link href="https://gamma.chalmers.it/me/edit">{l.user.profile}</Link>
+      <Link href="/settings">{l.user.settings}</Link>
+      <LogoutLink locale={locale} />
     </Dropdown>
   );
 };

@@ -30,8 +30,8 @@ export default function RootLayout({
     <html lang={locale}>
       <body style={{ display: 'unset' }} className={poppins.className}>
         <ThemeProvider>
-          <Header />
-          <Banner />
+          <Header locale={locale} />
+          <Banner locale={locale} />
           {children}
         </ThemeProvider>
       </body>

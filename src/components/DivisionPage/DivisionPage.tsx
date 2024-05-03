@@ -5,8 +5,10 @@ import DeletePageButton from './DeletePageButton/DeletePageButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DivisionPageForm from '../DivisionPageForm/DivisionPageForm';
 import SessionService from '@/services/sessionService';
+import i18nService from '@/services/i18nService';
 
 export default async function DivisionPage(
+  locale: string,
   slug: string[],
   id?: number,
   gammaSuperGroupId?: string
@@ -20,10 +22,11 @@ export default async function DivisionPage(
   const isEditing = slug[slug.length - 1] === 'edit';
   return isEditing && canEdit
     ? editContent(slug, id)
-    : mainContent(slug, id, canEdit, canEdit || isAdmin);
+    : mainContent(locale, slug, id, canEdit, canEdit || isAdmin);
 }
 
 async function mainContent(
+  locale: string,
   slug: string[],
   id?: number,
   canEdit?: boolean,
@@ -31,18 +34,25 @@ async function mainContent(
 ) {
   const page = await DivisionPageService.getBySlug(slug, id);
   const end = slug[slug.length - 1];
+  const l = i18nService.getLocale(locale);
+  const en = locale === 'en';
 
   const side = page && (
     <>
-      {canEdit && <ActionButton href={`./${end}/edit`}>Redigera</ActionButton>}
-      {canDelete && <DeletePageButton id={page.id} />}
+      {canEdit && (
+        <ActionButton href={`./${end}/edit`}>{l.general.edit}</ActionButton>
+      )}
+      {canDelete && <DeletePageButton text={l.general.delete} id={page.id} />}
     </>
   );
 
   return (
     <main>
-      <ContentArticle title={page?.titleSv ?? 'Untitled'} titleSide={side}>
-        <p>{page?.contentSv}</p>
+      <ContentArticle
+        title={(en ? page?.titleEn : page?.titleSv) ?? 'Untitled'}
+        titleSide={side}
+      >
+        <p>{en ? page?.contentEn : page?.contentSv}</p>
       </ContentArticle>
     </main>
   );

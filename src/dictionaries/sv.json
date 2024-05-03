@@ -1,9 +1,79 @@
 {
+  "general": {
+    "create": "Skapa",
+    "edit": "Redigera",
+    "delete": "Radera"
+  },
+  "site": {
+    "title": "Informationsteknik",
+    "subtitle": "Chalmers Studentkår"
+  },
+  "nav": {
+    "division": "Sektionen",
+    "docs": "Dokument",
+    "wiki": "Wiki",
+    "pictures": "Bilder",
+    "merch": "Merch",
+    "honorary": "Hedersmedlemmar",
+    "pl": "Programledningen",
+    "samo": "SAMO",
+    "applicants": "Sökande",
+    "stats": "Antagningsstatistik",
+    "nollkit": "NollKITs hemsida",
+    "studentlife": "Studentlivet",
+    "students": "Studenter",
+    "courses": "Kurser",
+    "grouprooms": "Boka grupprum",
+    "schedule": "Schema",
+    "print": "Skriva ut",
+    "studenthealth": "Studiehälsa",
+    "services": "Tjänster",
+    "business": "Företag",
+    "contact": "Kontakt"
+  },
+  "banner": {
+    "top": "Teknologsektionen"
+  },
   "footer": {
     "postadress": "POSTADRESS",
     "visitadress": "BESÖKSADRESS",
     "contact": "CONTAKT",
     "developed": "Utvecklad av",
     "moreinfo": "mer info"
+  },
+  "news": {
+    "title": "Nyheter",
+    "empty": "Inga nyheter att visa",
+    "create": "Skapa nyhet",
+    "error": "Det gick inte att hämta nyheter",
+    "scheduled": "Schemalagd",
+    "edited": "Redigerad",
+    "written": "Skriven",
+    "for": "för",
+    "by": "av",
+    "unknown": "okänd användare"
+  },
+  "pages": {
+    "about": "Om sektionen",
+    "groups": "Kommittéer, föreningar och andra instanser",
+    "create": "Skapa sida"
+  },
+  "groups": {
+    "members": "Nuvarande medlemmar",
+    "memberserror": "Kunde inte hämta medlemmar",
+    "createsubpage": "Skapa undersida"
+  },
+  "lunch": {
+    "nolunch": "Ingen lunch idag"
+  },
+  "sponsors": {
+    "title": "Samarbetspartners",
+    "empty": "Vill du synas här? Kontakta"
+  },
+  "user": {
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "profile": "Min profil",
+    "settings": "Inställningar"
   }
 }

@@ -13,19 +13,19 @@ export default function Home({
   return (
     <main className={styles.main}>
       <ThreePaneLayout
-        left={<LeftBar />}
-        middle={<NewsList />}
+        left={<LeftBar locale={locale} />}
+        middle={<NewsList locale={locale} />}
         right={<ContactCard locale={locale} />}
       />
     </main>
   );
 }
 
-const LeftBar = () => {
+const LeftBar = ({ locale }: { locale: string }) => {
   return (
     <div className={styles.sidePanel}>
-      <Lunch />
-      <Sponsors />
+      <Lunch locale={locale} />
+      <Sponsors locale={locale} />
     </div>
   );
 };

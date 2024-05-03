@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Navigation from '../Navigation/Navigation';
 import Search from '../SearchBar/Search';
 
-const SearchSwitcher = () => {
+const SearchSwitcher = ({ locale }: { locale?: string }) => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   const handleSearchIconClick = () => {
@@ -13,7 +13,7 @@ const SearchSwitcher = () => {
 
   return (
     <>
-      {isSearchExpanded ? null : <Navigation />}
+      {isSearchExpanded ? null : <Navigation locale={locale} />}
       <Search
         onSearchIconClick={handleSearchIconClick}
         isExpanded={isSearchExpanded}
