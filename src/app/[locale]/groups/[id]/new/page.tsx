@@ -5,7 +5,11 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPageService from '@/services/divisionPageService';
 
-export default async function Page({ params }: { params: { id: string; locale: string; } }) {
+export default async function Page({
+  params
+}: {
+  params: { id: string; locale: string };
+}) {
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
   const main = await mainContent(group.id);
