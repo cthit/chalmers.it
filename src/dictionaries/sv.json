@@ -65,5 +65,9 @@
   },
   "lunch": {
     "nolunch": "Ingen lunch idag"
+  },
+  "sponsors": {
+    "title": "Samarbetspartners",
+    "empty": "Vill du synas här? Kontakta"
   }
 }

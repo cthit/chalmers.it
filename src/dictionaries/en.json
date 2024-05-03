@@ -65,5 +65,9 @@
   },
   "lunch": {
     "nolunch": "No lunch for today"
+  },
+  "sponsors": {
+    "title": "Our Partners",
+    "empty": "Would you like to advertise here? Please contact"
   }
 }

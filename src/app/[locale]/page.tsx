@@ -25,7 +25,7 @@ const LeftBar = ({ locale }: { locale: string }) => {
   return (
     <div className={styles.sidePanel}>
       <Lunch locale={locale} />
-      <Sponsors />
+      <Sponsors locale={locale} />
     </div>
   );
 };
