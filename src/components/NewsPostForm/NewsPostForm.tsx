@@ -18,6 +18,7 @@ import FileService, { MediaType } from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
 import MarkdownView from '../MarkdownView/MarkdownView';
+import { toast } from 'react-toastify';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'

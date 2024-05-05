@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { addNotifier } from '@/actions/notifiers';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
+import { toast } from 'react-toastify';
 
 const NewNotifierForm = () => {
   const router = useRouter();
@@ -16,7 +17,15 @@ const NewNotifierForm = () => {
     const notifType = type as 'DISCORD' | 'SLACK';
     const notifLang = language as 'EN' | 'SV';
 
-    await addNotifier(notifType, notifLang, webhook);
+    try {
+      toast.promise(addNotifier(notifType, notifLang, webhook), {
+        pending: 'Adding notifier...',
+        success: 'Notifier added!',
+        error: 'Failed to add notifier'
+      });
+    } catch (e) {
+      console.error(e);
+    }
     router.refresh();
   };
 

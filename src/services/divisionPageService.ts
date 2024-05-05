@@ -132,6 +132,14 @@ export default class DivisionPageService {
     return this.flattenPages(pages);
   }
 
+  static async getSingleById(id: number) {
+    return prisma.divisionPage.findUnique({
+      where: {
+        id: id
+      }
+    });
+  }
+
   static async getBySlug(slug: string[], id?: number) {
     const pages = await this.get(id);
     return this.findBySlug(slug, pages);

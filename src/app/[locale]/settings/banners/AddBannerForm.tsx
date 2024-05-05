@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { addBanner } from '@/actions/banners';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import { toast } from 'react-toastify';
 
 const AddBannerForm = ({
   groups
@@ -38,7 +39,15 @@ const AddBannerForm = ({
     const formData = new FormData();
     formData.append('file', bannerImage!);
 
-    addBanner(groupId, formData);
+    try {
+      await toast.promise(addBanner(groupId, formData), {
+        pending: 'Adding banner...',
+        success: 'Banner added!',
+        error: 'Failed to add banner'
+      });
+    } catch (e) {
+      console.error(e);
+    }
 
     setGroupId(0);
     setBannerImage(null);

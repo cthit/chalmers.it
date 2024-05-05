@@ -3,6 +3,7 @@
 import DivisionPageService from '@/services/divisionPageService';
 import { redirect } from 'next/navigation';
 import SessionService from '@/services/sessionService';
+import { toast } from 'react-toastify';
 
 export async function create(
   titleEn: string,
@@ -13,24 +14,34 @@ export async function create(
   divisionGroupId?: number,
   parentId?: number
 ) {
-  //todo: Should corporate relations be able to create non-division group pages?
   if (!(await SessionService.isAdmin())) {
     if (
       divisionGroupId === undefined ||
-      (await SessionService.canEditGroupByInternalId(divisionGroupId))
+      !(await SessionService.canEditGroupByInternalId(divisionGroupId))
     ) {
       throw new Error('Unauthorized');
     }
   }
-  await DivisionPageService.post(
-    titleEn,
-    titleSv,
-    contentEn,
-    contentSv,
-    slug,
-    divisionGroupId,
-    parentId
-  );
+  try {
+    await toast.promise(
+      DivisionPageService.post(
+        titleEn,
+        titleSv,
+        contentEn,
+        contentSv,
+        slug,
+        divisionGroupId,
+        parentId
+      ),
+      {
+        pending: 'Saving...',
+        success: 'Page created',
+        error: 'Failed to create page'
+      }
+    );
+  } catch (e) {
+    console.error(e);
+  }
   redirect('.');
 }
 
@@ -48,6 +59,19 @@ export async function edit(
   slug: string,
   parentId?: number
 ) {
+  const page = (await DivisionPageService.getSingleById(id)) ?? null;
+  if (page === null) {
+    throw new Error('Page not found');
+  }
+
+  if (!(await SessionService.isAdmin())) {
+    if (
+      page.divisionGroupId === null ||
+      !(await SessionService.canEditGroupByInternalId(page.divisionGroupId))
+    ) {
+      throw new Error('Unauthorized');
+    }
+  }
   await DivisionPageService.edit(
     id,
     titleEn,
