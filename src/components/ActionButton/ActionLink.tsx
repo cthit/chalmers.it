@@ -1,23 +1,24 @@
 import styles from './ActionButton.module.scss';
 import { Playfair_Display } from 'next/font/google';
-import { ButtonHTMLAttributes } from 'react';
+import Link, { LinkProps } from 'next/link';
+import { AnchorHTMLAttributes } from 'react';
 import React from 'react';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-const ActionButton = ({
+const ActionLink = ({
   className,
   children,
   ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement>) => {
+}: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) => {
   return (
-    <button
+    <Link
       className={`${styles.button} ${playfair.className} ${className}`}
       {...rest}
     >
       {children}
-    </button>
+    </Link>
   );
 };
 
-export default ActionButton;
+export default ActionLink;
