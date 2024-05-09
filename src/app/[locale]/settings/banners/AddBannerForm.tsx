@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { addBanner } from '@/actions/banners';
 import DropdownList from '@/components/DropdownList/DropdownList';
+import ActionButton from '@/components/ActionButton/ActionButton';
 
 const AddBannerForm = ({
   groups
@@ -67,7 +68,7 @@ const AddBannerForm = ({
           onChange={handleImageChange}
         />
       </div>
-      <button type="submit">Add Banner</button>
+      <ActionButton type="submit">Add Banner</ActionButton>
     </form>
   );
 };

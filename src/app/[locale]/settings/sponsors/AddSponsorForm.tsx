@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { addSponsor } from '@/actions/sponsors';
+import ActionButton from '@/components/ActionButton/ActionButton';
 
 const AddSponsorForm = () => {
   const [sponsorUrl, setSponsorUrl] = useState('');
@@ -71,7 +72,7 @@ const AddSponsorForm = () => {
           onChange={handleImageChange}
         />
       </div>
-      <button type="submit">Add Sponsor</button>
+      <ActionButton type="submit">Add Sponsor</ActionButton>
     </form>
   );
 };
