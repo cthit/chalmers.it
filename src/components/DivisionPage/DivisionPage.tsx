@@ -6,6 +6,7 @@ import ContentPane from '../ContentPane/ContentPane';
 import DivisionPageForm from '../DivisionPageForm/DivisionPageForm';
 import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
+import ActionLink from '../ActionButton/ActionLink';
 
 export default async function DivisionPage(
   locale: string,
@@ -40,7 +41,7 @@ async function mainContent(
   const side = page && (
     <>
       {canEdit && (
-        <ActionButton href={`./${end}/edit`}>{l.general.edit}</ActionButton>
+        <ActionLink href={`./${end}/edit`}>{l.general.edit}</ActionLink>
       )}
       {canDelete && <DeletePageButton text={l.general.delete} id={page.id} />}
     </>

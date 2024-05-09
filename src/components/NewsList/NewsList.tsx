@@ -7,6 +7,7 @@ import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
+import ActionLink from '../ActionButton/ActionLink';
 
 interface NewsPostInterface {
   id: number;
@@ -50,7 +51,7 @@ const News = ({
       <div className={styles.title}>
         <h1>{l.news.title}</h1>
         {canPost && (
-          <ActionButton href="/post/new">{l.news.create}</ActionButton>
+          <ActionLink href="/post/new">{l.news.create}</ActionLink>
         )}
       </div>
       {news.length === 0 && (

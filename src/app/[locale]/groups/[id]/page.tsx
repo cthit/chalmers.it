@@ -10,6 +10,7 @@ import SessionService from '@/services/sessionService';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 export default async function Page({
   params: { locale, id }
@@ -38,8 +39,8 @@ const mainContent = async (locale: string, id: string) => {
 
   const side = canEdit && (
     <>
-      <ActionButton href={`./${id}/edit`}>{l.general.edit}</ActionButton>
-      <ActionButton href={`./${id}/new`}>{l.groups.createsubpage}</ActionButton>
+      <ActionLink href={`./${id}/edit`}>{l.general.edit}</ActionLink>
+      <ActionLink href={`./${id}/new`}>{l.groups.createsubpage}</ActionLink>
     </>
   );
 

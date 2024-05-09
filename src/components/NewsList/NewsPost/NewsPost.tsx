@@ -10,6 +10,7 @@ import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import SessionService from '@/services/sessionService';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 interface NewsPostProps {
   post: {
@@ -61,9 +62,9 @@ const NewsPost = async ({ locale, post }: NewsPostProps) => {
           </Link>
         </h2>
         {ownsPost && (
-          <ActionButton href={`/post/${post.id}/edit`}>
+          <ActionLink href={`/post/${post.id}/edit`}>
             {l.general.edit}
-          </ActionButton>
+          </ActionLink>
         )}
         {canDeletePost && (
           <DeletePostButton text={l.general.delete} id={post.id} />
