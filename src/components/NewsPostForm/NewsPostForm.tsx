@@ -62,7 +62,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     console.log('dropped');
     e.preventDefault();
     const files = e.dataTransfer.files;
-    let newQueue = uploadQueue;
+    let newQueue = { ...uploadQueue };
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const sha256 = await FileService.fileSha256(file);

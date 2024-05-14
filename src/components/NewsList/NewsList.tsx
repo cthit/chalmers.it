@@ -1,7 +1,6 @@
 import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
-import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
@@ -50,9 +49,7 @@ const News = ({
     <ContentPane>
       <div className={styles.title}>
         <h1>{l.news.title}</h1>
-        {canPost && (
-          <ActionLink href="/post/new">{l.news.create}</ActionLink>
-        )}
+        {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
       </div>
       {news.length === 0 && (
         <>

@@ -7,7 +7,11 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import ContentPane from '@/components/ContentPane/ContentPane';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({
+  params
+}: {
+  params: { locale: string; id: string };
+}) {
   const groups = await SessionService.getActiveGroups();
   const newsPost = await NewsService.get(Number.parseInt(params.id));
 
@@ -28,6 +32,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main className={style.main}>
       <ContentPane>
         <NewsPostForm
+          locale={params.locale}
           groups={groups}
           id={newsPost!.id}
           titleEn={newsPost!.titleEn}
