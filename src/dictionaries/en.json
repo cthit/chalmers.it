@@ -2,7 +2,8 @@
   "general": {
     "create": "Create",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "close": "Close"
   },
   "site": {
     "title": "Software Engineering (IT)",
@@ -45,13 +46,26 @@
     "title": "News",
     "empty": "No news posts to show",
     "create": "Create Post",
+    "edit": "Edit Post",
     "error": "Could not fetch news posts",
     "scheduled": "Scheduled",
     "edited": "Edited",
     "written": "Written",
     "for": "for",
     "by": "by",
-    "unknown": "unknown author"
+    "unknown": "unknown author",
+    "self": "Myself"
+  },
+  "editor": {
+    "createAs": "Create as",
+    "self": "Myself",
+    "title": "Title",
+    "content": "Content",
+    "publish": "Publish at",
+    "now": "Now",
+    "scheduled": "Scheduled",
+    "previewAction": "Preview",
+    "preview": "Preview"
   },
   "pages": {
     "about": "About our division",
@@ -75,5 +89,15 @@
     "logout": "Log out",
     "profile": "My profile",
     "settings": "Settings"
+  },
+  "markdown": {
+    "title": "Cheat Sheet",
+    "header": "Headers",
+    "formatting": "Text Formatting",
+    "lists": "Lists",
+    "links": "Links",
+    "images": "Images",
+    "code": "Code Blocks",
+    "tables": "Tables"
   }
 }

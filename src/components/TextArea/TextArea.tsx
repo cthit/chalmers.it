@@ -1,19 +1,12 @@
 import style from './TextArea.module.scss';
-import { ChangeEventHandler } from 'react';
+import { InputHTMLAttributes } from 'react';
 
-interface TextAreaProps {
-  value: string | undefined;
-  onChange: ChangeEventHandler<HTMLInputElement> | undefined;
-}
-
-const TextArea = ({ value, onChange }: TextAreaProps) => {
+const TextArea = ({
+  className,
+  ...rest
+}: InputHTMLAttributes<HTMLInputElement>) => {
   return (
-    <input
-      className={style.input}
-      type="text"
-      value={value}
-      onChange={onChange}
-    />
+    <input className={`${style.input} ${className}`} type="text" {...rest} />
   );
 };
 

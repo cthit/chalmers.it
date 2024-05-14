@@ -1,7 +1,7 @@
 .editor {
   border: none;
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow-y: scroll;
   padding: 0.5rem;
   min-height: 200px;
   font-size: var(--text-normal);

@@ -12,6 +12,8 @@ import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
+import i18nService from '@/services/i18nService';
+import FileService from '@/services/fileService';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -26,6 +28,7 @@ interface NewPostFormProps {
   contentEn?: string;
   contentSv?: string;
   writtenByGammaUserId?: string;
+  locale: string;
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
@@ -34,6 +37,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     breaks: true,
     gfm: true
   });
+
+  const l = i18nService.getLocale(newsPost.locale);
 
   const [group, setGroup] = useState(newsPost.group ?? 'self');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
@@ -49,6 +54,22 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [previewContentEn, setPreviewContentEn] = useState({
     __html: marked.parse('')
   });
+  const [uploadQueue, setUploadQueue] = useState<{
+    [key: string]: File;
+  }>({});
+
+  const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+    console.log('dropped');
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    let newQueue = uploadQueue;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const sha256 = await FileService.fileSha256(file);
+      newQueue[sha256] = file;
+    }
+    setUploadQueue(newQueue);
+  };
 
   async function send() {
     try {
@@ -97,11 +118,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   return (
     <>
-      <h1>{newsPost.id ? 'Redigera nyhet' : 'Skapa nyhet'}</h1>
+      <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
       <Divider />
-      <h2>Posta som</h2>
+      <h2>{l.editor.createAs}</h2>
       <DropdownList onChange={(e) => setGroup(e.target.value)}>
-        <option value="self">Mig själv</option>
+        <option value="self">{l.editor.self}</option>
         {newsPost.groups.map((group) => (
           <option key={group.superGroup!.id} value={group.superGroup!.id}>
             {group.superGroup?.prettyName ?? group.prettyName}
@@ -109,28 +130,42 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         ))}
       </DropdownList>
 
-      <h2>Titel (Eng)</h2>
+      <h2>{l.editor.title} (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>Innehåll (Eng)</h2>
+      <h2>{l.editor.content} (Eng)</h2>
       <MarkdownEditor
+        onDrop={() => console.log('dropped')}
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
 
-      <h2>Titel (Sv)</h2>
+      <h2>{l.editor.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>Innehåll (Sv)</h2>
+      <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
+        onDrop={dropFile}
+        onDragOver={(e) => {
+          console.log('dragover');
+          e.preventDefault();
+        }}
+        onDragLeave={() => console.log('drag leave')}
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
       />
 
+      <h2>Media</h2>
+      <ul>
+        {Object.entries(uploadQueue).map(([sha256, file]) => (
+          <li key={sha256}>{file.name}</li>
+        ))}
+      </ul>
+
       <br />
-      <h2>Publiceringstid</h2>
+      <h2>{l.editor.publish}</h2>
       <div className={style.actions}>
         <DropdownList onChange={(e) => setPublish(e.target.value)}>
-          <option value="now">Nu</option>
-          <option value="schedule">Schemalagd</option>
+          <option value="now">{l.editor.now}</option>
+          <option value="schedule">{l.editor.scheduled}</option>
         </DropdownList>
         <DatePicker
           disabled={publish === 'now'}
@@ -139,12 +174,39 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
       </div>
 
+      <Divider />
+      <h1>Event</h1>
+      <Divider />
+
+      <h2>{l.editor.title} (Eng)</h2>
+      <TextArea />
+
+      <h2>{l.editor.title} (Sv)</h2>
+      <TextArea />
+
+      <h2>Start</h2>
+      <DatePicker
+        disabled={publish === 'now'}
+        value={scheduledFor}
+        onChange={(e) => setScheduledFor(e)}
+      />
+      <h2>End</h2>
+      <DatePicker
+        disabled={publish === 'now'}
+        value={scheduledFor}
+        onChange={(e) => setScheduledFor(e)}
+      />
+      <label htmlFor="fullDay">Full day event</label>
+      <input type="checkbox" id="fullDay" name="fullDay" value="fullDay" />
+      <h2>Location</h2>
+      <TextArea />
+
       <br />
       <div className={style.actions}>
         <ActionButton onClick={send}>
-          {newsPost.id !== undefined ? 'Redigera' : 'Skapa'}
+          {newsPost.id !== undefined ? l.general.edit : l.general.create}
         </ActionButton>
-        <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
+        <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
       </div>
 
       <Popup
@@ -155,7 +217,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         overlayStyle={PreviewContentStyle}
       >
         <div className={style.dialog}>
-          <h1>Förhandsgranskning</h1>
+          <h1>{l.editor.preview}</h1>
           <Divider />
           <h2>{titleEn}</h2>
           <p dangerouslySetInnerHTML={previewContentEn} />
@@ -164,7 +226,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <p dangerouslySetInnerHTML={previewContentSv} />
 
           <ActionButton onClick={() => setShowPreview(false)}>
-            Stäng
+            {l.general.close}
           </ActionButton>
         </div>
       </Popup>
