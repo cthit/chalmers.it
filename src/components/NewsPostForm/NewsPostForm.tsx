@@ -58,6 +58,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     [key: string]: File;
   }>({});
 
+  const [eventCreation, setEventCreation] = useState<string>('');
+
   const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
     console.log('dropped');
     e.preventDefault();
@@ -227,33 +229,41 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
       <br />
       <h2>Event</h2>
-      <DropdownList>
-        <option>Inget event</option>
-        <option>Skapa event</option>
-        <option>Koppla event</option>
+      <DropdownList
+        value={eventCreation}
+        onChange={(e) => setEventCreation(e.target.value)}
+      >
+        <option value={''}>Inget event</option>
+        <option value="new">Skapa event</option>
+        <option value={'existing'}>Koppla event</option>
       </DropdownList>
-      <h2>{l.editor.title} (Eng)</h2>
-      <TextArea />
 
-      <h2>{l.editor.title} (Sv)</h2>
-      <TextArea />
+      {eventCreation && (
+        <>
+          <h2>{l.editor.title} (Eng)</h2>
+          <TextArea />
 
-      <h2>Start</h2>
-      <DatePicker
-        disabled={publish === 'now'}
-        value={scheduledFor}
-        onChange={(e) => setScheduledFor(e)}
-      />
-      <h2>End</h2>
-      <DatePicker
-        disabled={publish === 'now'}
-        value={scheduledFor}
-        onChange={(e) => setScheduledFor(e)}
-      />
-      <label htmlFor="fullDay">Full day event </label>
-      <input type="checkbox" id="fullDay" name="fullDay" value="fullDay" />
-      <h2>Location</h2>
-      <TextArea />
+          <h2>{l.editor.title} (Sv)</h2>
+          <TextArea />
+
+          <h2>Start</h2>
+          <DatePicker
+            disabled={publish === 'now'}
+            value={scheduledFor}
+            onChange={(e) => setScheduledFor(e)}
+          />
+          <h2>End</h2>
+          <DatePicker
+            disabled={publish === 'now'}
+            value={scheduledFor}
+            onChange={(e) => setScheduledFor(e)}
+          />
+          <label htmlFor="fullDay">Full day event </label>
+          <input type="checkbox" id="fullDay" name="fullDay" value="fullDay" />
+          <h2>Location</h2>
+          <TextArea />
+        </>
+      )}
 
       <br />
       <div className={style.actions}>
