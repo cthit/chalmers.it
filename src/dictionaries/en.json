@@ -4,6 +4,9 @@
     "create": "Create",
     "edit": "Edit",
     "delete": "Delete",
+    "download": "Download",
+    "upload": "Upload",
+    "uploaded": "Uploaded",
     "close": "Close"
   },
   "site": {
@@ -142,6 +145,11 @@
     "logout": "Log out",
     "profile": "My profile",
     "settings": "Settings"
+  },
+  "docs": {
+    "title": "Documents",
+    "more": "See more documents at docs.chalmers.it",
+    "empty": "No documents to show"
   },
   "markdown": {
     "title": "Cheat Sheet",

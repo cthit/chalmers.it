@@ -4,6 +4,9 @@
     "create": "Skapa",
     "edit": "Redigera",
     "delete": "Radera",
+    "download": "Ladda ner",
+    "upload": "Ladda upp",
+    "uploaded": "Uppladdad",
     "close": "Stäng"
   },
   "site": {
@@ -142,6 +145,11 @@
     "logout": "Logga ut",
     "profile": "Min profil",
     "settings": "Inställningar"
+  },
+  "docs": {
+    "title": "Dokument",
+    "more": "Se fler dokument på docs.chalmers.it",
+    "empty": "Inga dokument att visa"
   },
   "markdown": {
     "title": "Lathund",

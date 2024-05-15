@@ -3,8 +3,10 @@ import { DocumentType } from '@prisma/client';
 
 export interface DivisionDocument {
   id: number;
-  title: string;
-  description: string;
+  titleSv: string;
+  titleEn: string;
+  descriptionSv: string;
+  descriptionEn: string;
   url: string;
   divisionGroupName: string;
   divisionGroupId: number;
@@ -58,8 +60,10 @@ export default class DivisionDocumentService {
 
     return data.map((document) => ({
       id: document.id,
-      title: document.titleSv,
-      description: document.descriptionSv,
+      titleSv: document.titleSv,
+      titleEn: document.titleEn,
+      descriptionSv: document.descriptionSv,
+      descriptionEn: document.descriptionEn,
       url: `/api/media/${document.media.sha256}`,
       divisionGroupName: document.DivisionGroup.prettyName,
       divisionGroupId: document.DivisionGroup.id,

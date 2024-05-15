@@ -5,9 +5,10 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 
 interface DeleteDocumentButtonProps {
   id: number;
+  text: string;
 }
 
-const DeleteDocumentButton = ({ id }: DeleteDocumentButtonProps) => {
+const DeleteDocumentButton = ({ id, text }: DeleteDocumentButtonProps) => {
   async function remove() {
     try {
       await deleteDocument(id);
@@ -16,7 +17,7 @@ const DeleteDocumentButton = ({ id }: DeleteDocumentButtonProps) => {
     }
   }
 
-  return <ActionButton onClick={remove}>Radera</ActionButton>;
+  return <ActionButton onClick={remove}>{text}</ActionButton>;
 };
 
 export default DeleteDocumentButton;
