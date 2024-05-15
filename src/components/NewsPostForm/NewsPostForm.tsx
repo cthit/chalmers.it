@@ -1,6 +1,6 @@
 'use client';
 
-import { edit, post, postForGroup } from './actions';
+import { edit, post, postForGroup } from '../../actions/newsPosts';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -65,10 +65,32 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     let newQueue = { ...uploadQueue };
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const sha256 = await FileService.fileSha256(file);
+      const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
     }
     setUploadQueue(newQueue);
+  };
+
+  const delFile = (sha256: string) => {
+    const newQueue = { ...uploadQueue };
+    delete newQueue[sha256];
+    setUploadQueue(newQueue);
+  };
+
+  const copyFile = (sha256: string) => {
+    navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
+  };
+
+  const replaceLocalFiles = (text: string) => {
+    let newText = text;
+    for (const [sha256, file] of Object.entries(uploadQueue)) {
+      newText = newText.replace(
+        '(/api/media/' + sha256 + ')',
+        '(' + URL.createObjectURL(file) + ')'
+      );
+    }
+
+    return newText;
   };
 
   async function send() {
@@ -100,7 +122,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
         return;
       } else {
-        await post(titleEn, titleSv, contentEn, contentSv, publishDate);
+        let formData = new FormData();
+        for (const file of Object.values(uploadQueue)) {
+          formData.append('file', file);
+        }
+        await post(
+          titleEn,
+          titleSv,
+          contentEn,
+          contentSv,
+          formData,
+          publishDate
+        );
       }
     } catch {
       console.log('Failed to post news article');
@@ -108,9 +141,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   function preview() {
-    const markupSv = marked.parse(contentSv);
+    const markupSv = marked.parse(replaceLocalFiles(contentSv));
     setPreviewContentSv({ __html: markupSv });
-    const markupEn = marked.parse(contentEn);
+    const markupEn = marked.parse(replaceLocalFiles(contentEn));
     setPreviewContentEn({ __html: markupEn });
 
     setShowPreview(true);
@@ -134,7 +167,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>{l.editor.content} (Eng)</h2>
       <MarkdownEditor
-        onDrop={() => console.log('dropped')}
+        onDragOver={(e) => {
+          e.preventDefault();
+        }}
+        onDrop={dropFile}
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
@@ -143,20 +179,35 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
-        onDrop={dropFile}
         onDragOver={(e) => {
-          console.log('dragover');
           e.preventDefault();
         }}
-        onDragLeave={() => console.log('drag leave')}
+        onDrop={dropFile}
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
       />
-
-      <h2>Media</h2>
+      <br />
+      <h2>{l.editor.uploaded}</h2>
+      {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noFiles}</p>}
       <ul>
         {Object.entries(uploadQueue).map(([sha256, file]) => (
-          <li key={sha256}>{file.name}</li>
+          <li className={style.fileActions} key={sha256}>
+            <p>{file.name}</p>{' '}
+            <ActionButton
+              onClick={() => {
+                copyFile(sha256);
+              }}
+            >
+              {l.editor.copyLink}
+            </ActionButton>{' '}
+            <ActionButton
+              onClick={() => {
+                delFile(sha256);
+              }}
+            >
+              {l.general.delete}
+            </ActionButton>
+          </li>
         ))}
       </ul>
 
@@ -174,10 +225,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
       </div>
 
-      <Divider />
-      <h1>Event</h1>
-      <Divider />
-
+      <br />
+      <h2>Event</h2>
+      <DropdownList>
+        <option>Inget event</option>
+        <option>Skapa event</option>
+        <option>Koppla event</option>
+      </DropdownList>
       <h2>{l.editor.title} (Eng)</h2>
       <TextArea />
 
@@ -196,7 +250,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         value={scheduledFor}
         onChange={(e) => setScheduledFor(e)}
       />
-      <label htmlFor="fullDay">Full day event</label>
+      <label htmlFor="fullDay">Full day event </label>
       <input type="checkbox" id="fullDay" name="fullDay" value="fullDay" />
       <h2>Location</h2>
       <TextArea />

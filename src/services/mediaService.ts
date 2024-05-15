@@ -1,5 +1,6 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
+import FileService from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
@@ -36,11 +37,7 @@ export default class MediaService {
   }
 
   static async save(file: Blob) {
-    const sha256 = await crypto.subtle.digest(
-      'SHA-256',
-      await file.arrayBuffer()
-    );
-    const shaString = Array.from(new Uint8Array(sha256)).join('');
+    const shaString = await FileService.fileSha256(file);
 
     const extension = convertMimeType(file.type);
     if (!extension) return null;

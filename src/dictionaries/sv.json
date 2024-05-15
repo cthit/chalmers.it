@@ -64,7 +64,10 @@
     "now": "Nu",
     "scheduled": "Schemalagd",
     "previewAction": "Förhandsgranska",
-    "preview": "Förhandsgranskning"
+    "preview": "Förhandsgranskning",
+    "uploaded": "Uppladdade Filer",
+    "noFiles": "Inga filer uppladdade",
+    "copyLink": "Kopiera länk"
   },
   "pages": {
     "about": "Om sektionen",

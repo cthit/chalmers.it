@@ -65,7 +65,10 @@
     "now": "Now",
     "scheduled": "Scheduled",
     "previewAction": "Preview",
-    "preview": "Preview"
+    "preview": "Preview",
+    "uploaded": "Uploaded Files",
+    "noFiles": "No files uploaded",
+    "copyLink": "Copy link"
   },
   "pages": {
     "about": "About our division",

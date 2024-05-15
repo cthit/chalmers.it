@@ -5,14 +5,20 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import { redirect } from 'next/navigation';
 import { PostStatus } from '@prisma/client';
+import MediaService from '@/services/mediaService';
 
 export async function post(
   titleEn: string,
   titleSv: string,
   contentEn: string,
   contentSv: string,
+  files: FormData,
   scheduledPublish?: Date
 ) {
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file);
+  }
+
   const session = await getServerSession(authConfig);
   await NewsService.post({
     titleEn,

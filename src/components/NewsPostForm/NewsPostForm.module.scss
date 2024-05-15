@@ -9,3 +9,15 @@
   display: flex;
   gap: 1rem;
 }
+
+.fileActions {
+  list-style-type: none;
+  display: flex;
+  margin-bottom: 0.5rem;
+  gap: 0.25rem;
+}
+
+.fileActions p {
+  flex-grow: 1;
+  display: inline-block;
+}
