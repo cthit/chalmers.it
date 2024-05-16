@@ -5,7 +5,6 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
 import GroupMember from '@/components/GroupMember/GroupMember';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
-import ActionButton from '@/components/ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import ContactCard from '@/components/ContactCard/ContactCard';

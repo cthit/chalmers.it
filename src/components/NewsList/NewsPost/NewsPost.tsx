@@ -4,7 +4,6 @@ import Link from 'next/link';
 import GammaService from '@/services/gammaService';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
-import ActionButton from '@/components/ActionButton/ActionButton';
 import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import SessionService from '@/services/sessionService';

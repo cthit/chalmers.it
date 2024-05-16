@@ -1,4 +1,3 @@
-import ActionButton from '@/components/ActionButton/ActionButton';
 import DivisionPageService from '@/services/divisionPageService';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import DeletePageButton from './DeletePageButton/DeletePageButton';

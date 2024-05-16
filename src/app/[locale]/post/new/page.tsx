@@ -1,5 +1,4 @@
 import NewsPostForm from '@/components/NewsPostForm/NewsPostForm';
-import style from './page.module.scss';
 import SessionService from '@/services/sessionService';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
@@ -13,7 +12,6 @@ export default async function Page({
   params: { locale: string };
 }) {
   const groups = await SessionService.getActiveGroups();
-  const l = i18nService.getLocale(locale);
 
   return (
     <main>

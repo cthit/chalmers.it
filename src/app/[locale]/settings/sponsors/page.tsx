@@ -1,7 +1,6 @@
 import Divider from '@/components/Divider/Divider';
 import SponsorService from '@/services/sponsorService';
 import AddSponsorForm from './AddSponsorForm';
-import ActionButton from '@/components/ActionButton/ActionButton';
 import ActionLink from '@/components/ActionButton/ActionLink';
 
 export default async function Page() {
