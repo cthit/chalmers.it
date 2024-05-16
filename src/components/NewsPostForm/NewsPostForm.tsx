@@ -69,7 +69,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     let newQueue = { ...uploadQueue };
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      if (file.size > FileService.maxMediaSize) continue;
+      if (!FileService.checkValidFile(file)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;

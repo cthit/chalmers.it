@@ -25,12 +25,12 @@ export default class MediaService {
   }
 
   static async save(file: Blob) {
-    if (file.size > FileService.maxMediaSize) return null;
-
-    const shaString = await FileService.fileSha256(file);
+    if (!FileService.checkValidFile(file)) return null;
 
     const extension = FileService.convertMimeType(file.type);
     if (!extension) return null;
+
+    const shaString = await FileService.fileSha256(file);
 
     // Write file if it doesn't already exist in file system
     await stat(`${mediaPath}/${shaString}.${extension}`).catch(

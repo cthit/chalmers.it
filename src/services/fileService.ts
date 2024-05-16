@@ -33,7 +33,13 @@ export default class FileService {
       .replace(/=+$/, '');
   }
 
-  static async convertMimeType(mimeType: string) {
+  static checkValidFile(file: Blob | File) {
+    return (
+      file.size <= this.maxMediaSize && this.convertMimeType(file.type) !== null
+    );
+  }
+
+  static convertMimeType(mimeType: string) {
     switch (mimeType) {
       case 'image/jpeg':
         return 'jpg';
