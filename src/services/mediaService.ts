@@ -4,21 +4,9 @@ import FileService from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
-const convertMimeType = (mimeType: string) => {
-  switch (mimeType) {
-    case 'image/jpeg':
-      return 'jpg';
-    case 'image/png':
-      return 'png';
-    case 'image/gif':
-      return 'gif';
-    case 'image/webp':
-      return 'webp';
-    default:
-      return null;
-  }
-};
-
+/**
+ * Helper class for media operations on server
+ */
 export default class MediaService {
   static async get(sha256: string) {
     return await prisma.media.findUnique({
@@ -37,9 +25,11 @@ export default class MediaService {
   }
 
   static async save(file: Blob) {
+    if (file.size > FileService.maxMediaSize) return null;
+
     const shaString = await FileService.fileSha256(file);
 
-    const extension = convertMimeType(file.type);
+    const extension = FileService.convertMimeType(file.type);
     if (!extension) return null;
 
     // Write file if it doesn't already exist in file system
@@ -76,7 +66,8 @@ export default class MediaService {
         extension: true
       }
     });
-    const filename = sha256 + '.' + convertMimeType(extension!.extension);
+    const filename =
+      sha256 + '.' + FileService.convertMimeType(extension!.extension);
 
     return {
       data: await readFile(`${mediaPath}/${filename}`),

@@ -10,10 +10,13 @@ import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
+import markdownStyle from '@/components/MarkdownView/MarkdownView.module.scss';
 import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
 import FileService from '@/services/fileService';
+import ContentPane from '../ContentPane/ContentPane';
+import MediaService from '@/services/mediaService';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -61,12 +64,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [eventCreation, setEventCreation] = useState<string>('');
 
   const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
-    console.log('dropped');
     e.preventDefault();
     const files = e.dataTransfer.files;
     let newQueue = { ...uploadQueue };
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      if (file.size > FileService.maxMediaSize) continue;
+
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
     }
@@ -280,19 +284,27 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         onClose={() => setShowPreview(false)}
         overlayStyle={PreviewContentStyle}
       >
-        <div className={style.dialog}>
+        <ContentPane className={style.dialog}>
           <h1>{l.editor.preview}</h1>
           <Divider />
-          <h2>{titleEn}</h2>
-          <p dangerouslySetInnerHTML={previewContentEn} />
+          <h1>{titleEn}</h1>
+          <div
+            className={markdownStyle.content}
+            dangerouslySetInnerHTML={previewContentEn}
+          />
+
           <Divider />
-          <h2>{titleSv}</h2>
-          <p dangerouslySetInnerHTML={previewContentSv} />
+
+          <h1>{titleSv}</h1>
+          <div
+            className={markdownStyle.content}
+            dangerouslySetInnerHTML={previewContentSv}
+          />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.general.close}
           </ActionButton>
-        </div>
+        </ContentPane>
       </Popup>
     </>
   );
