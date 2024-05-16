@@ -1,6 +1,13 @@
 // Default max size is 100 MiB
 const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE || '104857600');
 
+const mimeTypes: { [key: string]: string } = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/webp': 'webp'
+};
+
 /**
  * Helper class for media operations common to client and server
  */
@@ -40,17 +47,6 @@ export default class FileService {
   }
 
   static convertMimeType(mimeType: string) {
-    switch (mimeType) {
-      case 'image/jpeg':
-        return 'jpg';
-      case 'image/png':
-        return 'png';
-      case 'image/gif':
-        return 'gif';
-      case 'image/webp':
-        return 'webp';
-      default:
-        return null;
-    }
+    return mimeTypes[mimeType] ?? null;
   }
 }

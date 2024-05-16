@@ -16,7 +16,6 @@ import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
 import FileService from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
-import MediaService from '@/services/mediaService';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
