@@ -11,6 +11,23 @@ export default class NewsService {
     return await prisma.newsPost.findUnique({
       where: {
         id
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        contentEn: true,
+        contentSv: true,
+        createdAt: true,
+        updatedAt: true,
+        writtenByGammaUserId: true,
+        status: true,
+        writtenFor: {
+          select: {
+            gammaSuperGroupId: true,
+            prettyName: true
+          }
+        }
       }
     });
   }

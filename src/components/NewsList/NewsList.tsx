@@ -58,7 +58,10 @@ const News = ({
         </>
       )}
       {news.map((newsPost) => (
-        <NewsPost locale={locale} post={newsPost} key={newsPost.id} />
+        <>
+          <Divider />
+          <NewsPost locale={locale} post={newsPost} key={newsPost.id} />
+        </>
       ))}
     </ContentPane>
   );

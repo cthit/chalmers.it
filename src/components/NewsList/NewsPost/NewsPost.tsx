@@ -1,4 +1,3 @@
-import Divider from '@/components/Divider/Divider';
 import style from './NewsPost.module.scss';
 import Link from 'next/link';
 import GammaService from '@/services/gammaService';
@@ -28,9 +27,10 @@ interface NewsPostProps {
     } | null;
   };
   locale: string;
+  noNav?: boolean;
 }
 
-const NewsPost = async ({ locale, post }: NewsPostProps) => {
+const NewsPost = async ({ locale, post, noNav }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
@@ -50,15 +50,13 @@ const NewsPost = async ({ locale, post }: NewsPostProps) => {
   }
 
   const canDeletePost = ownsPost || (await SessionService.isAdmin());
+  const title = en ? post.titleEn : post.titleSv;
 
   return (
     <>
-      <Divider />
       <div className={style.titleArea}>
         <h2 className={style.title}>
-          <Link href={`/post/${post.id}`}>
-            {en ? post.titleEn : post.titleSv}
-          </Link>
+          {noNav ? title : <Link href={`/post/${post.id}`}>{title}</Link>}
         </h2>
         {ownsPost && (
           <ActionLink href={`/post/${post.id}/edit`}>
