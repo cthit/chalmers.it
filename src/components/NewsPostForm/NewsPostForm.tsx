@@ -31,7 +31,28 @@ interface NewPostFormProps {
   contentSv?: string;
   writtenByGammaUserId?: string;
   locale: string;
+  connectedEvents?: Event[];
 }
+
+interface Event {
+  titleEn: string;
+  titleSv: string;
+  start: Date;
+  end: Date;
+  fullDay: boolean;
+  location: string;
+  id?: number;
+}
+
+const emptyEvent: Event = {
+  titleEn: '',
+  titleSv: '',
+  start: new Date(),
+  end: new Date(),
+  fullDay: false,
+  location: '',
+  id: undefined
+};
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
   marked.use({
@@ -60,7 +81,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     [key: string]: File;
   }>({});
 
-  const [eventCreation, setEventCreation] = useState<string>('');
+  const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
 
   const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
@@ -224,49 +245,106 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <option value="schedule">{l.editor.scheduled}</option>
         </DropdownList>
         <DatePicker
-          disabled={publish === 'now'}
+          hidden={publish === 'now'}
           value={scheduledFor}
           onChange={(e) => setScheduledFor(e)}
         />
       </div>
 
       <br />
-      <h2>Event</h2>
-      <DropdownList
-        value={eventCreation}
-        onChange={(e) => setEventCreation(e.target.value)}
-      >
-        <option value={''}>Inget event</option>
-        <option value="new">Skapa event</option>
-        <option value={'existing'}>Koppla event</option>
-      </DropdownList>
+      <h2>Events</h2>
 
-      {eventCreation && (
+      {events.map((e, i) => (
         <>
-          <h2>{l.editor.title} (Eng)</h2>
-          <TextArea />
+          <h2 key={i}>{l.editor.title} (Eng)</h2>
+          <TextArea
+            value={e.titleEn}
+            onChange={(e) => {
+              const newEvents = [...events];
+              newEvents[i].titleEn = e.target.value;
+              setEvents(newEvents);
+            }}
+          />
 
-          <h2>{l.editor.title} (Sv)</h2>
-          <TextArea />
+          <h2 key={i}>{l.editor.title} (Sv)</h2>
+          <TextArea
+            value={e.titleSv}
+            onChange={(e) => {
+              const newEvents = [...events];
+              newEvents[i].titleSv = e.target.value;
+              setEvents(newEvents);
+            }}
+          />
 
           <h2>Start</h2>
           <DatePicker
-            disabled={publish === 'now'}
-            value={scheduledFor}
-            onChange={(e) => setScheduledFor(e)}
+            key={i}
+            value={e.start}
+            onChange={(d) => {
+              const newEvents = [...events];
+              newEvents[i].start = d;
+              setEvents(newEvents);
+            }}
           />
           <h2>End</h2>
           <DatePicker
-            disabled={publish === 'now'}
-            value={scheduledFor}
-            onChange={(e) => setScheduledFor(e)}
+            key={i}
+            disabled={e.fullDay}
+            value={e.end}
+            onChange={(d) => {
+              const newEvents = [...events];
+              newEvents[i].end = d;
+              setEvents(newEvents);
+            }}
           />
-          <label htmlFor="fullDay">Full day event </label>
-          <input type="checkbox" id="fullDay" name="fullDay" value="fullDay" />
+          <br />
+          <label key={i} htmlFor={'fullDay' + i}>
+            Full day event{' '}
+          </label>
+          <input
+            key={i}
+            type="checkbox"
+            id={'fullDay' + i}
+            name="fullDay"
+            checked={e.fullDay}
+            onChange={(e) => {
+              const newEvents = [...events];
+              newEvents[i].fullDay = e.target.checked;
+              setEvents(newEvents);
+            }}
+          />
           <h2>Location</h2>
-          <TextArea />
+          <TextArea
+            key={i}
+            value={e.location}
+            onChange={(e) => {
+              const newEvents = [...events];
+              newEvents[i].location = e.target.value;
+              setEvents(newEvents);
+            }}
+          />
+
+          <ActionButton
+            key={i}
+            onClick={() => {
+              const newEvents = [...events];
+              newEvents.splice(i, 1);
+              setEvents(newEvents);
+            }}
+          >
+            Delete Event
+          </ActionButton>
         </>
-      )}
+      ))}
+
+      <br />
+      <ActionButton
+        onClick={() => {
+          setEvents([...events, { ...emptyEvent }]);
+        }}
+      >
+        Add Event
+      </ActionButton>
 
       <br />
       <div className={style.actions}>
