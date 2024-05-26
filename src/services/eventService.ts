@@ -30,7 +30,7 @@ export default class EventService {
         titleSv: event.titleSv,
         descriptionEn: event.descriptionEn,
         descriptionSv: event.descriptionSv,
-        fullDay: false,
+        fullDay: event.fullDay,
         startTime: event.startTime,
         endTime: event.endTime,
         newsPostId: event.newsPostId,
@@ -61,6 +61,9 @@ export default class EventService {
         titleSv: event.titleSv,
         descriptionEn: event.descriptionEn,
         descriptionSv: event.descriptionSv,
+        fullDay: event.fullDay,
+        startTime: event.startTime,
+        endTime: event.endTime,
         newsPostId: event.newsPostId
       }
     });

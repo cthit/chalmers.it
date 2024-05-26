@@ -1,7 +1,7 @@
 'use client';
 
 import { edit, post, postForGroup } from '@/actions/newsPosts';
-import { createEvent, editEvent } from '@/actions/events';
+import { createEvent, deleteEvent, editEvent } from '@/actions/events';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -81,6 +81,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }>({});
 
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
+  const [removeQueue, setRemoveQueue] = useState<number[]>([]);
 
   const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
@@ -175,9 +176,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         if (event.id === undefined) {
           await createEvent(data);
         } else {
-          await editEvent(event.id!, data);
+          await editEvent(event.id, data);
         }
       }
+
+      for (const id of removeQueue) {
+        await deleteEvent(id);
+      }
+
       router.push('/');
     } catch {
       console.log('Failed to post news article');
@@ -188,6 +194,16 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     const newEvents: Event[] = [...events];
     newEvents[id][key] = value as never;
     setEvents(newEvents);
+  }
+
+  function removeEventState(i: number, id?: number) {
+    const newEvents = [...events];
+    newEvents.splice(i, 1);
+    setEvents(newEvents);
+
+    if (id !== undefined) {
+      setRemoveQueue([...removeQueue, id]);
+    }
   }
 
   function preview() {
@@ -321,13 +337,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
             <br />
             <br />
-            <ActionButton
-              onClick={() => {
-                const newEvents = [...events];
-                newEvents.splice(i, 1);
-                setEvents(newEvents);
-              }}
-            >
+            <ActionButton onClick={() => removeEventState(i, e.id)}>
               {l.events.remove}
             </ActionButton>
           </li>

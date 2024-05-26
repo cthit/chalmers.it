@@ -3,8 +3,8 @@
 import EventService from '@/services/eventService';
 
 export async function editEvent(
-  gammaSuperGroupId: number,
-  prettyName: {
+  id: number,
+  data: {
     titleEn: string;
     titleSv: string;
     descriptionEn: string;
@@ -15,10 +15,10 @@ export async function editEvent(
     newsPostId?: number | undefined;
   }
 ) {
-  EventService.update(gammaSuperGroupId, prettyName);
+  EventService.update(id, data);
 }
 
-export async function createEvent(prettyName: {
+export async function createEvent(data: {
   titleEn: string;
   titleSv: string;
   descriptionEn: string;
@@ -28,5 +28,9 @@ export async function createEvent(prettyName: {
   endTime: Date;
   newsPostId?: number | undefined;
 }) {
-  EventService.create(prettyName);
+  EventService.create(data);
+}
+
+export async function deleteEvent(id: number) {
+  EventService.delete(id);
 }
