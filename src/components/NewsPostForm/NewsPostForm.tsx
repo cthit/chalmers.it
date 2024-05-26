@@ -11,7 +11,6 @@ import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
-import markdownStyle from '@/components/MarkdownView/MarkdownView.module.scss';
 import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
