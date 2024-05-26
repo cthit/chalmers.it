@@ -7,7 +7,7 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { GammaGroup } from '@/types/gamma';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
@@ -76,6 +76,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState('');
   const [previewContentEn, setPreviewContentEn] = useState('');
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
     [key: string]: File;
   }>({});
@@ -83,12 +85,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
 
-  const dropFile = async (e: React.DragEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
+  const dropFiles = async (f: FileList) => {
     let newQueue = { ...uploadQueue };
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    for (let i = 0; i < f.length; i++) {
+      const file = f[i];
       if (!FileService.checkValidFile(file)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
@@ -234,7 +234,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         onDragOver={(e) => {
           e.preventDefault();
         }}
-        onDrop={dropFile}
+        onDrop={(e) => dropFiles(e.dataTransfer.files)}
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
@@ -246,7 +246,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         onDragOver={(e) => {
           e.preventDefault();
         }}
-        onDrop={dropFile}
+        onDrop={(e) => dropFiles(e.dataTransfer.files)}
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
       />
@@ -274,6 +274,16 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           </li>
         ))}
       </ul>
+      <ActionButton onClick={() => fileInputRef.current!.click()}>
+        {l.editor.selectFiles}
+      </ActionButton>
+      <input
+        onChange={(e) => dropFiles(e.target.files!)}
+        multiple
+        ref={fileInputRef}
+        type="file"
+        hidden
+      />
 
       <br />
       <h2>{l.editor.publish}</h2>
