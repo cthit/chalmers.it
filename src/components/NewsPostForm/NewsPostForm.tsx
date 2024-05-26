@@ -18,6 +18,7 @@ import i18nService from '@/services/i18nService';
 import FileService from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
+import MarkdownView from '../MarkdownView/MarkdownView';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -74,12 +75,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [publish, setPublish] = useState('now');
   const [scheduledFor, setScheduledFor] = useState(new Date());
   const [showPreview, setShowPreview] = useState(false);
-  const [previewContentSv, setPreviewContentSv] = useState({
-    __html: marked.parse('')
-  });
-  const [previewContentEn, setPreviewContentEn] = useState({
-    __html: marked.parse('')
-  });
+  const [previewContentSv, setPreviewContentSv] = useState('');
+  const [previewContentEn, setPreviewContentEn] = useState('');
   const [uploadQueue, setUploadQueue] = useState<{
     [key: string]: File;
   }>({});
@@ -176,10 +173,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           newsPostId: postId
         };
 
-        if (newsPost.id !== undefined) {
-          await editEvent(event.id!, data);
-        } else {
+        if (event.id === undefined) {
           await createEvent(data);
+        } else {
+          await editEvent(event.id!, data);
         }
       }
       router.push('/');
@@ -188,11 +185,15 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }
   }
 
+  function editEventState(id: number, key: keyof Event, value: any) {
+    const newEvents: Event[] = [...events];
+    newEvents[id][key] = value as never;
+    setEvents(newEvents);
+  }
+
   function preview() {
-    const markupSv = marked.parse(replaceLocalFiles(contentSv));
-    setPreviewContentSv({ __html: markupSv });
-    const markupEn = marked.parse(replaceLocalFiles(contentEn));
-    setPreviewContentEn({ __html: markupEn });
+    setPreviewContentSv(replaceLocalFiles(contentSv));
+    setPreviewContentEn(replaceLocalFiles(contentEn));
 
     setShowPreview(true);
   }
@@ -276,90 +277,63 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <br />
       <h2>{l.events.events}</h2>
 
-      {events.map((e, i) => (
-        <>
-          <h3 key={i}>{l.editor.title} (Eng)</h3>
-          <TextArea
-            value={e.titleEn}
-            onChange={(e) => {
-              const newEvents = [...events];
-              newEvents[i].titleEn = e.target.value;
-              setEvents(newEvents);
-            }}
-          />
+      <ul>
+        {events.map((e, i) => (
+          <li key={i} className={style.listItem}>
+            <h3>{l.editor.title} (Eng)</h3>
+            <TextArea
+              value={e.titleEn}
+              onChange={(e) => editEventState(i, 'titleEn', e.target.value)}
+            />
 
-          <h3 key={i}>{l.editor.title} (Sv)</h3>
-          <TextArea
-            value={e.titleSv}
-            onChange={(e) => {
-              const newEvents = [...events];
-              newEvents[i].titleSv = e.target.value;
-              setEvents(newEvents);
-            }}
-          />
+            <h3>{l.editor.title} (Sv)</h3>
+            <TextArea
+              value={e.titleSv}
+              onChange={(e) => editEventState(i, 'titleSv', e.target.value)}
+            />
 
-          <h3>{l.events.start}</h3>
-          <DatePicker
-            key={i}
-            value={e.startTime}
-            onChange={(d) => {
-              const newEvents = [...events];
-              newEvents[i].startTime = d;
-              setEvents(newEvents);
-            }}
-          />
-          <h3>{l.events.end}</h3>
-          <DatePicker
-            key={i}
-            disabled={e.fullDay}
-            value={e.endTime}
-            onChange={(d) => {
-              const newEvents = [...events];
-              newEvents[i].endTime = d;
-              setEvents(newEvents);
-            }}
-          />
-          <br />
-          <label key={i} htmlFor={'fullDay' + i}>
-            {l.events.fullDay}{' '}
-          </label>
-          <input
-            key={i}
-            type="checkbox"
-            id={'fullDay' + i}
-            name="fullDay"
-            checked={e.fullDay}
-            onChange={(e) => {
-              const newEvents = [...events];
-              newEvents[i].fullDay = e.target.checked;
-              setEvents(newEvents);
-            }}
-          />
-          <h3>{l.events.location}</h3>
-          <TextArea
-            key={i}
-            value={e.location ?? ''}
-            onChange={(e) => {
-              const newEvents = [...events];
-              newEvents[i].location = e.target.value;
-              setEvents(newEvents);
-            }}
-          />
+            <h3>{l.events.start}</h3>
+            <DatePicker
+              value={e.startTime}
+              onChange={(d) => editEventState(i, 'startTime', d)}
+            />
+            <h3>{l.events.end}</h3>
+            <DatePicker
+              disabled={e.fullDay}
+              value={e.endTime}
+              onChange={(d) => editEventState(i, 'startTime', d)}
+            />
+            <br />
+            <label key={i} htmlFor={'fullDay' + i}>
+              {l.events.fullDay}{' '}
+            </label>
+            <input
+              type="checkbox"
+              id={'fullDay' + i}
+              name="fullDay"
+              checked={e.fullDay}
+              onChange={(e) => editEventState(i, 'fullDay', e.target.checked)}
+            />
+            <h3>{l.events.location}</h3>
+            <TextArea
+              value={e.location ?? ''}
+              onChange={(e) => editEventState(i, 'location', e.target.value)}
+            />
 
-          <br />
-          <br />
-          <ActionButton
-            key={i}
-            onClick={() => {
-              const newEvents = [...events];
-              newEvents.splice(i, 1);
-              setEvents(newEvents);
-            }}
-          >
-            {l.events.remove}
-          </ActionButton>
-        </>
-      ))}
+            <br />
+            <br />
+            <ActionButton
+              onClick={() => {
+                const newEvents = [...events];
+                newEvents.splice(i, 1);
+                setEvents(newEvents);
+              }}
+            >
+              {l.events.remove}
+            </ActionButton>
+          </li>
+        ))}
+      </ul>
 
       {events.length === 0 ? (
         <p>{l.events.empty}</p>
@@ -397,18 +371,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <h1>{l.editor.preview}</h1>
           <Divider />
           <h1>{titleEn}</h1>
-          <div
-            className={markdownStyle.content}
-            dangerouslySetInnerHTML={previewContentEn}
-          />
+          <MarkdownView content={previewContentEn} />
 
           <Divider />
 
           <h1>{titleSv}</h1>
-          <div
-            className={markdownStyle.content}
-            dangerouslySetInnerHTML={previewContentSv}
-          />
+          <MarkdownView content={previewContentSv} />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.general.close}
