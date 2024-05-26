@@ -22,6 +22,7 @@ export default class EventService {
     startTime: Date;
     endTime: Date;
     newsPostId?: number;
+    location?: string;
   }) {
     return await prisma.event.create({
       data: {
@@ -32,7 +33,8 @@ export default class EventService {
         fullDay: false,
         startTime: event.startTime,
         endTime: event.endTime,
-        newsPostId: event.newsPostId
+        newsPostId: event.newsPostId,
+        location: event.location
       }
     });
   }

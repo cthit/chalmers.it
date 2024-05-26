@@ -45,6 +45,7 @@ export default async function Page({
               contentEn={newsPost!.contentEn}
               contentSv={newsPost!.contentSv}
               writtenByGammaUserId={newsPost!.writtenByGammaUserId}
+              connectedEvents={newsPost!.connectedEvents}
             />
           </ContentPane>
         }

@@ -20,7 +20,7 @@ export async function post(
   }
 
   const session = await getServerSession(authConfig);
-  await NewsService.post({
+  const res = await NewsService.post({
     titleEn,
     titleSv,
     contentEn,
@@ -29,7 +29,7 @@ export async function post(
     writtenByGammaUserId: session?.user?.id!,
     status: scheduledPublish ? PostStatus.SCHEDULED : PostStatus.PUBLISHED
   });
-  redirect('/');
+  return res.id;
 }
 
 export async function edit(
@@ -53,7 +53,6 @@ export async function edit(
     scheduledPublish,
     id: id
   });
-  redirect('/');
 }
 
 export async function postForGroup(
@@ -65,7 +64,7 @@ export async function postForGroup(
   scheduledPublish?: Date
 ) {
   const session = await getServerSession(authConfig);
-  await NewsService.post({
+  const res = await NewsService.post({
     titleEn,
     titleSv,
     contentEn,
@@ -75,5 +74,5 @@ export async function postForGroup(
     writtenByGammaUserId: session?.user?.id!,
     status: scheduledPublish ? PostStatus.SCHEDULED : PostStatus.PUBLISHED
   });
-  redirect('/');
+  return res.id;
 }

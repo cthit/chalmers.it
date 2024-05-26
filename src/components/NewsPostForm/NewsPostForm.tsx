@@ -1,6 +1,7 @@
 'use client';
 
-import { edit, post, postForGroup } from '../../actions/newsPosts';
+import { edit, post, postForGroup } from '@/actions/newsPosts';
+import { createEvent, editEvent } from '@/actions/events';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -16,6 +17,7 @@ import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
 import FileService from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
+import { useRouter } from 'next/navigation';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -37,18 +39,18 @@ interface NewPostFormProps {
 interface Event {
   titleEn: string;
   titleSv: string;
-  start: Date;
-  end: Date;
+  startTime: Date;
+  endTime: Date;
   fullDay: boolean;
-  location: string;
+  location: string | null;
   id?: number;
 }
 
 const emptyEvent: Event = {
   titleEn: '',
   titleSv: '',
-  start: new Date(),
-  end: new Date(),
+  startTime: new Date(),
+  endTime: new Date(),
   fullDay: false,
   location: '',
   id: undefined
@@ -62,6 +64,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   });
 
   const l = i18nService.getLocale(newsPost.locale);
+  const router = useRouter();
 
   const [group, setGroup] = useState(newsPost.group ?? 'self');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
@@ -123,6 +126,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     try {
       const publishDate =
         publish === 'now' ? undefined : new Date(scheduledFor);
+      let postId: number;
 
       if (newsPost.id !== undefined) {
         await edit(
@@ -134,11 +138,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           contentSv,
           publishDate
         );
-        return;
-      }
-
-      if (group !== 'self') {
-        await postForGroup(
+        postId = newsPost.id!;
+      } else if (group !== 'self') {
+        postId = await postForGroup(
           titleEn,
           titleSv,
           contentEn,
@@ -146,13 +148,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           group,
           publishDate
         );
-        return;
       } else {
         let formData = new FormData();
         for (const file of Object.values(uploadQueue)) {
           formData.append('file', file);
         }
-        await post(
+        postId = await post(
           titleEn,
           titleSv,
           contentEn,
@@ -161,6 +162,27 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           publishDate
         );
       }
+
+      for (const event of events) {
+        const data = {
+          titleEn: event.titleEn,
+          titleSv: event.titleSv,
+          fullDay: event.fullDay,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          location: event.location,
+          descriptionEn: '',
+          descriptionSv: '',
+          newsPostId: postId
+        };
+
+        if (newsPost.id !== undefined) {
+          await editEvent(event.id!, data);
+        } else {
+          await createEvent(data);
+        }
+      }
+      router.push('/');
     } catch {
       console.log('Failed to post news article');
     }
@@ -256,7 +278,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
       {events.map((e, i) => (
         <>
-          <h2 key={i}>{l.editor.title} (Eng)</h2>
+          <h3 key={i}>{l.editor.title} (Eng)</h3>
           <TextArea
             value={e.titleEn}
             onChange={(e) => {
@@ -266,7 +288,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             }}
           />
 
-          <h2 key={i}>{l.editor.title} (Sv)</h2>
+          <h3 key={i}>{l.editor.title} (Sv)</h3>
           <TextArea
             value={e.titleSv}
             onChange={(e) => {
@@ -276,24 +298,24 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             }}
           />
 
-          <h2>Start</h2>
+          <h3>Start</h3>
           <DatePicker
             key={i}
-            value={e.start}
+            value={e.startTime}
             onChange={(d) => {
               const newEvents = [...events];
-              newEvents[i].start = d;
+              newEvents[i].startTime = d;
               setEvents(newEvents);
             }}
           />
-          <h2>End</h2>
+          <h3>End</h3>
           <DatePicker
             key={i}
             disabled={e.fullDay}
-            value={e.end}
+            value={e.endTime}
             onChange={(d) => {
               const newEvents = [...events];
-              newEvents[i].end = d;
+              newEvents[i].endTime = d;
               setEvents(newEvents);
             }}
           />
@@ -313,10 +335,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               setEvents(newEvents);
             }}
           />
-          <h2>Location</h2>
+          <h3>Location</h3>
           <TextArea
             key={i}
-            value={e.location}
+            value={e.location ?? ''}
             onChange={(e) => {
               const newEvents = [...events];
               newEvents[i].location = e.target.value;
@@ -324,6 +346,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             }}
           />
 
+          <br />
+          <br />
           <ActionButton
             key={i}
             onClick={() => {
@@ -337,7 +361,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </>
       ))}
 
-      <br />
+      {events.length === 0 ? (
+        <p>No events connected</p>
+      ) : (
+        <>
+          <br />
+          <br />
+        </>
+      )}
       <ActionButton
         onClick={() => {
           setEvents([...events, { ...emptyEvent }]);
@@ -346,6 +377,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         Add Event
       </ActionButton>
 
+      <br />
       <br />
       <div className={style.actions}>
         <ActionButton onClick={send}>
