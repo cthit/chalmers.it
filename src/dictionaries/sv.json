@@ -38,7 +38,7 @@
   "footer": {
     "postadress": "POSTADRESS",
     "visitadress": "BESÖKSADRESS",
-    "contact": "CONTAKT",
+    "contact": "KONTAKT",
     "developed": "Utvecklad av",
     "moreinfo": "mer info"
   },
@@ -73,6 +73,16 @@
     "about": "Om sektionen",
     "groups": "Kommittéer, föreningar och andra instanser",
     "create": "Skapa sida"
+  },
+  "events": {
+    "events": "Evenemang",
+    "start": "Start",
+    "end": "Slut",
+    "fullDay": "Heldagsevenemang",
+    "location": "Plats",
+    "add": "Lägg till evenemang",
+    "remove": "Ta bort evenemang",
+    "empty": "Inga evenemang kopplade"
   },
   "groups": {
     "members": "Nuvarande medlemmar",

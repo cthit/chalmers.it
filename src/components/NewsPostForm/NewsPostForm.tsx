@@ -274,7 +274,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       </div>
 
       <br />
-      <h2>Events</h2>
+      <h2>{l.events.events}</h2>
 
       {events.map((e, i) => (
         <>
@@ -298,7 +298,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             }}
           />
 
-          <h3>Start</h3>
+          <h3>{l.events.start}</h3>
           <DatePicker
             key={i}
             value={e.startTime}
@@ -308,7 +308,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               setEvents(newEvents);
             }}
           />
-          <h3>End</h3>
+          <h3>{l.events.end}</h3>
           <DatePicker
             key={i}
             disabled={e.fullDay}
@@ -321,7 +321,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           />
           <br />
           <label key={i} htmlFor={'fullDay' + i}>
-            Full day event{' '}
+            {l.events.fullDay}{' '}
           </label>
           <input
             key={i}
@@ -335,7 +335,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               setEvents(newEvents);
             }}
           />
-          <h3>Location</h3>
+          <h3>{l.events.location}</h3>
           <TextArea
             key={i}
             value={e.location ?? ''}
@@ -356,13 +356,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               setEvents(newEvents);
             }}
           >
-            Delete Event
+            {l.events.remove}
           </ActionButton>
         </>
       ))}
 
       {events.length === 0 ? (
-        <p>No events connected</p>
+        <p>{l.events.empty}</p>
       ) : (
         <>
           <br />
@@ -374,7 +374,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           setEvents([...events, { ...emptyEvent }]);
         }}
       >
-        Add Event
+        {l.events.add}
       </ActionButton>
 
       <br />

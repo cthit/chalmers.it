@@ -75,6 +75,16 @@
     "groups": "Committees, associations and other instances",
     "create": "Create page"
   },
+  "events": {
+    "events": "Events",
+    "start": "Start",
+    "end": "End",
+    "fullDay": "Full day event",
+    "location": "Location",
+    "add": "Add event",
+    "remove": "Remove event",
+    "empty": "No events connected"
+  },
   "groups": {
     "members": "Current members",
     "memberserror": "Could not fetch members",
