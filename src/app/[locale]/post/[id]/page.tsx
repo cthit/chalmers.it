@@ -26,7 +26,7 @@ export default async function Page({
       <ThreePaneLayout
         middle={
           <ContentPane>
-            {post && <NewsPost noNav locale={params.locale} post={post} />}
+            {post && <NewsPost standalone locale={params.locale} post={post} />}
           </ContentPane>
         }
         right={<ContactCard locale={params.locale} />}

@@ -7,6 +7,7 @@ import Divider from '../Divider/Divider';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
+import React from 'react';
 
 interface NewsPostInterface {
   id: number;
@@ -58,10 +59,10 @@ const News = ({
         </>
       )}
       {news.map((newsPost) => (
-        <>
+        <React.Fragment key={newsPost.id}>
           <Divider />
-          <NewsPost locale={locale} post={newsPost} key={newsPost.id} />
-        </>
+          <NewsPost locale={locale} post={newsPost} />
+        </React.Fragment>
       ))}
     </ContentPane>
   );

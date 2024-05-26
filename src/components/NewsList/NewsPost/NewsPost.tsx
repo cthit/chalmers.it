@@ -27,10 +27,10 @@ interface NewsPostProps {
     } | null;
   };
   locale: string;
-  noNav?: boolean;
+  standalone?: boolean;
 }
 
-const NewsPost = async ({ locale, post, noNav }: NewsPostProps) => {
+const NewsPost = async ({ locale, post, standalone: noNav }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
