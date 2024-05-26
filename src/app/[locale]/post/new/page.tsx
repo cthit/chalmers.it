@@ -4,7 +4,6 @@ import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
-import i18nService from '@/services/i18nService';
 
 export default async function Page({
   params: { locale }
