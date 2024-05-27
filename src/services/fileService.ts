@@ -1,11 +1,22 @@
 // Default max size is 100 MiB
-const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE || '104857600');
+const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE ?? '104857600');
 
-const mimeTypes: { [key: string]: string } = {
-  'image/jpeg': 'jpg',
-  'image/png': 'png',
-  'image/gif': 'gif',
-  'image/webp': 'webp'
+export enum MediaType {
+  Image = 'image',
+  Document = 'document'
+}
+
+export interface MediaMeta {
+  type: MediaType;
+  extension: string;
+}
+
+const mimeTypes: { [key: string]: MediaMeta } = {
+  'image/jpeg': { type: MediaType.Image, extension: 'jpg' },
+  'image/png': { type: MediaType.Image, extension: 'png' },
+  'image/gif': { type: MediaType.Image, extension: 'gif' },
+  'image/webp': { type: MediaType.Image, extension: 'webp' },
+  'application/pdf': { type: MediaType.Document, extension: 'pdf' }
 };
 
 /**
@@ -40,13 +51,12 @@ export default class FileService {
       .replace(/=+$/, '');
   }
 
-  static checkValidFile(file: Blob | File) {
-    return (
-      file.size <= this.maxMediaSize && this.convertMimeType(file.type) !== null
-    );
+  static checkValidFile(file: Blob | File, types: MediaType[]) {
+    const info = this.convertMimeType(file.type);
+    return file.size <= this.maxMediaSize && info && types.includes(info.type);
   }
 
-  static convertMimeType(mimeType: string) {
+  static convertMimeType(mimeType: string): MediaMeta | null {
     return mimeTypes[mimeType] ?? null;
   }
 }

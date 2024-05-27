@@ -14,7 +14,7 @@ import style from './NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
-import FileService from '@/services/fileService';
+import FileService, { MediaType } from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
 import MarkdownView from '../MarkdownView/MarkdownView';
@@ -22,6 +22,7 @@ import MarkdownView from '../MarkdownView/MarkdownView';
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
 };
+const validUploadTypes = Object.values(MediaType);
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -89,7 +90,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     let newQueue = { ...uploadQueue };
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
-      if (!FileService.checkValidFile(file)) continue;
+      if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;

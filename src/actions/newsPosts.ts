@@ -6,6 +6,7 @@ import { authConfig } from '@/auth/auth';
 import { redirect } from 'next/navigation';
 import { PostStatus } from '@prisma/client';
 import MediaService from '@/services/mediaService';
+import { MediaType } from '@/services/fileService';
 
 export async function post(
   titleEn: string,
@@ -16,7 +17,7 @@ export async function post(
   scheduledPublish?: Date
 ) {
   for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file);
+    await MediaService.save(file, Object.values(MediaType));
   }
 
   const session = await getServerSession(authConfig);

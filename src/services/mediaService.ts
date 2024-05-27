@@ -1,6 +1,6 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
-import FileService from './fileService';
+import FileService, { MediaType } from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
@@ -24,8 +24,8 @@ export default class MediaService {
     });
   }
 
-  static async save(file: Blob) {
-    if (!FileService.checkValidFile(file)) return null;
+  static async save(file: Blob, types: MediaType[]) {
+    if (!FileService.checkValidFile(file, types)) return null;
 
     const extension = FileService.convertMimeType(file.type);
     if (!extension) return null;
