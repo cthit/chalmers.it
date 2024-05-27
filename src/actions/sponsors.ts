@@ -1,5 +1,6 @@
 'use server';
 
+import { MediaType } from '@/services/fileService';
 import MediaService from '@/services/mediaService';
 import SponsorService from '@/services/sponsorService';
 
@@ -15,7 +16,7 @@ export async function addSponsor(
 
   let logoSha = undefined;
   if (file) {
-    logoSha = (await MediaService.save(file))?.sha256;
+    logoSha = (await MediaService.save(file, [MediaType.Image]))?.sha256;
   }
 
   await SponsorService.create({

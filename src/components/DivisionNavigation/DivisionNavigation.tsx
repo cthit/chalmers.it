@@ -4,9 +4,9 @@ import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import Link from 'next/link';
 import DivisionPageService from '@/services/divisionPageService';
-import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
+import ActionLink from '../ActionButton/ActionLink';
 
 const indent = (depth: number) => {
   return {
@@ -23,9 +23,7 @@ const DivisionNavigation = async ({ locale }: { locale: string }) => {
   return (
     <ContentPane>
       <h2>{l.pages.about}</h2>
-      {isAdmin && (
-        <ActionButton href="/pages/new">{l.general.create}</ActionButton>
-      )}
+      {isAdmin && <ActionLink href="/pages/new">{l.general.create}</ActionLink>}
       <Divider />
       <ul className={styles.links}>
         <SubPages en={en} slug={'/pages'} />

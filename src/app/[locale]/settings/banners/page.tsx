@@ -2,7 +2,7 @@ import Divider from '@/components/Divider/Divider';
 import AddBannerForm from './AddBannerForm';
 import DivisionGroupService from '@/services/divisionGroupService';
 import DeleteBannerButton from './DeleteBannerButton';
-import ActionButton from '@/components/ActionButton/ActionButton';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 export default async function Page() {
   const banners = await DivisionGroupService.getBanners();
@@ -18,9 +18,9 @@ export default async function Page() {
             <li key={banner.id}>
               <h2>{banner.divisionGroup.prettyName}</h2>
               <p>Banner-ID {banner.id}</p>
-              <ActionButton href={`/api/media/${banner.mediaSha256}`}>
+              <ActionLink href={`/api/media/${banner.mediaSha256}`}>
                 Bildlänk
-              </ActionButton>{' '}
+              </ActionLink>{' '}
               <DeleteBannerButton banner={banner} />
             </li>
           ))}

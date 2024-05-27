@@ -11,6 +11,34 @@ export default class NewsService {
     return await prisma.newsPost.findUnique({
       where: {
         id
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        contentEn: true,
+        contentSv: true,
+        createdAt: true,
+        updatedAt: true,
+        writtenByGammaUserId: true,
+        status: true,
+        writtenFor: {
+          select: {
+            gammaSuperGroupId: true,
+            prettyName: true
+          }
+        },
+        connectedEvents: {
+          select: {
+            id: true,
+            titleEn: true,
+            titleSv: true,
+            startTime: true,
+            endTime: true,
+            fullDay: true,
+            location: true
+          }
+        }
       }
     });
   }
@@ -96,10 +124,9 @@ export default class NewsService {
       };
     }
 
-    await prisma.newsPost.create(data).then((res) => {
-      if (post.status === PostStatus.PUBLISHED)
-        NotifyService.notifyNewsPost(res);
-    });
+    const res = await prisma.newsPost.create(data);
+    if (post.status === PostStatus.PUBLISHED) NotifyService.notifyNewsPost(res);
+    return res;
   }
 
   static async edit(edited: {

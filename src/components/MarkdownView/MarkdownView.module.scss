@@ -1,7 +1,18 @@
-.content p {
-  margin-bottom: 1rem;
+.content {
+  p,
+  img,
+  ol,
+  ul,
+  table,
+  pre {
+    margin-bottom: 1rem;
+  }
 }
 
 .content a {
   color: var(--link-color);
+}
+
+.content li {
+  margin-left: 1rem;
 }

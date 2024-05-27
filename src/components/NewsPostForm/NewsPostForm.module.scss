@@ -1,11 +1,26 @@
 .dialog {
   min-width: 50vw;
-  background-color: var(--content-background-color);
-  padding: 1rem;
-  border-radius: 0.5rem;
+  max-height: 95vh;
+  overflow-y: scroll;
 }
 
 .actions {
   display: flex;
   gap: 1rem;
+}
+
+.fileActions {
+  align-items: center;
+  display: flex;
+  margin-bottom: 0.5rem;
+  gap: 0.25rem;
+}
+
+.listItem {
+  list-style-type: none;
+}
+
+.fileActions p {
+  flex-grow: 1;
+  display: inline-block;
 }

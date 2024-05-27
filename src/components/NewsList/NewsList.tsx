@@ -1,12 +1,13 @@
 import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
 import NewsService from '@/services/newsService';
-import ActionButton from '../ActionButton/ActionButton';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
+import ActionLink from '../ActionButton/ActionLink';
+import React from 'react';
 
 interface NewsPostInterface {
   id: number;
@@ -49,9 +50,7 @@ const News = ({
     <ContentPane>
       <div className={styles.title}>
         <h1>{l.news.title}</h1>
-        {canPost && (
-          <ActionButton href="/post/new">{l.news.create}</ActionButton>
-        )}
+        {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
       </div>
       {news.length === 0 && (
         <>
@@ -60,7 +59,10 @@ const News = ({
         </>
       )}
       {news.map((newsPost) => (
-        <NewsPost locale={locale} post={newsPost} key={newsPost.id} />
+        <React.Fragment key={newsPost.id}>
+          <Divider />
+          <NewsPost locale={locale} post={newsPost} />
+        </React.Fragment>
       ))}
     </ContentPane>
   );

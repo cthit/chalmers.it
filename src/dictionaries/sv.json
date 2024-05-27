@@ -2,7 +2,8 @@
   "general": {
     "create": "Skapa",
     "edit": "Redigera",
-    "delete": "Radera"
+    "delete": "Radera",
+    "close": "Stäng"
   },
   "site": {
     "title": "Informationsteknik",
@@ -37,7 +38,7 @@
   "footer": {
     "postadress": "POSTADRESS",
     "visitadress": "BESÖKSADRESS",
-    "contact": "CONTAKT",
+    "contact": "KONTAKT",
     "developed": "Utvecklad av",
     "moreinfo": "mer info"
   },
@@ -45,6 +46,7 @@
     "title": "Nyheter",
     "empty": "Inga nyheter att visa",
     "create": "Skapa nyhet",
+    "edit": "Redigera nyhet",
     "error": "Det gick inte att hämta nyheter",
     "scheduled": "Schemalagd",
     "edited": "Redigerad",
@@ -53,10 +55,35 @@
     "by": "av",
     "unknown": "okänd användare"
   },
+  "editor": {
+    "createAs": "Posta som",
+    "self": "Mig själv",
+    "title": "Titel",
+    "content": "Innehåll",
+    "publish": "Publiceringstid",
+    "now": "Nu",
+    "scheduled": "Schemalagd",
+    "previewAction": "Förhandsgranska",
+    "preview": "Förhandsgranskning",
+    "selectFiles": "Välj filer",
+    "uploaded": "Uppladdade Filer",
+    "noFiles": "Inga filer uppladdade",
+    "copyLink": "Kopiera länk"
+  },
   "pages": {
     "about": "Om sektionen",
     "groups": "Kommittéer, föreningar och andra instanser",
     "create": "Skapa sida"
+  },
+  "events": {
+    "events": "Evenemang",
+    "start": "Start",
+    "end": "Slut",
+    "fullDay": "Heldagsevenemang",
+    "location": "Plats",
+    "add": "Lägg till evenemang",
+    "remove": "Ta bort evenemang",
+    "empty": "Inga evenemang kopplade"
   },
   "groups": {
     "members": "Nuvarande medlemmar",
@@ -75,5 +102,15 @@
     "logout": "Logga ut",
     "profile": "Min profil",
     "settings": "Inställningar"
+  },
+  "markdown": {
+    "title": "Lathund",
+    "header": "Titlar",
+    "formatting": "Textformatering",
+    "lists": "Listor",
+    "links": "Länkar",
+    "images": "Bilder",
+    "code": "Kodblock",
+    "tables": "Tabeller"
   }
 }

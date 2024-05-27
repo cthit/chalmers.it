@@ -1,15 +1,14 @@
-import Divider from '@/components/Divider/Divider';
 import style from './NewsPost.module.scss';
 import Link from 'next/link';
 import GammaService from '@/services/gammaService';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
-import ActionButton from '@/components/ActionButton/ActionButton';
 import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import SessionService from '@/services/sessionService';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 interface NewsPostProps {
   post: {
@@ -28,9 +27,10 @@ interface NewsPostProps {
     } | null;
   };
   locale: string;
+  standalone?: boolean;
 }
 
-const NewsPost = async ({ locale, post }: NewsPostProps) => {
+const NewsPost = async ({ locale, post, standalone: noNav }: NewsPostProps) => {
   const group = post.writtenFor?.prettyName;
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
@@ -50,20 +50,18 @@ const NewsPost = async ({ locale, post }: NewsPostProps) => {
   }
 
   const canDeletePost = ownsPost || (await SessionService.isAdmin());
+  const title = en ? post.titleEn : post.titleSv;
 
   return (
     <>
-      <Divider />
       <div className={style.titleArea}>
         <h2 className={style.title}>
-          <Link href={`/post/${post.id}`}>
-            {en ? post.titleEn : post.titleSv}
-          </Link>
+          {noNav ? title : <Link href={`/post/${post.id}`}>{title}</Link>}
         </h2>
         {ownsPost && (
-          <ActionButton href={`/post/${post.id}/edit`}>
+          <ActionLink href={`/post/${post.id}/edit`}>
             {l.general.edit}
-          </ActionButton>
+          </ActionLink>
         )}
         {canDeletePost && (
           <DeletePostButton text={l.general.delete} id={post.id} />

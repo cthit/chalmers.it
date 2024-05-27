@@ -1,23 +1,12 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
+import FileService, { MediaType } from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
-const convertMimeType = (mimeType: string) => {
-  switch (mimeType) {
-    case 'image/jpeg':
-      return 'jpg';
-    case 'image/png':
-      return 'png';
-    case 'image/gif':
-      return 'gif';
-    case 'image/webp':
-      return 'webp';
-    default:
-      return null;
-  }
-};
-
+/**
+ * Helper class for media operations on server
+ */
 export default class MediaService {
   static async get(sha256: string) {
     return await prisma.media.findUnique({
@@ -35,15 +24,13 @@ export default class MediaService {
     });
   }
 
-  static async save(file: Blob) {
-    const sha256 = await crypto.subtle.digest(
-      'SHA-256',
-      await file.arrayBuffer()
-    );
-    const shaString = Array.from(new Uint8Array(sha256)).join('');
+  static async save(file: Blob, types: MediaType[]) {
+    if (!FileService.checkValidFile(file, types)) return null;
 
-    const extension = convertMimeType(file.type);
+    const extension = FileService.convertMimeType(file.type);
     if (!extension) return null;
+
+    const shaString = await FileService.fileSha256(file);
 
     // Write file if it doesn't already exist in file system
     await stat(`${mediaPath}/${shaString}.${extension}`).catch(
@@ -79,7 +66,8 @@ export default class MediaService {
         extension: true
       }
     });
-    const filename = sha256 + '.' + convertMimeType(extension!.extension);
+    const filename =
+      sha256 + '.' + FileService.convertMimeType(extension!.extension);
 
     return {
       data: await readFile(`${mediaPath}/${filename}`),
