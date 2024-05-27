@@ -76,6 +76,8 @@ export interface GammaProfile {
   sub: string;
   picture: string;
   email?: string;
+  name: string;
+  cid: string;
   given_name: string;
   family_name: string;
   nickname: string;
