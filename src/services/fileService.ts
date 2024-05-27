@@ -52,8 +52,8 @@ export default class FileService {
   }
 
   static checkValidFile(file: Blob | File, types: MediaType[]) {
-    const info = this.convertMimeType(file.type);
-    return file.size <= this.maxMediaSize && info && types.includes(info.type);
+    const meta = this.convertMimeType(file.type);
+    return file.size <= this.maxMediaSize && meta && types.includes(meta.type);
   }
 
   static convertMimeType(mimeType: string): MediaMeta | null {

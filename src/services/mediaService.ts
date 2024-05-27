@@ -27,16 +27,16 @@ export default class MediaService {
   static async save(file: Blob, types: MediaType[]) {
     if (!FileService.checkValidFile(file, types)) return null;
 
-    const extension = FileService.convertMimeType(file.type);
-    if (!extension) return null;
+    const meta = FileService.convertMimeType(file.type);
+    if (!meta) return null;
 
     const shaString = await FileService.fileSha256(file);
 
     // Write file if it doesn't already exist in file system
-    await stat(`${mediaPath}/${shaString}.${extension}`).catch(
+    await stat(`${mediaPath}/${shaString}.${meta.extension}`).catch(
       async () =>
         await writeFile(
-          `${mediaPath}/${shaString}.${extension}`,
+          `${mediaPath}/${shaString}.${meta.extension}`,
           Buffer.from(await file.arrayBuffer())
         )
     );
@@ -66,8 +66,9 @@ export default class MediaService {
         extension: true
       }
     });
-    const filename =
-      sha256 + '.' + FileService.convertMimeType(extension!.extension);
+
+    const meta = FileService.convertMimeType(extension!.extension);
+    const filename = sha256 + '.' + meta?.extension;
 
     return {
       data: await readFile(`${mediaPath}/${filename}`),
