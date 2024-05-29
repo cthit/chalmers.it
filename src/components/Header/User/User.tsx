@@ -6,17 +6,19 @@ import LoginButton from './LoginButton/LoginButton';
 import Dropdown from '../Navigation/Dropdown/Dropdown';
 import Link from 'next/link';
 import i18nService from '@/services/i18nService';
+import GammaService from '@/services/gammaService';
+import FallbackImage from '@/components/FallbackImage/FallbackImage';
 
 const User = async ({ locale }: { locale: string }) => {
   const session = await getServerSession(authConfig);
-  const image = session?.user?.image;
+  const id = session?.user?.id;
 
   return (
     <div className={styles.user}>
-      {image === undefined ? (
+      {id === undefined ? (
         <LoginButton locale={locale} />
       ) : (
-        <LoggedIn image={session?.user?.image!} locale={locale} />
+        <LoggedIn image={GammaService.getUserAvatarURL(id)} locale={locale} />
       )}
     </div>
   );
@@ -27,20 +29,22 @@ const LoggedIn = ({ image, locale }: { image: string; locale: string }) => {
   return (
     <Dropdown
       parent={
-        <a href="https://gamma.chalmers.it/me/edit">
-          <object data={image}>
-            <picture>
-              <img
-                src="/smurf.svg"
-                className={styles.pfp}
-                alt="Profile Picture"
-              />
-            </picture>
-          </object>
-        </a>
+        <div className={styles.pfpContainer}>
+          <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
+            <FallbackImage
+              src={image}
+              className={styles.pfp}
+              alt="Profile Picture"
+              width="3rem"
+              height="3rem"
+            />
+          </Link>
+        </div>
       }
     >
-      <Link href="https://gamma.chalmers.it/me/edit">{l.user.profile}</Link>
+      <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
+        {l.user.profile}
+      </Link>
       <Link href="/settings">{l.user.settings}</Link>
       <LogoutLink locale={locale} />
     </Dropdown>
