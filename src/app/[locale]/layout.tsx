@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import Banner from '@/components/Banner/Banner';
 import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider';
+import TopLoader from '@/components/TopLoader/TopLoader';
 import ToastContainerWrapper from '@/components/ToastContainerWrapper/ToastContainerWrapper';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
@@ -31,6 +32,7 @@ export default function RootLayout({
     <html lang={locale}>
       <body style={{ display: 'unset' }} className={poppins.className}>
         <ThemeProvider>
+          <TopLoader />
           <Header locale={locale} />
           <Banner locale={locale} />
           {children}
