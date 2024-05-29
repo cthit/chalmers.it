@@ -2,6 +2,7 @@ import Divider from '@/components/Divider/Divider';
 import SponsorService from '@/services/sponsorService';
 import AddSponsorForm from './AddSponsorForm';
 import ActionLink from '@/components/ActionButton/ActionLink';
+import RemoveSponsorButton from './RemoveSponsorButton';
 
 export default async function Page() {
   const sponsors = await SponsorService.getAll();
@@ -14,7 +15,8 @@ export default async function Page() {
         {sponsors.map((sponsor) => (
           <li key={sponsor.id}>
             <h2>{sponsor.nameSv}</h2>
-            <ActionLink href={sponsor.url}>Länk</ActionLink>
+            <ActionLink href={sponsor.url}>Länk</ActionLink>{' '}
+            <RemoveSponsorButton sponsor={sponsor} />
           </li>
         ))}
       </ul>
