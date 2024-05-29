@@ -70,7 +70,7 @@ export default class DivisionPageService {
     maxDepth: number,
     editedId?: number
   ) {
-    let forbiddenIds = editedId ? [editedId] : [];
+    const forbiddenIds = editedId ? [editedId] : [];
     const editedPage = pages.find((p) => p.id === editedId);
     const editedMoveDepth = editedPage
       ? editedPage.deepestChild - editedPage.depth

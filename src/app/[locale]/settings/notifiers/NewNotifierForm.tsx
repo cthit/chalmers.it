@@ -9,9 +9,9 @@ import { toast } from 'react-toastify';
 
 const NewNotifierForm = () => {
   const router = useRouter();
-  let [type, setType] = useState('DISCORD');
-  let [language, setLanguage] = useState('EN');
-  let [webhook, setWebhook] = useState('');
+  const [type, setType] = useState('DISCORD');
+  const [language, setLanguage] = useState('EN');
+  const [webhook, setWebhook] = useState('');
 
   const newNotifier = async () => {
     const notifType = type as 'DISCORD' | 'SLACK';

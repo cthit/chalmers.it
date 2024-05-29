@@ -1,5 +1,3 @@
-'use client';
-
 import styles from './Search.module.scss';
 import { BsSearchHeartFill } from 'react-icons/bs';
 
@@ -8,7 +6,7 @@ interface SearchProps {
   isExpanded: boolean;
 }
 
-const Search: React.FC<SearchProps> = ({ onSearchIconClick, isExpanded }) => {
+const Search = ({ onSearchIconClick, isExpanded }: SearchProps) => {
   return (
     <div
       className={styles.searchBarContainer}

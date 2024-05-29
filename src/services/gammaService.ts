@@ -46,7 +46,7 @@ export default class GammaService {
   }
 
   static async getSuperGroupMembers(sgid: string) {
-    let activeGroups = await this.getAllActiveSuperGroups();
+    const activeGroups = await this.getAllActiveSuperGroups();
     return (
       activeGroups.find((group) => group.superGroup.id === sgid)?.members || []
     );

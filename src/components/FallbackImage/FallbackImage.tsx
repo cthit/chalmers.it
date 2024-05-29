@@ -4,6 +4,7 @@ import { ImgHTMLAttributes, useEffect, useRef, useState } from 'react';
 
 const FallbackImage = ({
   src,
+  alt,
   fallback,
   ...rest
 }: ImgHTMLAttributes<HTMLImageElement> & { fallback?: string }) => {
@@ -24,6 +25,7 @@ const FallbackImage = ({
     <picture>
       <img
         {...rest}
+        alt={alt}
         src={src}
         ref={imgRef as any}
         onError={({ currentTarget }) => {

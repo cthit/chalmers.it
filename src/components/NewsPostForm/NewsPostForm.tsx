@@ -88,7 +88,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
 
   const dropFiles = async (f: FileList) => {
-    let newQueue = { ...uploadQueue };
+    const newQueue = { ...uploadQueue };
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
@@ -162,7 +162,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           }
         );
       } else {
-        let formData = new FormData();
+        const formData = new FormData();
         for (const file of Object.values(uploadQueue)) {
           formData.append('file', file);
         }

@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth from 'next-auth'; // eslint-disable-line
 
 declare module 'next-auth' {
   interface Session {
