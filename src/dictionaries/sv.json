@@ -6,6 +6,8 @@
     "close": "Stäng"
   },
   "site": {
+    "siteTitle": "IT på Chalmers",
+    "siteDescription": "Teknologsektionen Informationsteknik",
     "title": "Informationsteknik",
     "subtitle": "Chalmers Studentkår"
   },

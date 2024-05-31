@@ -6,6 +6,8 @@
     "close": "Close"
   },
   "site": {
+    "siteTitle": "IT at Chalmers",
+    "siteDescription": "Software Engineering (IT) Student Division",
     "title": "Software Engineering (IT)",
     "subtitle": "Chalmers Student Union"
   },
