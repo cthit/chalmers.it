@@ -15,7 +15,7 @@ const ThemeSelector = () => {
 
   if (!mounted) {
     return (
-      <div className={styles.loading}>
+      <div className={`${styles.icon} ${styles.loading}`}>
         <BsThreeDots />
       </div>
     );
@@ -28,7 +28,7 @@ const ThemeSelector = () => {
   };
 
   return (
-    <a className={styles.toggle} onClick={toggleTheme}>
+    <a className={`${styles.icon} ${styles.toggle}`} onClick={toggleTheme}>
       {isDark ? <BsFillMoonFill /> : <BsFillSunFill />}
     </a>
   );
