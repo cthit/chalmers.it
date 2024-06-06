@@ -21,7 +21,7 @@ export default async function DivisionPage(
 
   const isEditing = slug[slug.length - 1] === 'edit';
   return isEditing && canEdit
-    ? editContent(slug, id)
+    ? editContent(locale, slug, id)
     : mainContent(locale, slug, id, canEdit, canEdit || isAdmin);
 }
 
@@ -58,7 +58,7 @@ async function mainContent(
   );
 }
 
-async function editContent(slug: string[], id?: number) {
+async function editContent(locale: string, slug: string[], id?: number) {
   slug.length -= 1;
   const pages = await DivisionPageService.get(id);
 
@@ -76,6 +76,7 @@ async function editContent(slug: string[], id?: number) {
           titleSv={page.titleSv}
           contentEn={page.contentEn}
           contentSv={page.contentSv}
+          locale={locale}
         />
       </ContentPane>
     </main>

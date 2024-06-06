@@ -9,19 +9,19 @@ export default async function Page({
 }: {
   params: { locale: string };
 }) {
-  const main = await mainContent();
+  const main = await mainContent(locale);
   const left = <DivisionNavigation locale={locale} />;
   const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;
 }
 
-async function mainContent() {
+async function mainContent(locale: string) {
   const pages = await DivisionPageService.get();
   return (
     <main>
       <ContentPane>
-        <DivisionPageForm pages={pages} />
+        <DivisionPageForm pages={pages} locale={locale} />
       </ContentPane>
     </main>
   );
