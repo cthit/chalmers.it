@@ -15,6 +15,10 @@
 
     --divider-color: #{$turquoise-400};
     --banner-top-opacity: 0;
+
+    --calendar-current-color: #{$lightgray-400};
+    --calendar-neighboring-color: #{$lightgray-300};
+    --calendar-event-color: #{$turquoise-600};
   }
 
   @include dark {
@@ -30,6 +34,10 @@
 
     --divider-color: #{$turquoise-800};
     --banner-top-opacity: 0.6;
+
+    --calendar-current-color: #{$darkgray-500};
+    --calendar-neighboring-color: #{$darkgray-600};
+    --calendar-event-color: #{$turquoise-700};
   }
 
   --primary-color: #{$turquoise-500};

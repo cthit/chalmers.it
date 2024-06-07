@@ -1,0 +1,17 @@
+.tile {
+  background-color: var(--calendar-current-color);
+  border-radius: 0.375rem;
+  border: solid 0.125rem var(--content-background-color);
+  aspect-ratio: 1 / 1;
+  overflow: visible !important;
+  position: relative;
+}
+
+.tileEvent {
+  background-color: var(--calendar-event-color) !important;
+}
+
+.event {
+  text-align: left;
+  background-color: var(--content-background-color);
+}

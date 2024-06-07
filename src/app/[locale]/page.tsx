@@ -4,6 +4,7 @@ import NewsList from '@/components/NewsList/NewsList';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import Lunch from '@/components/Lunch/Lunch';
 import Sponsors from '@/components/Sponsors/Sponsors';
+import Calendar from '@/components/Calendar/Calendar';
 
 export default function Home({
   params: { locale }
@@ -15,7 +16,12 @@ export default function Home({
       <ThreePaneLayout
         left={<LeftBar locale={locale} />}
         middle={<NewsList locale={locale} />}
-        right={<ContactCard locale={locale} />}
+        right={
+          <>
+            <Calendar locale={locale} />
+            <ContactCard locale={locale} />
+          </>
+        }
       />
     </main>
   );

@@ -58,7 +58,9 @@
     "unknown": "okänd användare",
     "deleting": "Raderar...",
     "deleted": "Raderad!",
-    "deleteError": "Kunde inte radera nyhet!"
+    "deleteError": "Kunde inte radera nyhet!",
+    "loading": "Laddar inlägg",
+    "loadEmpty": "Inga fler inlägg att visa"
   },
   "editor": {
     "createAs": "Posta som",
@@ -106,11 +108,12 @@
     "events": "Evenemang",
     "start": "Start",
     "end": "Slut",
-    "fullDay": "Heldagsevenemang",
+    "fullDay": "Heldag",
     "location": "Plats",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
-    "empty": "Inga evenemang kopplade"
+    "empty": "Inga evenemang kopplade",
+    "subscribe": "Prenumerera (Google kalender)"
   },
   "groups": {
     "members": "Nuvarande medlemmar",

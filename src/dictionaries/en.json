@@ -59,7 +59,9 @@
     "self": "Myself",
     "deleting": "Deleting...",
     "deleted": "Deleted!",
-    "deleteError": "Could not delete news post!"
+    "deleteError": "Could not delete news post!",
+    "loading": "Loading posts",
+    "loadEmpty": "No more posts to show"
   },
   "editor": {
     "createAs": "Create as",
@@ -107,11 +109,12 @@
     "events": "Events",
     "start": "Start",
     "end": "End",
-    "fullDay": "Full day event",
+    "fullDay": "Full day",
     "location": "Location",
     "add": "Add event",
     "remove": "Remove event",
-    "empty": "No events connected"
+    "empty": "No events connected",
+    "subscribe": "Subscribe (Google Calendar)"
   },
   "groups": {
     "members": "Current members",
