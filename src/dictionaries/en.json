@@ -54,7 +54,10 @@
     "for": "for",
     "by": "by",
     "unknown": "unknown author",
-    "self": "Myself"
+    "self": "Myself",
+    "deleting": "Deleting...",
+    "deleted": "Deleted!",
+    "deleteError": "Could not delete news post!"
   },
   "editor": {
     "createAs": "Create as",

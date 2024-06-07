@@ -14,10 +14,8 @@ export async function addSponsor(
   form: FormData
 ) {
   if (
-    !(
-      (await SessionService.isCorporateRelations()) ||
-      (await SessionService.isAdmin())
-    )
+    !(await SessionService.isAdmin()) &&
+    !(await SessionService.isCorporateRelations())
   ) {
     throw new Error('Unauthorized');
   }

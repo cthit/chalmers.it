@@ -90,7 +90,15 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     } else {
       try {
         await toast.promise(
-          create(titleEn, titleSv, contentEn, contentSv, slug, page),
+          create(
+            titleEn,
+            titleSv,
+            contentEn,
+            contentSv,
+            slug,
+            divisionPost.divisionGroupId,
+            page
+          ),
           {
             pending: l.pages.creating,
             success: l.pages.created,

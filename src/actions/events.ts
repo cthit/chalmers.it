@@ -1,6 +1,13 @@
 'use server';
 
 import EventService from '@/services/eventService';
+import SessionService from '@/services/sessionService';
+
+async function throwIfUnauthorized() {
+  if (!(await SessionService.isAdmin()) && !(await SessionService.isActive())) {
+    throw new Error('Unauthorized');
+  }
+}
 
 export async function editEvent(
   id: number,
@@ -15,7 +22,9 @@ export async function editEvent(
     newsPostId?: number | undefined;
   }
 ) {
-  EventService.update(id, data);
+  await throwIfUnauthorized();
+
+  await EventService.update(id, data);
 }
 
 export async function createEvent(data: {
@@ -28,9 +37,13 @@ export async function createEvent(data: {
   endTime: Date;
   newsPostId?: number | undefined;
 }) {
-  EventService.create(data);
+  await throwIfUnauthorized();
+
+  await EventService.create(data);
 }
 
 export async function deleteEvent(id: number) {
-  EventService.delete(id);
+  await throwIfUnauthorized();
+
+  await EventService.delete(id);
 }

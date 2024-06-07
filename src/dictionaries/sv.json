@@ -53,7 +53,10 @@
     "written": "Skriven",
     "for": "för",
     "by": "av",
-    "unknown": "okänd användare"
+    "unknown": "okänd användare",
+    "deleting": "Raderar...",
+    "deleted": "Raderad!",
+    "deleteError": "Kunde inte radera nyhet!"
   },
   "editor": {
     "createAs": "Posta som",

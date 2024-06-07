@@ -3,7 +3,6 @@
 import DivisionPageService from '@/services/divisionPageService';
 import { redirect } from 'next/navigation';
 import SessionService from '@/services/sessionService';
-import { toast } from 'react-toastify';
 
 export async function create(
   titleEn: string,
@@ -23,21 +22,14 @@ export async function create(
     }
   }
   try {
-    await toast.promise(
-      DivisionPageService.post(
-        titleEn,
-        titleSv,
-        contentEn,
-        contentSv,
-        slug,
-        divisionGroupId,
-        parentId
-      ),
-      {
-        pending: 'Saving...',
-        success: 'Page created',
-        error: 'Failed to create page'
-      }
+    await DivisionPageService.post(
+      titleEn,
+      titleSv,
+      contentEn,
+      contentSv,
+      slug,
+      divisionGroupId,
+      parentId
     );
   } catch (e) {
     console.error(e);
@@ -46,6 +38,17 @@ export async function create(
 }
 
 export async function deletePage(id: number) {
+  const divisionGroupId = (await DivisionPageService.getSingleById(id))
+    ?.divisionGroupId;
+  if (!(await SessionService.isAdmin())) {
+    if (
+      divisionGroupId === undefined ||
+      divisionGroupId === null ||
+      !(await SessionService.canEditGroupByInternalId(divisionGroupId))
+    ) {
+      throw new Error('Unauthorized');
+    }
+  }
   await DivisionPageService.delete(id);
   redirect('.');
 }

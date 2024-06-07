@@ -4,6 +4,7 @@ import MediaService from '@/services/mediaService';
 import DivisionGroupService from '@/services/divisionGroupService';
 import { redirect } from 'next/navigation';
 import { MediaType } from '@/services/fileService';
+import SessionService from '@/services/sessionService';
 
 export async function addBanner(divisionGroupId: number, form: FormData) {
   if (

@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import DivisionGroupService from './divisionGroupService';
 import { Session } from 'next-auth';
+import prisma from '@/prisma';
 
 /**
  * Service for handling the session of the current user
@@ -75,5 +76,35 @@ export default class SessionService {
           (g) => g.superGroup!.name === corporateRelationsGroup
         )
       : false;
+  }
+
+  static async isNewsPostOwner(postId: number, session?: any | null) {
+    const post = await prisma.newsPost.findUnique({
+      where: {
+        id: postId
+      },
+      select: {
+        writtenByGammaUserId: true,
+        writtenFor: {
+          select: {
+            gammaSuperGroupId: true
+          }
+        }
+      }
+    });
+
+    if (!post) return false;
+
+    session = session || (await getServerSession(authConfig));
+
+    return (
+      session?.user?.id === post.writtenByGammaUserId ||
+      (post.writtenFor?.gammaSuperGroupId
+        ? await SessionService.canEditGroup(
+            post.writtenFor!.gammaSuperGroupId,
+            session
+          )
+        : false)
+    );
   }
 }

@@ -64,7 +64,11 @@ const NewsPost = async ({ locale, post, standalone: noNav }: NewsPostProps) => {
           </ActionLink>
         )}
         {canDeletePost && (
-          <DeletePostButton text={l.general.delete} id={post.id} />
+          <DeletePostButton
+            text={l.general.delete}
+            id={post.id}
+            locale={locale}
+          />
         )}
       </div>
       <p className={style.subtitle}>
