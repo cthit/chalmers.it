@@ -4,6 +4,7 @@ import styles from './InfiniteScroller.module.scss';
 import { getPage } from '@/actions/newsList';
 import { useEffect, useRef, useState } from 'react';
 import NewsPost from './NewsPost/NewsPost';
+import i18nService from '@/services/i18nService';
 
 const InfiniteScroller = ({
   page,
@@ -14,6 +15,8 @@ const InfiniteScroller = ({
 }) => {
   const [news, setNews] = useState<any[] | undefined>(undefined);
   const ref = useRef<HTMLParagraphElement | null>(null);
+
+  const l = i18nService.getLocale(locale);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -35,7 +38,7 @@ const InfiniteScroller = ({
     <>
       {news === undefined ? (
         <p className={styles.loading} ref={ref}>
-          Loading posts
+          {l.news.loading}
         </p>
       ) : (
         <>
@@ -45,7 +48,7 @@ const InfiniteScroller = ({
           {news.length > 0 ? (
             <InfiniteScroller page={page + 1} locale={locale} />
           ) : (
-            <p className={styles.loading}>No more posts to show.</p>
+            <p className={styles.loading}>{l.news.loadEmpty}</p>
           )}
         </>
       )}
