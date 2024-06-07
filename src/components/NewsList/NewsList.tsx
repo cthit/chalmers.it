@@ -1,6 +1,5 @@
 import styles from './NewsList.module.scss';
 import NewsPost from './NewsPost/NewsPost';
-import NewsService from '@/services/newsService';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
@@ -8,26 +7,25 @@ import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import React from 'react';
+import { getPage } from '@/actions/newsList';
+import InfiniteScroller from './InfiniteScroller';
 
 interface NewsPostInterface {
-  id: number;
-  titleSv: string;
-  titleEn: string;
-  contentSv: string;
-  contentEn: string;
-  writtenByGammaUserId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  status: PostStatus;
-  writtenFor: {
-    gammaSuperGroupId: string;
-    prettyName: string;
-  } | null;
+  id: number,
+  title: string,
+  content: string,
+  author?: string,
+  createdAt: Date,
+  updatedAt?: Date,
+  status: PostStatus,
+  writtenFor?: string,
+  deletable: boolean,
+  editable: boolean
 }
 
 const NewsList = async ({ locale }: { locale: string }) => {
   try {
-    const news = await NewsService.getPage(1, 10);
+    const news = await getPage(1, locale);
     const canPost = await SessionService.isActive().catch(() => false);
 
     return <News news={news} canPost={canPost} locale={locale} />;
@@ -41,7 +39,7 @@ const News = ({
   canPost,
   locale
 }: {
-  news: NewsPostInterface[];
+  news: (NewsPostInterface | undefined)[];
   canPost: boolean;
   locale: string;
 }) => {
@@ -58,12 +56,13 @@ const News = ({
           <p>{l.news.empty}</p>
         </>
       )}
-      {news.map((newsPost) => (
-        <React.Fragment key={newsPost.id}>
+      {news.filter((p) => p !== undefined).map((newsPost) => (
+        <React.Fragment key={newsPost!.id}>
           <Divider />
-          <NewsPost locale={locale} post={newsPost} />
+          <NewsPost locale={locale} post={newsPost!} />
         </React.Fragment>
       ))}
+      <InfiniteScroller page={2} locale={locale} />
     </ContentPane>
   );
 };
