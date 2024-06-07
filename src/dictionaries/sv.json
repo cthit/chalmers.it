@@ -82,7 +82,6 @@
   "pages": {
     "about": "Om sektionen",
     "groups": "Kommittéer, föreningar och andra instanser",
-    "create": "Skapa",
     "createUnder": "Skapa under",
     "createPage": "Skapa sida",
     "createSubpage": "Skapa undersida",
@@ -92,7 +91,6 @@
     "creating": "Skapar sida...",
     "created": "Sidan skapad!",
     "createError": "Kunde inte skapa sida!",
-    "edit": "Redigera",
     "editPage": "Redigera sida",
     "editSubpage": "Redigera undersida",
     "preview": "Förhandsgranska",

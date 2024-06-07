@@ -166,7 +166,9 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <br />
       <div className={style.actions}>
         <ActionButton onClick={apply}>
-          {divisionPost.editedId !== undefined ? l.pages.edit : l.pages.create}
+          {divisionPost.editedId !== undefined
+            ? l.general.edit
+            : l.general.create}
         </ActionButton>
         <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>

@@ -83,7 +83,6 @@
   "pages": {
     "about": "About our division",
     "groups": "Committees, associations and other instances",
-    "create": "Create",
     "createUnder": "Create under",
     "createPage": "Create page",
     "createSubpage": "Create subpage",
@@ -93,7 +92,6 @@
     "creating": "Creating...",
     "created": "Created!",
     "createError": "Could not create page!",
-    "edit": "Edit",
     "editPage": "Edit page",
     "editSubpage": "Edit subpage",
     "preview": "Preview",
