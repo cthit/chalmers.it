@@ -3,6 +3,7 @@
 import { MediaType } from '@/services/fileService';
 import MediaService from '@/services/mediaService';
 import SponsorService from '@/services/sponsorService';
+import SessionService from '@/services/sessionService';
 
 export async function addSponsor(
   sponsor: {
@@ -12,6 +13,12 @@ export async function addSponsor(
   },
   form: FormData
 ) {
+  if (
+    !(await SessionService.isAdmin()) &&
+    !(await SessionService.isCorporateRelations())
+  ) {
+    throw new Error('Unauthorized');
+  }
   const file: File | null = form.get('file') as unknown as File;
 
   let logoSha = undefined;

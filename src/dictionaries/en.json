@@ -54,7 +54,10 @@
     "for": "for",
     "by": "by",
     "unknown": "unknown author",
-    "self": "Myself"
+    "self": "Myself",
+    "deleting": "Deleting...",
+    "deleted": "Deleted!",
+    "deleteError": "Could not delete news post!"
   },
   "editor": {
     "createAs": "Create as",
@@ -69,12 +72,34 @@
     "selectFiles": "Select files",
     "uploaded": "Uploaded Files",
     "noFiles": "No files uploaded",
-    "copyLink": "Copy link"
+    "copyLink": "Copy link",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "saveError": "Could not save news post!",
+    "posting": "Creating...",
+    "posted": "Created!",
+    "postError": "Could not create news post!"
   },
   "pages": {
     "about": "About our division",
     "groups": "Committees, associations and other instances",
-    "create": "Create page"
+    "createUnder": "Create under",
+    "createPage": "Create page",
+    "createSubpage": "Create subpage",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "saveError": "Could not save page!",
+    "creating": "Creating...",
+    "created": "Created!",
+    "createError": "Could not create page!",
+    "editPage": "Edit page",
+    "editSubpage": "Edit subpage",
+    "preview": "Preview",
+    "title": "Title",
+    "urlSlug": "URL-slug",
+    "content": "Content",
+    "close": "Close",
+    "topLevel": "Top level"
   },
   "events": {
     "events": "Events",

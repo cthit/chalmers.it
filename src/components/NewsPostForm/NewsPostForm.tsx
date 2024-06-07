@@ -18,6 +18,7 @@ import FileService, { MediaType } from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
 import MarkdownView from '../MarkdownView/MarkdownView';
+import { toast } from 'react-toastify';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -127,37 +128,51 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       let postId: number;
 
       if (newsPost.id !== undefined) {
-        await edit(
-          newsPost.id!,
-          newsPost.writtenByGammaUserId!,
-          titleEn,
-          titleSv,
-          contentEn,
-          contentSv,
-          publishDate
+        await toast.promise(
+          edit(
+            newsPost.id!,
+            newsPost.writtenByGammaUserId!,
+            titleEn,
+            titleSv,
+            contentEn,
+            contentSv,
+            publishDate
+          ),
+          {
+            pending: l.editor.saving,
+            success: l.editor.saved,
+            error: l.editor.saveError
+          }
         );
         postId = newsPost.id!;
       } else if (group !== 'self') {
-        postId = await postForGroup(
-          titleEn,
-          titleSv,
-          contentEn,
-          contentSv,
-          group,
-          publishDate
+        postId = await toast.promise(
+          postForGroup(
+            titleEn,
+            titleSv,
+            contentEn,
+            contentSv,
+            group,
+            publishDate
+          ),
+          {
+            pending: l.editor.posting,
+            success: l.editor.posted,
+            error: l.editor.postError
+          }
         );
       } else {
         let formData = new FormData();
         for (const file of Object.values(uploadQueue)) {
           formData.append('file', file);
         }
-        postId = await post(
-          titleEn,
-          titleSv,
-          contentEn,
-          contentSv,
-          formData,
-          publishDate
+        postId = await toast.promise(
+          post(titleEn, titleSv, contentEn, contentSv, formData, publishDate),
+          {
+            pending: l.editor.posting,
+            success: l.editor.posted,
+            error: l.editor.postError
+          }
         );
       }
 

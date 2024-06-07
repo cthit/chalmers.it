@@ -23,7 +23,7 @@ function arrayEquals(a: any[], b: any[]) {
 
 export default class DivisionPageService {
   static async getAll() {
-    return await prisma.divisionGroup.findMany();
+    return prisma.divisionGroup.findMany();
   }
 
   private static flattenPages(pages: any[]) {
@@ -132,6 +132,14 @@ export default class DivisionPageService {
     return this.flattenPages(pages);
   }
 
+  static async getSingleById(id: number) {
+    return prisma.divisionPage.findUnique({
+      where: {
+        id: id
+      }
+    });
+  }
+
   static async getBySlug(slug: string[], id?: number) {
     const pages = await this.get(id);
     return this.findBySlug(slug, pages);
@@ -150,7 +158,7 @@ export default class DivisionPageService {
     divisionGroupId?: number,
     parentId?: number
   ) {
-    return await prisma.divisionPage.create({
+    return prisma.divisionPage.create({
       data: {
         titleEn,
         titleSv,
@@ -172,7 +180,7 @@ export default class DivisionPageService {
     slug: string,
     parentId?: number
   ) {
-    return await prisma.divisionPage.update({
+    return prisma.divisionPage.update({
       where: {
         id
       },
@@ -188,7 +196,7 @@ export default class DivisionPageService {
   }
 
   static async delete(id: number) {
-    return await prisma.divisionPage.delete({
+    return prisma.divisionPage.delete({
       where: {
         id
       }

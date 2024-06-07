@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { addSponsor } from '@/actions/sponsors';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import { toast } from 'react-toastify';
 
 const AddSponsorForm = () => {
   const [sponsorUrl, setSponsorUrl] = useState('');
@@ -30,14 +31,25 @@ const AddSponsorForm = () => {
     const formData = new FormData();
     formData.append('file', sponsorImage!);
 
-    addSponsor(
-      {
-        nameSv: sponsorName,
-        nameEn: sponsorName,
-        url: sponsorUrl
-      },
-      formData
-    );
+    try {
+      await toast.promise(
+        addSponsor(
+          {
+            nameSv: sponsorName,
+            nameEn: sponsorName,
+            url: sponsorUrl
+          },
+          formData
+        ),
+        {
+          pending: 'Adding sponsor...',
+          success: 'Sponsor added!',
+          error: 'Failed to add sponsor'
+        }
+      );
+    } catch (e) {
+      console.error(e);
+    }
 
     setSponsorName('');
     setSponsorImage(null);

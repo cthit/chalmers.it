@@ -13,6 +13,8 @@ import DivisionPageService, {
   DivisionPage
 } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
+import { toast } from 'react-toastify';
+import i18nService from '@/services/i18nService';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -28,6 +30,7 @@ interface DivisionPostFormProps {
   titleSv?: string;
   contentEn?: string;
   contentSv?: string;
+  locale: string;
 }
 
 const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
@@ -36,6 +39,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     breaks: true,
     gfm: true
   });
+
+  const l = i18nService.getLocale(divisionPost.locale);
 
   const [page, setPage] = useState(divisionPost.parentId);
   const [titleEn, setTitleEn] = useState(divisionPost.titleEn ?? '');
@@ -60,27 +65,49 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     setShowPreview(true);
   }
 
-  function apply() {
+  async function apply() {
     if (divisionPost.editedId !== undefined) {
-      edit(
-        divisionPost.editedId,
-        titleEn,
-        titleSv,
-        contentEn,
-        contentSv,
-        slug,
-        page
-      );
+      try {
+        await toast.promise(
+          edit(
+            divisionPost.editedId,
+            titleEn,
+            titleSv,
+            contentEn,
+            contentSv,
+            slug,
+            page
+          ),
+          {
+            pending: l.pages.saving,
+            success: l.pages.saved,
+            error: l.pages.saveError
+          }
+        );
+      } catch (e) {
+        console.error(e);
+      }
     } else {
-      create(
-        titleEn,
-        titleSv,
-        contentEn,
-        contentSv,
-        slug,
-        divisionPost.divisionGroupId,
-        page
-      );
+      try {
+        await toast.promise(
+          create(
+            titleEn,
+            titleSv,
+            contentEn,
+            contentSv,
+            slug,
+            divisionPost.divisionGroupId,
+            page
+          ),
+          {
+            pending: l.pages.creating,
+            success: l.pages.created,
+            error: l.pages.createError
+          }
+        );
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
@@ -96,41 +123,41 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <h1>
         {divisionPost.divisionGroupId
           ? divisionPost.editedId
-            ? 'Redigera undersida'
-            : 'Skapa undersida'
+            ? l.pages.editSubpage
+            : l.pages.editPage
           : divisionPost.editedId
-            ? 'Redigera sida'
-            : 'Skapa sida'}
+            ? l.pages.createSubpage
+            : l.pages.createPage}
       </h1>
       <Divider />
-      <h2>Skapa under</h2>
+      <h2>{l.pages.createUnder}</h2>
       <DropdownList value={page} onChange={(e) => setPage(+e.target.value)}>
-        <option value={undefined}>Toppnivå</option>
+        <option value={undefined}>{l.pages.topLevel}</option>
         {validPages.map((p) => {
           const pad = '\u00A0'.repeat(p.depth);
           return (
             <option key={p.id} value={p.id} disabled={p.disabled}>
-              {`${pad}${p.titleSv}`}
+              {`${pad}${divisionPost.locale === 'en' ? p.titleEn : p.titleSv}`}
             </option>
           );
         })}
       </DropdownList>
 
       <br />
-      <h2>URL-slug</h2>
+      <h2>{l.pages.urlSlug}</h2>
       <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
-      <h2>Titel (Eng)</h2>
+      <h2>{l.pages.title} (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>Innehåll (Eng)</h2>
+      <h2>{l.pages.content} (Eng)</h2>
       <MarkdownEditor
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
 
-      <h2>Titel (Sv)</h2>
+      <h2>{l.pages.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>Innehåll (Sv)</h2>
+      <h2>{l.pages.content} (Sv)</h2>
       <MarkdownEditor
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
@@ -139,7 +166,9 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <br />
       <div className={style.actions}>
         <ActionButton onClick={apply}>
-          {divisionPost.editedId !== undefined ? 'Redigera' : 'Skapa'}
+          {divisionPost.editedId !== undefined
+            ? l.general.edit
+            : l.general.create}
         </ActionButton>
         <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>
@@ -152,7 +181,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         overlayStyle={PreviewContentStyle}
       >
         <div className={style.dialog}>
-          <h1>Förhandsgranskning</h1>
+          <h1>{l.pages.preview}</h1>
           <Divider />
           <h2>{titleEn}</h2>
           <p dangerouslySetInnerHTML={previewContentEn} />
@@ -161,12 +190,11 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           <p dangerouslySetInnerHTML={previewContentSv} />
 
           <ActionButton onClick={() => setShowPreview(false)}>
-            Stäng
+            {l.pages.close}
           </ActionButton>
         </div>
       </Popup>
     </>
   );
 };
-
 export default DivisionPageForm;

@@ -53,7 +53,10 @@
     "written": "Skriven",
     "for": "för",
     "by": "av",
-    "unknown": "okänd användare"
+    "unknown": "okänd användare",
+    "deleting": "Raderar...",
+    "deleted": "Raderad!",
+    "deleteError": "Kunde inte radera nyhet!"
   },
   "editor": {
     "createAs": "Posta som",
@@ -68,12 +71,34 @@
     "selectFiles": "Välj filer",
     "uploaded": "Uppladdade Filer",
     "noFiles": "Inga filer uppladdade",
-    "copyLink": "Kopiera länk"
+    "copyLink": "Kopiera länk",
+    "saving": "Sparar...",
+    "saved": "Sparad!",
+    "saveError": "Kunde inte spara nyhet!",
+    "posting": "Skapar...",
+    "posted": "Skapad!",
+    "postError": "Kunde inte skapa nyhet!"
   },
   "pages": {
     "about": "Om sektionen",
     "groups": "Kommittéer, föreningar och andra instanser",
-    "create": "Skapa sida"
+    "createUnder": "Skapa under",
+    "createPage": "Skapa sida",
+    "createSubpage": "Skapa undersida",
+    "saving": "Sparar...",
+    "saved": "Sparad!",
+    "saveError": "Kunde inte spara sida!",
+    "creating": "Skapar sida...",
+    "created": "Sidan skapad!",
+    "createError": "Kunde inte skapa sida!",
+    "editPage": "Redigera sida",
+    "editSubpage": "Redigera undersida",
+    "preview": "Förhandsgranska",
+    "title": "Titel",
+    "urlSlug": "URL-slug",
+    "content": "Innehåll",
+    "close": "Stäng",
+    "topLevel": "Toppnivå"
   },
   "events": {
     "events": "Evenemang",

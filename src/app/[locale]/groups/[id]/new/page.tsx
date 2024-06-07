@@ -12,19 +12,19 @@ export default async function Page({
 }) {
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
-  const main = await mainContent(group.id);
+  const main = await mainContent(group.id, params.locale);
   const left = <DivisionNavigation locale={params.locale} />;
   const right = <div></div>;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;
 }
 
-async function mainContent(id: number) {
+async function mainContent(id: number, locale: string) {
   const pages = await DivisionPageService.get(id);
   return (
     <main>
       <ContentPane>
-        <DivisionPageForm divisionGroupId={id} pages={pages} />
+        <DivisionPageForm divisionGroupId={id} pages={pages} locale={locale} />
       </ContentPane>
     </main>
   );
