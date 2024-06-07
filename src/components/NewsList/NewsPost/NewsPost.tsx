@@ -46,6 +46,7 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
             text={l.general.delete}
             id={post.id}
             locale={locale}
+          />
         )}
       </div>
       <p className={style.subtitle}>
