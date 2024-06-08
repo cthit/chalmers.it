@@ -118,8 +118,9 @@
   },
   "groups": {
     "members": "Current members",
-    "memberserror": "Could not fetch members",
-    "createsubpage": "Create subpage"
+    "membersError": "Could not fetch members",
+    "membersEmpty": "No members",
+    "createSubpage": "Create subpage"
   },
   "lunch": {
     "nolunch": "No lunch for today"

@@ -117,8 +117,9 @@
   },
   "groups": {
     "members": "Nuvarande medlemmar",
-    "memberserror": "Kunde inte hämta medlemmar",
-    "createsubpage": "Skapa undersida"
+    "membersError": "Kunde inte hämta medlemmar",
+    "membersEmpty": "Inga medlemmar",
+    "createSubpage": "Skapa undersida"
   },
   "lunch": {
     "nolunch": "Ingen lunch idag"
