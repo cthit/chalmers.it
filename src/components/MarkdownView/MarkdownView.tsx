@@ -9,7 +9,7 @@ const MarkdownView = ({ content }: { content: string }) => {
   });
 
   const renderMarkdownText = () => {
-    var rawMarkup = marked.parse(content);
+    const rawMarkup = marked.parse(content);
     return { __html: rawMarkup };
   };
 

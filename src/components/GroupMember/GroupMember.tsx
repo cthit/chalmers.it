@@ -1,4 +1,5 @@
 'use server';
+import FallbackImage from '../FallbackImage/FallbackImage';
 import styles from './GroupMember.module.scss';
 
 const GroupMember = ({
@@ -14,15 +15,11 @@ const GroupMember = ({
 }) => {
   return (
     <div>
-      <object data={pfp}>
-        <picture>
-          <img
-            src="/smurf.svg"
-            className={styles.picture}
-            alt="Profile Picture"
-          />
-        </picture>
-      </object>
+      <FallbackImage
+        src={pfp}
+        className={styles.picture}
+        alt={'Profile picture for ' + name}
+      />
       <h3>{name}</h3>
       <p>{postStyled ? `${postStyled} (${post})` : post}</p>
     </div>

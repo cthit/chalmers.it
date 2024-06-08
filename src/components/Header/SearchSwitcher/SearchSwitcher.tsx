@@ -1,23 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import SearchBar from '../SearchBar/SearchBar';
+import SearchIcon from '../SearchBar/SearchIcon';
+import styles from '../Header.module.scss';
+import EscapeHatch from '../EscapeHatch/EscapeHatch';
 import Navigation from '../Navigation/Navigation';
-import Search from '../SearchBar/Search';
+import { useState } from 'react';
 
-const SearchSwitcher = ({ locale }: { locale?: string }) => {
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
-  const handleSearchIconClick = () => {
-    setIsSearchExpanded(!isSearchExpanded);
-  };
+const SearchSwitcher = ({
+  children,
+  locale
+}: {
+  children: React.ReactNode;
+  locale: string;
+}) => {
+  const [showSearch, setShowSearch] = useState(false);
 
   return (
     <>
-      {isSearchExpanded ? null : <Navigation locale={locale} />}
-      <Search
-        onSearchIconClick={handleSearchIconClick}
-        isExpanded={isSearchExpanded}
-      />
+      <EscapeHatch locale={locale} />
+      {showSearch ? <SearchBar /> : <Navigation locale={locale} />}
+      <div className={styles.right}>
+        <SearchIcon onClick={() => setShowSearch(!showSearch)} />
+        {children}
+      </div>
     </>
   );
 };

@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
   const router = useRouter();
-  let [newGroup, setNewGroup] = useState('');
+  const [newGroup, setNewGroup] = useState('');
 
   async function importGroup() {
     try {

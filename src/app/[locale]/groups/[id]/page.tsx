@@ -39,7 +39,7 @@ const mainContent = async (locale: string, id: string) => {
   const side = canEdit && (
     <>
       <ActionLink href={`./${id}/edit`}>{l.general.edit}</ActionLink>
-      <ActionLink href={`./${id}/new`}>{l.groups.createsubpage}</ActionLink>
+      <ActionLink href={`./${id}/new`}>{l.groups.createSubpage}</ActionLink>
     </>
   );
 
@@ -51,9 +51,15 @@ const mainContent = async (locale: string, id: string) => {
     >
       <MarkdownView content={en ? group.descriptionEn : group.descriptionSv} />
       <h2>{l.groups.members}</h2>
-      <ul className={style.memberList}>
-        {groupMembers ? (
-          groupMembers.map((member) => (
+      {groupMembers && groupMembers.length === 0 && (
+        <p className={style.membersMessage}>{l.groups.membersEmpty}</p>
+      )}
+      {groupMembers === undefined && (
+        <p className={style.membersMessage}>{l.groups.membersError}</p>
+      )}
+      {groupMembers && groupMembers.length !== 0 && (
+        <ul className={style.memberList}>
+          {groupMembers.map((member) => (
             <li key={member.user.id}>
               <GroupMember
                 pfp={GammaService.getUserAvatarURL(member.user.id)}
@@ -62,11 +68,9 @@ const mainContent = async (locale: string, id: string) => {
                 postStyled={member.unofficialPostName}
               />
             </li>
-          ))
-        ) : (
-          <li className={style.memberListError}>{l.groups.memberserror}</li>
-        )}
-      </ul>
+          ))}
+        </ul>
+      )}
     </ContentArticle>
   );
 };

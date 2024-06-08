@@ -6,6 +6,8 @@
     "close": "Stäng"
   },
   "site": {
+    "siteTitle": "IT på Chalmers",
+    "siteDescription": "Teknologsektionen Informationsteknik",
     "title": "Informationsteknik",
     "subtitle": "Chalmers Studentkår"
   },
@@ -56,7 +58,9 @@
     "unknown": "okänd användare",
     "deleting": "Raderar...",
     "deleted": "Raderad!",
-    "deleteError": "Kunde inte radera nyhet!"
+    "deleteError": "Kunde inte radera nyhet!",
+    "loading": "Laddar inlägg",
+    "loadEmpty": "Inga fler inlägg att visa"
   },
   "editor": {
     "createAs": "Posta som",
@@ -91,6 +95,7 @@
     "creating": "Skapar sida...",
     "created": "Sidan skapad!",
     "createError": "Kunde inte skapa sida!",
+    "editGroupPage": "Redigera gruppsida",
     "editPage": "Redigera sida",
     "editSubpage": "Redigera undersida",
     "preview": "Förhandsgranska",
@@ -104,16 +109,18 @@
     "events": "Evenemang",
     "start": "Start",
     "end": "Slut",
-    "fullDay": "Heldagsevenemang",
+    "fullDay": "Heldag",
     "location": "Plats",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
-    "empty": "Inga evenemang kopplade"
+    "empty": "Inga evenemang kopplade",
+    "subscribe": "Prenumerera (Google kalender)"
   },
   "groups": {
     "members": "Nuvarande medlemmar",
-    "memberserror": "Kunde inte hämta medlemmar",
-    "createsubpage": "Skapa undersida"
+    "membersError": "Kunde inte hämta medlemmar",
+    "membersEmpty": "Inga medlemmar",
+    "createSubpage": "Skapa undersida"
   },
   "lunch": {
     "nolunch": "Ingen lunch idag"

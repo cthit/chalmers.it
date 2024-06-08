@@ -7,14 +7,23 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import Banner from '@/components/Banner/Banner';
 import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider';
+import TopLoader from '@/components/TopLoader/TopLoader';
+import i18nService from '@/services/i18nService';
 import ToastContainerWrapper from '@/components/ToastContainerWrapper/ToastContainerWrapper';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'IT på Chalmers',
-  description: 'Teknologsektionen Informationsteknik'
-};
+export function generateMetadata({
+  params: { locale }
+}: {
+  params: { locale: string };
+}): Metadata {
+  const l = i18nService.getLocale(locale);
+  return {
+    title: l.site.siteTitle,
+    description: l.site.siteDescription
+  };
+}
 
 export function generateStaticParams() {
   return i18nConfig.locales.map((locale) => ({ locale }));
@@ -31,6 +40,7 @@ export default function RootLayout({
     <html lang={locale}>
       <body style={{ display: 'unset' }} className={poppins.className}>
         <ThemeProvider>
+          <TopLoader />
           <Header locale={locale} />
           <Banner locale={locale} />
           {children}

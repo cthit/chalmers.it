@@ -1,15 +1,10 @@
-.icon {
+.searchIcon {
+  color: var(--text-color);
   font-size: 1.5rem;
   line-height: 1.2rem;
-  color: var(--text-color);
-  padding: 0 1rem;
 }
 
-.loading {
-  opacity: 0.5;
-}
-
-.toggle:hover {
+.searchIcon:hover {
   cursor: pointer;
   color: var(--text-hover-color);
 }

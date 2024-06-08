@@ -6,6 +6,8 @@
     "close": "Close"
   },
   "site": {
+    "siteTitle": "IT at Chalmers",
+    "siteDescription": "Software Engineering (IT) Student Division",
     "title": "Software Engineering (IT)",
     "subtitle": "Chalmers Student Union"
   },
@@ -57,7 +59,9 @@
     "self": "Myself",
     "deleting": "Deleting...",
     "deleted": "Deleted!",
-    "deleteError": "Could not delete news post!"
+    "deleteError": "Could not delete news post!",
+    "loading": "Loading posts",
+    "loadEmpty": "No more posts to show"
   },
   "editor": {
     "createAs": "Create as",
@@ -93,6 +97,7 @@
     "created": "Created!",
     "createError": "Could not create page!",
     "editPage": "Edit page",
+    "editGroupPage": "Edit group page",
     "editSubpage": "Edit subpage",
     "preview": "Preview",
     "title": "Title",
@@ -105,16 +110,18 @@
     "events": "Events",
     "start": "Start",
     "end": "End",
-    "fullDay": "Full day event",
+    "fullDay": "Full day",
     "location": "Location",
     "add": "Add event",
     "remove": "Remove event",
-    "empty": "No events connected"
+    "empty": "No events connected",
+    "subscribe": "Subscribe (Google Calendar)"
   },
   "groups": {
     "members": "Current members",
-    "memberserror": "Could not fetch members",
-    "createsubpage": "Create subpage"
+    "membersError": "Could not fetch members",
+    "membersEmpty": "No members",
+    "createSubpage": "Create subpage"
   },
   "lunch": {
     "nolunch": "No lunch for today"
