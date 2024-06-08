@@ -1,0 +1,72 @@
+.toggle {
+  font-size: 2.5rem;
+  padding: 0.2rem;
+  margin-left: 1rem;
+  color: var(--text-color);
+  line-height: 1.2rem;
+}
+
+.drawer {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.content > * {
+  margin: 0.875rem 0;
+}
+
+.content > nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  position: absolute;
+  background-color: var(--header-color);
+  width: 70vw;
+  height: 100%;
+  z-index: 10;
+  animation: slideIn 0.5s;
+  padding: 1.875rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.open {
+  display: block;
+}
+
+.closed {
+  display: none;
+}

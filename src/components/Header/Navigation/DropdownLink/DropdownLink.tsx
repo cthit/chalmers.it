@@ -8,9 +8,10 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 type Props = {
   children: ReactNode;
   text: string;
+  desktop?: boolean;
 };
 
-const DropdownLink = ({ text, children }: Props) => {
+const DropdownLink = ({ text, children, desktop }: Props) => {
   return (
     <Dropdown
       parent={
@@ -19,6 +20,7 @@ const DropdownLink = ({ text, children }: Props) => {
           <p className={styles.navLinkArrow}>&nbsp;&#9660; </p>
         </div>
       }
+      id={`${text}-${desktop ? 'desktop' : 'mobile'}`}
     >
       {children}
     </Dropdown>

@@ -21,3 +21,22 @@
   flex-direction: row;
   align-items: center;
 }
+.mobile {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header {
+    padding: 0;
+  }
+}

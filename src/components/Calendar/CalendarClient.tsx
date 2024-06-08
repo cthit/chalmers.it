@@ -68,6 +68,7 @@ const CalendarClient = ({
                   <p>{date.getDate()}</p>
                 </div>
               }
+              id={stripTime(date).toString()}
             >
               {events[stripTime(date)]?.map((event) => (
                 <div key={event.id} className={styles.event}>
