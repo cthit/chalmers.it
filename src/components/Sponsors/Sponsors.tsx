@@ -2,15 +2,17 @@ import SponsorService from '@/services/sponsorService';
 import ContentPane from '../ContentPane/ContentPane';
 import styles from './Sponsors.module.scss';
 import Link from 'next/link';
+import i18nService from '@/services/i18nService';
 
-const Sponsors = async () => {
+const Sponsors = async ({ locale }: { locale: string }) => {
   const sponsors = await SponsorService.getAll();
+  const l = i18nService.getLocale(locale);
   return (
     <ContentPane>
-      <h1>Samarbetspartners</h1>
+      <h1>{l.sponsors.title}</h1>
       {sponsors.length === 0 && (
         <p>
-          Vill du synas här? Kontakta{' '}
+          {l.sponsors.empty}{' '}
           <a href="mailto:armit@chalmers.it">armit@chalmers.it</a>
         </p>
       )}

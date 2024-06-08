@@ -26,18 +26,35 @@ model NewsPost {
 }
 
 model DivisionGroup {
-  id                Int        @id @default(autoincrement())
-  gammaSuperGroupId String     @unique
-  slug              String     @unique
+  id                Int            @id @default(autoincrement())
+  gammaSuperGroupId String         @unique
+  slug              String         @unique
   prettyName        String
   titleSv           String
   titleEn           String
   descriptionSv     String
   descriptionEn     String
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
   NewsPost          NewsPost[]
   Banner            Banner[]
+  DivisionPages     DivisionPage[]
+}
+
+model DivisionPage {
+  id              Int            @id @default(autoincrement())
+  parent          DivisionPage?  @relation("DivisionPageTree", fields: [parentId], references: [id])
+  children        DivisionPage[] @relation("DivisionPageTree")
+  parentId        Int?
+  titleSv         String
+  titleEn         String
+  contentSv       String
+  contentEn       String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  DivisionGroup   DivisionGroup? @relation(fields: [divisionGroupId], references: [id])
+  divisionGroupId Int?
+  slug            String
 }
 
 model Event {

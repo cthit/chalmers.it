@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from 'react';
 import styles from './DatePicker.module.scss';
 
 const convertToDateTimeLocalString = (date: Date) => {
@@ -10,22 +11,25 @@ const convertToDateTimeLocalString = (date: Date) => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
+interface DatePickerProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+  value: Date;
+  onChange?: (date: Date) => void;
+}
+
 const DatePicker = ({
   value,
   onChange,
-  disabled
-}: {
-  value: Date;
-  onChange: (_date: Date) => void;
-  disabled?: boolean;
-}) => {
+  className,
+  ...rest
+}: DatePickerProps) => {
   return (
     <input
-      className={styles.picker}
-      disabled={disabled}
+      className={`${styles.picker} ${className}`}
       type="datetime-local"
       value={convertToDateTimeLocalString(value)}
-      onChange={(e) => onChange(new Date(e.target.value))}
+      onChange={(e) => onChange && onChange(new Date(e.target.value))}
+      {...rest}
     />
   );
 };

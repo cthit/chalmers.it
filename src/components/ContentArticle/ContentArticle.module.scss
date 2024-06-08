@@ -1,0 +1,18 @@
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.titleRight {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+.title > h3 {
+  flex-grow: 1;
+  color: #a7ebeb;
+}

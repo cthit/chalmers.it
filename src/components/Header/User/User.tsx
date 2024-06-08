@@ -5,42 +5,48 @@ import LogoutLink from './LogoutLink/LogoutLink';
 import LoginButton from './LoginButton/LoginButton';
 import Dropdown from '../Navigation/Dropdown/Dropdown';
 import Link from 'next/link';
+import i18nService from '@/services/i18nService';
+import GammaService from '@/services/gammaService';
+import FallbackImage from '@/components/FallbackImage/FallbackImage';
 
-const User = async () => {
+const User = async ({ locale }: { locale: string }) => {
   const session = await getServerSession(authConfig);
-  const image = session?.user?.image;
+  const id = session?.user?.id;
 
   return (
     <div className={styles.user}>
-      {image === undefined ? (
-        <LoginButton />
+      {id === undefined ? (
+        <LoginButton locale={locale} />
       ) : (
-        <LoggedIn image={session?.user?.image!} />
+        <LoggedIn image={GammaService.getUserAvatarURL(id)} locale={locale} />
       )}
     </div>
   );
 };
 
-const LoggedIn = ({ image }: { image: string }) => {
+const LoggedIn = ({ image, locale }: { image: string; locale: string }) => {
+  const l = i18nService.getLocale(locale);
   return (
     <Dropdown
       parent={
-        <a href="https://gamma.chalmers.it/me/edit">
-          <object data={image}>
-            <picture>
-              <img
-                src="/smurf.svg"
-                className={styles.pfp}
-                alt="Profile Picture"
-              />
-            </picture>
-          </object>
-        </a>
+        <div className={styles.pfpContainer}>
+          <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
+            <FallbackImage
+              src={image}
+              className={styles.pfp}
+              alt="Profile Picture"
+              width="3rem"
+              height="3rem"
+            />
+          </Link>
+        </div>
       }
     >
-      <Link href="https://gamma.chalmers.it/me/edit">Min profil</Link>
-      <Link href="/settings">Inställningar</Link>
-      <LogoutLink />
+      <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
+        {l.user.profile}
+      </Link>
+      <Link href="/settings">{l.user.settings}</Link>
+      <LogoutLink locale={locale} />
     </Dropdown>
   );
 };

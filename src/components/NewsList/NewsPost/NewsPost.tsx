@@ -1,85 +1,63 @@
-import Divider from '@/components/Divider/Divider';
 import style from './NewsPost.module.scss';
 import Link from 'next/link';
-import GammaService from '@/services/gammaService';
-import { getServerSession } from 'next-auth/next';
-import { authConfig } from '@/auth/auth';
-import ActionButton from '@/components/ActionButton/ActionButton';
 import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
-import SessionService from '@/services/sessionService';
 import { PostStatus } from '@prisma/client';
+import i18nService from '@/services/i18nService';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 interface NewsPostProps {
   post: {
     id: number;
-    titleSv: string;
-    titleEn: string;
-    contentSv: string;
-    contentEn: string;
-    writtenByGammaUserId: string;
+    title: string;
+    content: string;
+    author?: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt?: Date;
     status: PostStatus;
-    writtenFor: {
-      gammaSuperGroupId: string;
-      prettyName: string;
-    } | null;
+    writtenFor?: string;
+    deletable: boolean;
+    editable: boolean;
   };
+  locale: string;
+  standalone?: boolean;
 }
 
-const formatDate = (date: Date) => {
-  return date
-    .toLocaleDateString(['sv-SE'], {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-    .replace(',', '');
-};
-
-const NewsPost = async ({ post }: NewsPostProps) => {
-  const group = post.writtenFor?.prettyName;
-
-  const nick =
-    (await GammaService.getNick(post.writtenByGammaUserId)) ||
-    'Okänd användare';
-
-  const ownsPost =
-    (await getServerSession(authConfig))?.user?.id ===
-      post.writtenByGammaUserId ||
-    (post.writtenFor?.gammaSuperGroupId
-      ? await SessionService.canEditGroup(post.writtenFor!.gammaSuperGroupId)
-      : false);
-
-  if (!ownsPost && post.status !== PostStatus.PUBLISHED) {
-    return null;
-  }
-
-  const canDeletePost = ownsPost || (await SessionService.isAdmin());
+const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
+  const l = i18nService.getLocale(locale);
 
   return (
     <>
-      <Divider />
       <div className={style.titleArea}>
         <h2 className={style.title}>
-          <Link href={`/post/${post.id}`}>{post.titleSv}</Link>
+          {noNav ? (
+            post.title
+          ) : (
+            <Link href={`/post/${post.id}`}>{post.title}</Link>
+          )}
         </h2>
-        {ownsPost && (
-          <ActionButton href={`/post/${post.id}/edit`}>Redigera</ActionButton>
+        {post.editable && (
+          <ActionLink href={`/post/${post.id}/edit`}>
+            {l.general.edit}
+          </ActionLink>
         )}
-        {canDeletePost && <DeletePostButton id={post.id} />}
+        {post.deletable && (
+          <DeletePostButton
+            text={l.general.delete}
+            id={post.id}
+            locale={locale}
+          />
+        )}
       </div>
       <p className={style.subtitle}>
-        {post.status === PostStatus.SCHEDULED ? 'Schemalagd ' : null}
-        {formatDate(post.createdAt)} | Skriven {group && `för ${group}`} av{' '}
-        {nick}{' '}
-        {post.updatedAt.getTime() - post.createdAt.getTime() > 5000 &&
-          ` | Redigerad ${formatDate(post.updatedAt)}`}
+        {post.status === PostStatus.SCHEDULED ? `${l.news.scheduled} ` : null}
+        {`${i18nService.formatDate(post.createdAt)} | ${l.news.written} `}
+        {post.writtenFor && `${l.news.for} ${post.writtenFor}`}{' '}
+        {`${l.news.by} ${post.author} `}
+        {post.updatedAt &&
+          ` | ${l.news.edited} ${i18nService.formatDate(post.updatedAt)}`}
       </p>
-      <MarkdownView content={post.contentSv} />
+      <MarkdownView content={post.content} />
     </>
   );
 };

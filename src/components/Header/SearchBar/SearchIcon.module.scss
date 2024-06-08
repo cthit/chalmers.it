@@ -1,0 +1,10 @@
+.searchIcon {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  line-height: 1.2rem;
+}
+
+.searchIcon:hover {
+  cursor: pointer;
+  color: var(--text-hover-color);
+}

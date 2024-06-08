@@ -6,10 +6,9 @@ const gammaUrl = process.env.GAMMA_ROOT_URL?.replace(/\/$/, '');
 export const authConfig: NextAuthOptions = {
   providers: [
     GammaProvider({
-      url: gammaUrl!,
-      profileEndpoint: '/userinfo',
-      clientId: process.env.GAMMA_CLIENT_ID || 'id',
-      clientSecret: process.env.GAMMA_CLIENT_SECRET || 'secret'
+      wellKnown: gammaUrl,
+      clientId: process.env.GAMMA_CLIENT_ID ?? 'id',
+      clientSecret: process.env.GAMMA_CLIENT_SECRET ?? 'secret'
     })
   ],
   callbacks: {

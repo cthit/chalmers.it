@@ -1,10 +1,23 @@
 {
-  "extends": "next/core-web-vitals",
-  "plugins": ["unused-imports"],
+  "extends": [
+    "next",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "tsx": true
+    },
+    "sourceType": "module"
+  },
   "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "warn",
     "no-unused-vars": "off",
-    "unused-imports/no-unused-imports": "warn",
-    "unused-imports/no-unused-vars": [
+    "prefer-const": "warn",
+    "@typescript-eslint/no-unused-vars": [
       "warn",
       {
         "argsIgnorePattern": "^_"

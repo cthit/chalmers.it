@@ -1,0 +1,16 @@
+.memberList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, max-content));
+  justify-content: center;
+  grid-auto-flow: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.memberList > li {
+  list-style: none;
+}
+
+.memberListError {
+  margin: 2rem 0;
+}

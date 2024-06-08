@@ -1,0 +1,146 @@
+{
+  "general": {
+    "create": "Skapa",
+    "edit": "Redigera",
+    "delete": "Radera",
+    "close": "Stäng"
+  },
+  "site": {
+    "siteTitle": "IT på Chalmers",
+    "siteDescription": "Teknologsektionen Informationsteknik",
+    "title": "Informationsteknik",
+    "subtitle": "Chalmers Studentkår"
+  },
+  "nav": {
+    "division": "Sektionen",
+    "docs": "Dokument",
+    "wiki": "Wiki",
+    "pictures": "Bilder",
+    "merch": "Merch",
+    "honorary": "Hedersmedlemmar",
+    "pl": "Programledningen",
+    "samo": "SAMO",
+    "applicants": "Sökande",
+    "stats": "Antagningsstatistik",
+    "nollkit": "NollKITs hemsida",
+    "studentlife": "Studentlivet",
+    "students": "Studenter",
+    "courses": "Kurser",
+    "grouprooms": "Boka grupprum",
+    "schedule": "Schema",
+    "print": "Skriva ut",
+    "studenthealth": "Studiehälsa",
+    "services": "Tjänster",
+    "business": "Företag",
+    "contact": "Kontakt"
+  },
+  "banner": {
+    "top": "Teknologsektionen"
+  },
+  "footer": {
+    "postadress": "POSTADRESS",
+    "visitadress": "BESÖKSADRESS",
+    "contact": "KONTAKT",
+    "developed": "Utvecklad av",
+    "moreinfo": "mer info"
+  },
+  "news": {
+    "title": "Nyheter",
+    "empty": "Inga nyheter att visa",
+    "create": "Skapa nyhet",
+    "edit": "Redigera nyhet",
+    "error": "Det gick inte att hämta nyheter",
+    "scheduled": "Schemalagd",
+    "edited": "Redigerad",
+    "written": "Skriven",
+    "for": "för",
+    "by": "av",
+    "unknown": "okänd användare",
+    "deleting": "Raderar...",
+    "deleted": "Raderad!",
+    "deleteError": "Kunde inte radera nyhet!",
+    "loading": "Laddar inlägg",
+    "loadEmpty": "Inga fler inlägg att visa"
+  },
+  "editor": {
+    "createAs": "Posta som",
+    "self": "Mig själv",
+    "title": "Titel",
+    "content": "Innehåll",
+    "publish": "Publiceringstid",
+    "now": "Nu",
+    "scheduled": "Schemalagd",
+    "previewAction": "Förhandsgranska",
+    "preview": "Förhandsgranskning",
+    "selectFiles": "Välj filer",
+    "uploaded": "Uppladdade Filer",
+    "noFiles": "Inga filer uppladdade",
+    "copyLink": "Kopiera länk",
+    "saving": "Sparar...",
+    "saved": "Sparad!",
+    "saveError": "Kunde inte spara nyhet!",
+    "posting": "Skapar...",
+    "posted": "Skapad!",
+    "postError": "Kunde inte skapa nyhet!"
+  },
+  "pages": {
+    "about": "Om sektionen",
+    "groups": "Kommittéer, föreningar och andra instanser",
+    "createUnder": "Skapa under",
+    "createPage": "Skapa sida",
+    "createSubpage": "Skapa undersida",
+    "saving": "Sparar...",
+    "saved": "Sparad!",
+    "saveError": "Kunde inte spara sida!",
+    "creating": "Skapar sida...",
+    "created": "Sidan skapad!",
+    "createError": "Kunde inte skapa sida!",
+    "editPage": "Redigera sida",
+    "editSubpage": "Redigera undersida",
+    "preview": "Förhandsgranska",
+    "title": "Titel",
+    "urlSlug": "URL-slug",
+    "content": "Innehåll",
+    "close": "Stäng",
+    "topLevel": "Toppnivå"
+  },
+  "events": {
+    "events": "Evenemang",
+    "start": "Start",
+    "end": "Slut",
+    "fullDay": "Heldag",
+    "location": "Plats",
+    "add": "Lägg till evenemang",
+    "remove": "Ta bort evenemang",
+    "empty": "Inga evenemang kopplade",
+    "subscribe": "Prenumerera (Google kalender)"
+  },
+  "groups": {
+    "members": "Nuvarande medlemmar",
+    "memberserror": "Kunde inte hämta medlemmar",
+    "createsubpage": "Skapa undersida"
+  },
+  "lunch": {
+    "nolunch": "Ingen lunch idag"
+  },
+  "sponsors": {
+    "title": "Samarbetspartners",
+    "empty": "Vill du synas här? Kontakta"
+  },
+  "user": {
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "profile": "Min profil",
+    "settings": "Inställningar"
+  },
+  "markdown": {
+    "title": "Lathund",
+    "header": "Titlar",
+    "formatting": "Textformatering",
+    "lists": "Listor",
+    "links": "Länkar",
+    "images": "Bilder",
+    "code": "Kodblock",
+    "tables": "Tabeller"
+  }
+}

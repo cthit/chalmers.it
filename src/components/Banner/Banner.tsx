@@ -1,20 +1,22 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import styles from './Banner.module.scss';
 import { Playfair_Display } from 'next/font/google';
+import i18nService from '@/services/i18nService';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
-const BannerTitle = () => {
+const BannerTitle = ({ locale }: { locale?: string }) => {
+  const l = i18nService.getLocale(locale);
   return (
     <div className={styles.title}>
-      <h2>Teknologsektionen</h2>
-      <h1>Informationsteknik</h1>
-      <h2>Chalmers Studentkår</h2>
+      <h2>{l.banner.top}</h2>
+      <h1>{l.site.title}</h1>
+      <h2>{l.site.subtitle}</h2>
     </div>
   );
 };
 
-const Banner = async () => {
+const Banner = async ({ locale }: { locale?: string }) => {
   const banner = await DivisionGroupService.getRandomBanner().catch((e) => {
     console.error(`${e.name}:`, e.message);
     return null;
@@ -22,7 +24,7 @@ const Banner = async () => {
 
   return (
     <div className={`${styles.banner} ${playfair.className}`}>
-      <BannerTitle />
+      <BannerTitle locale={locale} />
       <div className={styles.bannerImg}>
         {banner && (
           <picture>

@@ -22,6 +22,7 @@ export default class EventService {
     startTime: Date;
     endTime: Date;
     newsPostId?: number;
+    location?: string;
   }) {
     return await prisma.event.create({
       data: {
@@ -29,10 +30,11 @@ export default class EventService {
         titleSv: event.titleSv,
         descriptionEn: event.descriptionEn,
         descriptionSv: event.descriptionSv,
-        fullDay: false,
+        fullDay: event.fullDay,
         startTime: event.startTime,
         endTime: event.endTime,
-        newsPostId: event.newsPostId
+        newsPostId: event.newsPostId,
+        location: event.location
       }
     });
   }
@@ -59,6 +61,9 @@ export default class EventService {
         titleSv: event.titleSv,
         descriptionEn: event.descriptionEn,
         descriptionSv: event.descriptionSv,
+        fullDay: event.fullDay,
+        startTime: event.startTime,
+        endTime: event.endTime,
         newsPostId: event.newsPostId
       }
     });

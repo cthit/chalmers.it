@@ -1,24 +1,25 @@
 import styles from './Header.module.scss';
-import EscapeHatch from './EscapeHatch/EscapeHatch';
+import User from './User/User';
 import SearchSwitcher from './SearchSwitcher/SearchSwitcher';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
-import User from './User/User';
 import NavDrawer from './NavDrawer/NavDrawer';
+import EscapeHatch from './EscapeHatch/EscapeHatch';
 
-const Header = () => {
+const Header = ({ locale }: { locale: string }) => {
   return (
     <header className={styles.header}>
       <div className={`${styles.mobile}`}>
         <NavDrawer>
-          <User />
+          <User locale={locale} />
           <ThemeSelector />
         </NavDrawer>
       </div>
       <EscapeHatch />
       <div className={`${styles.desktop} ${styles.header}`}>
-        <SearchSwitcher />
-        <ThemeSelector />
-        <User />
+        <SearchSwitcher locale={locale}>
+          <ThemeSelector />
+          <User locale={locale} />
+        </SearchSwitcher>
       </div>
     </header>
   );

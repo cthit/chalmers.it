@@ -1,17 +1,15 @@
-import style from './DropdownList.module.scss';
-import { ChangeEventHandler } from 'react';
+import styles from './DropdownList.module.scss';
+import React, { SelectHTMLAttributes } from 'react';
 
-interface DropdownListProps {
-  children: React.ReactNode;
-  onChange: ChangeEventHandler<HTMLSelectElement> | undefined;
+export default class DropdownList extends React.Component<
+  SelectHTMLAttributes<HTMLSelectElement>
+> {
+  render() {
+    const { className, children, ...rest } = this.props;
+    return (
+      <select className={`${className} ${styles.list}`} {...rest}>
+        {children}
+      </select>
+    );
+  }
 }
-
-const DropdownList = ({ children, onChange }: DropdownListProps) => {
-  return (
-    <select className={style.list} onChange={onChange}>
-      {children}
-    </select>
-  );
-};
-
-export default DropdownList;

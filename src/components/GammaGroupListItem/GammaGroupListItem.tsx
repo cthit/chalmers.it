@@ -2,7 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import ActionButton from '../ActionButton/ActionButton';
-import { removeGroup } from './actions';
+import { removeGroup } from '@/actions/groups';
+import { toast } from 'react-toastify';
 
 const GammaGroupListItem = ({
   id,
@@ -16,7 +17,11 @@ const GammaGroupListItem = ({
   const router = useRouter();
 
   const remove = async () => {
-    removeGroup(superGroupId);
+    await toast.promise(removeGroup(superGroupId), {
+      pending: 'Removing group...',
+      success: 'Group removed!',
+      error: 'Failed to remove group'
+    });
     router.refresh();
   };
 
