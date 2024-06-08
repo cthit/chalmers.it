@@ -11,6 +11,8 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 
+export const revalidate = 3600;
+
 export default async function Page({
   params: { locale, id }
 }: {

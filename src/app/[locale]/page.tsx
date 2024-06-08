@@ -6,6 +6,8 @@ import Lunch from '@/components/Lunch/Lunch';
 import Sponsors from '@/components/Sponsors/Sponsors';
 import Calendar from '@/components/Calendar/Calendar';
 
+export const revalidate = 3600;
+
 export default function Home({
   params: { locale }
 }: {

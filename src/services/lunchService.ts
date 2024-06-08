@@ -16,7 +16,7 @@ interface Meal {
 
 export default class LunchService {
   static async getLunch(): Promise<Restaurant[]> {
-    const response = await fetch(lunchUrl);
+    const response = await fetch(lunchUrl, { next: { revalidate: 3600 } });
     return await response.json();
   }
 }
