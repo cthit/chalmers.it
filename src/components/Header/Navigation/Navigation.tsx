@@ -11,9 +11,9 @@ type Props = {
   desktop?: boolean;
 };
 
-const Navigation = ({ locale, desktop }: Props ) => {
+const Navigation = ({ locale, desktop }: Props) => {
   const l = i18nService.getLocale(locale);
-  
+
   return (
     <nav className={styles.nav}>
       <DropdownLink text={l.nav.division} desktop={desktop}>

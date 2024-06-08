@@ -20,7 +20,7 @@ const DropdownLink = ({ text, children, desktop }: Props) => {
           <p className={styles.navLinkArrow}>&nbsp;&#9660; </p>
         </div>
       }
-      id={`${text}-${desktop? 'desktop' : 'mobile'}`}
+      id={`${text}-${desktop ? 'desktop' : 'mobile'}`}
     >
       {children}
     </Dropdown>
