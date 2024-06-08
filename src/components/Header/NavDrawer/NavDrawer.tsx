@@ -2,15 +2,14 @@
 
 import styles from './NavDrawer.module.scss';
 import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { FaBars } from 'react-icons/fa6';
 
 const NavDrawer = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
   return (
     <div>
       <a className={styles.toggle} onClick={() => setOpen(!open)}>
-        <FontAwesomeIcon icon={faBars} />
+        <FaBars />
       </a>
       <div className={`${styles.drawer} ${open ? styles.open : styles.closed}`}>
         <div className={styles.content}>{children}</div>
