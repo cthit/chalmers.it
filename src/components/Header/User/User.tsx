@@ -41,6 +41,7 @@ const LoggedIn = ({ image, locale }: { image: string; locale: string }) => {
           </Link>
         </div>
       }
+      id="user-dropdown"
     >
       <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
         {l.user.profile}
