@@ -41,12 +41,10 @@ export default class GammaService {
     );
   }
 
-  static async getSuperGroupMembers(sgid: string) {
+  static async getSuperGroup(sgid: string) {
     // We assume all super groups are active from the info API
     const activeGroups = await this.getAllSuperGroups();
-    return (
-      activeGroups.find((group) => group.superGroup.id === sgid)?.members || []
-    );
+    return activeGroups.find((group) => group.superGroup.id === sgid);
   }
 }
 
