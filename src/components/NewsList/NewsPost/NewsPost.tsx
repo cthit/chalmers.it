@@ -53,7 +53,7 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
         {post.status === PostStatus.SCHEDULED ? `${l.news.scheduled} ` : null}
         {`${i18nService.formatDate(post.createdAt)} | ${l.news.written} `}
         {post.writtenFor && `${l.news.for} ${post.writtenFor}`}{' '}
-        {`${l.news.by} ${post.author} `}
+        {`${l.news.by} ${post.author ?? l.news.unknown} `}
         {post.updatedAt &&
           ` | ${l.news.edited} ${i18nService.formatDate(post.updatedAt)}`}
       </p>
