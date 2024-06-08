@@ -1,5 +1,5 @@
 /* Dropdown.module.scss */
-.dropdown {
+.dropdownLabel {
   border: none;
   background: transparent;
   cursor: pointer; /* Indicate it's clickable */
@@ -18,7 +18,7 @@
 }
 
 /* Corrected the sibling selector to target the next siblings */
-.dropdownInput:checked + .dropdown + .dropdownContent {
+.dropdownInput:checked + .dropdownLabel + .dropdownContent {
   display: block;
 }
 

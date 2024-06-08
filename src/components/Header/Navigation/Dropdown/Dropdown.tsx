@@ -2,7 +2,7 @@
 
 import { Playfair_Display } from 'next/font/google';
 import styles from './Dropdown.module.scss';
-import { ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
@@ -12,16 +12,22 @@ type Props = {
   children: ReactNode;
 };
 
-const Dropdown = ({ children, parent, id }: Props) => {
+const Dropdown = ({
+  children,
+  parent,
+  id,
+  className,
+  ...rest
+}: Props & HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div>
+    <div className={`${styles.dropdown} ${className}`} {...rest}>
       <input
         type="radio"
         id={id}
         name="dropdown"
         className={styles.dropdownInput}
       />
-      <label htmlFor={id} className={styles.dropdown}>
+      <label htmlFor={id} className={styles.dropdownLabel}>
         {parent}
       </label>
       <div className={`${styles.dropdownContent} ${playfair.className}`}>
