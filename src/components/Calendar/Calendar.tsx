@@ -13,7 +13,7 @@ const Calendar = async ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
 
   const events = await EventService.getAll();
-  let eventMap: {
+  const eventMap: {
     [key: number]: {
       id: number;
       titleSv: string;

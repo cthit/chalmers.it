@@ -41,7 +41,7 @@ const CalendarClient = ({
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
 
-  const mapTileClass: TileClassNameFunc = ({ activeStartDate, date, view }) => {
+  const mapTileClass: TileClassNameFunc = ({ date }) => {
     return [
       styles.tile,
       ...((events[stripTime(date)] || []).length > 0 ? [styles.tileEvent] : [])
@@ -58,19 +58,28 @@ const CalendarClient = ({
       className="event-calendar"
       tileClassName={mapTileClass}
       calendarType="iso8601"
-      tileContent={({ activeStartDate, date, view }) =>
+      tileContent={({ date, view }) =>
         view === 'month' ? (
-          <Dropdown parent={<p>{date.getDate()}</p>}>
-            {events[stripTime(date)]?.map((event) => (
-              <div key={event.id} className={styles.event}>
-                <h3>{en ? event.titleEn : event.titleSv}</h3>
-                <p>{event.fullDay ? l.events.fullDay : 'Time'}</p>
-              </div>
-            ))}
-          </Dropdown>
-        ) : (
-          <p>{date.getDate()}</p>
-        )
+          events[stripTime(date)] ? (
+            <Dropdown
+              className={styles.dropdown}
+              parent={
+                <div className={styles.date}>
+                  <p>{date.getDate()}</p>
+                </div>
+              }
+            >
+              {events[stripTime(date)]?.map((event) => (
+                <div key={event.id} className={styles.event}>
+                  <h3>{en ? event.titleEn : event.titleSv}</h3>
+                  <p>{event.fullDay ? l.events.fullDay : 'Time'}</p>
+                </div>
+              ))}
+            </Dropdown>
+          ) : (
+            <p>{date.getDate()}</p>
+          )
+        ) : null
       }
     />
   );

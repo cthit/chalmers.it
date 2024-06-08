@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { marked } from 'marked';
 import style from './PageForm.module.scss';
 import Popup from 'reactjs-popup';
+import i18nService from '@/services/i18nService';
+import MarkdownView from '../MarkdownView/MarkdownView';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -21,6 +23,7 @@ interface NewPostFormProps {
   contentEn: string;
   contentSv: string;
   slug: string;
+  locale: string;
 }
 
 const PageForm = (description: NewPostFormProps) => {
@@ -28,6 +31,7 @@ const PageForm = (description: NewPostFormProps) => {
     gfm: true,
     breaks: true
   });
+  const l = i18nService.getLocale(description.locale);
 
   const [titleEn, setTitleEn] = useState(description.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(description.titleSv ?? '');
@@ -35,12 +39,8 @@ const PageForm = (description: NewPostFormProps) => {
   const [contentSv, setContentSv] = useState(description.contentSv ?? '');
   const [slug, setSlug] = useState(description.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
-  const [previewContentSv, setPreviewContentSv] = useState({
-    __html: marked.parse('')
-  });
-  const [previewContentEn, setPreviewContentEn] = useState({
-    __html: marked.parse('')
-  });
+  const [previewContentSv, setPreviewContentSv] = useState('');
+  const [previewContentEn, setPreviewContentEn] = useState('');
 
   async function send() {
     try {
@@ -51,33 +51,31 @@ const PageForm = (description: NewPostFormProps) => {
   }
 
   function preview() {
-    const markupSv = marked.parse(contentSv);
-    setPreviewContentSv({ __html: markupSv });
-    const markupEn = marked.parse(contentEn);
-    setPreviewContentEn({ __html: markupEn });
+    setPreviewContentSv(contentSv);
+    setPreviewContentEn(contentEn);
 
     setShowPreview(true);
   }
 
   return (
     <>
-      <h1>Ändra grupp</h1>
+      <h1>{l.pages.editGroupPage}</h1>
       <Divider />
 
-      <h2>URL-slug</h2>
+      <h2>{l.pages.urlSlug}</h2>
       <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
-      <h2>Titel (Eng)</h2>
+      <h2>{l.editor.title} (En)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>Innehåll (Eng)</h2>
+      <h2>{l.editor.content} (En)</h2>
       <MarkdownEditor
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
 
-      <h2>Titel (Sv)</h2>
+      <h2>{l.editor.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>Innehåll (Sv)</h2>
+      <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
         value={contentSv}
         onChange={(e) => setContentSv(e.target.value)}
@@ -86,9 +84,9 @@ const PageForm = (description: NewPostFormProps) => {
       <br />
       <div className={style.actions}>
         <ActionButton onClick={send}>
-          {description.id !== undefined ? 'Redigera' : 'Skapa'}
+          {description.id !== undefined ? l.general.edit : l.general.create}
         </ActionButton>
-        <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
+        <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
       </div>
 
       <Popup
@@ -99,16 +97,14 @@ const PageForm = (description: NewPostFormProps) => {
         overlayStyle={PreviewContentStyle}
       >
         <div className={style.dialog}>
-          <h1>Förhandsgranskning</h1>
+          <h1>{l.editor.preview}</h1>
           <Divider />
-          <h2>{titleEn}</h2>
-          <p dangerouslySetInnerHTML={previewContentEn} />
+          <MarkdownView content={previewContentEn} />
           <Divider />
-          <h2>{titleSv}</h2>
-          <p dangerouslySetInnerHTML={previewContentSv} />
+          <MarkdownView content={previewContentSv} />
 
           <ActionButton onClick={() => setShowPreview(false)}>
-            Stäng
+            {l.general.close}
           </ActionButton>
         </div>
       </Popup>

@@ -3,7 +3,12 @@ import { IconBaseProps } from 'react-icons/lib';
 import styles from './SearchIcon.module.scss';
 
 const SearchIcon = ({ className, ...rest }: IconBaseProps) => {
-  return <BsSearchHeartFill className={styles.searchIcon} {...rest} />;
+  return (
+    <BsSearchHeartFill
+      className={`${styles.searchIcon} ${className}`}
+      {...rest}
+    />
+  );
 };
 
 export default SearchIcon;

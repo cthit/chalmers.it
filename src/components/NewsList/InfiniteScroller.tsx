@@ -32,7 +32,7 @@ const InfiniteScroller = ({
       observer.observe(ref.current);
       return () => observer.disconnect();
     }
-  }, [ref]);
+  }, [ref, locale, page]);
 
   return (
     <>
