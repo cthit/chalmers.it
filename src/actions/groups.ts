@@ -9,10 +9,7 @@ export async function addGroup(gammaSuperGroupId: string) {
     throw new Error('Unauthorized');
   }
 
-  const allGroups = (await GammaService.getAllSuperGroups()).flatMap(
-    (g) => g.superGroups
-  );
-  const group = allGroups.find(
+  const group = (await GammaService.getAllSuperGroups()).find(
     (g) => g.superGroup.id === gammaSuperGroupId
   )?.superGroup;
 
