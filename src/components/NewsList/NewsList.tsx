@@ -11,16 +11,16 @@ import { getPage } from '@/actions/newsList';
 import InfiniteScroller from './InfiniteScroller';
 
 interface NewsPostInterface {
-  id: number,
-  title: string,
-  content: string,
-  author?: string,
-  createdAt: Date,
-  updatedAt?: Date,
-  status: PostStatus,
-  writtenFor?: string,
-  deletable: boolean,
-  editable: boolean
+  id: number;
+  title: string;
+  content: string;
+  author?: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  status: PostStatus;
+  writtenFor?: string;
+  deletable: boolean;
+  editable: boolean;
 }
 
 const NewsList = async ({ locale }: { locale: string }) => {
@@ -56,12 +56,14 @@ const News = ({
           <p>{l.news.empty}</p>
         </>
       )}
-      {news.filter((p) => p !== undefined).map((newsPost) => (
-        <React.Fragment key={newsPost!.id}>
-          <Divider />
-          <NewsPost locale={locale} post={newsPost!} />
-        </React.Fragment>
-      ))}
+      {news
+        .filter((p) => p !== undefined)
+        .map((newsPost) => (
+          <React.Fragment key={newsPost!.id}>
+            <Divider />
+            <NewsPost locale={locale} post={newsPost!} />
+          </React.Fragment>
+        ))}
       <InfiniteScroller page={2} locale={locale} />
     </ContentPane>
   );

@@ -97,6 +97,7 @@
     "created": "Created!",
     "createError": "Could not create page!",
     "editPage": "Edit page",
+    "editGroupPage": "Edit group page",
     "editSubpage": "Edit subpage",
     "preview": "Preview",
     "title": "Title",

@@ -50,7 +50,8 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .banner, .banner img {
+  .banner,
+  .banner img {
     height: calc(6rem + 20vw);
     max-height: 15rem;
   }

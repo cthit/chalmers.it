@@ -30,6 +30,7 @@ export default async function Page({
             contentEn={group.descriptionEn}
             contentSv={group.descriptionSv}
             slug={params.id}
+            locale={params.locale}
           />
         </ContentPane>
       }
