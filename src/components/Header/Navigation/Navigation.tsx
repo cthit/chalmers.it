@@ -6,11 +6,17 @@ import i18nService from '@/services/i18nService';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
-const Navigation = ({ locale }: { locale?: string }) => {
+type Props = {
+  locale: string;
+  desktop?: boolean;
+};
+
+const Navigation = ({ locale, desktop }: Props ) => {
   const l = i18nService.getLocale(locale);
+  
   return (
     <nav className={styles.nav}>
-      <DropdownLink text={l.nav.division}>
+      <DropdownLink text={l.nav.division} desktop={desktop}>
         <Link href="/groups">{l.pages.groups}</Link>
         <Link href="https://dokument.chalmers.it/">{l.nav.docs}</Link>
         <Link href="https://wikit.chalmers.it/">{l.nav.wiki}&nbsp;&#8599;</Link>
@@ -24,7 +30,7 @@ const Navigation = ({ locale }: { locale?: string }) => {
         <Link href="/programledningen">{l.nav.pl}</Link>
         <Link href="/samo">{l.nav.samo}</Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.applicants}>
+      <DropdownLink text={l.nav.applicants} desktop={desktop}>
         <Link href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6">
           {l.nav.stats}&nbsp;&#8599;
         </Link>
@@ -33,7 +39,7 @@ const Navigation = ({ locale }: { locale?: string }) => {
           {l.nav.studentlife}
         </Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.students}>
+      <DropdownLink text={l.nav.students} desktop={desktop}>
         <Link href="https://www.chalmers.se/utbildning/dina-studier/hitta-kurs-och-programplaner/programplaner/TKITE/?acYear=2019%2F2020&year=1&view=year&halftime=">
           {l.nav.courses}&nbsp;&#8599;
         </Link>

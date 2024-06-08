@@ -1,14 +1,31 @@
+/* Dropdown.module.scss */
+.dropdown {
+  border: none;
+  background: transparent;
+  cursor: pointer; /* Indicate it's clickable */
+}
+
+.dropdownInput {
+  display: none;
+}
+
 .dropdownContent {
   display: none;
   position: absolute;
-  top: 4.75rem;
   min-width: 10rem;
+  max-width: 15rem;
   z-index: 3;
 }
 
-.dropdown:hover .dropdownContent,
-.dropdown:hover .dropdownHitbox {
+/* Corrected the sibling selector to target the next siblings */
+.dropdownInput:checked + .dropdown + .dropdownContent {
   display: block;
+}
+
+@media (max-width: 768px) {
+  .dropdownContent {
+    position: relative;
+  }
 }
 
 .dropdownContent > a {
@@ -17,17 +34,9 @@
   padding: 0.5rem 0.5rem;
   color: var(--text-color);
   font-size: 14px;
+  text-wrap: balance;
 }
 
 .dropdownContent > a:hover {
   background-color: var(--dropdown-hover-color);
-}
-
-.dropdownHitbox {
-  display: none;
-  position: absolute;
-  overflow: hidden;
-  height: 2rem;
-  width: 6rem;
-  z-index: 2;
 }

@@ -4,17 +4,19 @@ import SearchSwitcher from './SearchSwitcher/SearchSwitcher';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import NavDrawer from './NavDrawer/NavDrawer';
 import EscapeHatch from './EscapeHatch/EscapeHatch';
+import Navigation from './Navigation/Navigation';
 
 const Header = ({ locale }: { locale: string }) => {
   return (
     <header className={styles.header}>
       <div className={`${styles.mobile}`}>
         <NavDrawer>
+          <Navigation locale={locale} desktop={false} />
           <User locale={locale} />
           <ThemeSelector />
         </NavDrawer>
+        <EscapeHatch locale={locale} />
       </div>
-      <EscapeHatch />
       <div className={`${styles.desktop} ${styles.header}`}>
         <SearchSwitcher locale={locale}>
           <ThemeSelector />
