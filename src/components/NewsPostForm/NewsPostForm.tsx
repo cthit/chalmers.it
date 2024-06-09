@@ -234,7 +234,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
       <Divider />
       <h2>{l.editor.createAs}</h2>
-      <DropdownList onChange={(e) => setGroup(e.target.value)}>
+      <DropdownList value={group} onChange={(e) => setGroup(e.target.value)}>
         <option value="self">{l.editor.self}</option>
         {newsPost.groups.map((group) => (
           <option key={group.superGroup!.id} value={group.superGroup!.id}>

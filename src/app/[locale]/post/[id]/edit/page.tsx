@@ -40,6 +40,7 @@ export default async function Page({
               contentSv={newsPost!.contentSv}
               writtenByGammaUserId={newsPost!.writtenByGammaUserId}
               connectedEvents={newsPost!.connectedEvents}
+              group={newsPost!.writtenFor?.gammaSuperGroupId}
             />
           </ContentPane>
         }
