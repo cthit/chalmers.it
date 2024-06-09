@@ -5,10 +5,6 @@
   cursor: pointer; /* Indicate it's clickable */
 }
 
-.dropdownInput {
-  display: none;
-}
-
 .dropdownContent {
   display: none;
   position: absolute;
@@ -17,9 +13,20 @@
   z-index: 3;
 }
 
-/* Corrected the sibling selector to target the next siblings */
-.dropdownInput:checked + .dropdownLabel + .dropdownContent {
-  display: block;
+@media (hover: hover) {
+  .dropdown:hover .dropdownContent,
+  .dropdown:hover .dropdownHitbox {
+    display: block;
+  }
+}
+
+@media (hover: none) {
+  .dropdownInput:checked + .dropdownLabel + .dropdownHitbox + .dropdownContent {
+    display: block;
+  }
+  .dropdownHitbox {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -39,4 +46,13 @@
 
 .dropdownContent > a:hover {
   background-color: var(--dropdown-hover-color);
+}
+
+.dropdownHitbox {
+  display: none;
+  position: absolute;
+  overflow: hidden;
+  height: 2rem;
+  width: 6rem;
+  z-index: 2;
 }

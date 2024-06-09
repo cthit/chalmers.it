@@ -13,10 +13,15 @@ type Props = {
 
 const Navigation = ({ locale, desktop }: Props) => {
   const l = i18nService.getLocale(locale);
+  const c = desktop ? styles.desktopDropdown : undefined;
 
   return (
     <nav className={styles.nav}>
-      <DropdownLink text={l.nav.division} desktop={desktop}>
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.division}
+        desktop={desktop}
+      >
         <Link href="/groups">{l.pages.groups}</Link>
         <Link target="_blank" href="https://dokument.chalmers.it/">
           {l.nav.docs}
@@ -34,7 +39,11 @@ const Navigation = ({ locale, desktop }: Props) => {
         <Link href="/pages/programledningen">{l.nav.pl}</Link>
         <Link href="/pages/samo">{l.nav.samo}</Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.applicants} desktop={desktop}>
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.applicants}
+        desktop={desktop}
+      >
         <Link
           target="_blank"
           href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6"
@@ -48,7 +57,11 @@ const Navigation = ({ locale, desktop }: Props) => {
           {l.nav.studentlife}&nbsp;&#8599;
         </Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.students} desktop={desktop}>
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.students}
+        desktop={desktop}
+      >
         <Link
           target="_blank"
           href="https://www.chalmers.se/utbildning/dina-studier/hitta-kurs-och-programplaner/programplaner/TKITE"
