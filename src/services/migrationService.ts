@@ -16,6 +16,47 @@ const mediaUrlRegex = new RegExp(mediaUrlRegexPattern, 'gi');
 export default class MigrationService {
   static async migrate() {
     await this.migrateNewsPosts();
+    await this.migratePages();
+  }
+
+  static async migratePages() {
+    console.log('Migrating pages');
+    const pages = await oldPrisma.pages.findMany();
+
+    for (const page of pages) {
+      console.log(`Migrating page ${page.id}`);
+      const page_translations = await oldPrisma.page_translations.findMany({
+        where: { page_id: page.id }
+      });
+
+      if (page_translations.length != 2) {
+        console.error(
+          `Page ${page.id} has ${page_translations.length} translations`
+        );
+        continue;
+      }
+
+      const enTranslation = page_translations.find((t) => t.locale == 'en');
+      const svTranslation = page_translations.find((t) => t.locale == 'sv');
+
+      if (!enTranslation || !svTranslation) {
+        console.error(`Page ${page.id} is missing translations`);
+        continue;
+      }
+
+      await prisma.divisionPage.create({
+        data: {
+          titleSv: svTranslation.title!,
+          titleEn: enTranslation.title!,
+          contentSv: await this.migrateMediaUrls(svTranslation.body!),
+          contentEn: await this.migrateMediaUrls(enTranslation.body!),
+          slug: page.slug!,
+          createdAt: page.created_at!,
+          updatedAt: page.updated_at!
+        }
+      });
+    }
+    console.log('Migration of pages done!');
   }
 
   private static async getAllOldGammaUsers() {

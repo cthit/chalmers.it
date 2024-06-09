@@ -3,7 +3,8 @@ const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE ?? '104857600');
 
 export enum MediaType {
   Image = 'image',
-  Document = 'document'
+  Document = 'document',
+  Container = 'container'
 }
 
 export interface MediaMeta {
@@ -32,7 +33,8 @@ const mimeTypes: { [key: string]: MediaMeta } = {
   'application/vnd.oasis.opendocument.spreadsheet': {
     type: MediaType.Document,
     extension: 'ods'
-  }
+  },
+  'application/zip': { type: MediaType.Container, extension: 'zip' }
 };
 
 /**
