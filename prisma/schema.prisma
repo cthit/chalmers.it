@@ -37,7 +37,6 @@ model DivisionGroup {
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   NewsPost          NewsPost[]
-  Banner            Banner[]
   DivisionPages     DivisionPage[]
 }
 
@@ -85,24 +84,12 @@ model Sponsor {
   type        SponsorType @default(PARTNER)
 }
 
-model Banner {
-  id              Int           @id @default(autoincrement())
-  divisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id], onDelete: Cascade)
-  image           Media         @relation(fields: [mediaSha256], references: [sha256])
-  createdAt       DateTime      @default(now())
-  divisionGroupId Int
-  mediaSha256     String
-
-  @@unique([divisionGroupId, mediaSha256])
-}
-
 model Media {
   sha256    String     @id
   extension String
   createdAt DateTime   @default(now())
   NewsPost  NewsPost[]
   Sponsor   Sponsor[]
-  Banner    Banner[]
 }
 
 model EventNotifiers {

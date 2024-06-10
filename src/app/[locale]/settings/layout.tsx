@@ -21,11 +21,6 @@ const pages = [
     authFunc: SessionService.isAdmin
   },
   {
-    path: '/settings/banners',
-    name: 'Banner Images',
-    authFunc: SessionService.isActive
-  },
-  {
     path: '/settings/sponsors',
     name: 'Sponsors',
     authFunc: async () =>

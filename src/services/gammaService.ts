@@ -25,6 +25,14 @@ export default class GammaService {
     return `${this.gammaUrl}/images/group/avatar/${gid}`;
   }
 
+  static getSuperGroupBannerURL(gid: string) {
+    return `${this.gammaUrl}/images/super-group/banner/${gid}`;
+  }
+
+  static getGroupBannerURL(gid: string) {
+    return `${this.gammaUrl}/images/group/banner/${gid}`;
+  }
+
   static isSuperGroupActive(sg: { type: string }) {
     return activeGroupTypes.includes(sg.type);
   }

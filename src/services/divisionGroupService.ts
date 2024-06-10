@@ -48,9 +48,12 @@ export default class DivisionGroupService {
   }
 
   static async getRandomBanner() {
-    return await prisma.banner.findMany().then((banners) => {
-      return banners[Math.floor(Math.random() * banners.length)];
-    });
+    const group = await GammaService.getAllSuperGroups();
+    const randomGroup = group[Math.floor(Math.random() * group.length)];
+    return {
+      url: GammaService.getSuperGroupBannerURL(randomGroup.superGroup.id),
+      name: randomGroup.superGroup.prettyName
+    };
   }
 
   static async getBannerForGroup(groupId: number) {
@@ -62,42 +65,6 @@ export default class DivisionGroupService {
         Banner: true
       }
     });
-  }
-
-  static async addBanner(groupId: number, bannerSha: string) {
-    return prisma.divisionGroup.update({
-      where: {
-        id: groupId
-      },
-      data: {
-        Banner: {
-          create: {
-            mediaSha256: bannerSha
-          }
-        }
-      }
-    });
-  }
-
-  static async deleteBanner(bannerId: number) {
-    return prisma.banner.delete({
-      where: {
-        id: bannerId
-      }
-    });
-  }
-
-  static async getBannerOwner(bannerId: number) {
-    return (
-      await prisma.banner.findUnique({
-        where: {
-          id: bannerId
-        },
-        select: {
-          divisionGroupId: true
-        }
-      })
-    )?.divisionGroupId;
   }
 
   static async getInfoBySlug(slug: string) {
