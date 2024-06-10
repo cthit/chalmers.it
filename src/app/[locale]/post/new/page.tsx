@@ -11,9 +11,9 @@ export default async function Page({
 }: {
   params: { locale: string };
 }) {
-  const groups = await SessionService.getActiveGroups();
+  const groups = await SessionService.getActiveAddedGroups();
 
-  if (groups.length === 0) {
+  if (!(await SessionService.isActive())) {
     return <Forbidden />;
   }
 

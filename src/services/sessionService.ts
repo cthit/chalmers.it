@@ -24,6 +24,15 @@ export default class SessionService {
       : [];
   }
 
+  static async getActiveAddedGroups(s?: Session | null) {
+    const session = s ?? (await SessionService.getSession());
+    const activeGroups = await this.getActiveGroups(session);
+    const addedGroups = await DivisionGroupService.getAll();
+    return activeGroups.filter((a) =>
+      addedGroups.some((g) => a.superGroup!.id === g.gammaSuperGroupId)
+    );
+  }
+
   static async canEditGroup(gammaSuperGroupId: string, s?: Session | null) {
     const session = s ?? (await SessionService.getSession());
 
