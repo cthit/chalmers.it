@@ -31,6 +31,7 @@ interface DivisionPostFormProps {
   contentEn?: string;
   contentSv?: string;
   locale: string;
+  priority?: number;
 }
 
 const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
@@ -49,6 +50,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [contentSv, setContentSv] = useState(divisionPost.contentSv ?? '');
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
+  const [prio, setPrio] = useState(divisionPost.priority ?? 0);
   const [previewContentSv, setPreviewContentSv] = useState({
     __html: marked.parse('')
   });
@@ -76,6 +78,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             contentEn,
             contentSv,
             slug,
+            prio,
             page
           ),
           {
@@ -96,6 +99,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             contentEn,
             contentSv,
             slug,
+            prio,
             divisionPost.divisionGroupId,
             page
           ),
@@ -146,6 +150,13 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <br />
       <h2>{l.pages.urlSlug}</h2>
       <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
+
+      <br />
+      <h2>{l.pages.sortPrio}</h2>
+      <TextArea
+        value={Number.isNaN(prio) ? 0 : prio}
+        onChange={(e) => setPrio(+e.target.value)}
+      />
 
       <h2>{l.pages.title} (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />

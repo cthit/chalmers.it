@@ -104,7 +104,8 @@
     "urlSlug": "URL-slug",
     "content": "Content",
     "close": "Close",
-    "topLevel": "Top level"
+    "topLevel": "Top level",
+    "sortPrio": "Sort priority"
   },
   "events": {
     "events": "Events",

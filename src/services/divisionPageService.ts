@@ -10,6 +10,7 @@ export type DivisionPage = {
   completeSlug: string[];
   depth: number;
   deepestChild: number;
+  priority: number;
 };
 
 function arrayEquals(a: any[], b: any[]) {
@@ -48,7 +49,8 @@ export default class DivisionPageService {
         contentSv: page.contentSv,
         completeSlug,
         depth,
-        deepestChild: depth
+        deepestChild: depth,
+        priority: page.priority
       };
 
       if (page.children) {
@@ -96,6 +98,9 @@ export default class DivisionPageService {
         divisionGroupId: id || null,
         parent: null
       },
+      orderBy: {
+        priority: 'desc'
+      },
       select: {
         id: true,
         parentId: true,
@@ -103,8 +108,12 @@ export default class DivisionPageService {
         titleSv: true,
         contentEn: true,
         contentSv: true,
+        priority: true,
         slug: true,
         children: {
+          orderBy: {
+            priority: 'desc'
+          },
           select: {
             id: true,
             parentId: true,
@@ -112,8 +121,12 @@ export default class DivisionPageService {
             titleSv: true,
             contentEn: true,
             contentSv: true,
+            priority: true,
             slug: true,
             children: {
+              orderBy: {
+                priority: 'desc'
+              },
               select: {
                 id: true,
                 parentId: true,
@@ -121,6 +134,7 @@ export default class DivisionPageService {
                 titleSv: true,
                 contentEn: true,
                 contentSv: true,
+                priority: true,
                 slug: true
               }
             }
@@ -155,6 +169,7 @@ export default class DivisionPageService {
     contentEn: string,
     contentSv: string,
     slug: string,
+    priority?: number,
     divisionGroupId?: number,
     parentId?: number
   ) {
@@ -166,7 +181,8 @@ export default class DivisionPageService {
         contentSv,
         slug,
         divisionGroupId,
-        parentId
+        parentId,
+        priority
       }
     });
   }
@@ -178,6 +194,7 @@ export default class DivisionPageService {
     contentEn: string,
     contentSv: string,
     slug: string,
+    priority?: number,
     parentId?: number
   ) {
     return prisma.divisionPage.update({
@@ -190,7 +207,8 @@ export default class DivisionPageService {
         titleSv,
         contentEn,
         contentSv,
-        slug
+        slug,
+        priority
       }
     });
   }

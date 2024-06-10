@@ -10,6 +10,7 @@ export async function create(
   contentEn: string,
   contentSv: string,
   slug: string,
+  sortPrio: number,
   divisionGroupId?: number,
   parentId?: number
 ) {
@@ -60,6 +61,7 @@ export async function edit(
   contentEn: string,
   contentSv: string,
   slug: string,
+  sortPrio: number,
   parentId?: number
 ) {
   const page = (await DivisionPageService.getSingleById(id)) ?? null;
@@ -82,6 +84,7 @@ export async function edit(
     contentEn,
     contentSv,
     slug,
+    sortPrio,
     parentId
   );
   redirect('.');

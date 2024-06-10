@@ -103,7 +103,8 @@
     "urlSlug": "URL-slug",
     "content": "Innehåll",
     "close": "Stäng",
-    "topLevel": "Toppnivå"
+    "topLevel": "Toppnivå",
+    "sortPrio": "Sorteringsprioritet"
   },
   "events": {
     "events": "Evenemang",

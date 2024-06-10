@@ -81,6 +81,7 @@ async function editContent(locale: string, slug: string[], id?: number) {
           titleSv={page.titleSv}
           contentEn={page.contentEn}
           contentSv={page.contentSv}
+          priority={page.priority}
           locale={locale}
         />
       </ContentPane>
