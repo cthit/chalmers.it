@@ -11,13 +11,6 @@ export default {
   },
   output: 'standalone',
   experimental: {
-    instrumentationHook: true,
-    serverComponentsExternalPackages: [
-      'pino',
-      'pino-pretty',
-      'colorette',
-      'ansis/colors',
-      'next-logger'
-    ]
+    instrumentationHook: true
   }
 };
