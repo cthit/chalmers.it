@@ -25,8 +25,6 @@ export default async function Page({
           <title>{group.prettyName}</title>
           <PageForm
             id={group.id}
-            titleEn={group.titleEn}
-            titleSv={group.titleSv}
             contentEn={group.descriptionEn}
             contentSv={group.descriptionSv}
             slug={params.id}

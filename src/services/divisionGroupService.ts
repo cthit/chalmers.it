@@ -15,8 +15,6 @@ export default class DivisionGroupService {
       data: {
         gammaSuperGroupId,
         prettyName,
-        titleEn: 'yeppers peppers',
-        titleSv: 'yeppers peppers',
         descriptionEn: 'yeppers peppers',
         descriptionSv: 'yeppers peppers',
         slug
@@ -28,21 +26,6 @@ export default class DivisionGroupService {
     return prisma.divisionGroup.delete({
       where: {
         gammaSuperGroupId
-      }
-    });
-  }
-
-  static async getBanners() {
-    return prisma.banner.findMany({
-      select: {
-        id: true,
-        divisionGroupId: true,
-        mediaSha256: true,
-        divisionGroup: {
-          select: {
-            prettyName: true
-          }
-        }
       }
     });
   }
@@ -59,17 +42,6 @@ export default class DivisionGroupService {
     };
   }
 
-  static async getBannerForGroup(groupId: number) {
-    return prisma.divisionGroup.findUnique({
-      where: {
-        id: groupId
-      },
-      select: {
-        Banner: true
-      }
-    });
-  }
-
   static async getInfoBySlug(slug: string) {
     return prisma.divisionGroup.findUnique({
       where: {
@@ -79,8 +51,6 @@ export default class DivisionGroupService {
         id: true,
         gammaSuperGroupId: true,
         prettyName: true,
-        titleEn: true,
-        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -95,8 +65,6 @@ export default class DivisionGroupService {
       select: {
         gammaSuperGroupId: true,
         prettyName: true,
-        titleEn: true,
-        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -142,8 +110,6 @@ export default class DivisionGroupService {
   }
 
   static async editInfo(edited: {
-    titleEn: string;
-    titleSv: string;
     contentEn: string;
     contentSv: string;
     id: number;
@@ -154,8 +120,6 @@ export default class DivisionGroupService {
         id: edited.id
       },
       data: {
-        titleEn: edited.titleEn,
-        titleSv: edited.titleSv,
         descriptionEn: edited.contentEn,
         descriptionSv: edited.contentSv,
         slug: edited.slug

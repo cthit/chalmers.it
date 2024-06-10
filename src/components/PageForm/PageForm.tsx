@@ -18,8 +18,6 @@ const PreviewContentStyle = {
 
 interface NewPostFormProps {
   id: number;
-  titleEn: string;
-  titleSv: string;
   contentEn: string;
   contentSv: string;
   slug: string;
@@ -33,8 +31,6 @@ const PageForm = (description: NewPostFormProps) => {
   });
   const l = i18nService.getLocale(description.locale);
 
-  const [titleEn, setTitleEn] = useState(description.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(description.titleSv ?? '');
   const [contentEn, setContentEn] = useState(description.contentEn ?? '');
   const [contentSv, setContentSv] = useState(description.contentSv ?? '');
   const [slug, setSlug] = useState(description.slug ?? '');
@@ -44,7 +40,7 @@ const PageForm = (description: NewPostFormProps) => {
 
   async function send() {
     try {
-      await edit(description.id, titleEn, titleSv, contentEn, contentSv, slug);
+      await edit(description.id, contentEn, contentSv, slug);
     } catch {
       console.log('Failed to edit group description');
     }
@@ -65,16 +61,12 @@ const PageForm = (description: NewPostFormProps) => {
       <h2>{l.pages.urlSlug}</h2>
       <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
-      <h2>{l.editor.title} (En)</h2>
-      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>{l.editor.content} (En)</h2>
       <MarkdownEditor
         value={contentEn}
         onChange={(e) => setContentEn(e.target.value)}
       />
 
-      <h2>{l.editor.title} (Sv)</h2>
-      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
         value={contentSv}

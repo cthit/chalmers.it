@@ -30,8 +30,6 @@ model DivisionGroup {
   gammaSuperGroupId String         @unique
   slug              String         @unique
   prettyName        String
-  titleSv           String
-  titleEn           String
   descriptionSv     String
   descriptionEn     String
   createdAt         DateTime       @default(now())
@@ -42,9 +40,10 @@ model DivisionGroup {
 
 model DivisionPage {
   id              Int            @id @default(autoincrement())
+  parentId        Int?
+  priority        Int            @default(0)
   parent          DivisionPage?  @relation("DivisionPageTree", fields: [parentId], references: [id])
   children        DivisionPage[] @relation("DivisionPageTree")
-  parentId        Int?
   titleSv         String
   titleEn         String
   contentSv       String
