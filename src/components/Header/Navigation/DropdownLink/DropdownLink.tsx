@@ -1,6 +1,6 @@
 import { Playfair_Display } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 import Dropdown from '../Dropdown/Dropdown';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
