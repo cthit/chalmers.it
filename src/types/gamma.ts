@@ -51,6 +51,8 @@ export interface GammaSuperGroupListItem {
   superGroups: {
     superGroup: GammaSuperGroup;
     members: GammaGroupMember[];
+    hasBanner: boolean;
+    hasAvatar: boolean;
   }[];
 }
 

@@ -48,8 +48,11 @@ export default class DivisionGroupService {
   }
 
   static async getRandomBanner() {
-    const group = await GammaService.getAllSuperGroups();
-    const randomGroup = group[Math.floor(Math.random() * group.length)];
+    const groups = (await GammaService.getAllSuperGroups()).filter(
+      (g) => g.hasBanner
+    );
+    if (groups.length === 0) return null;
+    const randomGroup = groups[Math.floor(Math.random() * groups.length)];
     return {
       url: GammaService.getSuperGroupBannerURL(randomGroup.superGroup.id),
       name: randomGroup.superGroup.prettyName

@@ -83,7 +83,7 @@ export default class MediaService {
     let size = 0;
     for (const dirent of dir) {
       if (dirent.isFile()) {
-        size += (await stat(mediaPath + dirent.name)).size;
+        size += (await stat(mediaPath + "/" + dirent.name)).size;
       }
     }
 
