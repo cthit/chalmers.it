@@ -7,7 +7,6 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import Forbidden from '@/components/ErrorPages/403/403';
-import DivisionGroupService from '@/services/divisionGroupService';
 
 export default async function Page({
   params

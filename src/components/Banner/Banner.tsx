@@ -28,7 +28,11 @@ const Banner = async ({ locale }: { locale?: string }) => {
       <div className={styles.bannerImg}>
         {banner && (
           <picture>
-            <img src={banner.url} alt={"Banner for " + banner.name} title={banner.name} />
+            <img
+              src={banner.url}
+              alt={'Banner for ' + banner.name}
+              title={banner.name}
+            />
           </picture>
         )}
       </div>
