@@ -1,6 +1,6 @@
 'use client';
 
-import { edit } from '../../actions/groupRootPages';
+import { edit } from '@/actions/groupRootPages';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
