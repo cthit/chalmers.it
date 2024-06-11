@@ -33,11 +33,16 @@ const InfiniteScroller = ({
       }
     });
 
+    if (news !== undefined) {
+      observer.disconnect();
+      return;
+    }
+
     if (ref.current) {
       observer.observe(ref.current);
       return () => observer.disconnect();
     }
-  }, [ref, locale, page]);
+  }, [ref, locale, page, getNext]);
 
   return (
     <>
