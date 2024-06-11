@@ -129,7 +129,9 @@
   },
   "sponsors": {
     "title": "Samarbetspartners",
-    "empty": "Vill du synas här? Kontakta"
+    "empty": "Vill du synas här? Kontakta",
+    "main": "Huvudpartner",
+    "partner": "Samarbetspartner"
   },
   "user": {
     "login": "Logga in",

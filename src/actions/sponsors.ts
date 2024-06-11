@@ -5,12 +5,14 @@ import MediaService from '@/services/mediaService';
 import SponsorService from '@/services/sponsorService';
 import SessionService from '@/services/sessionService';
 import { redirect } from 'next/navigation';
+import { SponsorType } from '@prisma/client';
 
 export async function addSponsor(
   sponsor: {
     nameSv: string;
     nameEn: string;
     url: string;
+    type: SponsorType;
   },
   form: FormData
 ) {
@@ -32,7 +34,8 @@ export async function addSponsor(
     nameSv: sponsor.nameSv,
     nameEn: sponsor.nameEn,
     url: sponsor.url,
-    logoSha
+    logoSha,
+    type: sponsor.type
   });
   redirect('/settings/sponsors');
 }

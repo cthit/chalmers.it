@@ -8,6 +8,7 @@ const AddSponsorForm = () => {
   const [sponsorUrl, setSponsorUrl] = useState('');
   const [sponsorName, setSponsorName] = useState('');
   const [sponsorImage, setSponsorImage] = useState<File | null>(null);
+  const [type, setType] = useState<'PARTNER' | 'MAIN_PARTNER'>('PARTNER');
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSponsorName(event.target.value);
@@ -37,7 +38,8 @@ const AddSponsorForm = () => {
           {
             nameSv: sponsorName,
             nameEn: sponsorName,
-            url: sponsorUrl
+            url: sponsorUrl,
+            type
           },
           formData
         ),
@@ -57,6 +59,13 @@ const AddSponsorForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="sponsorType">Sponsor Type:</label>
+        <select value={type} onChange={(e) => setType(e.target.value as any)}>
+          <option value="MAIN_PARTNER">Main Partner</option>
+          <option value="PARTNER">Partner</option>
+        </select>
+      </div>
       <div>
         <label htmlFor="sponsorName">Sponsor Name:</label>
         <input
