@@ -3,7 +3,7 @@ import NotifyService from '@/services/notifyService';
 import NewNotifierForm from './NewNotifierForm';
 import RemoveNotifierButton from './RemoveNotifierButton';
 
-export default async function Page({ locale }: { locale: string }) {
+export default async function Page() {
   const notifiers = await NotifyService.getNotifiers();
 
   return (
@@ -16,7 +16,7 @@ export default async function Page({ locale }: { locale: string }) {
             <h2>{notifier.type}</h2>
             <p>{notifier.language}</p>
             <p>{notifier.url}</p>
-            <RemoveNotifierButton id={notifier.id} locale={locale} />
+            <RemoveNotifierButton id={notifier.id} />
           </li>
         ))}
       </ul>

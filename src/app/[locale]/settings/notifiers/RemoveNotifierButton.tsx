@@ -2,18 +2,9 @@
 
 import { removeNotifier } from '@/actions/notifiers';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
 
-const RemoveNotifierButton = ({
-  id,
-  locale
-}: {
-  id: number;
-  locale: string;
-}) => {
-  const l = i18nService.getLocale(locale);
-
+const RemoveNotifierButton = ({ id }: { id: number }) => {
   const remove = async () => {
     try {
       await toast.promise(removeNotifier(id), {
