@@ -17,7 +17,7 @@ const Header = ({ locale }: { locale: string }) => {
         </NavDrawer>
         <EscapeHatch locale={locale} />
       </div>
-      <div className={`${styles.desktop} ${styles.header}`}>
+      <div className={`${styles.desktop}`}>
         <SearchSwitcher locale={locale}>
           <ThemeSelector />
           <User locale={locale} />

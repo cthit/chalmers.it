@@ -13,19 +13,28 @@ export default class SessionService {
   }
 
   static async getUser(s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
     return session?.user;
   }
 
   static async getActiveGroups(s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
     return session?.user?.id
       ? await DivisionGroupService.getUserActiveGroups(session?.user?.id!)
       : [];
   }
 
+  static async getActiveAddedGroups(s?: Session | null) {
+    const session = s ?? (await SessionService.getSession());
+    const activeGroups = await this.getActiveGroups(session);
+    const addedGroups = await DivisionGroupService.getAll();
+    return activeGroups.filter((a) =>
+      addedGroups.some((g) => a.superGroup!.id === g.gammaSuperGroupId)
+    );
+  }
+
   static async canEditGroup(gammaSuperGroupId: string, s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
 
     const activeGroups = session?.user?.id
       ? await DivisionGroupService.getUserActiveGroups(session?.user?.id!)
@@ -34,7 +43,7 @@ export default class SessionService {
   }
 
   static async canEditGroupByInternalId(id: number, s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
 
     const gammaSuperGroupId =
       await DivisionGroupService.getGammaSuperGroupIdFromInternalId(id);
@@ -46,14 +55,14 @@ export default class SessionService {
   }
 
   static async isActive(s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
     return session?.user?.id
       ? await DivisionGroupService.isUserActive(session?.user?.id!)
       : false;
   }
 
   static async isAdmin(s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
 
     const adminGroups = (process.env.ADMIN_GROUPS || 'styrit').split(',');
     const groups = SessionService.getActiveGroups();
@@ -64,7 +73,7 @@ export default class SessionService {
   }
 
   static async isCorporateRelations(s?: Session | null) {
-    const session = s || (await SessionService.getSession());
+    const session = s ?? (await SessionService.getSession());
     if (await this.isAdmin(session)) return true;
 
     const corporateRelationsGroup =
@@ -78,7 +87,7 @@ export default class SessionService {
       : false;
   }
 
-  static async isNewsPostOwner(postId: number, session?: any | null) {
+  static async isNewsPostOwner(postId: number, s?: Session | null) {
     const post = await prisma.newsPost.findUnique({
       where: {
         id: postId
@@ -95,7 +104,7 @@ export default class SessionService {
 
     if (!post) return false;
 
-    session = session || (await getServerSession(authConfig));
+    const session = s ?? (await getServerSession(authConfig));
 
     return (
       session?.user?.id === post.writtenByGammaUserId ||

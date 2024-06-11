@@ -1,4 +1,3 @@
-'use server';
 import FallbackImage from '../FallbackImage/FallbackImage';
 import styles from './GroupMember.module.scss';
 

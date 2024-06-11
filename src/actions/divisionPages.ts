@@ -3,6 +3,8 @@
 import DivisionPageService from '@/services/divisionPageService';
 import { redirect } from 'next/navigation';
 import SessionService from '@/services/sessionService';
+import MediaService from '@/services/mediaService';
+import { MediaType } from '@/services/fileService';
 
 export async function create(
   titleEn: string,
@@ -10,6 +12,8 @@ export async function create(
   contentEn: string,
   contentSv: string,
   slug: string,
+  sortPrio: number,
+  files: FormData,
   divisionGroupId?: number,
   parentId?: number
 ) {
@@ -21,6 +25,11 @@ export async function create(
       throw new Error('Unauthorized');
     }
   }
+
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file, Object.values(MediaType));
+  }
+
   try {
     await DivisionPageService.post(
       titleEn,
@@ -28,6 +37,7 @@ export async function create(
       contentEn,
       contentSv,
       slug,
+      sortPrio,
       divisionGroupId,
       parentId
     );
@@ -60,11 +70,17 @@ export async function edit(
   contentEn: string,
   contentSv: string,
   slug: string,
+  sortPrio: number,
+  files: FormData,
   parentId?: number
 ) {
   const page = (await DivisionPageService.getSingleById(id)) ?? null;
   if (page === null) {
     throw new Error('Page not found');
+  }
+
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file, Object.values(MediaType));
   }
 
   if (!(await SessionService.isAdmin())) {
@@ -82,6 +98,7 @@ export async function edit(
     contentEn,
     contentSv,
     slug,
+    sortPrio,
     parentId
   );
   redirect('.');

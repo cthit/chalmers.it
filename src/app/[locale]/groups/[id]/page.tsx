@@ -11,6 +11,8 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 
+export const revalidate = 3600;
+
 export default async function Page({
   params: { locale, id }
 }: {
@@ -25,7 +27,7 @@ export default async function Page({
 
 const mainContent = async (locale: string, id: string) => {
   const group = (await DivisionGroupService.getInfoBySlug(id))!;
-  const groupMembers = await GammaService.getSuperGroupMembers(
+  const gammaGroup = await GammaService.getSuperGroup(
     group.gammaSuperGroupId
   ).catch(() => undefined);
 
@@ -46,20 +48,24 @@ const mainContent = async (locale: string, id: string) => {
   return (
     <ContentArticle
       title={group.prettyName}
-      subtitle={en ? group.titleEn : group.titleSv}
+      subtitle={
+        en
+          ? gammaGroup?.superGroup.enDescription
+          : gammaGroup?.superGroup.svDescription
+      }
       titleSide={side}
     >
       <MarkdownView content={en ? group.descriptionEn : group.descriptionSv} />
       <h2>{l.groups.members}</h2>
-      {groupMembers && groupMembers.length === 0 && (
+      {gammaGroup?.members && gammaGroup.members.length === 0 && (
         <p className={style.membersMessage}>{l.groups.membersEmpty}</p>
       )}
-      {groupMembers === undefined && (
+      {gammaGroup?.members === undefined && (
         <p className={style.membersMessage}>{l.groups.membersError}</p>
       )}
-      {groupMembers && groupMembers.length !== 0 && (
+      {gammaGroup?.members && gammaGroup.members.length !== 0 && (
         <ul className={style.memberList}>
-          {groupMembers.map((member) => (
+          {gammaGroup.members.map((member) => (
             <li key={member.user.id}>
               <GroupMember
                 pfp={GammaService.getUserAvatarURL(member.user.id)}

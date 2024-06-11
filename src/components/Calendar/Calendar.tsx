@@ -43,7 +43,12 @@ const Calendar = async ({ locale }: { locale: string }) => {
       <h1>{l.events.events}</h1>
       <Divider />
       <CalendarClient locale={locale} events={eventMap} />
-      <ActionLink href="/">{l.events.subscribe}</ActionLink>
+      <ActionLink
+        target="_blank"
+        href="https://calendar.google.com/calendar/embed?src=a55ipd3o49n05cd2eebqo854qs@group.calendar.google.com"
+      >
+        {l.events.subscribe}
+      </ActionLink>
     </ContentPane>
   );
 };

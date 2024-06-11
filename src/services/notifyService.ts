@@ -46,6 +46,14 @@ export default class NotifyService {
       }
     });
   }
+
+  static async removeNotifier(id: number) {
+    await prisma.eventNotifiers.delete({
+      where: {
+        id: id
+      }
+    });
+  }
 }
 
 class DiscordWebhookNotifier implements Notifier {
@@ -84,10 +92,7 @@ class DiscordWebhookNotifier implements Notifier {
               post.id
             }`,
             description: content,
-            color: 0x00a8d3,
-            image: {
-              url: 'https://chalmers.it/assets/logo-dark-txt-61b29abd5e9c8df2f6c500817b0dad65e86bd177cc29d88df9ee1507f9e8ebff.png'
-            }
+            color: 0x00a8d3
           }
         ]
       })
@@ -151,12 +156,6 @@ class SlackWebhookNotifier implements Notifier {
                   type: 'mrkdwn',
                   text: `${content}`
                 }
-              },
-              {
-                type: 'image',
-                image_url:
-                  'https://chalmers.it/assets/logo-dark-txt-61b29abd5e9c8df2f6c500817b0dad65e86bd177cc29d88df9ee1507f9e8ebff.png',
-                alt_text: 'inspiration'
               }
             ]
           }

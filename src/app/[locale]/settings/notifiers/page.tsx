@@ -1,6 +1,7 @@
 import Divider from '@/components/Divider/Divider';
 import NotifyService from '@/services/notifyService';
 import NewNotifierForm from './NewNotifierForm';
+import RemoveNotifierButton from './RemoveNotifierButton';
 
 export default async function Page() {
   const notifiers = await NotifyService.getNotifiers();
@@ -15,6 +16,7 @@ export default async function Page() {
             <h2>{notifier.type}</h2>
             <p>{notifier.language}</p>
             <p>{notifier.url}</p>
+            <RemoveNotifierButton id={notifier.id} />
           </li>
         ))}
       </ul>

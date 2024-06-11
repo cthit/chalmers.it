@@ -25,6 +25,14 @@ export default class GammaService {
     return `${this.gammaUrl}/images/group/avatar/${gid}`;
   }
 
+  static getSuperGroupBannerURL(gid: string) {
+    return `${this.gammaUrl}/images/super-group/banner/${gid}`;
+  }
+
+  static getGroupBannerURL(gid: string) {
+    return `${this.gammaUrl}/images/group/banner/${gid}`;
+  }
+
   static isSuperGroupActive(sg: { type: string }) {
     return activeGroupTypes.includes(sg.type);
   }
@@ -34,22 +42,17 @@ export default class GammaService {
   }
 
   static async getAllSuperGroups() {
-    return await gammaGetRequest<GammaSuperGroupBlob>('/info/v1/blob');
-  }
-
-  static async getAllActiveSuperGroups() {
     return (
-      (await this.getAllSuperGroups())
-        .filter((sg) => this.isSuperGroupActive(sg))
-        .flatMap((sg) => sg.superGroups) || []
+      (await gammaGetRequest<GammaSuperGroupBlob>('/info/v1/blob')).flatMap(
+        (sg) => sg.superGroups
+      ) || []
     );
   }
 
-  static async getSuperGroupMembers(sgid: string) {
-    const activeGroups = await this.getAllActiveSuperGroups();
-    return (
-      activeGroups.find((group) => group.superGroup.id === sgid)?.members || []
-    );
+  static async getSuperGroup(sgid: string) {
+    // We assume all super groups are active from the info API
+    const activeGroups = await this.getAllSuperGroups();
+    return activeGroups.find((group) => group.superGroup.id === sgid);
   }
 }
 
@@ -57,7 +60,8 @@ const gammaGetRequest = async <T>(path: string): Promise<T> => {
   const response = await fetch(GammaService.gammaUrl + '/api' + path, {
     headers: {
       Authorization: 'pre-shared ' + apiKey
-    }
+    },
+    next: { revalidate: 3600 }
   });
 
   if (!response.ok) {

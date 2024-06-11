@@ -10,6 +10,7 @@ type Props = {
   parent: ReactNode;
   id: string;
   children: ReactNode;
+  contentClassName?: string;
 };
 
 const Dropdown = ({
@@ -17,6 +18,7 @@ const Dropdown = ({
   parent,
   id,
   className,
+  contentClassName,
   ...rest
 }: Props & HTMLAttributes<HTMLDivElement>) => {
   return (
@@ -26,11 +28,16 @@ const Dropdown = ({
         id={id}
         name="dropdown"
         className={styles.dropdownInput}
+        hidden
       />
       <label htmlFor={id} className={styles.dropdownLabel}>
         {parent}
       </label>
-      <div className={`${styles.dropdownContent} ${playfair.className}`}>
+      <div className={styles.dropdownHitbox} />
+
+      <div
+        className={`${styles.dropdownContent} ${playfair.className} ${contentClassName}`}
+      >
         {children}
       </div>
     </div>

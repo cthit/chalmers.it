@@ -15,8 +15,6 @@ export default class DivisionGroupService {
       data: {
         gammaSuperGroupId,
         prettyName,
-        titleEn: 'yeppers peppers',
-        titleSv: 'yeppers peppers',
         descriptionEn: 'yeppers peppers',
         descriptionSv: 'yeppers peppers',
         slug
@@ -32,72 +30,16 @@ export default class DivisionGroupService {
     });
   }
 
-  static async getBanners() {
-    return prisma.banner.findMany({
-      select: {
-        id: true,
-        divisionGroupId: true,
-        mediaSha256: true,
-        divisionGroup: {
-          select: {
-            prettyName: true
-          }
-        }
-      }
-    });
-  }
-
   static async getRandomBanner() {
-    return await prisma.banner.findMany().then((banners) => {
-      return banners[Math.floor(Math.random() * banners.length)];
-    });
-  }
-
-  static async getBannerForGroup(groupId: number) {
-    return prisma.divisionGroup.findUnique({
-      where: {
-        id: groupId
-      },
-      select: {
-        Banner: true
-      }
-    });
-  }
-
-  static async addBanner(groupId: number, bannerSha: string) {
-    return prisma.divisionGroup.update({
-      where: {
-        id: groupId
-      },
-      data: {
-        Banner: {
-          create: {
-            mediaSha256: bannerSha
-          }
-        }
-      }
-    });
-  }
-
-  static async deleteBanner(bannerId: number) {
-    return prisma.banner.delete({
-      where: {
-        id: bannerId
-      }
-    });
-  }
-
-  static async getBannerOwner(bannerId: number) {
-    return (
-      await prisma.banner.findUnique({
-        where: {
-          id: bannerId
-        },
-        select: {
-          divisionGroupId: true
-        }
-      })
-    )?.divisionGroupId;
+    const groups = (await GammaService.getAllSuperGroups()).filter(
+      (g) => g.hasBanner
+    );
+    if (groups.length === 0) return null;
+    const randomGroup = groups[Math.floor(Math.random() * groups.length)];
+    return {
+      url: GammaService.getSuperGroupBannerURL(randomGroup.superGroup.id),
+      name: randomGroup.superGroup.prettyName
+    };
   }
 
   static async getInfoBySlug(slug: string) {
@@ -109,8 +51,6 @@ export default class DivisionGroupService {
         id: true,
         gammaSuperGroupId: true,
         prettyName: true,
-        titleEn: true,
-        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -125,8 +65,6 @@ export default class DivisionGroupService {
       select: {
         gammaSuperGroupId: true,
         prettyName: true,
-        titleEn: true,
-        titleSv: true,
         descriptionEn: true,
         descriptionSv: true
       }
@@ -172,8 +110,6 @@ export default class DivisionGroupService {
   }
 
   static async editInfo(edited: {
-    titleEn: string;
-    titleSv: string;
     contentEn: string;
     contentSv: string;
     id: number;
@@ -184,8 +120,6 @@ export default class DivisionGroupService {
         id: edited.id
       },
       data: {
-        titleEn: edited.titleEn,
-        titleSv: edited.titleSv,
         descriptionEn: edited.contentEn,
         descriptionSv: edited.contentSv,
         slug: edited.slug

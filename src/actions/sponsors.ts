@@ -20,6 +20,7 @@ export async function addSponsor(
   ) {
     throw new Error('Unauthorized');
   }
+
   const file: File | null = form.get('file') as unknown as File;
 
   let logoSha = undefined;
@@ -37,6 +38,13 @@ export async function addSponsor(
 }
 
 export async function removeSponsor(id: number) {
+  if (
+    !(await SessionService.isAdmin()) &&
+    !(await SessionService.isCorporateRelations())
+  ) {
+    throw new Error('Unauthorized');
+  }
+
   await SponsorService.remove(id);
   redirect('/settings/sponsors');
 }

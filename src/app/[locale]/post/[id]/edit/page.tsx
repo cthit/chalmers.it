@@ -2,32 +2,26 @@ import NewsPostForm from '@/components/NewsPostForm/NewsPostForm';
 import SessionService from '@/services/sessionService';
 import NewsService from '@/services/newsService';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
-import { authConfig } from '@/auth/auth';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 import ContactCard from '@/components/ContactCard/ContactCard';
+import Forbidden from '@/components/ErrorPages/403/403';
 
 export default async function Page({
   params
 }: {
   params: { locale: string; id: string };
 }) {
-  const groups = await SessionService.getActiveGroups();
+  const groups = await SessionService.getActiveAddedGroups();
   const newsPost = await NewsService.get(Number.parseInt(params.id));
 
   if (newsPost === null) {
-    return notFound();
+    notFound();
   }
 
-  if (
-    !(
-      (await getServerSession(authConfig))?.user?.id ===
-      newsPost.writtenByGammaUserId
-    )
-  ) {
-    return notFound();
+  if (!(await SessionService.isNewsPostOwner(newsPost.id))) {
+    return <Forbidden />;
   }
 
   return (
@@ -46,6 +40,7 @@ export default async function Page({
               contentSv={newsPost!.contentSv}
               writtenByGammaUserId={newsPost!.writtenByGammaUserId}
               connectedEvents={newsPost!.connectedEvents}
+              group={newsPost!.writtenFor?.gammaSuperGroupId}
             />
           </ContentPane>
         }

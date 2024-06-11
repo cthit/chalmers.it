@@ -6,6 +6,8 @@ import DivisionPageForm from '../DivisionPageForm/DivisionPageForm';
 import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
+import { notFound } from 'next/navigation';
+import MarkdownView from '../MarkdownView/MarkdownView';
 
 export default async function DivisionPage(
   locale: string,
@@ -33,11 +35,15 @@ async function mainContent(
   canDelete?: boolean
 ) {
   const page = await DivisionPageService.getBySlug(slug, id);
+  if (page === undefined) {
+    notFound();
+  }
+
   const end = slug[slug.length - 1];
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
 
-  const side = page && (
+  const side = (
     <>
       {canEdit && (
         <ActionLink href={`./${end}/edit`}>{l.general.edit}</ActionLink>
@@ -49,10 +55,10 @@ async function mainContent(
   return (
     <main>
       <ContentArticle
-        title={(en ? page?.titleEn : page?.titleSv) ?? 'Untitled'}
+        title={en ? page?.titleEn : page?.titleSv}
         titleSide={side}
       >
-        <p>{en ? page?.contentEn : page?.contentSv}</p>
+        <MarkdownView content={en ? page?.contentEn : page?.contentSv} />
       </ContentArticle>
     </main>
   );
@@ -76,6 +82,7 @@ async function editContent(locale: string, slug: string[], id?: number) {
           titleSv={page.titleSv}
           contentEn={page.contentEn}
           contentSv={page.contentSv}
+          priority={page.priority}
           locale={locale}
         />
       </ContentPane>

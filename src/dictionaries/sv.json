@@ -60,7 +60,8 @@
     "deleted": "Raderad!",
     "deleteError": "Kunde inte radera nyhet!",
     "loading": "Laddar inlägg",
-    "loadEmpty": "Inga fler inlägg att visa"
+    "loadEmpty": "Inga fler inlägg att visa",
+    "loadMore": "Ladda fler"
   },
   "editor": {
     "createAs": "Posta som",
@@ -103,7 +104,8 @@
     "urlSlug": "URL-slug",
     "content": "Innehåll",
     "close": "Stäng",
-    "topLevel": "Toppnivå"
+    "topLevel": "Toppnivå",
+    "sortPrio": "Sorteringsprioritet"
   },
   "events": {
     "events": "Evenemang",

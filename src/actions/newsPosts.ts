@@ -40,15 +40,19 @@ export async function post(
 
 export async function edit(
   id: number,
-  writtenByGammaUserId: string,
   titleEn: string,
   titleSv: string,
   contentEn: string,
   contentSv: string,
+  files: FormData,
   scheduledPublish?: Date
 ) {
   if (!(await SessionService.isNewsPostOwner(id))) {
     throw new Error('Unauthorized');
+  }
+
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file, Object.values(MediaType));
   }
 
   await NewsService.edit({
@@ -67,12 +71,17 @@ export async function postForGroup(
   contentEn: string,
   contentSv: string,
   divisionSuperGroupId: string,
+  files: FormData,
   scheduledPublish?: Date
 ) {
   const session = await getServerSession(authConfig);
 
   if (!(await SessionService.canEditGroup(divisionSuperGroupId, session))) {
     throw new Error('Unauthorized');
+  }
+
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file, Object.values(MediaType));
   }
 
   const res = await NewsService.post({

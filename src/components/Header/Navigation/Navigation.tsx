@@ -13,64 +13,101 @@ type Props = {
 
 const Navigation = ({ locale, desktop }: Props) => {
   const l = i18nService.getLocale(locale);
+  const c = desktop ? styles.desktopDropdown : undefined;
 
   return (
     <nav className={styles.nav}>
-      <DropdownLink text={l.nav.division} desktop={desktop}>
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.division}
+        desktop={desktop}
+      >
         <Link href="/groups">{l.pages.groups}</Link>
-        <Link href="https://dokument.chalmers.it/">{l.nav.docs}</Link>
-        <Link href="https://wikit.chalmers.it/">{l.nav.wiki}&nbsp;&#8599;</Link>
-        <Link href="https://flashit.chalmers.it/">
+        <Link target="_blank" href="https://dokument.chalmers.it/">
+          {l.nav.docs}
+        </Link>
+        <Link target="_blank" href="https://wikit.chalmers.it/">
+          {l.nav.wiki}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://flashit.chalmers.it/">
           {l.nav.pictures}&nbsp;&#8599;
         </Link>
-        <Link href="https://cthit.myspreadshop.it/">
+        <Link target="_blank" href="https://cthit.myspreadshop.it/">
           {l.nav.merch}&nbsp;&#8599;
         </Link>
-        <Link href="/honorary-members">{l.nav.honorary}</Link>
-        <Link href="/programledningen">{l.nav.pl}</Link>
-        <Link href="/samo">{l.nav.samo}</Link>
+        <Link href="/pages/honorary-members">{l.nav.honorary}</Link>
+        <Link href="/pages/programledningen">{l.nav.pl}</Link>
+        <Link href="/pages/samo">{l.nav.samo}</Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.applicants} desktop={desktop}>
-        <Link href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6">
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.applicants}
+        desktop={desktop}
+      >
+        <Link
+          target="_blank"
+          href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6"
+        >
           {l.nav.stats}&nbsp;&#8599;
         </Link>
-        <Link href="https://nollk.it/">{l.nav.nollkit}&nbsp;&#8599;</Link>
-        <Link href="https://wiki.chalmers.it/index.php/Nollan">
-          {l.nav.studentlife}
+        <Link target="_blank" href="https://nollk.it/">
+          {l.nav.nollkit}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://wiki.chalmers.it/index.php/Nollan">
+          {l.nav.studentlife}&nbsp;&#8599;
         </Link>
       </DropdownLink>
-      <DropdownLink text={l.nav.students} desktop={desktop}>
-        <Link href="https://www.chalmers.se/utbildning/dina-studier/hitta-kurs-och-programplaner/programplaner/TKITE/?acYear=2019%2F2020&year=1&view=year&halftime=">
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.students}
+        desktop={desktop}
+      >
+        <Link
+          target="_blank"
+          href="https://www.chalmers.se/utbildning/dina-studier/hitta-kurs-och-programplaner/programplaner/TKITE"
+        >
           {l.nav.courses}&nbsp;&#8599;
         </Link>
-        <Link href="https://cloud.timeedit.net/chalmers/web/b1/">
+        <Link
+          target="_blank"
+          href="https://cloud.timeedit.net/chalmers/web/b1/"
+        >
           {l.nav.grouprooms}&nbsp;&#8599;
         </Link>
-        <Link href="https://cloud.timeedit.net/chalmers/web/public/ri1Q7.html">
+        <Link
+          target="_blank"
+          href="https://cloud.timeedit.net/chalmers/web/public/ri1Q7.html"
+        >
           {l.nav.schedule}&nbsp;&#8599;
         </Link>
-        <Link href="https://cthit.slack.com/">Slack&nbsp;&#8599;</Link>
-        <Link href="https://www.lib.chalmers.se/paa-biblioteket/skriva-ut-och-scanna/">
+        <Link target="_blank" href="https://cthit.slack.com/">
+          Slack&nbsp;&#8599;
+        </Link>
+        <Link
+          target="_blank"
+          href="https://www.lib.chalmers.se/paa-biblioteket/skriva-ut-och-scanna/"
+        >
           {l.nav.print}&nbsp;&#8599;
         </Link>
-        <Link href="https://chalmersstudentkar.se/feel_safe/">
+        <Link target="_blank" href="https://chalmersstudentkar.se/feel_safe/">
           {l.nav.studenthealth}&nbsp;&#8599;
         </Link>
       </DropdownLink>
       <Link
-        href="/services"
+        href="/pages/services"
         className={`${styles.navLink} ${playfair.className}`}
       >
         {l.nav.services}
       </Link>
       <Link
-        href="/business"
+        target="_blank"
+        href="https://armit.chalmers.it/"
         className={`${styles.navLink} ${playfair.className}`}
       >
         {l.nav.business}
       </Link>
       <Link
-        href="/contact"
+        href="/pages/contact"
         className={`${styles.navLink} ${playfair.className}`}
       >
         {l.nav.contact}

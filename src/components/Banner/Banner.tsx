@@ -28,7 +28,11 @@ const Banner = async ({ locale }: { locale?: string }) => {
       <div className={styles.bannerImg}>
         {banner && (
           <picture>
-            <img src={`/api/media/${banner.mediaSha256}`} alt="Page banner" />
+            <img
+              src={banner.url}
+              alt={'Banner for ' + banner.name}
+              title={banner.name}
+            />
           </picture>
         )}
       </div>

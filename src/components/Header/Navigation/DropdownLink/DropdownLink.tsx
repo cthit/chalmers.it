@@ -1,19 +1,25 @@
 import { Playfair_Display } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 import Dropdown from '../Dropdown/Dropdown';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
 type Props = {
-  children: ReactNode;
   text: string;
   desktop?: boolean;
+  contentClassName?: string;
 };
 
-const DropdownLink = ({ text, children, desktop }: Props) => {
+const DropdownLink = ({
+  text,
+  desktop,
+  children,
+  ...rest
+}: Props & HTMLAttributes<HTMLDivElement>) => {
   return (
     <Dropdown
+      {...rest}
       parent={
         <div className={styles.navLink}>
           <p className={playfair.className}>{text} </p>
