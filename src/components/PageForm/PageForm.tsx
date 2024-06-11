@@ -6,7 +6,6 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { useState } from 'react';
-import { marked } from 'marked';
 import style from './PageForm.module.scss';
 import Popup from 'reactjs-popup';
 import i18nService from '@/services/i18nService';
@@ -25,10 +24,6 @@ interface NewPostFormProps {
 }
 
 const PageForm = (description: NewPostFormProps) => {
-  marked.use({
-    gfm: true,
-    breaks: true
-  });
   const l = i18nService.getLocale(description.locale);
 
   const [contentEn, setContentEn] = useState(description.contentEn ?? '');

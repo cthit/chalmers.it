@@ -6,7 +6,6 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
-import { marked } from 'marked';
 import style from '../NewsPostForm/NewsPostForm.module.scss';
 import Popup from 'reactjs-popup';
 import DivisionPageService, {
@@ -15,6 +14,7 @@ import DivisionPageService, {
 import { create, edit } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
+import MarkdownView from '../MarkdownView/MarkdownView';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -35,12 +35,6 @@ interface DivisionPostFormProps {
 }
 
 const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
-  marked.use({
-    pedantic: false,
-    breaks: true,
-    gfm: true
-  });
-
   const l = i18nService.getLocale(divisionPost.locale);
 
   const [page, setPage] = useState(divisionPost.parentId);
@@ -51,18 +45,12 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
-  const [previewContentSv, setPreviewContentSv] = useState({
-    __html: marked.parse('')
-  });
-  const [previewContentEn, setPreviewContentEn] = useState({
-    __html: marked.parse('')
-  });
+  const [previewContentSv, setPreviewContentSv] = useState('');
+  const [previewContentEn, setPreviewContentEn] = useState('');
 
   function preview() {
-    const markupSv = marked.parse(contentSv);
-    setPreviewContentSv({ __html: markupSv });
-    const markupEn = marked.parse(contentEn);
-    setPreviewContentEn({ __html: markupEn });
+    setPreviewContentSv(contentSv);
+    setPreviewContentEn(contentEn);
 
     setShowPreview(true);
   }
@@ -195,10 +183,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           <h1>{l.pages.preview}</h1>
           <Divider />
           <h2>{titleEn}</h2>
-          <p dangerouslySetInnerHTML={previewContentEn} />
+          <MarkdownView content={previewContentEn} />
           <Divider />
           <h2>{titleSv}</h2>
-          <p dangerouslySetInnerHTML={previewContentSv} />
+          <MarkdownView content={previewContentSv} />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.pages.close}
