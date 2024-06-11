@@ -1,6 +1,6 @@
 'use client';
 
-import { edit } from './actions';
+import { edit } from '../../actions/groupRootPages';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -12,6 +12,7 @@ import i18nService from '@/services/i18nService';
 import MarkdownView from '../MarkdownView/MarkdownView';
 import FileService, { MediaType } from '@/services/fileService';
 import ContentPane from '../ContentPane/ContentPane';
+import { toast } from 'react-toastify';
 
 const PreviewContentStyle = {
   backgroundColor: '#000000AA'
@@ -76,7 +77,14 @@ const PageForm = (description: NewPostFormProps) => {
       for (const file of Object.values(uploadQueue)) {
         formData.append('file', file);
       }
-      await edit(description.id, contentEn, contentSv, slug, formData);
+      await toast.promise(
+        edit(description.id, contentEn, contentSv, slug, formData),
+        {
+          pending: l.editor.saving,
+          success: l.editor.saved,
+          error: l.editor.saveError
+        }
+      );
     } catch {
       console.log('Failed to edit group description');
     }
