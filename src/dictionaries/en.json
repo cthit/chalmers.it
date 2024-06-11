@@ -61,7 +61,8 @@
     "deleted": "Deleted!",
     "deleteError": "Could not delete news post!",
     "loading": "Loading posts",
-    "loadEmpty": "No more posts to show"
+    "loadEmpty": "No more posts to show",
+    "loadMore": "Load more"
   },
   "editor": {
     "createAs": "Create as",

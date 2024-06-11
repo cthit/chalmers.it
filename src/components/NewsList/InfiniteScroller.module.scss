@@ -3,3 +3,19 @@
   opacity: 0.5;
   text-align: center;
 }
+
+.loadButton {
+  margin: auto;
+  margin-top: 1rem;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .loadButton {
+    display: block;
+  }
+
+  .hitBox {
+    display: none;
+  }
+}

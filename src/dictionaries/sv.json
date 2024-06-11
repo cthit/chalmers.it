@@ -60,7 +60,8 @@
     "deleted": "Raderad!",
     "deleteError": "Kunde inte radera nyhet!",
     "loading": "Laddar inlägg",
-    "loadEmpty": "Inga fler inlägg att visa"
+    "loadEmpty": "Inga fler inlägg att visa",
+    "loadMore": "Ladda fler"
   },
   "editor": {
     "createAs": "Posta som",

@@ -5,6 +5,7 @@ import { getPage } from '@/actions/newsList';
 import { useEffect, useRef, useState } from 'react';
 import NewsPost from './NewsPost/NewsPost';
 import i18nService from '@/services/i18nService';
+import ActionButton from '../ActionButton/ActionButton';
 
 const InfiniteScroller = ({
   page,
@@ -18,13 +19,17 @@ const InfiniteScroller = ({
 
   const l = i18nService.getLocale(locale);
 
+  const getNext = () => {
+    getPage(page, locale).then((news) => {
+      setNews(news);
+    });
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         observer.disconnect();
-        getPage(page, locale).then((news) => {
-          setNews(news);
-        });
+        getNext();
       }
     });
 
@@ -37,9 +42,14 @@ const InfiniteScroller = ({
   return (
     <>
       {news === undefined ? (
-        <p className={styles.loading} ref={ref}>
-          {l.news.loading}
-        </p>
+        <>
+          <ActionButton onClick={getNext} className={styles.loadButton}>
+            {l.news.loadMore}
+          </ActionButton>
+          <p className={`${styles.loading} ${styles.hitBox}`} ref={ref}>
+            {l.news.loading}
+          </p>
+        </>
       ) : (
         <>
           {news.map((post: any) => (
