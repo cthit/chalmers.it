@@ -2,7 +2,7 @@
 
 import styles from './InfiniteScroller.module.scss';
 import { getPage } from '@/actions/newsList';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import NewsPost from './NewsPost/NewsPost';
 import i18nService from '@/services/i18nService';
 import ActionButton from '../ActionButton/ActionButton';
@@ -19,11 +19,11 @@ const InfiniteScroller = ({
 
   const l = i18nService.getLocale(locale);
 
-  const getNext = () => {
+  const getNext = useCallback(() => {
     getPage(page, locale).then((news) => {
       setNews(news);
     });
-  };
+  }, [locale, page]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
