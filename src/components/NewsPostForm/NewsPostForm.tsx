@@ -109,20 +109,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
   };
 
-  const replaceLocalFiles = (text: string) => {
-    let newText = text;
-    for (const [sha256, file] of Object.entries(uploadQueue)) {
-      newText = newText.replace(
-        '(/api/media/' + sha256 + ')',
-        '(' + URL.createObjectURL(file) + ')'
-      );
-    }
-
-    return newText;
-  };
-
   async function send() {
     try {
+      const formData = new FormData();
+      for (const file of Object.values(uploadQueue)) {
+        formData.append('file', file);
+      }
       const publishDate =
         publish === 'now' ? undefined : new Date(scheduledFor);
       let postId: number;
@@ -131,11 +123,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         await toast.promise(
           edit(
             newsPost.id!,
-            newsPost.writtenByGammaUserId!,
             titleEn,
             titleSv,
             contentEn,
             contentSv,
+            formData,
             publishDate
           ),
           {
@@ -153,6 +145,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             contentEn,
             contentSv,
             group,
+            formData,
             publishDate
           ),
           {
@@ -162,10 +155,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           }
         );
       } else {
-        const formData = new FormData();
-        for (const file of Object.values(uploadQueue)) {
-          formData.append('file', file);
-        }
         postId = await toast.promise(
           post(titleEn, titleSv, contentEn, contentSv, formData, publishDate),
           {
@@ -223,8 +212,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   function preview() {
-    setPreviewContentSv(replaceLocalFiles(contentSv));
-    setPreviewContentEn(replaceLocalFiles(contentEn));
+    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
+    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
 
     setShowPreview(true);
   }

@@ -59,4 +59,21 @@ export default class FileService {
   static convertMimeType(mimeType: string): MediaMeta | null {
     return mimeTypes[mimeType] ?? null;
   }
+
+  static replaceLocalFiles(
+    text: string,
+    files: {
+      [key: string]: File;
+    }
+  ) {
+    let newText = text;
+    for (const [sha256, file] of Object.entries(files)) {
+      newText = newText.replace(
+        '(/api/media/' + sha256 + ')',
+        '(' + URL.createObjectURL(file) + ')'
+      );
+    }
+
+    return newText;
+  }
 }

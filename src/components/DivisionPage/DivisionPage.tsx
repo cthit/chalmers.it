@@ -7,6 +7,7 @@ import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import { notFound } from 'next/navigation';
+import MarkdownView from '../MarkdownView/MarkdownView';
 
 export default async function DivisionPage(
   locale: string,
@@ -57,7 +58,7 @@ async function mainContent(
         title={en ? page?.titleEn : page?.titleSv}
         titleSide={side}
       >
-        <p>{en ? page.contentEn : page.contentSv}</p>
+        <MarkdownView content={en ? page?.contentEn : page?.contentSv} />
       </ContentArticle>
     </main>
   );
