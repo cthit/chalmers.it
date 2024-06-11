@@ -4,6 +4,12 @@ CREATE TYPE "NotifierType" AS ENUM ('DISCORD', 'SLACK');
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('SV', 'EN');
 
+-- CreateEnum
+CREATE TYPE "PostStatus" AS ENUM ('DRAFT', 'SCHEDULED', 'PUBLISHED', 'DELETED');
+
+-- CreateEnum
+CREATE TYPE "SponsorType" AS ENUM ('PARTNER', 'MAIN_PARTNER');
+
 -- CreateTable
 CREATE TABLE "NewsPost" (
     "id" SERIAL NOT NULL,
@@ -12,6 +18,8 @@ CREATE TABLE "NewsPost" (
     "contentSv" TEXT NOT NULL,
     "contentEn" TEXT NOT NULL,
     "writtenByGammaUserId" TEXT NOT NULL,
+    "scheduledPublish" TIMESTAMP(3),
+    "status" "PostStatus" NOT NULL DEFAULT 'DRAFT',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "divisionGroupId" INTEGER,
@@ -26,14 +34,29 @@ CREATE TABLE "DivisionGroup" (
     "gammaSuperGroupId" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "prettyName" TEXT NOT NULL,
-    "titleSv" TEXT NOT NULL,
-    "titleEn" TEXT NOT NULL,
     "descriptionSv" TEXT NOT NULL,
     "descriptionEn" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "DivisionGroup_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DivisionPage" (
+    "id" SERIAL NOT NULL,
+    "parentId" INTEGER,
+    "priority" INTEGER NOT NULL DEFAULT 0,
+    "titleSv" TEXT NOT NULL,
+    "titleEn" TEXT NOT NULL,
+    "contentSv" TEXT NOT NULL,
+    "contentEn" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "divisionGroupId" INTEGER,
+    "slug" TEXT NOT NULL,
+
+    CONSTRAINT "DivisionPage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -59,23 +82,13 @@ CREATE TABLE "Sponsor" (
     "id" SERIAL NOT NULL,
     "nameSv" TEXT NOT NULL,
     "nameEn" TEXT NOT NULL,
-    "descriptionSv" TEXT NOT NULL,
-    "descriptionEn" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "mediaSha256" TEXT,
+    "type" "SponsorType" NOT NULL DEFAULT 'PARTNER',
 
     CONSTRAINT "Sponsor_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Banner" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "divisionGroupId" INTEGER NOT NULL,
-    "mediaSha256" TEXT NOT NULL,
-
-    CONSTRAINT "Banner_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -103,9 +116,6 @@ CREATE UNIQUE INDEX "DivisionGroup_gammaSuperGroupId_key" ON "DivisionGroup"("ga
 -- CreateIndex
 CREATE UNIQUE INDEX "DivisionGroup_slug_key" ON "DivisionGroup"("slug");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Banner_divisionGroupId_mediaSha256_key" ON "Banner"("divisionGroupId", "mediaSha256");
-
 -- AddForeignKey
 ALTER TABLE "NewsPost" ADD CONSTRAINT "NewsPost_divisionGroupId_fkey" FOREIGN KEY ("divisionGroupId") REFERENCES "DivisionGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -113,13 +123,13 @@ ALTER TABLE "NewsPost" ADD CONSTRAINT "NewsPost_divisionGroupId_fkey" FOREIGN KE
 ALTER TABLE "NewsPost" ADD CONSTRAINT "NewsPost_mediaSha256_fkey" FOREIGN KEY ("mediaSha256") REFERENCES "Media"("sha256") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "DivisionPage" ADD CONSTRAINT "DivisionPage_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "DivisionPage"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivisionPage" ADD CONSTRAINT "DivisionPage_divisionGroupId_fkey" FOREIGN KEY ("divisionGroupId") REFERENCES "DivisionGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Event" ADD CONSTRAINT "Event_newsPostId_fkey" FOREIGN KEY ("newsPostId") REFERENCES "NewsPost"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Sponsor" ADD CONSTRAINT "Sponsor_mediaSha256_fkey" FOREIGN KEY ("mediaSha256") REFERENCES "Media"("sha256") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Banner" ADD CONSTRAINT "Banner_divisionGroupId_fkey" FOREIGN KEY ("divisionGroupId") REFERENCES "DivisionGroup"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Banner" ADD CONSTRAINT "Banner_mediaSha256_fkey" FOREIGN KEY ("mediaSha256") REFERENCES "Media"("sha256") ON DELETE RESTRICT ON UPDATE CASCADE;
