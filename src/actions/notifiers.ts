@@ -10,7 +10,6 @@ export async function addNotifier(
   language: Language,
   webhook: string
 ) {
-  console.log('Adding', type, language, webhook, 'as a notifier.');
   if (!(await SessionService.isAdmin())) {
     throw new Error('Unauthorized');
   }
@@ -22,7 +21,6 @@ export async function addNotifier(
 }
 
 export async function removeNotifier(id: number) {
-  console.log('Removing notifier with id', id);
   if (!(await SessionService.isAdmin())) {
     throw new Error('Unauthorized');
   }

@@ -42,7 +42,7 @@ const InfiniteScroller = ({
       observer.observe(ref.current);
       return () => observer.disconnect();
     }
-  }, [ref, locale, page, getNext]);
+  }, [ref, locale, page, getNext, news]);
 
   return (
     <>
