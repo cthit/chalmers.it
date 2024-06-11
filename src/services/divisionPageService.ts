@@ -29,7 +29,9 @@ export default class DivisionPageService {
 
   private static flattenPages(pages: any[]) {
     const result: { [key: number]: DivisionPage } = [];
+    const idx: { [key: number]: number } = {};
 
+    let currIdx = 0;
     const dfs = (page: any, parentSlug: string[], depth: number) => {
       const completeSlug = parentSlug.concat(page.slug);
 
@@ -52,6 +54,7 @@ export default class DivisionPageService {
         deepestChild: depth,
         priority: page.priority
       };
+      idx[page.id] = currIdx++;
 
       if (page.children) {
         for (const child of page.children) {
@@ -64,7 +67,7 @@ export default class DivisionPageService {
       dfs(page, [], 0);
     }
 
-    return Object.values(result);
+    return Object.values(result).sort((a, b) => idx[a.id] - idx[b.id]);
   }
 
   static checkValidMoveTargets(
