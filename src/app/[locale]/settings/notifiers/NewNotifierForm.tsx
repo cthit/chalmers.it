@@ -18,7 +18,7 @@ const NewNotifierForm = () => {
     const notifLang = language as 'EN' | 'SV';
 
     try {
-      toast.promise(addNotifier(notifType, notifLang, webhook), {
+      await toast.promise(addNotifier(notifType, notifLang, webhook), {
         pending: 'Adding notifier...',
         success: 'Notifier added!',
         error: 'Failed to add notifier'
@@ -30,7 +30,7 @@ const NewNotifierForm = () => {
   };
 
   return (
-    <form>
+    <div>
       <p>Type</p>
       <DropdownList onChange={(e) => setType(e.target.value)}>
         <option value="DISCORD">Discord</option>
@@ -44,7 +44,7 @@ const NewNotifierForm = () => {
       <p>Webhook URL</p>
       <input type="text" onChange={(e) => setWebhook(e.target.value)} />
       <ActionButton onClick={newNotifier}>Add</ActionButton>
-    </form>
+    </div>
   );
 };
 
