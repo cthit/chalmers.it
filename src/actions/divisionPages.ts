@@ -37,14 +37,14 @@ export async function create(
       contentEn,
       contentSv,
       slug,
-      sortPrio,
+      isNaN(sortPrio) ? 0 : sortPrio,
       divisionGroupId,
       parentId
     );
   } catch (e) {
     console.error(e);
   }
-  redirect('.');
+  redirect('/groups');
 }
 
 export async function deletePage(id: number) {
@@ -60,7 +60,7 @@ export async function deletePage(id: number) {
     }
   }
   await DivisionPageService.delete(id);
-  redirect('.');
+  redirect('/groups');
 }
 
 export async function edit(
@@ -98,8 +98,8 @@ export async function edit(
     contentEn,
     contentSv,
     slug,
-    sortPrio,
+    isNaN(sortPrio) ? 0 : sortPrio,
     parentId
   );
-  redirect('.');
+  redirect('/groups');
 }
