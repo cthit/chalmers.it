@@ -9,7 +9,7 @@ import { MediaType } from '@/services/fileService';
 const oldPrisma = new PrismaClient();
 
 const mediaUrlRegexPattern =
-  '(?<=\\((?:(?:\\s*?https?:\\/\\/chalmers\\.it)|(?:\\s*)))((\\/uploads\\/)|(\\/core\\/wp-content\\/uploads\\/))\\S*?(?=\\s*?\\))';
+  '(?<=\\((?:(?:\\s*?https?:\\/\\/chalmers\\.it)|(?:\\s*)))((\\/uploads\\/)|(\\/core\\/wp-content\\/uploads\\/))\\S*?(?=(?:(?:\\s*)|(?:\\s+\\".*?\\"\\s*?))\\))';
 
 const mediaUrlRegex = new RegExp(mediaUrlRegexPattern, 'gi');
 
@@ -78,7 +78,7 @@ export default class MigrationService {
 
   private static async migrateNewsPosts() {
     const gammaSuperGroups = (await GammaService.getAllSuperGroups()).flatMap(
-      (value) => value.superGroups
+      (value) => value.superGroup
     );
 
     const gammaSuperGroupsInDb = await DivisionGroupService.getAll();
@@ -87,16 +87,15 @@ export default class MigrationService {
 
     for (const superGroup of gammaSuperGroups) {
       const gammaSuperGroupInDb = gammaSuperGroupsInDb.find(
-        (g) => g.gammaSuperGroupId == superGroup.superGroup.id
+        (g) => g.gammaSuperGroupId == superGroup.id
       );
       if (!gammaSuperGroupInDb) {
         console.log(
-          `Super group ${superGroup.superGroup.id} is missing from local database`
+          `Super group ${superGroup.id} is missing from local database`
         );
         continue;
       }
-      groupNameToGammaIdDict[superGroup.superGroup.name] =
-        gammaSuperGroupInDb.id;
+      groupNameToGammaIdDict[superGroup.name] = gammaSuperGroupInDb.id;
     }
 
     const allGammaUsers = await this.getAllOldGammaUsers();
@@ -162,6 +161,14 @@ export default class MigrationService {
         'https://chalmers.it' + match
       );
       postContent = postContent.replace(match, newUrl);
+      postContent = postContent.replace(
+        'https://chalmers.it/api/media/',
+        '/api/media/'
+      );
+      postContent = postContent.replace(
+        'http://chalmers.it/api/media/',
+        '/api/media/'
+      );
     }
 
     return postContent;
