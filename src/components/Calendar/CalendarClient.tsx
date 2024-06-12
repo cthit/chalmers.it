@@ -3,9 +3,10 @@
 import './Calendar.scss';
 import styles from './CalendarTiles.module.scss';
 import { Calendar as ReactCalendar, TileClassNameFunc } from 'react-calendar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
+import { getAllEvents } from '@/actions/events';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -14,32 +15,21 @@ const stripTime = (d: Date) => {
   return d.setHours(0, 0, 0, 0);
 };
 
-const CalendarClient = ({
-  locale,
-  events
-}: {
-  locale: string;
-  events: {
-    [key: number]: {
-      id: number;
-      titleSv: string;
-      titleEn: string;
-      descriptionEn: string;
-      descriptionSv: string;
-      fullDay: boolean;
-      startTime: Date;
-      endTime: Date;
-      location: string | null;
-      createdAt: Date;
-      updatedAt: Date;
-      newsPostId: number | null;
-    }[];
-  };
-}) => {
+const CalendarClient = ({ locale }: { locale: string }) => {
   const [value, onChange] = React.useState<Value>(new Date());
+  const [events, setEvents] = React.useState<{ [key: number]: any[] }>({});
+
   const loc = locale === 'sv' ? 'sv-SE' : 'en-US';
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
+
+  useEffect(() => {
+    const getEvents = async () => {
+      setEvents(await getAllEvents());
+    };
+
+    getEvents();
+  }, []);
 
   const mapTileClass: TileClassNameFunc = ({ date }) => {
     return [

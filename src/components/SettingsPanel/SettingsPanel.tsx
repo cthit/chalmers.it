@@ -15,7 +15,7 @@ const SettingsPanel = ({
 }) => {
   const pathname = usePathname();
 
-  const hasAccess = pages.some((page) => page.path === pathname);
+  const hasAccess = pages.some((page) => pathname.endsWith(page.path));
   if (!hasAccess) {
     return <Forbidden />;
   }

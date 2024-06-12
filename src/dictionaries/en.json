@@ -130,7 +130,9 @@
   },
   "sponsors": {
     "title": "Our Partners",
-    "empty": "Would you like to advertise here? Please contact"
+    "empty": "Would you like to advertise here? Please contact",
+    "main": "Main Partner",
+    "partner": "Partner"
   },
   "user": {
     "login": "Log in",

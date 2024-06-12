@@ -1,8 +1,13 @@
 import prisma from '@/prisma';
+import { SponsorType } from '@prisma/client';
 
 export default class SponsorService {
   static async getAll() {
-    return await prisma.sponsor.findMany();
+    return await prisma.sponsor.findMany({
+      orderBy: {
+        type: 'desc'
+      }
+    });
   }
 
   static async getLogo(id: number) {
@@ -32,13 +37,15 @@ export default class SponsorService {
     nameEn: string;
     url: string;
     logoSha?: string;
+    type: SponsorType;
   }) {
     return await prisma.sponsor.create({
       data: {
         nameSv: sponsor.nameSv,
         nameEn: sponsor.nameEn,
         url: sponsor.url,
-        mediaSha256: sponsor.logoSha
+        mediaSha256: sponsor.logoSha,
+        type: sponsor.type
       }
     });
   }
