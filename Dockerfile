@@ -15,6 +15,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN yarn prisma generate
+#TODO: Remove this line when the old site is removed
+RUN yarn prisma generate --schema ./prisma-old-site/schema.prisma
 RUN yarn build
 
 ##########################
@@ -35,6 +37,8 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+#TODO: Remove this line when the old site is removed
+COPY --from=builder --chown=nextjs:nodejs /app/prisma-old-site/client/old-db ./prisma-old-site/client/old-db
 
 # Copy logger configs
 COPY --chown=nextjs:nodejs next-logger.config.js /app/

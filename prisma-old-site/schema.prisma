@@ -1,0 +1,265 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "client/old-db"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("OLD_DATABASE_URL")
+}
+
+model ar_internal_metadata {
+  key        String   @id @db.VarChar(255)
+  value      String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+}
+
+model banners {
+  id         Int      @id @default(autoincrement())
+  image      String?  @db.VarChar(255)
+  group_id   String?  @db.VarChar(20)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+}
+
+model comments {
+  id         Int       @id @default(autoincrement())
+  post_id    Int?
+  body       String?   @db.Text
+  user_id    String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+
+  @@index([post_id], map: "index_comments_on_post_id")
+}
+
+model committee_translations {
+  id           Int       @id @default(autoincrement())
+  committee_id Int
+  locale       String    @db.VarChar(255)
+  created_at   DateTime? @db.DateTime(0)
+  updated_at   DateTime? @db.DateTime(0)
+  title        String?   @db.VarChar(255)
+  description  String?   @db.Text
+
+  @@index([committee_id], map: "index_committee_translations_on_committee_id")
+  @@index([locale], map: "index_committee_translations_on_locale")
+}
+
+model committees {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.VarChar(255)
+  title       String?   @db.VarChar(255)
+  description String?   @db.Text
+  url         String?   @db.VarChar(255)
+  email       String?   @db.VarChar(255)
+  slug        String?   @db.VarChar(255)
+  created_at  DateTime? @db.DateTime(0)
+  updated_at  DateTime? @db.DateTime(0)
+
+  @@index([slug], map: "index_committees_on_slug")
+}
+
+model configurables {
+  id         Int       @id @default(autoincrement())
+  name       String?   @db.VarChar(255)
+  value      String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+
+  @@index([name], map: "index_configurables_on_name")
+}
+
+model contacts {
+  id         Int      @id @default(autoincrement())
+  title      String?  @db.Text
+  body       String?  @db.Text
+  email      String?  @db.VarChar(255)
+  to_whom    String?  @db.Text
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+  value      String?  @db.Text
+}
+
+model course_translations {
+  id          Int       @id @default(autoincrement())
+  course_id   Int
+  locale      String    @db.VarChar(255)
+  created_at  DateTime? @db.DateTime(0)
+  updated_at  DateTime? @db.DateTime(0)
+  name        String?   @db.VarChar(255)
+  description String?   @db.Text
+
+  @@index([course_id], map: "index_course_translations_on_course_id")
+  @@index([locale], map: "index_course_translations_on_locale")
+}
+
+model events {
+  id            Int       @id @default(autoincrement())
+  event_date    DateTime? @db.Date
+  full_day      Boolean?
+  start_time    DateTime? @db.Time(0)
+  end_time      DateTime? @db.Time(0)
+  location      String?   @db.VarChar(255)
+  organizer     String?   @db.VarChar(255)
+  post_id       Int?
+  facebook_link String?   @db.VarChar(255)
+
+  @@index([post_id], map: "index_events_on_post_id")
+}
+
+model frontpages {
+  id         Int      @id @default(autoincrement())
+  page_id    Int?
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+
+  @@index([page_id], map: "index_frontpages_on_page_id")
+}
+
+model menu_links {
+  id              Int       @id @default(autoincrement())
+  menu_id         Int?
+  controller      String?   @db.VarChar(255)
+  action          String?   @db.VarChar(255)
+  params          String?   @db.Text
+  title           String?   @db.VarChar(255)
+  preferred_order Int?
+  created_at      DateTime? @db.DateTime(0)
+  updated_at      DateTime? @db.DateTime(0)
+
+  @@index([menu_id], map: "index_menu_links_on_menu_id")
+}
+
+model menus {
+  id         Int       @id @default(autoincrement())
+  name       String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+}
+
+model page_translations {
+  id         Int      @id @default(autoincrement())
+  page_id    Int
+  locale     String   @db.VarChar(255)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+  title      String?  @db.VarChar(255)
+  body       String?  @db.Text
+
+  @@index([locale], map: "index_page_translations_on_locale")
+  @@index([page_id], map: "index_page_translations_on_page_id")
+}
+
+model pages {
+  id         Int       @id @default(autoincrement())
+  title      String?   @db.VarChar(255)
+  body       String?   @db.Text
+  slug       String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+  parent_id  Int?
+
+  @@index([parent_id], map: "index_pages_on_parent_id")
+  @@index([slug], map: "index_pages_on_slug")
+  @@index([title], map: "index_pages_on_title")
+}
+
+model post_translations {
+  id         Int       @id @default(autoincrement())
+  post_id    Int
+  locale     String    @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+  title      String?   @db.VarChar(255)
+  body       String?   @db.Text
+  slug       String?   @db.VarChar(255)
+
+  @@index([locale], map: "index_post_translations_on_locale")
+  @@index([post_id], map: "index_post_translations_on_post_id")
+}
+
+model posts {
+  id             Int       @id @default(autoincrement())
+  user_id        String    @db.VarChar(20)
+  group_id       String?   @db.VarChar(20)
+  title          String?   @db.VarChar(255)
+  body           String?   @db.Text
+  sticky         Boolean   @default(false)
+  created_at     DateTime? @db.DateTime(0)
+  updated_at     DateTime? @db.DateTime(0)
+  slug           String?   @db.VarChar(255)
+  comments_count Int?      @default(0)
+  show_public    Boolean?
+
+  @@index([group_id], map: "index_posts_on_group_id")
+  @@index([slug], map: "index_posts_on_slug")
+  @@index([title], map: "index_posts_on_title")
+  @@index([user_id], map: "index_posts_on_user_id")
+}
+
+model schema_migrations {
+  version String @unique(map: "unique_schema_migrations") @db.VarChar(255)
+}
+
+model sessions {
+  id         Int       @id @default(autoincrement())
+  uid        String?   @db.VarChar(255)
+  provider   String?   @db.VarChar(255)
+  token      String?   @db.VarChar(1000)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+}
+
+model sponsor_translations {
+  id         Int      @id @default(autoincrement())
+  sponsor_id Int
+  locale     String   @db.VarChar(255)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+  title      String?  @db.VarChar(255)
+
+  @@index([locale], map: "index_sponsor_translations_on_locale")
+  @@index([sponsor_id], map: "index_sponsor_translations_on_sponsor_id")
+}
+
+model sponsors {
+  id         Int      @id @default(autoincrement())
+  name       String?  @db.VarChar(255)
+  image      String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+  title      String?  @db.VarChar(255)
+  order      Int?
+  imagelink  String?  @db.VarChar(255)
+}
+
+model uploads {
+  id         Int       @id @default(autoincrement())
+  source     String?   @db.VarChar(255)
+  user_id    String?   @db.VarChar(255)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+}
+
+model user_group_info_translations {
+  id                 Int      @id @default(autoincrement())
+  user_group_info_id Int
+  locale             String   @db.VarChar(255)
+  created_at         DateTime @db.DateTime(0)
+  updated_at         DateTime @db.DateTime(0)
+  body               String?  @db.VarChar(255)
+
+  @@index([locale], map: "index_user_group_info_translations_on_locale")
+  @@index([user_group_info_id], map: "index_user_group_info_translations_on_user_group_info_id")
+}
+
+model user_group_infos {
+  id         Int      @id @default(autoincrement())
+  user_id    String?  @db.VarChar(20)
+  group_id   String?  @db.VarChar(20)
+  body       String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+}

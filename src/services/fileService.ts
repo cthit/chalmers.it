@@ -3,7 +3,8 @@ const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE ?? '104857600');
 
 export enum MediaType {
   Image = 'image',
-  Document = 'document'
+  Document = 'document',
+  Container = 'container'
 }
 
 export interface MediaMeta {
@@ -16,7 +17,24 @@ const mimeTypes: { [key: string]: MediaMeta } = {
   'image/png': { type: MediaType.Image, extension: 'png' },
   'image/gif': { type: MediaType.Image, extension: 'gif' },
   'image/webp': { type: MediaType.Image, extension: 'webp' },
-  'application/pdf': { type: MediaType.Document, extension: 'pdf' }
+  'application/pdf': { type: MediaType.Document, extension: 'pdf' },
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+    type: MediaType.Document,
+    extension: 'docx'
+  },
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+    type: MediaType.Document,
+    extension: 'xlsx'
+  },
+  'application/vnd.oasis.opendocument.text': {
+    type: MediaType.Document,
+    extension: 'odt'
+  },
+  'application/vnd.oasis.opendocument.spreadsheet': {
+    type: MediaType.Document,
+    extension: 'ods'
+  },
+  'application/zip': { type: MediaType.Container, extension: 'zip' }
 };
 
 /**
