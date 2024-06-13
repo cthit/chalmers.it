@@ -1,6 +1,10 @@
 import prisma from '@/prisma';
 
 export default class EventService {
+  static stripTime(d: Date) {
+    return new Date(d).setHours(0, 0, 0, 0) - d.getTimezoneOffset() * 60 * 1000;
+  }
+
   static async getAll() {
     return await prisma.event.findMany();
   }

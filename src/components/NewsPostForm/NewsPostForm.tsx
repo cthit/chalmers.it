@@ -331,7 +331,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             <DatePicker
               disabled={e.fullDay}
               value={e.endTime}
-              onChange={(d) => editEventState(i, 'startTime', d)}
+              onChange={(d) => editEventState(i, 'endTime', d)}
             />
             <br />
             <label key={i} htmlFor={'fullDay' + i}>

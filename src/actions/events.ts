@@ -3,10 +3,6 @@
 import EventService from '@/services/eventService';
 import SessionService from '@/services/sessionService';
 
-const stripTime = (d: Date) => {
-  return d.setHours(0, 0, 0, 0);
-};
-
 async function throwIfUnauthorized() {
   if (!(await SessionService.isAdmin()) && !(await SessionService.isActive())) {
     throw new Error('Unauthorized');
@@ -72,7 +68,7 @@ export async function getAllEvents() {
   } = {};
 
   events.forEach((event) => {
-    const date = stripTime(event.startTime);
+    const date = EventService.stripTime(event.startTime);
     if (!eventMap[date]) {
       eventMap[date] = [];
     }

@@ -2,41 +2,72 @@
 
 import './Calendar.scss';
 import styles from './CalendarTiles.module.scss';
-import { Calendar as ReactCalendar, TileClassNameFunc } from 'react-calendar';
-import React, { useEffect } from 'react';
+import { Calendar as ReactCalendar, TileArgs } from 'react-calendar';
+import React, { useCallback } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
-import { getAllEvents } from '@/actions/events';
+import EventService from '@/services/eventService';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const stripTime = (d: Date) => {
-  return d.setHours(0, 0, 0, 0);
-};
-
-const CalendarClient = ({ locale }: { locale: string }) => {
+const CalendarClient = ({
+  locale,
+  events
+}: {
+  locale: string;
+  events: { [key: number]: any[] };
+}) => {
   const [value, onChange] = React.useState<Value>(new Date());
-  const [events, setEvents] = React.useState<{ [key: number]: any[] }>({});
 
   const loc = locale === 'sv' ? 'sv-SE' : 'en-US';
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
 
-  useEffect(() => {
-    const getEvents = async () => {
-      setEvents(await getAllEvents());
-    };
+  const mapTileClass = useCallback(
+    ({ date }: TileArgs) => {
+      return [
+        styles.tile,
+        ...((events[EventService.stripTime(date)] || []).length > 0
+          ? [styles.tileEvent]
+          : [])
+      ];
+    },
+    [events]
+  );
 
-    getEvents();
-  }, []);
-
-  const mapTileClass: TileClassNameFunc = ({ date }) => {
-    return [
-      styles.tile,
-      ...((events[stripTime(date)] || []).length > 0 ? [styles.tileEvent] : [])
-    ];
-  };
+  const mapTileContent = useCallback(
+    ({ date, view }: TileArgs) => {
+      if (view !== 'month') {
+        return null;
+      }
+      return events.hasOwnProperty(EventService.stripTime(date)) ? (
+        <Dropdown
+          className={styles.dropdown}
+          parent={
+            <div className={styles.date}>
+              <p>{date.getDate()}</p>
+            </div>
+          }
+          id={EventService.stripTime(date).toString()}
+        >
+          {events[EventService.stripTime(date)]?.map((event) => (
+            <div key={event.id} className={styles.event}>
+              <h3>{en ? event.titleEn : event.titleSv}</h3>
+              <p>
+                {event.fullDay
+                  ? l.events.fullDay
+                  : `${i18nService.formatTime(event.startTime)} - ${i18nService.formatTime(event.endTime)}`}
+              </p>
+            </div>
+          ))}
+        </Dropdown>
+      ) : (
+        <p>{date.getDate()}</p>
+      );
+    },
+    [en, events, l]
+  );
 
   return (
     <ReactCalendar
@@ -48,30 +79,7 @@ const CalendarClient = ({ locale }: { locale: string }) => {
       className="event-calendar"
       tileClassName={mapTileClass}
       calendarType="iso8601"
-      tileContent={({ date, view }) =>
-        view === 'month' ? (
-          events[stripTime(date)] ? (
-            <Dropdown
-              className={styles.dropdown}
-              parent={
-                <div className={styles.date}>
-                  <p>{date.getDate()}</p>
-                </div>
-              }
-              id={stripTime(date).toString()}
-            >
-              {events[stripTime(date)]?.map((event) => (
-                <div key={event.id} className={styles.event}>
-                  <h3>{en ? event.titleEn : event.titleSv}</h3>
-                  <p>{event.fullDay ? l.events.fullDay : 'Time'}</p>
-                </div>
-              ))}
-            </Dropdown>
-          ) : (
-            <p>{date.getDate()}</p>
-          )
-        ) : null
-      }
+      tileContent={mapTileContent}
     />
   );
 };
