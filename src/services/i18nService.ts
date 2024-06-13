@@ -7,6 +7,7 @@ export default class i18nService {
   static formatDate = (date: Date, useTime = true) => {
     return date
       .toLocaleDateString(['sv-SE'], {
+        timeZone: 'Europe/Stockholm',
         day: 'numeric',
         month: 'numeric',
         year: 'numeric',
@@ -14,5 +15,13 @@ export default class i18nService {
         minute: useTime ? '2-digit' : undefined
       })
       .replace(',', '');
+  };
+
+  static formatTime = (date: Date) => {
+    return date.toLocaleTimeString(['sv-SE'], {
+      timeZone: 'Europe/Stockholm',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 }

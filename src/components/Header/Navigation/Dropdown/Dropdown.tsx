@@ -1,5 +1,3 @@
-'use client';
-
 import { Playfair_Display } from 'next/font/google';
 import styles from './Dropdown.module.scss';
 import { HTMLAttributes, ReactNode } from 'react';
