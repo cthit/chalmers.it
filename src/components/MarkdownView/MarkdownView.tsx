@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import style from './MarkdownView.module.scss';
+import sanitizeHtml from 'sanitize-html';
 
 const MarkdownView = ({ content }: { content: string }) => {
   marked.use({
@@ -9,8 +10,9 @@ const MarkdownView = ({ content }: { content: string }) => {
   });
 
   const renderMarkdownText = () => {
-    const rawMarkup = marked.parse(content);
-    return { __html: rawMarkup };
+    const rawMarkup = marked.parse(content) as string;
+    const sanitizedMarkup = sanitizeHtml(rawMarkup);
+    return { __html: sanitizedMarkup };
   };
 
   return (
