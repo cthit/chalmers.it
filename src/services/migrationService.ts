@@ -15,8 +15,78 @@ const mediaUrlRegex = new RegExp(mediaUrlRegexPattern, 'gi');
 
 export default class MigrationService {
   static async migrate() {
+    await this.migrateGroupPages();
     await this.migrateNewsPosts();
     await this.migratePages();
+  }
+
+  static async migrateGroupPages() {
+    console.log('Migrating group pages');
+    const committees = await oldPrisma.committees.findMany();
+
+    const gammaGroups = await GammaService.getAllSuperGroups();
+
+    const gammaGroupsInDb = await DivisionGroupService.getAll();
+
+    const gammaGroupToIdDict: { [key: string]: number } = {};
+    for (const group of gammaGroups) {
+      const groupInDb = gammaGroupsInDb.find(
+        (g) => g.gammaSuperGroupId == group.superGroup.id
+      );
+      if (!groupInDb) {
+        continue;
+      }
+      gammaGroupToIdDict[group.superGroup.name] = groupInDb.id;
+    }
+
+    for (const committee of committees) {
+      console.log(`Migrating committee ${committee.name}`);
+
+      if (gammaGroupToIdDict[committee.slug!] == undefined) {
+        console.error(`Committee ${committee.name} is missing in the database`);
+        continue;
+      }
+
+      const committee_translations =
+        await oldPrisma.committee_translations.findMany({
+          where: { committee_id: committee.id }
+        });
+
+      if (committee_translations.length != 2) {
+        console.error(
+          `Committee ${committee.id} has ${committee_translations.length} translations`
+        );
+        continue;
+      }
+
+      const enTranslation = committee_translations.find(
+        (t) => t.locale == 'en'
+      );
+      const svTranslation = committee_translations.find(
+        (t) => t.locale == 'sv'
+      );
+
+      if (!enTranslation || !svTranslation) {
+        console.error(`Committee ${committee.id} is missing translations`);
+        continue;
+      }
+
+      await prisma.divisionGroup.update({
+        where: { id: gammaGroupToIdDict[committee.slug!] },
+        data: {
+          prettyName: committee.name!,
+          descriptionEn: await this.migrateMediaUrls(
+            enTranslation.description!
+          ),
+          descriptionSv: await this.migrateMediaUrls(
+            svTranslation.description!
+          ),
+          createdAt: committee.created_at!,
+          updatedAt: committee.updated_at!
+        }
+      });
+    }
+    console.log('Migration of committees done!');
   }
 
   static async migratePages() {
