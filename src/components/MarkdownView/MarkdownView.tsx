@@ -12,7 +12,8 @@ const MarkdownView = ({ content }: { content: string }) => {
   const renderMarkdownText = () => {
     const rawMarkup = marked.parse(content) as string;
     const sanitizedMarkup = sanitizeHtml(rawMarkup, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img'])
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      disallowedTagsMode: 'escape'
     });
     return { __html: sanitizedMarkup };
   };
