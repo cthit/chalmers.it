@@ -107,6 +107,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const copyFile = (sha256: string) => {
     navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
+    toast(l.editor.linkCopied, { type: 'success' });
   };
 
   async function send() {

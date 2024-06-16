@@ -83,7 +83,8 @@
     "saveError": "Could not save news post!",
     "posting": "Creating...",
     "posted": "Created!",
-    "postError": "Could not create news post!"
+    "postError": "Could not create news post!",
+    "linkCopied": "Link copied!"
   },
   "pages": {
     "about": "About our division",
