@@ -82,7 +82,8 @@
     "saveError": "Kunde inte spara nyhet!",
     "posting": "Skapar...",
     "posted": "Skapad!",
-    "postError": "Kunde inte skapa nyhet!"
+    "postError": "Kunde inte skapa nyhet!",
+    "linkCopied": "Länk kopierad!"
   },
   "pages": {
     "about": "Om sektionen",
