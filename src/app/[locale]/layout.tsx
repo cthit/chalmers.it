@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider';
 import TopLoader from '@/components/TopLoader/TopLoader';
 import i18nService from '@/services/i18nService';
 import ToastContainerWrapper from '@/components/ToastContainerWrapper/ToastContainerWrapper';
+import NotFound from '@/components/ErrorPages/404/404';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  const invalidLocale = locale !== 'en' && locale !== 'sv';
   return (
     <html lang={locale}>
       <body style={{ display: 'unset' }} className={poppins.className}>
@@ -43,7 +45,7 @@ export default function RootLayout({
           <TopLoader />
           <Header locale={locale} />
           <Banner locale={locale} />
-          {children}
+          {invalidLocale ? <NotFound /> : children}
           <ToastContainerWrapper />
         </ThemeProvider>
       </body>
