@@ -1,4 +1,4 @@
-import ActionButton from '@/components/ActionButton/ActionButton';
+import ActionLink from '@/components/ActionButton/ActionLink';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionDocumentService from '@/services/divisionDocumentService';
@@ -34,7 +34,7 @@ const mainContent = async (locale: string) => {
       subtitle={l.docs.more}
       titleSide={
         <GroupActive>
-          <ActionButton href="/documents/new">{l.general.upload}</ActionButton>
+          <ActionLink href="/documents/new">{l.general.upload}</ActionLink>
         </GroupActive>
       }
     >
@@ -55,7 +55,7 @@ const mainContent = async (locale: string) => {
               <GroupActive group={doc.gammaSuperGroupId}>
                 <DeleteDocumentButton text={l.general.delete} id={doc.id} />
               </GroupActive>{' '}
-              <ActionButton href={doc.url}>{l.general.download}</ActionButton>
+              <ActionLink href={doc.url}>{l.general.download}</ActionLink>
             </ContentPane>
           </li>
         ))}

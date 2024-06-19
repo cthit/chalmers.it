@@ -6,6 +6,10 @@ import { GammaGroup } from '@/types/gamma';
 import TextArea from '@/components/TextArea/TextArea';
 import { DocumentType } from '@prisma/client';
 import DivisionDocumentService from '@/services/divisionDocumentService';
+import ActionButton from '@/components/ActionButton/ActionButton';
+import FileService, { MediaType } from '@/services/fileService';
+
+const validMimes = FileService.getValidMimes([MediaType.Document]);
 
 const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
   const [groupId, setGroupId] = useState<string | undefined>(undefined);
@@ -16,7 +20,7 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
   const [descriptionSv, setDescriptionSv] = useState('');
   const [descriptionEn, setDescriptionEn] = useState('');
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDocChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setDocumentFile(event.target.files[0]);
     }
@@ -81,15 +85,15 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
         onChange={(e) => setDescriptionEn(e.target.value)}
       />
       <div>
-        <label htmlFor="documentFile">PDF-fil: </label>
+        <label htmlFor="documentFile">Dokumentfil: </label>
         <input
           type="file"
           id="documentFile"
-          accept="application/pdf"
-          onChange={handleImageChange}
+          accept={validMimes.join(',')}
+          onChange={handleDocChange}
         />
       </div>
-      <button type="submit">Ladda upp</button>
+      <ActionButton type="submit">Ladda upp</ActionButton>
     </form>
   );
 };
