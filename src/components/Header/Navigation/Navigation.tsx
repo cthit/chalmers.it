@@ -23,9 +23,7 @@ const Navigation = ({ locale, desktop }: Props) => {
         desktop={desktop}
       >
         <Link href="/groups">{l.pages.groups}</Link>
-        <Link target="_blank" href="/documents">
-          {l.nav.docs}
-        </Link>
+        <Link href="/documents">{l.nav.docs}</Link>
         <Link target="_blank" href="https://wikit.chalmers.it/">
           {l.nav.wiki}&nbsp;&#8599;
         </Link>
