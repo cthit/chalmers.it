@@ -26,16 +26,17 @@ model NewsPost {
 }
 
 model DivisionGroup {
-  id                Int            @id @default(autoincrement())
-  gammaSuperGroupId String         @unique
-  slug              String         @unique
+  id                Int                @id @default(autoincrement())
+  gammaSuperGroupId String             @unique
+  slug              String             @unique
   prettyName        String
   descriptionSv     String
   descriptionEn     String
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   NewsPost          NewsPost[]
   DivisionPages     DivisionPage[]
+  DivisionDocument  DivisionDocument[]
 }
 
 model DivisionPage {
@@ -99,11 +100,12 @@ model DivisionDocument {
 }
 
 model Media {
-  sha256    String     @id
-  extension String
-  createdAt DateTime   @default(now())
-  NewsPost  NewsPost[]
-  Sponsor   Sponsor[]
+  sha256           String             @id
+  extension        String
+  createdAt        DateTime           @default(now())
+  NewsPost         NewsPost[]
+  Sponsor          Sponsor[]
+  DivisionDocument DivisionDocument[]
 }
 
 model EventNotifiers {
