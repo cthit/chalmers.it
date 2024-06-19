@@ -4,6 +4,7 @@ import MediaService from '@/services/mediaService';
 import DivisionDocumentService from '@/services/divisionDocumentService';
 import { redirect } from 'next/navigation';
 import { DocumentType } from '@prisma/client';
+import { MediaType } from '@/services/fileService';
 
 export async function addDocument(
   divisionGroupId: string,
@@ -20,7 +21,7 @@ export async function addDocument(
     return;
   }
 
-  const mediaId = (await MediaService.save(file))?.sha256;
+  const mediaId = (await MediaService.save(file, [MediaType.Document]))?.sha256;
   if (mediaId) {
     await DivisionDocumentService.add(
       divisionGroupId,
