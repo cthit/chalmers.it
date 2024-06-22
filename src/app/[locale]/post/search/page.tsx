@@ -11,7 +11,7 @@ export default async function Page({
     <main>
       <ThreePaneLayout
         left={<></>}
-        middle={<NewsSearchForm />}
+        middle={<NewsSearchForm locale={locale} />}
         right={<ContactCard locale={locale} />}
       />
     </main>
