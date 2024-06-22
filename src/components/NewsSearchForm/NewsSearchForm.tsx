@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './NewsSearchForm.module.scss';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
@@ -21,14 +21,14 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
-  const onSearch = async () => {
+  const onSearch = useCallback(async () => {
     setResults(undefined);
     setResults(await search(query, locale, before, after));
-  };
+  }, [query, locale, before, after]);
 
   useEffect(() => {
     onSearch();
-  }, []);
+  }, [onSearch]);
 
   return (
     <>
