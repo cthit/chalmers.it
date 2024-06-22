@@ -159,21 +159,39 @@ export default class NewsService {
     });
   }
 
-  static async search(query: string) {
+  static async search(query: string, before?: Date, after?: Date) {
     return await prisma.newsPost.findMany({
       where: {
         OR: [
           {
             titleEn: {
-              contains: query
+              contains: query,
+              mode: 'insensitive'
             }
           },
           {
             titleSv: {
-              contains: query
+              contains: query,
+              mode: 'insensitive'
+            }
+          },
+          {
+            contentEn: {
+              contains: query,
+              mode: 'insensitive'
+            }
+          },
+          {
+            contentSv: {
+              contains: query,
+              mode: 'insensitive'
             }
           }
-        ]
+        ],
+        createdAt: {
+          gte: after,
+          lte: before
+        }
       }
     });
   }
