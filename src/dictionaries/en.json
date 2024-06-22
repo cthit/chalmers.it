@@ -159,6 +159,7 @@
     "before": "Before",
     "after": "After",
     "results": "Results",
-    "query": "Query"
+    "query": "Query",
+    "short": "Search query must be at least 3 characters long"
   }
 }

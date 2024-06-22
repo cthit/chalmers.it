@@ -67,11 +67,9 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
         <h1>{l.search.results}</h1>
         <Divider />
         {results === undefined && <p>{l.search.loading}</p>}
-        {results !== undefined && results.length === 0 && validLength ? (
-          <p>{l.search.empty}</p>
-        ) : (
-          <p>Query must be at least 3 characters</p>
-        )}
+        {results !== undefined &&
+          results.length === 0 &&
+          (validLength ? <p>{l.search.empty}</p> : <p>{l.search.short}</p>)}
         <ul className={styles.results}>
           {results !== undefined &&
             results.map((result) => (

@@ -158,6 +158,7 @@
     "before": "Före",
     "after": "Efter",
     "results": "Resultat",
-    "query": "Sökfråga"
+    "query": "Sökfråga",
+    "short": "Sökfrågan måste vara minst 3 tecken"
   }
 }
