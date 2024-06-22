@@ -1,4 +1,5 @@
 import Layout from '@/app/[locale]/layout';
+import { cookies } from 'next/headers';
 
 export const metadata = {
   title: '404 - Page not found',
@@ -10,10 +11,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const locale = cookies().get('NEXT_LOCALE')?.value ?? 'en';
   return (
     <Layout
       params={{
-        locale: 'en'
+        locale
       }}
     >
       {children}
