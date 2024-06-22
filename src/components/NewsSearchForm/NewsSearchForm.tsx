@@ -13,7 +13,7 @@ import i18nService from '@/services/i18nService';
 
 const NewsSearchForm = ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
-  const searchParams = useSearchParams().get('query') || '';
+  const searchParams = useSearchParams().get('q') || '';
 
   const [results, setResults] = useState<any[] | undefined>(undefined);
   const [query, setQuery] = useState(searchParams);
