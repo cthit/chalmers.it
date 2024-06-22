@@ -1,10 +1,14 @@
-import Layout from '@/app/[locale]/layout';
+import Layout, { generateMetadata as genMeta } from '@/app/[locale]/layout';
 import { cookies } from 'next/headers';
 
-export const metadata = {
-  title: '404 - Page not found',
-  description: 'Software Engineering at Chalmers'
-};
+export function generateMetadata() {
+  const locale = cookies().get('NEXT_LOCALE')?.value ?? 'en';
+  return genMeta({
+    params: {
+      locale
+    }
+  });
+}
 
 export default function RootLayout({
   children
