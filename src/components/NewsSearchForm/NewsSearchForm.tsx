@@ -1,5 +1,6 @@
 'use client';
 
+import styles from './NewsSearchForm.module.scss';
 import { useEffect, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
@@ -35,15 +36,21 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
         <h1>{l.search.search}</h1>
         <Divider />
         <label>{l.search.query}</label>
-        <TextArea value={query} onChange={(e) => setQuery(e.target.value)} />
-        <br />
-        <label>{l.search.after}</label>
-        <br />
-        <DatePicker value={after} onChange={setAfter} />
+        <TextArea
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onSearch();
+          }}
+        />
         <br />
         <label>{l.search.before}</label>
         <br />
         <DatePicker value={before} onChange={setBefore} />
+        <br />
+        <label>{l.search.after}</label>
+        <br />
+        <DatePicker value={after} onChange={setAfter} />
         <br />
         <ActionButton onClick={onSearch}>{l.search.search}</ActionButton>
       </ContentPane>
@@ -55,12 +62,16 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
         {results !== undefined && results.length === 0 && (
           <p>{l.search.empty}</p>
         )}
-        {results !== undefined &&
-          results.map((result) => (
-            <Link key={result.id} href={`/post/${result.id}`}>
-              {l.en ? result.titleEn : result.titleSv}
-            </Link>
-          ))}
+        <ul className={styles.results}>
+          {results !== undefined &&
+            results.map((result) => (
+              <li key={result.id}>
+                <Link href={`/post/${result.id}`}>
+                  {l.en ? result.titleEn : result.titleSv}
+                </Link>
+              </li>
+            ))}
+        </ul>
       </ContentPane>
     </>
   );
