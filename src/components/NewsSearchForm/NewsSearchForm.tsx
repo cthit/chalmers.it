@@ -14,21 +14,29 @@ import i18nService from '@/services/i18nService';
 
 const NewsSearchForm = ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
-  const searchParams = useSearchParams().get('q') || '';
+  const q = useSearchParams().get('q') || '';
 
+  const [first, setFirst] = useState<boolean>(true);
   const [results, setResults] = useState<any[] | undefined>(undefined);
-  const [query, setQuery] = useState(searchParams);
+  const [query, setQuery] = useState(q);
+  const [validLength, setValidLength] = useState<boolean>(q.length >= 3);
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
   const onSearch = useCallback(async () => {
     setResults(undefined);
-    setResults(await search(query, locale, before, after));
+
+    const isValidLength = query.length >= 3;
+    setValidLength(isValidLength);
+    setResults(isValidLength ? await search(query, locale, before, after) : []);
   }, [query, locale, before, after]);
 
   useEffect(() => {
-    onSearch();
-  }, [onSearch]);
+    if (first) {
+      onSearch();
+      setFirst(false);
+    }
+  }, [first, onSearch]);
 
   return (
     <>
@@ -59,8 +67,10 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
         <h1>{l.search.results}</h1>
         <Divider />
         {results === undefined && <p>{l.search.loading}</p>}
-        {results !== undefined && results.length === 0 && (
+        {results !== undefined && results.length === 0 && validLength ? (
           <p>{l.search.empty}</p>
+        ) : (
+          <p>Query must be at least 3 characters</p>
         )}
         <ul className={styles.results}>
           {results !== undefined &&
