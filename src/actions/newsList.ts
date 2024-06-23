@@ -62,6 +62,13 @@ export const getData = async (
 };
 
 export const getPage = async (page: number, locale: string) => {
-  const posts = await NewsService.getPage(page, 3);
+  const user = await SessionService.getUser();
+  const groups = await SessionService.getActiveGroups();
+  const posts = await NewsService.getPage(
+    page,
+    3,
+    user?.id,
+    groups.map((g) => g.superGroup.id)
+  );
   return Promise.all(posts.map((post) => getData(post, locale)));
 };
