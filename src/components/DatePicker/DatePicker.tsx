@@ -13,7 +13,7 @@ const convertToDateTimeLocalString = (date: Date) => {
 
 interface DatePickerProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
-  value: Date;
+  value?: Date;
   onChange?: (date: Date) => void;
 }
 
@@ -27,7 +27,7 @@ const DatePicker = ({
     <input
       className={`${styles.picker} ${className}`}
       type="datetime-local"
-      value={convertToDateTimeLocalString(value)}
+      value={value && convertToDateTimeLocalString(value)}
       onChange={(e) => onChange && onChange(new Date(e.target.value))}
       {...rest}
     />

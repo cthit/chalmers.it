@@ -1,4 +1,5 @@
 {
+  "en": true,
   "general": {
     "create": "Create",
     "edit": "Edit",
@@ -151,5 +152,15 @@
     "images": "Images",
     "code": "Code Blocks",
     "tables": "Tables"
+  },
+  "search": {
+    "search": "Search",
+    "empty": "No search results",
+    "loading": "Searching...",
+    "before": "Before",
+    "after": "After",
+    "results": "Results",
+    "query": "Query",
+    "short": "Search query must be at least 3 characters long"
   }
 }

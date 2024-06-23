@@ -1,4 +1,5 @@
 {
+  "en": false,
   "general": {
     "create": "Skapa",
     "edit": "Redigera",
@@ -151,5 +152,15 @@
     "images": "Bilder",
     "code": "Kodblock",
     "tables": "Tabeller"
+  },
+  "search": {
+    "search": "Sök",
+    "empty": "Inga sökresultat",
+    "loading": "Söker...",
+    "before": "Före",
+    "after": "Efter",
+    "results": "Resultat",
+    "query": "Sökfråga",
+    "short": "Sökfrågan måste vara minst 3 tecken"
   }
 }
