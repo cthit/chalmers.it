@@ -62,7 +62,12 @@ export default class NewsService {
     });
   }
 
-  static async getPage(page: number, pageSize: number) {
+  static async getPage(
+    page: number,
+    pageSize: number,
+    userId?: string,
+    groupIds?: string[]
+  ) {
     return await prisma.newsPost.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -85,6 +90,23 @@ export default class NewsService {
             prettyName: true
           }
         }
+      },
+      where: {
+        OR: [
+          {
+            status: PostStatus.PUBLISHED
+          },
+          {
+            writtenByGammaUserId: userId
+          },
+          {
+            writtenFor: {
+              gammaSuperGroupId: {
+                in: groupIds
+              }
+            }
+          }
+        ]
       }
     });
   }
@@ -163,40 +185,63 @@ export default class NewsService {
     query: string,
     locale: string,
     before?: Date,
-    after?: Date
+    after?: Date,
+    userId?: string,
+    groupIds?: string[]
   ) {
     return await prisma.newsPost.findMany({
       where: {
-        OR:
-          locale === 'en'
-            ? [
-                {
-                  titleEn: {
-                    contains: query,
-                    mode: 'insensitive'
-                  }
-                },
-                {
-                  contentEn: {
-                    contains: query,
-                    mode: 'insensitive'
+        AND: [
+          {
+            OR:
+              locale === 'en'
+                ? [
+                    {
+                      titleEn: {
+                        contains: query,
+                        mode: 'insensitive'
+                      }
+                    },
+                    {
+                      contentEn: {
+                        contains: query,
+                        mode: 'insensitive'
+                      }
+                    }
+                  ]
+                : [
+                    {
+                      titleSv: {
+                        contains: query,
+                        mode: 'insensitive'
+                      }
+                    },
+                    {
+                      contentSv: {
+                        contains: query,
+                        mode: 'insensitive'
+                      }
+                    }
+                  ]
+          },
+          {
+            OR: [
+              {
+                status: PostStatus.PUBLISHED
+              },
+              {
+                writtenByGammaUserId: userId
+              },
+              {
+                writtenFor: {
+                  gammaSuperGroupId: {
+                    in: groupIds
                   }
                 }
-              ]
-            : [
-                {
-                  titleSv: {
-                    contains: query,
-                    mode: 'insensitive'
-                  }
-                },
-                {
-                  contentSv: {
-                    contains: query,
-                    mode: 'insensitive'
-                  }
-                }
-              ],
+              }
+            ]
+          }
+        ],
         createdAt: {
           gte: after,
           lte: before
