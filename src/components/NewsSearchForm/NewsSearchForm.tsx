@@ -7,7 +7,6 @@ import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
 import Divider from '../Divider/Divider';
 import TextArea from '../TextArea/TextArea';
-import Link from 'next/link';
 import { search } from '@/actions/newsList';
 import { useSearchParams } from 'next/navigation';
 import i18nService from '@/services/i18nService';

@@ -84,8 +84,8 @@ export async function search(
   const posts = await NewsService.search(
     query,
     locale,
-    before,
-    after,
+    before ?? undefined,
+    after ?? undefined,
     user?.id,
     groups.map((g) => g.superGroup.id)
   );
