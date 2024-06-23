@@ -94,4 +94,10 @@ export default class FileService {
 
     return newText;
   }
+
+  static getValidMimes(types: MediaType[]) {
+    return Object.keys(mimeTypes).filter((key) =>
+      types.includes(mimeTypes[key].type)
+    );
+  }
 }

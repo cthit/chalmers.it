@@ -23,8 +23,13 @@ const Navigation = ({ locale, desktop }: Props) => {
         desktop={desktop}
       >
         <Link href="/groups">{l.pages.groups}</Link>
-        <Link target="_blank" href="https://dokument.chalmers.it/">
-          {l.nav.docs}
+        <Link href="/documents">{l.docs.operational}</Link>
+        <Link
+          target="_blank"
+          href="https://docs.chalmers.it/"
+          className={`${styles.navLink} ${playfair.className}`}
+        >
+          {l.docs.regulatory}&nbsp;&#8599;
         </Link>
         <Link target="_blank" href="https://wikit.chalmers.it/">
           {l.nav.wiki}&nbsp;&#8599;

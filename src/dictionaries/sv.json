@@ -4,6 +4,9 @@
     "create": "Skapa",
     "edit": "Redigera",
     "delete": "Radera",
+    "download": "Ladda ner",
+    "upload": "Ladda upp",
+    "uploaded": "Uppladdad",
     "close": "Stäng"
   },
   "site": {
@@ -14,7 +17,6 @@
   },
   "nav": {
     "division": "Sektionen",
-    "docs": "Dokument",
     "wiki": "Wiki",
     "pictures": "Bilder",
     "merch": "Merch",
@@ -66,10 +68,11 @@
     "loadMore": "Ladda fler"
   },
   "editor": {
-    "createAs": "Posta som",
+    "createAs": "Skapa som",
     "self": "Mig själv",
     "title": "Titel",
     "content": "Innehåll",
+    "description": "Beskrivning",
     "publish": "Publiceringstid",
     "now": "Nu",
     "scheduled": "Schemalagd",
@@ -142,6 +145,29 @@
     "logout": "Logga ut",
     "profile": "Min profil",
     "settings": "Inställningar"
+  },
+  "docs": {
+    "regulatory": "Styrdokument",
+    "operational": "Verksamhetsdokument",
+    "empty": "Inga dokument att visa",
+    "file": "Dokumentfil",
+    "type": "Dokumenttyp",
+    "createNew": "Ladda upp dokument",
+    "confirmDelete": "Är du säker på att du vill radera detta dokument?",
+    "deleting": "Raderar...",
+    "deleted": "Raderat!",
+    "deleteError": "Kunde inte radera dokument!",
+    "uploading": "Laddar upp...",
+    "uploaded": "Uppladdat!",
+    "uploadError": "Kunde inte ladda upp dokument!"
+  },
+  "docTypes": {
+    "budget": "Budget",
+    "businessPlan": "Verksamhetsplan",
+    "businessReport": "Verksamhetsrapport",
+    "financialReport": "Ekonomisk rapport",
+    "misc": "Annat",
+    "protocol": "Protokoll"
   },
   "markdown": {
     "title": "Lathund",

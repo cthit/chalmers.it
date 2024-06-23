@@ -26,16 +26,17 @@ model NewsPost {
 }
 
 model DivisionGroup {
-  id                Int            @id @default(autoincrement())
-  gammaSuperGroupId String         @unique
-  slug              String         @unique
+  id                Int                @id @default(autoincrement())
+  gammaSuperGroupId String             @unique
+  slug              String             @unique
   prettyName        String
   descriptionSv     String
   descriptionEn     String
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   NewsPost          NewsPost[]
   DivisionPages     DivisionPage[]
+  DivisionDocument  DivisionDocument[]
 }
 
 model DivisionPage {
@@ -83,12 +84,28 @@ model Sponsor {
   type        SponsorType @default(PARTNER)
 }
 
+model DivisionDocument {
+  id              Int           @id @default(autoincrement())
+  DivisionGroup   DivisionGroup @relation(fields: [divisionGroupId], references: [id])
+  divisionGroupId Int
+  media           Media         @relation(fields: [mediaSha256], references: [sha256])
+  mediaSha256     String
+  titleSv         String
+  titleEn         String
+  descriptionSv   String
+  descriptionEn   String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  type            DocumentType  @default(MISC)
+}
+
 model Media {
-  sha256    String     @id
-  extension String
-  createdAt DateTime   @default(now())
-  NewsPost  NewsPost[]
-  Sponsor   Sponsor[]
+  sha256           String             @id
+  extension        String
+  createdAt        DateTime           @default(now())
+  NewsPost         NewsPost[]
+  Sponsor          Sponsor[]
+  DivisionDocument DivisionDocument[]
 }
 
 model EventNotifiers {
@@ -96,6 +113,15 @@ model EventNotifiers {
   type     NotifierType
   url      String
   language Language
+}
+
+enum DocumentType {
+  PROTOCOL
+  BUDGET
+  BUSINESS_PLAN
+  FINANCIAL_REPORT
+  BUSINESS_REPORT
+  MISC
 }
 
 enum NotifierType {

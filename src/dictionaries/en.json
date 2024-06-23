@@ -4,6 +4,9 @@
     "create": "Create",
     "edit": "Edit",
     "delete": "Delete",
+    "download": "Download",
+    "upload": "Upload",
+    "uploaded": "Uploaded",
     "close": "Close"
   },
   "site": {
@@ -14,7 +17,6 @@
   },
   "nav": {
     "division": "The Division",
-    "docs": "Documents",
     "wiki": "Wiki",
     "pictures": "Pictures",
     "merch": "Merch",
@@ -70,6 +72,7 @@
     "self": "Myself",
     "title": "Title",
     "content": "Content",
+    "description": "Description",
     "publish": "Publish at",
     "now": "Now",
     "scheduled": "Scheduled",
@@ -142,6 +145,29 @@
     "logout": "Log out",
     "profile": "My profile",
     "settings": "Settings"
+  },
+  "docs": {
+    "regulatory": "Regulatory Documents",
+    "operational": "Operational Documents",
+    "empty": "No documents to show",
+    "file": "Document file",
+    "type": "Document type",
+    "createNew": "Upload new document",
+    "confirmDelete": "Are you sure you want to delete this document?",
+    "deleting": "Deleting...",
+    "deleted": "Deleted!",
+    "deleteError": "Could not delete document!",
+    "uploading": "Uploading...",
+    "uploaded": "Uploaded!",
+    "uploadError": "Could not upload document!"
+  },
+  "docTypes": {
+    "budget": "Budget",
+    "businessPlan": "Business Plan",
+    "businessReport": "Business Report",
+    "financialReport": "Financial Report",
+    "misc": "Miscellaneous",
+    "protocol": "Protocol"
   },
   "markdown": {
     "title": "Cheat Sheet",
