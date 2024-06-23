@@ -2,10 +2,11 @@
 
 import styles from './InfiniteScroller.module.scss';
 import { getPage } from '@/actions/newsList';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import NewsPost from './NewsPost/NewsPost';
 import i18nService from '@/services/i18nService';
 import ActionButton from '../ActionButton/ActionButton';
+import Divider from '../Divider/Divider';
 
 const InfiniteScroller = ({
   page,
@@ -58,7 +59,10 @@ const InfiniteScroller = ({
       ) : (
         <>
           {news.map((post: any) => (
-            <NewsPost key={post.id} post={post} locale={locale} />
+            <React.Fragment key={post.id}>
+              <Divider />
+              <NewsPost key={post.id} post={post} locale={locale} />
+            </React.Fragment>
           ))}
           {news.length > 0 ? (
             <InfiniteScroller page={page + 1} locale={locale} />
