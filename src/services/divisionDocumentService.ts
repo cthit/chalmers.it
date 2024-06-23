@@ -74,7 +74,7 @@ export default class DivisionDocumentService {
   }
 
   static async add(
-    divisionGroupId: string,
+    divisionSuperGroupId: string,
     titleSv: string,
     titleEn: string,
     descriptionSv: string,
@@ -86,7 +86,7 @@ export default class DivisionDocumentService {
       data: {
         DivisionGroup: {
           connect: {
-            gammaSuperGroupId: divisionGroupId
+            gammaSuperGroupId: divisionSuperGroupId
           }
         },
         media: {

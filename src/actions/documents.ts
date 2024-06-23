@@ -5,9 +5,10 @@ import DivisionDocumentService from '@/services/divisionDocumentService';
 import { redirect } from 'next/navigation';
 import { DocumentType } from '@prisma/client';
 import { MediaType } from '@/services/fileService';
+import SessionService from '@/services/sessionService';
 
 export async function addDocument(
-  divisionGroupId: string,
+  divisionSuperGroupId: string,
   titleSv: string,
   titleEn: string,
   descriptionSv: string,
@@ -15,6 +16,10 @@ export async function addDocument(
   form: FormData,
   type?: DocumentType
 ) {
+  if (!(await SessionService.canEditGroup(divisionSuperGroupId))) {
+    throw new Error('Unauthorized');
+  }
+
   const file: File | null = form.get('file') as unknown as File;
 
   if (!file) {
@@ -24,7 +29,7 @@ export async function addDocument(
   const mediaId = (await MediaService.save(file, [MediaType.Document]))?.sha256;
   if (mediaId) {
     await DivisionDocumentService.add(
-      divisionGroupId,
+      divisionSuperGroupId,
       titleSv,
       titleEn,
       descriptionSv,
