@@ -62,10 +62,7 @@ const ContactCard = ({ locale }: { locale?: string }) => {
           digIT
         </Link>{' '}
         |{' '}
-        <Link
-          className={styles.link}
-          href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        >
+        <Link className={styles.link} href="/about">
           {l.footer.moreinfo}
         </Link>{' '}
       </p>
