@@ -57,7 +57,7 @@ const AddDocumentForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="createAsGroup">Skapa som </label>
+        <label htmlFor="createAsGroup">{l.editor.createAs} </label>
         <DropdownList onChange={(e) => setGroupId(e.target.value)}>
           <option value={undefined} hidden>
             Select a group
@@ -70,7 +70,7 @@ const AddDocumentForm = ({
         </DropdownList>
       </div>
       <div>
-        <label htmlFor="createAsGroup">Dokumenttyp </label>
+        <label htmlFor="createAsGroup">{l.docs.type} </label>
         <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
@@ -83,22 +83,22 @@ const AddDocumentForm = ({
           ))}
         </DropdownList>
       </div>
-      <label htmlFor="titleSv">Titel (svenska): </label>
+      <label htmlFor="titleSv">{l.editor.title} (sv): </label>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <label htmlFor="titleEn">Titel (engelska): </label>
+      <label htmlFor="titleEn">{l.editor.title} (en): </label>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <label htmlFor="descriptionSv">Beskrivning (svenska): </label>
+      <label htmlFor="descriptionSv">{l.editor.content} (sv): </label>
       <TextArea
         value={descriptionSv}
         onChange={(e) => setDescriptionSv(e.target.value)}
       />
-      <label htmlFor="descriptionEn">Beskrivning (engelska): </label>
+      <label htmlFor="descriptionEn">{l.editor.content} (en): </label>
       <TextArea
         value={descriptionEn}
         onChange={(e) => setDescriptionEn(e.target.value)}
       />
       <div>
-        <label htmlFor="documentFile">Dokumentfil: </label>
+        <label htmlFor="documentFile">{l.docs.file}: </label>
         <input
           type="file"
           id="documentFile"
@@ -106,7 +106,7 @@ const AddDocumentForm = ({
           onChange={handleDocChange}
         />
       </div>
-      <ActionButton type="submit">Ladda upp</ActionButton>
+      <ActionButton type="submit">{l.general.upload}</ActionButton>
     </form>
   );
 };

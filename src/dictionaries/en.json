@@ -149,7 +149,10 @@
   "docs": {
     "title": "Documents",
     "more": "See more documents at docs.chalmers.it",
-    "empty": "No documents to show"
+    "empty": "No documents to show",
+    "file": "Document file",
+    "type": "Document type",
+    "createNew": "Upload new document"
   },
   "docTypes": {
     "budget": "Budget",

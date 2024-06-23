@@ -149,7 +149,10 @@
   "docs": {
     "title": "Dokument",
     "more": "Se fler dokument på docs.chalmers.it",
-    "empty": "Inga dokument att visa"
+    "empty": "Inga dokument att visa",
+    "file": "Dokumentfil",
+    "type": "Dokumenttyp",
+    "createNew": "Ladda upp dokument"
   },
   "docTypes": {
     "budget": "Budget",
