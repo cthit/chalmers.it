@@ -188,5 +188,8 @@
     "results": "Results",
     "query": "Query",
     "short": "Search query must be at least 3 characters long"
+  },
+  "about": {
+    "title": "About"
   }
 }

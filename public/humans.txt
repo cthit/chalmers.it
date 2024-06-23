@@ -1,0 +1,53 @@
+===== CHALMERS.IT =====
+  Developed by digIT
+=======================
+
+The home page for the Software Engineering (IT) student division at Chalmers University of Technology
+
+Questions, bug reports or suggestions:
+- digit@chalmers.it
+- #digit on Slack
+- https://github.com/cthit/chalmers.it/issues
+
+
+DEVELOPMENT TEAM
+----------------
+
+Next.js rewrite and redesign developed by digIT 23/24 and digIT 24/25:
+
+- Gustaf "Goose" Asplund
+   Development lead
+   digIT 23/24
+
+- Atosa "Katt" Daneshvar
+   New design
+   digIT 23/24
+
+- Oscar "Space" Eriksson
+   System design and interface
+   digIT 23/24
+
+- Simon "Casino" Westlin Green
+   Interface
+   digIT 24/25
+
+
+Rebuild of original version in Ruby on Rails by digIT 14/15:
+
+- Johan "Ndushi" Lindskogen
+   Tech Lead
+   digIT 24/25
+
+
+Original version designed by digIT 12/13:
+
+- Johan "brook" Brook
+   digIT 12/13
+
+
+FRAMEWORKS AND LIBRARIES
+------------------------
+
+- NextJS
+- React
+- Prisma

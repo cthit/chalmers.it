@@ -188,5 +188,8 @@
     "results": "Resultat",
     "query": "Sökfråga",
     "short": "Sökfrågan måste vara minst 3 tecken"
+  },
+  "about": {
+    "title": "Om"
   }
 }
