@@ -53,7 +53,7 @@ const mainContent = async (locale: string) => {
               </p>
               <p>{en ? doc.descriptionEn : doc.descriptionSv}</p>
               <GroupActive group={doc.gammaSuperGroupId}>
-                <DeleteDocumentButton text={l.general.delete} id={doc.id} />
+                <DeleteDocumentButton locale={locale} id={doc.id} />
               </GroupActive>{' '}
               <ActionLink href={doc.url}>{l.general.download}</ActionLink>
             </ContentPane>

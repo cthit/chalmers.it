@@ -73,6 +73,7 @@
     "self": "Mig själv",
     "title": "Titel",
     "content": "Innehåll",
+    "description": "Beskrivning",
     "publish": "Publiceringstid",
     "now": "Nu",
     "scheduled": "Schemalagd",
@@ -152,7 +153,14 @@
     "empty": "Inga dokument att visa",
     "file": "Dokumentfil",
     "type": "Dokumenttyp",
-    "createNew": "Ladda upp dokument"
+    "createNew": "Ladda upp dokument",
+    "confirmDelete": "Är du säker på att du vill radera detta dokument?",
+    "deleting": "Raderar...",
+    "deleted": "Raderat!",
+    "deleteError": "Kunde inte radera dokument!",
+    "uploading": "Laddar upp...",
+    "uploaded": "Uppladdat!",
+    "uploadError": "Kunde inte ladda upp dokument!"
   },
   "docTypes": {
     "budget": "Budget",

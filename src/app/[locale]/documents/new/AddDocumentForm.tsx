@@ -9,6 +9,7 @@ import DivisionDocumentService from '@/services/divisionDocumentService';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import FileService, { MediaType } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
+import { toast } from 'react-toastify';
 
 const validMimes = FileService.getValidMimes([MediaType.Document]);
 
@@ -43,14 +44,21 @@ const AddDocumentForm = ({
     const formData = new FormData();
     formData.append('file', documentFile!);
 
-    addDocument(
-      groupId,
-      titleSv,
-      titleEn,
-      descriptionSv,
-      descriptionEn,
-      formData,
-      type as DocumentType
+    await toast.promise(
+      addDocument(
+        groupId,
+        titleSv,
+        titleEn,
+        descriptionSv,
+        descriptionEn,
+        formData,
+        type as DocumentType
+      ),
+      {
+        pending: l.docs.uploading,
+        success: l.docs.uploaded,
+        error: l.docs.uploadError
+      }
     );
   };
 
@@ -87,12 +95,12 @@ const AddDocumentForm = ({
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <label htmlFor="titleEn">{l.editor.title} (en): </label>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <label htmlFor="descriptionSv">{l.editor.content} (sv): </label>
+      <label htmlFor="descriptionSv">{l.editor.description} (sv): </label>
       <TextArea
         value={descriptionSv}
         onChange={(e) => setDescriptionSv(e.target.value)}
       />
-      <label htmlFor="descriptionEn">{l.editor.content} (en): </label>
+      <label htmlFor="descriptionEn">{l.editor.description} (en): </label>
       <TextArea
         value={descriptionEn}
         onChange={(e) => setDescriptionEn(e.target.value)}

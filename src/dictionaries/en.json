@@ -73,6 +73,7 @@
     "self": "Myself",
     "title": "Title",
     "content": "Content",
+    "description": "Description",
     "publish": "Publish at",
     "now": "Now",
     "scheduled": "Scheduled",
@@ -152,7 +153,14 @@
     "empty": "No documents to show",
     "file": "Document file",
     "type": "Document type",
-    "createNew": "Upload new document"
+    "createNew": "Upload new document",
+    "confirmDelete": "Are you sure you want to delete this document?",
+    "deleting": "Deleting...",
+    "deleted": "Deleted!",
+    "deleteError": "Could not delete document!",
+    "uploading": "Uploading...",
+    "uploaded": "Uploaded!",
+    "uploadError": "Could not upload document!"
   },
   "docTypes": {
     "budget": "Budget",
