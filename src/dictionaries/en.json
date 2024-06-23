@@ -17,7 +17,6 @@
   },
   "nav": {
     "division": "The Division",
-    "docs": "Documents",
     "wiki": "Wiki",
     "pictures": "Pictures",
     "merch": "Merch",
@@ -148,8 +147,8 @@
     "settings": "Settings"
   },
   "docs": {
-    "title": "Documents",
-    "more": "See more documents at docs.chalmers.it",
+    "regulatory": "Regulatory Documents",
+    "operational": "Operational Documents",
     "empty": "No documents to show",
     "file": "Document file",
     "type": "Document type",

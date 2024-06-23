@@ -17,7 +17,6 @@
   },
   "nav": {
     "division": "Sektionen",
-    "docs": "Dokument",
     "wiki": "Wiki",
     "pictures": "Bilder",
     "merch": "Merch",
@@ -148,8 +147,8 @@
     "settings": "Inställningar"
   },
   "docs": {
-    "title": "Dokument",
-    "more": "Se fler dokument på docs.chalmers.it",
+    "regulatory": "Styrdokument",
+    "operational": "Verksamhetsdokument",
     "empty": "Inga dokument att visa",
     "file": "Dokumentfil",
     "type": "Dokumenttyp",

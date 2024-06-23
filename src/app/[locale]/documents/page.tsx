@@ -30,8 +30,7 @@ const mainContent = async (locale: string) => {
   const en = locale === 'en';
   return (
     <ContentArticle
-      title={l.docs.title}
-      subtitle={l.docs.more}
+      title={l.docs.operational}
       titleSide={
         <GroupActive>
           <ActionLink href="/documents/new">{l.general.upload}</ActionLink>
