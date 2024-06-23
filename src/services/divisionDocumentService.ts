@@ -16,20 +16,20 @@ export interface DivisionDocument {
 }
 
 export default class DivisionDocumentService {
-  static documentPrettyType(type: DocumentType) {
+  static documentTypeKey(type: DocumentType) {
     switch (type) {
       case DocumentType.BUDGET:
-        return 'Budget';
+        return 'budget';
       case DocumentType.BUSINESS_PLAN:
-        return 'Verksamhetsplan';
+        return 'businessPlan';
       case DocumentType.BUSINESS_REPORT:
-        return 'Verksamhetsrapport';
+        return 'businessReport';
       case DocumentType.FINANCIAL_REPORT:
-        return 'Ekonomisk rapport';
+        return 'financialReport';
       case DocumentType.MISC:
-        return 'Annat';
+        return 'misc';
       case DocumentType.PROTOCOL:
-        return 'Protokoll';
+        return 'protocol';
     }
   }
 

@@ -45,7 +45,7 @@ const mainContent = async (locale: string) => {
             <ContentPane>
               <h3 className={styles.title}>{en ? doc.titleEn : doc.titleSv}</h3>{' '}
               <h4 className={styles.docType}>
-                {DivisionDocumentService.documentPrettyType(doc.type)}
+                {l.docTypes[DivisionDocumentService.documentTypeKey(doc.type)]}
               </h4>
               <p className={styles.subtitle}>
                 {`${l.general.uploaded} ${i18nService.formatDate(doc.createdAt, false)}`}

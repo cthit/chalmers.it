@@ -151,6 +151,14 @@
     "more": "Se fler dokument på docs.chalmers.it",
     "empty": "Inga dokument att visa"
   },
+  "docTypes": {
+    "budget": "Budget",
+    "businessPlan": "Verksamhetsplan",
+    "businessReport": "Verksamhetsrapport",
+    "financialReport": "Ekonomisk rapport",
+    "misc": "Annat",
+    "protocol": "Protokoll"
+  },
   "markdown": {
     "title": "Lathund",
     "header": "Titlar",

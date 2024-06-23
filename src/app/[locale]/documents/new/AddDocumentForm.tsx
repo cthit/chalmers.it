@@ -8,10 +8,17 @@ import { DocumentType } from '@prisma/client';
 import DivisionDocumentService from '@/services/divisionDocumentService';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import FileService, { MediaType } from '@/services/fileService';
+import i18nService from '@/services/i18nService';
 
 const validMimes = FileService.getValidMimes([MediaType.Document]);
 
-const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
+const AddDocumentForm = ({
+  groups,
+  locale
+}: {
+  groups: GammaGroup[];
+  locale: string;
+}) => {
   const [groupId, setGroupId] = useState<string | undefined>(undefined);
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [type, setType] = useState<string>(DocumentType.MISC);
@@ -19,6 +26,8 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
   const [titleEn, setTitleEn] = useState('');
   const [descriptionSv, setDescriptionSv] = useState('');
   const [descriptionEn, setDescriptionEn] = useState('');
+
+  const l = i18nService.getLocale(locale);
 
   const handleDocChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -65,7 +74,11 @@ const AddDocumentForm = ({ groups }: { groups: GammaGroup[] }) => {
         <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
-              {DivisionDocumentService.documentPrettyType(type as DocumentType)}
+              {
+                l.docTypes[
+                  DivisionDocumentService.documentTypeKey(type as DocumentType)
+                ]
+              }
             </option>
           ))}
         </DropdownList>

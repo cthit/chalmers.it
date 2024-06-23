@@ -151,6 +151,14 @@
     "more": "See more documents at docs.chalmers.it",
     "empty": "No documents to show"
   },
+  "docTypes": {
+    "budget": "Budget",
+    "businessPlan": "Business Plan",
+    "businessReport": "Business Report",
+    "financialReport": "Financial Report",
+    "misc": "Miscellaneous",
+    "protocol": "Protocol"
+  },
   "markdown": {
     "title": "Cheat Sheet",
     "header": "Headers",
