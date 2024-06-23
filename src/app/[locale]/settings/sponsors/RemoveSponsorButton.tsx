@@ -10,11 +10,11 @@ const RemoveSponsorButton = ({
     id: number;
   };
 }) => {
-  return (
-    <ActionButton onClick={() => removeSponsor(sponsor.id)}>
-      Ta bort
-    </ActionButton>
-  );
+  const remove = async () => {
+    confirm('Are you sure you want to delete this sponsor?') &&
+      removeSponsor(sponsor.id);
+  };
+  return <ActionButton onClick={remove}>Ta bort</ActionButton>;
 };
 
 export default RemoveSponsorButton;

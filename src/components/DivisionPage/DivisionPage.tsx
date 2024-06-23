@@ -48,7 +48,7 @@ async function mainContent(
       {canEdit && (
         <ActionLink href={`./${end}/edit`}>{l.general.edit}</ActionLink>
       )}
-      {canDelete && <DeletePageButton text={l.general.delete} id={page.id} />}
+      {canDelete && <DeletePageButton locale={locale} id={page.id} />}
     </>
   );
 
