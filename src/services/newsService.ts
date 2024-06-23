@@ -190,6 +190,26 @@ export default class NewsService {
     groupIds?: string[]
   ) {
     return await prisma.newsPost.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        contentEn: true,
+        contentSv: true,
+        createdAt: true,
+        updatedAt: true,
+        writtenByGammaUserId: true,
+        status: true,
+        writtenFor: {
+          select: {
+            gammaSuperGroupId: true,
+            prettyName: true
+          }
+        }
+      },
       where: {
         AND: [
           {

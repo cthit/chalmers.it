@@ -72,3 +72,22 @@ export const getPage = async (page: number, locale: string) => {
   );
   return Promise.all(posts.map((post) => getData(post, locale)));
 };
+
+export async function search(
+  query: string,
+  locale: string,
+  before?: Date,
+  after?: Date
+) {
+  const user = await SessionService.getUser();
+  const groups = await SessionService.getActiveGroups();
+  const posts = await NewsService.search(
+    query,
+    locale,
+    before,
+    after,
+    user?.id,
+    groups.map((g) => g.superGroup.id)
+  );
+  return Promise.all(posts.map((post) => getData(post, locale)));
+}

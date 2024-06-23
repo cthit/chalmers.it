@@ -8,9 +8,10 @@ import DatePicker from '../DatePicker/DatePicker';
 import Divider from '../Divider/Divider';
 import TextArea from '../TextArea/TextArea';
 import Link from 'next/link';
-import { search } from '@/actions/search';
+import { search } from '@/actions/newsList';
 import { useSearchParams } from 'next/navigation';
 import i18nService from '@/services/i18nService';
+import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 
 const NewsSearchForm = ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
@@ -74,9 +75,7 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
           {results !== undefined &&
             results.map((result) => (
               <li key={result.id}>
-                <Link href={`/post/${result.id}`}>
-                  {l.en ? result.titleEn : result.titleSv}
-                </Link>
+                <NewsSearchResult post={result} locale={locale} />
               </li>
             ))}
         </ul>

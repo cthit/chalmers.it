@@ -5,6 +5,7 @@ import MarkdownView from '@/components/MarkdownView/MarkdownView';
 import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
+import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 
 interface NewsPostProps {
   post: {
@@ -49,14 +50,7 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
           />
         )}
       </div>
-      <p className={style.subtitle}>
-        {post.status === PostStatus.SCHEDULED ? `${l.news.scheduled} ` : null}
-        {`${i18nService.formatDate(post.createdAt)} | ${l.news.written} `}
-        {post.writtenFor && `${l.news.for} ${post.writtenFor}`}{' '}
-        {`${l.news.by} ${post.author ?? l.news.unknown} `}
-        {post.updatedAt &&
-          ` | ${l.news.edited} ${i18nService.formatDate(post.updatedAt)}`}
-      </p>
+      <NewsPostMeta post={post} locale={locale} />
       <MarkdownView content={post.content} />
     </>
   );
