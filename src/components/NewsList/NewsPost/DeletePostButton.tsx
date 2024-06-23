@@ -15,11 +15,12 @@ const DeletePostButton = ({ id, text, locale }: DeletePostButtonProps) => {
   const l = i18nService.getLocale(locale);
   async function remove() {
     try {
-      await toast.promise(deletePost(id), {
-        pending: l.news.deleting,
-        success: l.news.deleted,
-        error: l.news.deleteError
-      });
+      confirm(l.news.confirmDelete) &&
+        (await toast.promise(deletePost(id), {
+          pending: l.news.deleting,
+          success: l.news.deleted,
+          error: l.news.deleteError
+        }));
     } catch {
       console.log('Failed to remove news article');
     }

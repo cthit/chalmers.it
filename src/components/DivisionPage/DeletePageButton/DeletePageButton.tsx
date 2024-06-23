@@ -2,22 +2,24 @@
 
 import { deletePage } from '@/actions/divisionPages';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import i18nService from '@/services/i18nService';
 
 interface DeletePageButtonProps {
   id: number;
-  text: string;
+  locale: string;
 }
 
-const DeletePageButton = ({ text, id }: DeletePageButtonProps) => {
+const DeletePageButton = ({ locale, id }: DeletePageButtonProps) => {
+  const l = i18nService.getLocale(locale);
   async function remove() {
     try {
-      await deletePage(id);
+      confirm(l.pages.confirmDelete) && (await deletePage(id));
     } catch {
       console.log('Failed to remove division post');
     }
   }
 
-  return <ActionButton onClick={remove}>{text}</ActionButton>;
+  return <ActionButton onClick={remove}>{l.general.delete}</ActionButton>;
 };
 
 export default DeletePageButton;

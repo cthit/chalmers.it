@@ -17,11 +17,12 @@ const GammaGroupListItem = ({
   const router = useRouter();
 
   const remove = async () => {
-    await toast.promise(removeGroup(superGroupId), {
-      pending: 'Removing group...',
-      success: 'Group removed!',
-      error: 'Failed to remove group'
-    });
+    confirm('Are you sure you want to delete this group?') &&
+      (await toast.promise(removeGroup(superGroupId), {
+        pending: 'Removing group...',
+        success: 'Group removed!',
+        error: 'Failed to remove group'
+      }));
     router.refresh();
   };
 
