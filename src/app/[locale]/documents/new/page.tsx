@@ -5,6 +5,7 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import i18nService from '@/services/i18nService';
 import Forbidden from '@/components/ErrorPages/403/403';
+import ContactCard from '@/components/ContactCard/ContactCard';
 
 export default async function Page({
   params: { locale }
@@ -28,6 +29,7 @@ export default async function Page({
             <AddDocumentForm groups={groups} locale={locale} />
           </ContentPane>
         }
+        right={<ContactCard locale={locale} />}
       />
     </main>
   );

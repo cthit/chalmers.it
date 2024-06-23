@@ -65,7 +65,7 @@ const AddDocumentForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="createAsGroup">{l.editor.createAs} </label>
+        <label>{l.editor.createAs} </label>
         <DropdownList onChange={(e) => setGroupId(e.target.value)}>
           <option value={undefined} hidden>
             Select a group
@@ -78,7 +78,7 @@ const AddDocumentForm = ({
         </DropdownList>
       </div>
       <div>
-        <label htmlFor="createAsGroup">{l.docs.type} </label>
+        <label>{l.docs.type} </label>
         <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
@@ -91,16 +91,16 @@ const AddDocumentForm = ({
           ))}
         </DropdownList>
       </div>
-      <label htmlFor="titleSv">{l.editor.title} (sv): </label>
+      <label>{l.editor.title} (sv)</label>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <label htmlFor="titleEn">{l.editor.title} (en): </label>
+      <label>{l.editor.title} (en)</label>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <label htmlFor="descriptionSv">{l.editor.description} (sv): </label>
+      <label>{l.editor.description} (sv)</label>
       <TextArea
         value={descriptionSv}
         onChange={(e) => setDescriptionSv(e.target.value)}
       />
-      <label htmlFor="descriptionEn">{l.editor.description} (en): </label>
+      <label>{l.editor.description} (en)</label>
       <TextArea
         value={descriptionEn}
         onChange={(e) => setDescriptionEn(e.target.value)}

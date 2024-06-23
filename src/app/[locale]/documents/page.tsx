@@ -49,7 +49,7 @@ const mainContent = async (locale: string) => {
               </h4>
               <p className={styles.subtitle}>
                 {`${l.general.uploaded} ${i18nService.formatDate(doc.createdAt, false)}`}
-                {` ${l.news.by} ${doc.divisionGroupName}`}
+                {` ${l.news.for} ${doc.divisionGroupName}`}
               </p>
               <p>{en ? doc.descriptionEn : doc.descriptionSv}</p>
               <GroupActive group={doc.gammaSuperGroupId}>
