@@ -43,15 +43,10 @@ export default class SessionService {
   }
 
   static async canEditGroupByInternalId(id: number, s?: Session | null) {
-    const session = s ?? (await SessionService.getSession());
-
     const gammaSuperGroupId =
       await DivisionGroupService.getGammaSuperGroupIdFromInternalId(id);
 
-    const activeGroups = session?.user?.id
-      ? await DivisionGroupService.getUserActiveGroups(session?.user?.id!)
-      : [];
-    return activeGroups.some((g) => g?.id === gammaSuperGroupId);
+    return gammaSuperGroupId ? this.canEditGroup(gammaSuperGroupId, s) : [];
   }
 
   static async isActive(s?: Session | null) {
