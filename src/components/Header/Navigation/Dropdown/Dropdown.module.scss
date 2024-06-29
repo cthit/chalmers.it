@@ -16,7 +16,7 @@
   position: absolute;
 }
 
-@media (hover: hover) and (not (max-width: 768px)) {
+@media (hover: hover) and (not (max-width: #{$header-breakpoint})) {
   .dropdownContent {
     display: none;
   }
@@ -26,7 +26,7 @@
   }
 }
 
-@media (hover: none) or (max-width: 768px) {
+@media (hover: none) or (max-width: #{$header-breakpoint}) {
   .dropdownContainer {
     display: grid;
     grid-template-rows: 0fr;
@@ -45,7 +45,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: #{$header-breakpoint}) {
   .dropdownContainer {
     position: relative;
     transition: grid-template-rows 0.5s;

@@ -7,7 +7,8 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 export default {
   sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')]
+    includePaths: [path.join(__dirname, 'styles')],
+    prependData: `@import "@/styles/variables.scss";`
   },
   output: 'standalone',
   experimental: {

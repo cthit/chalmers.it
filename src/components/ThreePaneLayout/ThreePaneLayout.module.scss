@@ -17,7 +17,7 @@
   flex: 3 0 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: #{$mobile-layout-breakpoint}) {
   .main {
     flex-direction: column;
     padding: 1rem;

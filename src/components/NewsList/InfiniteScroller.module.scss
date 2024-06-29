@@ -10,7 +10,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: #{$mobile-layout-breakpoint}) {
   .loadButton {
     display: block;
   }

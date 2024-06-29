@@ -25,7 +25,7 @@
   color: var(--text-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: #{$header-breakpoint}) {
   .escapeHatch {
     padding-left: min(calc(0.25rem + 2vw), 1.25rem);
   }

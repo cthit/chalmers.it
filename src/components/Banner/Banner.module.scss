@@ -50,7 +50,7 @@
   margin-bottom: -0.25rem;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: #{$mobile-layout-breakpoint}) {
   .banner,
   .banner img {
     height: calc(6rem + 20vw);
