@@ -9,6 +9,12 @@
   margin: 0 1rem;
 }
 
+.navMobile {
+  flex-direction: column !important;
+  align-items: start;
+  justify-content: left;
+}
+
 .navLink {
   font-size: 16px;
   color: var(--text-color);
