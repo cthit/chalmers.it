@@ -62,10 +62,10 @@
   }
 
   .title h1 {
-    font-size: calc(0.5rem + 4vw);
+    font-size: min(calc(0.25rem + 6vw), 3rem);
   }
 
   .title h2 {
-    font-size: calc(0.5rem + 1.5vw);
+    font-size: min(calc(0.125rem + 3vw), 1.5rem);
   }
 }

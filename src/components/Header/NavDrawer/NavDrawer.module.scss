@@ -3,8 +3,8 @@
   padding: 0.2rem;
   margin-left: 1rem;
   color: var(--text-color);
-  height: calc(1.5rem + 2.5vw);
-  width: calc(1.5rem + 2.5vw);
+  height: min(calc(1.5rem + 2.5vw), 2.5rem);
+  width: min(calc(1.5rem + 2.5vw), 2.5rem);
 }
 
 .drawer {

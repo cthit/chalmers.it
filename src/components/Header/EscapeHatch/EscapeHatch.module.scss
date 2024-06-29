@@ -27,19 +27,19 @@
 
 @media (max-width: 768px) {
   .escapeHatch {
-    padding-left: calc(0.25rem + 2vw);
+    padding-left: min(calc(0.25rem + 2vw), 1.25rem);
   }
 
   .itlogo {
-    height: calc(1rem + 4vw);
-    width: calc(1rem + 4vw);
+    height: min(calc(8vw + 1rem), 3.125rem);
+    width: min(calc(8vw + 1rem), 3.125rem);
   }
 
   .title {
-    font-size: calc(0.5rem + 2vw);
+    font-size: min(4.5vw, 1.5rem);
   }
 
   .subtitle {
-    font-size: calc(0.5rem + 1vw);
+    font-size: min(3vw, 1rem);
   }
 }
