@@ -134,7 +134,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             contentEn,
             contentSv,
             formData,
-            publishDate
+            publish === 'now' ? null : publishDate
           ),
           {
             pending: l.editor.saving,
@@ -304,7 +304,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           onChange={(e) => setPublish(e.target.value)}
         >
           <option value="now">{l.editor.now}</option>
-          <option value="schedule">{l.editor.scheduled}</option>
+          <option
+            disabled={newsPost.scheduledPublish === null}
+            value="schedule"
+          >
+            {l.editor.scheduled}
+          </option>
         </DropdownList>
         <DatePicker
           hidden={publish === 'now'}
