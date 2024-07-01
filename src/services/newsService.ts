@@ -22,6 +22,7 @@ export default class NewsService {
         updatedAt: true,
         writtenByGammaUserId: true,
         status: true,
+        scheduledPublish: true,
         writtenFor: {
           select: {
             gammaSuperGroupId: true,
@@ -82,6 +83,7 @@ export default class NewsService {
         contentSv: true,
         createdAt: true,
         updatedAt: true,
+        scheduledPublish: true,
         writtenByGammaUserId: true,
         status: true,
         writtenFor: {
@@ -201,6 +203,7 @@ export default class NewsService {
         contentSv: true,
         createdAt: true,
         updatedAt: true,
+        scheduledPublish: true,
         writtenByGammaUserId: true,
         status: true,
         writtenFor: {

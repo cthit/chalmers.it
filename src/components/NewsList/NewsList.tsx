@@ -17,6 +17,7 @@ interface NewsPostInterface {
   author?: string;
   createdAt: Date;
   updatedAt?: Date;
+  scheduledPublish?: Date;
   status: PostStatus;
   writtenFor?: string;
   deletable: boolean;

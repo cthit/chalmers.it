@@ -35,6 +35,7 @@ interface NewPostFormProps {
   contentSv?: string;
   writtenByGammaUserId?: string;
   locale: string;
+  scheduledPublish?: Date | null;
   connectedEvents?: Event[];
 }
 
@@ -73,8 +74,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
   const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
   const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
-  const [publish, setPublish] = useState('now');
-  const [scheduledFor, setScheduledFor] = useState(new Date());
+  const [publish, setPublish] = useState(
+    newsPost.scheduledPublish ? 'schedule' : 'now'
+  );
+  const [scheduledFor, setScheduledFor] = useState(
+    newsPost.scheduledPublish ?? new Date()
+  );
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState('');
   const [previewContentEn, setPreviewContentEn] = useState('');
@@ -294,7 +299,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <br />
       <h2>{l.editor.publish}</h2>
       <div className={style.actions}>
-        <DropdownList onChange={(e) => setPublish(e.target.value)}>
+        <DropdownList
+          value={publish}
+          onChange={(e) => setPublish(e.target.value)}
+        >
           <option value="now">{l.editor.now}</option>
           <option value="schedule">{l.editor.scheduled}</option>
         </DropdownList>

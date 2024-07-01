@@ -10,16 +10,21 @@ const NewsPostMeta = ({
     author?: string;
     createdAt: Date;
     updatedAt?: Date;
+    scheduledPublish?: Date;
     status: PostStatus;
     writtenFor?: string;
   };
   locale: string;
 }) => {
   const l = i18nService.getLocale(locale);
+  const scheduled = post.status === PostStatus.SCHEDULED;
+  const date = scheduled
+    ? post.scheduledPublish ?? post.createdAt
+    : post.createdAt;
   return (
     <p className={styles.subtitle}>
-      {post.status === PostStatus.SCHEDULED ? `${l.news.scheduled} ` : null}
-      {`${i18nService.formatDate(post.createdAt)} | ${l.news.written} `}
+      {scheduled ? `${l.news.scheduled} ` : null}
+      {`${i18nService.formatDate(date)} | ${l.news.written} `}
       {post.writtenFor && `${l.news.for} ${post.writtenFor}`}{' '}
       {`${l.news.by} ${post.author ?? l.news.unknown} `}
       {post.updatedAt &&
