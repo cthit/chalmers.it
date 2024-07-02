@@ -14,9 +14,10 @@ type Props = {
 const Navigation = ({ locale, desktop }: Props) => {
   const l = i18nService.getLocale(locale);
   const c = desktop ? styles.desktopDropdown : undefined;
+  const navStyle = desktop ? styles.nav : `${styles.nav} ${styles.navMobile}`;
 
   return (
-    <nav className={styles.nav}>
+    <nav className={navStyle}>
       <DropdownLink
         contentClassName={c}
         text={l.nav.division}

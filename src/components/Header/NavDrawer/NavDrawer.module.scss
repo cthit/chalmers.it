@@ -3,7 +3,8 @@
   padding: 0.2rem;
   margin-left: 1rem;
   color: var(--text-color);
-  line-height: 1.2rem;
+  height: min(calc(1.5rem + 2.5vw), 2.5rem);
+  width: min(calc(1.5rem + 2.5vw), 2.5rem);
 }
 
 .drawer {
@@ -14,6 +15,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
 }
 
 .content > * {

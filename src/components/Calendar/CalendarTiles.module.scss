@@ -3,6 +3,7 @@
   border-radius: 0.375rem;
   border: solid 0.125rem var(--content-background-color);
   aspect-ratio: 1 / 1;
+  min-width: 0;
   overflow: visible !important;
   position: relative;
 }

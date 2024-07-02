@@ -31,12 +31,12 @@ const Dropdown = ({
       <label htmlFor={id} className={styles.dropdownLabel}>
         {parent}
       </label>
-      <div className={styles.dropdownHitbox} />
+      <div className={`${styles.dropdownHitbox}`} />
 
-      <div
-        className={`${styles.dropdownContent} ${playfair.className} ${contentClassName}`}
-      >
-        {children}
+      <div className={`${styles.dropdownContainer} ${contentClassName}`}>
+        <div className={`${styles.dropdownContent} ${playfair.className}`}>
+          {children}
+        </div>
       </div>
     </div>
   );

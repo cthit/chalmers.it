@@ -25,8 +25,21 @@
   color: var(--text-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: #{$header-breakpoint}) {
   .escapeHatch {
-    padding-left: 1.25rem;
+    padding-left: min(calc(0.25rem + 2vw), 1.25rem);
+  }
+
+  .itlogo {
+    height: min(calc(8vw + 1rem), 3.125rem);
+    width: min(calc(8vw + 1rem), 3.125rem);
+  }
+
+  .title {
+    font-size: min(4.5vw, 1.5rem);
+  }
+
+  .subtitle {
+    font-size: min(3vw, 1rem);
   }
 }

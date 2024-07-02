@@ -37,6 +37,7 @@
   text-align: center;
   color: white;
   z-index: 1;
+  width: 100%;
 }
 
 .title h1 {
@@ -49,7 +50,7 @@
   margin-bottom: -0.25rem;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: #{$mobile-layout-breakpoint}) {
   .banner,
   .banner img {
     height: calc(6rem + 20vw);
@@ -61,10 +62,10 @@
   }
 
   .title h1 {
-    font-size: 2rem;
+    font-size: min(calc(0.25rem + 6vw), 3rem);
   }
 
   .title h2 {
-    font-size: 1rem;
+    font-size: min(calc(0.125rem + 3vw), 1.5rem);
   }
 }
