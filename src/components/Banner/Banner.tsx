@@ -16,22 +16,37 @@ const BannerTitle = ({ locale }: { locale?: string }) => {
   );
 };
 
-const Banner = async ({ locale }: { locale?: string }) => {
-  const banner = await DivisionGroupService.getRandomBanner().catch((e) => {
-    console.error(`${e.name}:`, e.message);
-    return null;
-  });
+interface BannerProps {
+  locale?: string;
+  name?: string;
+  url?: string;
+}
+
+const Banner = async ({ locale, name, url }: BannerProps) => {
+  let groupName = name;
+  let groupUrl = url;
+
+  if (groupName === undefined || groupUrl === undefined) {
+    const banner = await DivisionGroupService.getRandomBanner().catch((e) => {
+      console.error(`${e.name}:`, e.message);
+      return null;
+    });
+    groupName = banner?.name;
+    groupUrl = banner?.url;
+  }
+
+  const validBanner = groupName !== undefined && groupUrl !== undefined;
 
   return (
     <div className={`${styles.banner} ${playfair.className}`}>
       <BannerTitle locale={locale} />
       <div className={styles.bannerImg}>
-        {banner && (
+        {validBanner && (
           <picture>
             <img
-              src={banner.url}
-              alt={'Banner for ' + banner.name}
-              title={banner.name}
+              src={groupUrl}
+              alt={'Banner for ' + groupName}
+              title={groupName}
             />
           </picture>
         )}
