@@ -45,7 +45,7 @@ export async function edit(
   contentEn: string,
   contentSv: string,
   files: FormData,
-  scheduledPublish?: Date
+  scheduledPublish?: Date | null
 ) {
   if (!(await SessionService.isNewsPostOwner(id))) {
     throw new Error('Unauthorized');

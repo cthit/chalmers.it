@@ -22,6 +22,7 @@ export default class NewsService {
         updatedAt: true,
         writtenByGammaUserId: true,
         status: true,
+        scheduledPublish: true,
         writtenFor: {
           select: {
             gammaSuperGroupId: true,
@@ -82,6 +83,7 @@ export default class NewsService {
         contentSv: true,
         createdAt: true,
         updatedAt: true,
+        scheduledPublish: true,
         writtenByGammaUserId: true,
         status: true,
         writtenFor: {
@@ -157,8 +159,18 @@ export default class NewsService {
     contentEn: string;
     contentSv: string;
     id: number;
-    scheduledPublish?: Date;
+    scheduledPublish?: Date | null;
   }) {
+    const post = await prisma.newsPost.findUnique({
+      where: {
+        id: edited.id
+      }
+    });
+
+    const updateScheduledPublish = post?.scheduledPublish !== null;
+    const publish =
+      edited.scheduledPublish === null && post?.status === PostStatus.SCHEDULED;
+
     return await prisma.newsPost.update({
       where: {
         id: edited.id
@@ -168,7 +180,10 @@ export default class NewsService {
         titleSv: edited.titleSv,
         contentEn: edited.contentEn,
         contentSv: edited.contentSv,
-        scheduledPublish: edited.scheduledPublish
+        status: publish ? PostStatus.PUBLISHED : undefined,
+        scheduledPublish: updateScheduledPublish
+          ? edited.scheduledPublish
+          : undefined
       }
     });
   }
@@ -201,6 +216,7 @@ export default class NewsService {
         contentSv: true,
         createdAt: true,
         updatedAt: true,
+        scheduledPublish: true,
         writtenByGammaUserId: true,
         status: true,
         writtenFor: {

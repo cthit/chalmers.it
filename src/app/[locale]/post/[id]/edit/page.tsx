@@ -41,6 +41,7 @@ export default async function Page({
               writtenByGammaUserId={newsPost!.writtenByGammaUserId}
               connectedEvents={newsPost!.connectedEvents}
               group={newsPost!.writtenFor?.gammaSuperGroupId}
+              scheduledPublish={newsPost!.scheduledPublish}
             />
           </ContentPane>
         }

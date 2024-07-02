@@ -17,6 +17,7 @@ export const getData = async (
     writtenByGammaUserId: string;
     createdAt: Date;
     updatedAt: Date;
+    scheduledPublish: Date | null;
     status: PostStatus;
     writtenFor: {
       gammaSuperGroupId: string;
@@ -54,6 +55,7 @@ export const getData = async (
       post.updatedAt.getTime() - post.createdAt.getTime() > 5000
         ? post.updatedAt
         : undefined,
+    scheduledPublish: post.scheduledPublish ?? undefined,
     status: post.status,
     writtenFor: group,
     editable: ownsPost,
