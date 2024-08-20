@@ -409,12 +409,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <h1>{l.editor.preview}</h1>
           <Divider />
           <h1>{titleEn}</h1>
-          <MarkdownView content={previewContentEn} />
+          <MarkdownView content={previewContentEn} allowBlob />
 
           <Divider />
 
           <h1>{titleSv}</h1>
-          <MarkdownView content={previewContentSv} />
+          <MarkdownView content={previewContentSv} allowBlob />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.general.close}

@@ -264,10 +264,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           <h1>{l.pages.preview}</h1>
           <Divider />
           <h2>{titleEn}</h2>
-          <MarkdownView content={previewContentEn} />
+          <MarkdownView content={previewContentEn} allowBlob />
           <Divider />
           <h2>{titleSv}</h2>
-          <MarkdownView content={previewContentSv} />
+          <MarkdownView content={previewContentSv} allowBlob />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.pages.close}
