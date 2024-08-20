@@ -174,9 +174,9 @@ const PageForm = (description: NewPostFormProps) => {
         <ContentPane className={styles.dialog}>
           <h1>{l.editor.preview}</h1>
           <Divider />
-          <MarkdownView content={previewContentEn} />
+          <MarkdownView content={previewContentEn} allowBlob />
           <Divider />
-          <MarkdownView content={previewContentSv} />
+          <MarkdownView content={previewContentSv} allowBlob />
 
           <ActionButton onClick={() => setShowPreview(false)}>
             {l.general.close}
