@@ -88,7 +88,7 @@ class DiscordWebhookNotifier implements Notifier {
         embeds: [
           {
             title: title,
-            url: `http://${process.env.BASE_URL || 'localhost:3000'}/post/${
+            url: `${process.env.BASE_URL ?? 'http://localhost:3000'}/post/${
               post.id
             }`,
             description: content,
@@ -145,8 +145,8 @@ class SlackWebhookNotifier implements Notifier {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `*<http://${
-                    process.env.BASE_URL || 'localhost:3000'
+                  text: `*<${
+                    process.env.BASE_URL ?? 'http://localhost:3000'
                   }/post/${post.id}|${title}>*`
                 }
               },
