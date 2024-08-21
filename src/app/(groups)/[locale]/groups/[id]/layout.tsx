@@ -9,8 +9,28 @@ import TopLoader from '@/components/TopLoader/TopLoader';
 import ToastContainerWrapper from '@/components/ToastContainerWrapper/ToastContainerWrapper';
 import DivisionGroupService from '@/services/divisionGroupService';
 import GammaService from '@/services/gammaService';
+import { Metadata } from 'next';
+import i18nService from '@/services/i18nService';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
+
+export async function generateMetadata({
+  params: { locale, id }
+}: {
+  params: { locale: string; id: string };
+}) {
+  const group = await DivisionGroupService.getInfoBySlug(id).catch(() => {
+    return null;
+  });
+  const l = i18nService.getLocale(locale);
+  return {
+    title:
+      group !== null
+        ? group.prettyName + ' - ' + l.site.siteTitle
+        : l.site.siteTitle,
+    description: l.site.siteDescription
+  } as Metadata;
+}
 
 export const dynamicParams = false;
 
