@@ -2,6 +2,11 @@ import { marked } from 'marked';
 import style from './MarkdownView.module.scss';
 import sanitizeHtml from 'sanitize-html';
 
+const customAllowedTags = sanitizeHtml.defaults.allowedTags.concat(['img']);
+const customAllowedSchemes = sanitizeHtml.defaults.allowedSchemes.concat([
+  'blob'
+]);
+
 const MarkdownView = ({
   content,
   allowBlob = false
@@ -18,10 +23,11 @@ const MarkdownView = ({
   const renderMarkdownText = () => {
     const rawMarkup = marked.parse(content) as string;
     const sanitizedMarkup = sanitizeHtml(rawMarkup, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      allowedTags: customAllowedTags,
       disallowedTagsMode: 'escape',
-      allowedSchemes:
-        allowBlob && sanitizeHtml.defaults.allowedSchemes.concat(['blob'])
+      allowedSchemes: allowBlob
+        ? customAllowedSchemes
+        : sanitizeHtml.defaults.allowedSchemes
     });
     return { __html: sanitizedMarkup };
   };

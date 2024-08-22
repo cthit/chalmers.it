@@ -159,7 +159,7 @@ const PageForm = (description: NewPostFormProps) => {
       <br />
       <div className={styles.actions}>
         <ActionButton onClick={send}>
-          {description.id !== undefined ? l.general.edit : l.general.create}
+          {description.id !== undefined ? l.general.save : l.general.create}
         </ActionButton>
         <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
       </div>

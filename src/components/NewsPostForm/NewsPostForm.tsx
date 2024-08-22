@@ -393,7 +393,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <br />
       <div className={style.actions}>
         <ActionButton onClick={send}>
-          {newsPost.id !== undefined ? l.general.edit : l.general.create}
+          {newsPost.id !== undefined ? l.general.save : l.general.create}
         </ActionButton>
         <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
       </div>
