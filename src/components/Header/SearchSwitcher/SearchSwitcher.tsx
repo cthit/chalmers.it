@@ -19,12 +19,12 @@ const SearchSwitcher = ({
   return (
     <>
       <EscapeHatch locale={locale} />
-      {showSearch ? (
-        <SearchBar />
-      ) : (
-        <Navigation locale={locale} desktop={true} />
-      )}
+      <Navigation locale={locale} desktop={true} />
+            
       <div className={styles.right}>
+        {showSearch ? (
+          <SearchBar />
+        ) : (<></>)}
         {<SearchIcon onClick={() => setShowSearch(!showSearch)} />}
         {children}
       </div>
