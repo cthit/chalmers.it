@@ -25,6 +25,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  //transition: flex 1s;
+}
+
+.right:focus-within {
+  flex: 2;
 }
 
 .mobile {
