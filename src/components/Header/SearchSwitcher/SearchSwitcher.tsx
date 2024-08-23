@@ -22,10 +22,7 @@ const SearchSwitcher = ({
       <Navigation locale={locale} desktop={true} />
             
       <div className={styles.right}>
-        {showSearch ? (
-          <SearchBar />
-        ) : (<></>)}
-        {<SearchIcon onClick={() => setShowSearch(!showSearch)} />}
+        <SearchBar />
         {children}
       </div>
     </>

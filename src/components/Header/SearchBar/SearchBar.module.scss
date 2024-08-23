@@ -1,6 +1,5 @@
 .expandedSearchBar {
   height: 2rem;
-  margin: 0 1rem;
   padding: 1rem;
   box-sizing: border-box;
   border: solid;
@@ -9,4 +8,5 @@
   background-color: var(--background-color);
   color: var(--text-color);
   width: 100%;
+  min-width: 8rem;
 }
