@@ -1,9 +1,9 @@
-import { Playfair_Display } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import styles from './DropdownLink.module.scss';
 import { HTMLAttributes } from 'react';
 import Dropdown from '../Dropdown/Dropdown';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
+const inter = Inter({ subsets: ['latin'], weight: '600' });
 
 type Props = {
   text: string;
@@ -22,7 +22,7 @@ const DropdownLink = ({
       {...rest}
       parent={
         <div className={styles.navLink}>
-          <p className={playfair.className}>{text} </p>
+          <p className={inter.className}>{text} </p>
           <p className={styles.navLinkArrow}>&nbsp;&#9660; </p>
         </div>
       }

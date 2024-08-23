@@ -1,8 +1,8 @@
-import { Playfair_Display } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import styles from './Dropdown.module.scss';
 import { HTMLAttributes, ReactNode } from 'react';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
+const inter = Inter({ subsets: ['latin'], weight: '600' });
 
 type Props = {
   parent: ReactNode;
@@ -34,7 +34,7 @@ const Dropdown = ({
       <div className={`${styles.dropdownHitbox}`} />
 
       <div className={`${styles.dropdownContainer} ${contentClassName}`}>
-        <div className={`${styles.dropdownContent} ${playfair.className}`}>
+        <div className={`${styles.dropdownContent} ${inter.className}`}>
           {children}
         </div>
       </div>
