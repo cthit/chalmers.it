@@ -3,6 +3,7 @@ import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 import i18nService from '@/services/i18nService';
+import NavService from '@/services/navService';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
 
@@ -11,13 +12,38 @@ type Props = {
   desktop?: boolean;
 };
 
-const Navigation = ({ locale, desktop }: Props) => {
+const Navigation = async ({ locale, desktop }: Props) => {
   const l = i18nService.getLocale(locale);
   const c = desktop ? styles.desktopDropdown : undefined;
   const navStyle = desktop ? styles.nav : `${styles.nav} ${styles.navMobile}`;
+  const items = await NavService.get();
 
   return (
     <nav className={navStyle}>
+      {items.map((category) =>
+        category.url === undefined ? (
+          <Link key={category.id} href={category.url}>
+            {l.en ? category.nameEn : category.nameSv}&nbsp;&#8599;
+          </Link>
+        ) : (
+          <DropdownLink
+            key={category.id}
+            contentClassName={c}
+            text={l.en ? category.nameEn : category.nameSv}
+            desktop={desktop}
+          >
+            {category.NavbarItem.map((item) => {
+              const target = item.url.startsWith('http') ? '_blank' : undefined;
+              return (
+                <Link target={target} key={item.id} href={item.url}>
+                  {l.en ? item.nameEn : item.nameSv}
+                </Link>
+              );
+            })}
+          </DropdownLink>
+        )
+      )}
+
       <DropdownLink
         contentClassName={c}
         text={l.nav.division}
