@@ -145,3 +145,22 @@ enum SponsorType {
   PARTNER
   MAIN_PARTNER
 }
+
+model NavbarCategory {
+  id         Int          @id @default(autoincrement())
+  priority   Int          @default(0)
+  nameSv     String
+  nameEn     String
+  url        String
+  NavbarItem NavbarItem[]
+}
+
+model NavbarItem {
+  id         Int            @id @default(autoincrement())
+  priority   Int            @default(0)
+  nameSv     String
+  nameEn     String
+  url        String
+  category   NavbarCategory @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
