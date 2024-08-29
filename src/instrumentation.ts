@@ -1,5 +1,6 @@
 import schedule from 'node-schedule';
 import NewsService from './services/newsService';
+import DivisionGroupService from './services/divisionGroupService';
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
@@ -11,9 +12,13 @@ export async function register() {
     await require('next-logger');
 
     console.log('Scheduling tasks');
-    const rule = new schedule.RecurrenceRule();
-    rule.second = 0;
+    const newsPublishRule = new schedule.RecurrenceRule();
+    newsPublishRule.second = 0;
 
-    schedule.scheduleJob(rule, NewsService.publishScheduled);
+    schedule.scheduleJob(newsPublishRule, NewsService.publishScheduled);
+    schedule.scheduleJob(
+      '0 0 * * 1',
+      DivisionGroupService.updatePrettyNamesFromGamma
+    );
   }
 }

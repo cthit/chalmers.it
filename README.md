@@ -1,6 +1,6 @@
 # chalmers.it
 
-An ongoing rewrite of [chalmersit-rails](https://github.com/cthit/chalmersit-rails) in Next.js
+A rewrite and redesign of [chalmersit-rails](https://github.com/cthit/chalmersit-rails) in Next.js
 
 ## Suggestions and Contributions
 

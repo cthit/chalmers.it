@@ -135,4 +135,21 @@ export default class DivisionGroupService {
       })
     )?.gammaSuperGroupId;
   }
+
+  static async updatePrettyNamesFromGamma() {
+    const groups = await prisma.divisionGroup.findMany();
+    const gammaGroups = await GammaService.getAllSuperGroups();
+
+    for (const group of groups) {
+      const gammaGroup = gammaGroups.find(
+        (g) => g.superGroup.id === group.gammaSuperGroupId
+      );
+      if (gammaGroup === undefined) continue;
+
+      await prisma.divisionGroup.update({
+        where: { id: group.id },
+        data: { prettyName: gammaGroup.superGroup.prettyName }
+      });
+    }
+  }
 }
