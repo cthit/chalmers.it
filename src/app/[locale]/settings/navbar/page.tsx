@@ -4,6 +4,7 @@ import EditItemForm from './EditItemForm';
 import Divider from '@/components/Divider/Divider';
 import AddItemForm from './AddItemForm';
 import AddCategoryForm from './AddCategoryForm';
+import React from 'react';
 
 export default async function Page() {
   const stats = await NavService.get();
@@ -11,7 +12,10 @@ export default async function Page() {
   return (
     <main>
       <title>Kontrollpanel - Navigering</title>
-      <p><i>Note:</i> A higher priority value will be placed further left / further up</p>
+      <p>
+        <i>Note:</i> A higher priority value will be placed further left /
+        further up
+      </p>
       {stats.map((category) => (
         <div key={category.id}>
           <h1>
@@ -21,10 +25,10 @@ export default async function Page() {
           <EditCategoryForm category={category} />
           <br />
           {category.NavbarItem.map((item) => (
-            <>
+            <React.Fragment key={item.id}>
               <h3 key={item.id}>{item.nameEn}</h3>
               <EditItemForm item={item} />
-            </>
+            </React.Fragment>
           ))}
           {category.url === '' ? (
             <>
