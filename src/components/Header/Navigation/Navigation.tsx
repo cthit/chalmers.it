@@ -31,7 +31,6 @@ const Navigation = async ({ locale, desktop }: Props) => {
             target={categoryTarget}
           >
             {l.en ? category.nameEn : category.nameSv}
-            {categoryIsExternal && <>&nbsp;&#8599;</>}
           </Link>
         ) : (
           <DropdownLink
