@@ -4,7 +4,11 @@ export default class NavService {
   static async get() {
     return await prisma.navbarCategory.findMany({
       include: {
-        NavbarItem: true
+        NavbarItem: {
+          orderBy: {
+            priority: 'asc'
+          }
+        }
       },
       orderBy: {
         priority: 'asc'
