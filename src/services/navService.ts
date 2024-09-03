@@ -6,22 +6,28 @@ export default class NavService {
       include: {
         NavbarItem: {
           orderBy: {
-            priority: 'asc'
+            priority: 'desc'
           }
         }
       },
       orderBy: {
-        priority: 'asc'
+        priority: 'desc'
       }
     });
   }
 
-  static async addCategory(nameEn: string, nameSv: string, priority?: number) {
+  static async addCategory(
+    nameEn: string,
+    nameSv: string,
+    priority?: number,
+    url?: string
+  ) {
     return await prisma.navbarCategory.create({
       data: {
         nameEn,
         nameSv,
-        priority
+        priority,
+        url: url ?? ''
       }
     });
   }
@@ -64,7 +70,8 @@ export default class NavService {
     id: number,
     nameEn: string,
     nameSv: string,
-    priority?: number
+    priority?: number,
+    url?: string
   ) {
     return await prisma.navbarCategory.update({
       where: {
@@ -73,7 +80,8 @@ export default class NavService {
       data: {
         nameEn,
         nameSv,
-        priority
+        priority,
+        url
       }
     });
   }

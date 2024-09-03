@@ -31,6 +31,11 @@ const pages = [
     path: '/settings/media',
     name: 'Media',
     authFunc: SessionService.isAdmin
+  },
+  {
+    path: '/settings/navbar',
+    name: 'Navigation',
+    authFunc: SessionService.isAdmin
   }
 ];
 
