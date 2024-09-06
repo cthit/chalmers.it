@@ -33,7 +33,7 @@ const GammaGroupListItem = ({
   const edit = async (e: any) => {
     e.preventDefault();
 
-    await toast.promise(editGroup(superGroupId, 0), {
+    await toast.promise(editGroup(superGroupId, prio), {
       pending: 'Editing group...',
       success: 'Group edited!',
       error: 'Failed to edit group'
@@ -56,7 +56,7 @@ const GammaGroupListItem = ({
           onChange={(e) => setPrio(+e.target.value)}
           value={prio}
         />
-        <ActionButton type="submit" onClick={remove}>
+        <ActionButton type="submit" onClick={edit}>
           Spara
         </ActionButton>
         <ActionButton type="button" onClick={remove}>
