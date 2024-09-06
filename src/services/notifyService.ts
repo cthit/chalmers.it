@@ -2,6 +2,7 @@ import { Prisma, NotifierType, Language } from '@prisma/client';
 import prisma from '@/prisma';
 import GammaService from './gammaService';
 import { markdownToBlocks } from '@tryfabric/mack';
+import DivisionGroupService from './divisionGroupService';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -71,13 +72,17 @@ class DiscordWebhookNotifier implements Notifier {
     const nick =
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
       (Language.EN ? 'Unknown user' : 'Okänd användare');
+    const group =
+      post.divisionGroupId !== null
+        ? await DivisionGroupService.getInfo(post.divisionGroupId)
+        : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
     const content =
       this.language === Language.EN ? post.contentEn : post.contentSv;
     const msg =
       this.language === Language.EN
-        ? `News published by **${nick}**`
-        : `Nyhet publicerad av **${nick}**`;
+        ? `News published${group ? ` for **${group.prettyName}**` : ''} by **${nick}**`
+        : `Nyhet publicerad${group ? ` för **${group.prettyName}**` : ''} av **${nick}**`;
 
     fetch(this.webhook, {
       method: 'POST',
@@ -115,14 +120,19 @@ class SlackWebhookNotifier implements Notifier {
     const nick =
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
       (Language.EN ? 'Unknown user' : 'Okänd användare');
+    const group =
+      post.divisionGroupId !== null
+        ? await DivisionGroupService.getInfo(post.divisionGroupId)
+        : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
     const content = await markdownToBlocks(
       this.language === Language.EN ? post.contentEn : post.contentSv
     );
+    console.log(JSON.stringify(content));
     const msg =
       this.language === Language.EN
-        ? `News published by *${nick}*`
-        : `Nyhet publicerad av *${nick}*`;
+        ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Nyhet publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
 
     fetch(this.webhook, {
       method: 'POST',
