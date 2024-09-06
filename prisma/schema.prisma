@@ -37,6 +37,7 @@ model DivisionGroup {
   NewsPost          NewsPost[]
   DivisionPages     DivisionPage[]
   DivisionDocument  DivisionDocument[]
+  priority          Int                @default(0)
 }
 
 model DivisionPage {

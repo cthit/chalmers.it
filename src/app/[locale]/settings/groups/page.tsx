@@ -25,6 +25,7 @@ export default async function Page() {
             id={group.id}
             superGroupId={group.gammaSuperGroupId}
             prettyName={group.prettyName}
+            priority={group.priority}
           />
         ))}
       </ul>

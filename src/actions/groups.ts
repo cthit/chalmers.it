@@ -25,3 +25,11 @@ export async function removeGroup(gammaSuperGroupId: string) {
 
   await DivisionGroupService.removeGroup(gammaSuperGroupId);
 }
+
+export async function editGroup(gammaSuperGroupId: string, priority: number) {
+  if (!(await SessionService.isAdmin())) {
+    throw new Error('Unauthorized');
+  }
+
+  await DivisionGroupService.editPriority(gammaSuperGroupId, priority);
+}

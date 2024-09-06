@@ -3,7 +3,11 @@ import GammaService from './gammaService';
 
 export default class DivisionGroupService {
   static async getAll() {
-    return prisma.divisionGroup.findMany();
+    return prisma.divisionGroup.findMany({
+      orderBy: {
+        priority: 'desc'
+      }
+    });
   }
 
   static async addGroup(
@@ -123,6 +127,17 @@ export default class DivisionGroupService {
         descriptionEn: edited.contentEn,
         descriptionSv: edited.contentSv,
         slug: edited.slug
+      }
+    });
+  }
+
+  static async editPriority(gammaSuperGroupId: string, priority: number) {
+    return prisma.divisionGroup.update({
+      where: {
+        gammaSuperGroupId
+      },
+      data: {
+        priority
       }
     });
   }

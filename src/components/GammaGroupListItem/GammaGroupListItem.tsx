@@ -2,19 +2,23 @@
 
 import { useRouter } from 'next/navigation';
 import ActionButton from '../ActionButton/ActionButton';
-import { removeGroup } from '@/actions/groups';
+import { editGroup, removeGroup } from '@/actions/groups';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 const GammaGroupListItem = ({
   id,
   superGroupId,
-  prettyName
+  prettyName,
+  priority
 }: {
   id: number;
   superGroupId: string;
   prettyName: string;
+  priority: number;
 }) => {
   const router = useRouter();
+  const [prio, setPrio] = useState(priority);
 
   const remove = async () => {
     confirm('Are you sure you want to delete this group?') &&
@@ -26,6 +30,16 @@ const GammaGroupListItem = ({
     router.refresh();
   };
 
+  const edit = async (e: any) => {
+    e.preventDefault();
+
+    await toast.promise(editGroup(superGroupId, 0), {
+      pending: 'Editing group...',
+      success: 'Group edited!',
+      error: 'Failed to edit group'
+    });
+  };
+
   return (
     <li>
       <h2>{prettyName}</h2>
@@ -35,7 +49,20 @@ const GammaGroupListItem = ({
       <p>
         <strong>Local ID:</strong> {id}
       </p>
-      <ActionButton onClick={remove}>Ta bort</ActionButton>
+      <form onSubmit={edit}>
+        <label>Priority</label>
+        <input
+          type="number"
+          onChange={(e) => setPrio(+e.target.value)}
+          value={prio}
+        />
+        <ActionButton type="submit" onClick={remove}>
+          Spara
+        </ActionButton>
+        <ActionButton type="button" onClick={remove}>
+          Ta bort
+        </ActionButton>
+      </form>
     </li>
   );
 };
