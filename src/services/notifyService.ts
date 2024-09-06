@@ -116,23 +116,40 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
+  private mergeSections(blocks: any[]) {
+    const merged: any[] = [];
+    for (const block of blocks) {
+      if (block.type === 'section') {
+        if (merged.length > 0 && merged[merged.length - 1].type === 'section') {
+          merged[merged.length - 1].text.text += '\n\n' + block.text.text;
+        } else {
+          merged.push(block);
+        }
+      } else {
+        merged.push(block);
+      }
+    }
+    return merged;
+  }
+
   async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
     const nick =
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
-      (Language.EN ? 'Unknown user' : 'Okänd användare');
+      (this.language === Language.EN ? 'Unknown user' : 'Okänd användare');
     const group =
       post.divisionGroupId !== null
         ? await DivisionGroupService.getInfo(post.divisionGroupId)
         : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
-    const content = await markdownToBlocks(
-      this.language === Language.EN ? post.contentEn : post.contentSv
+    const content = this.mergeSections(
+      await markdownToBlocks(
+        this.language === Language.EN ? post.contentEn : post.contentSv
+      )
     );
-    console.log(JSON.stringify(content));
     const msg =
       this.language === Language.EN
-        ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
-        : `Nyhet publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+        ? `Published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
 
     fetch(this.webhook, {
       method: 'POST',
@@ -140,26 +157,28 @@ class SlackWebhookNotifier implements Notifier {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: msg
-            }
-          }
-        ],
         attachments: [
           {
             color: '#00a8d3',
             blocks: [
               {
+                type: 'header',
+                text: {
+                  type: 'plain_text',
+                  text: title
+                }
+              },
+              {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `*<${
+                  text: `${msg}\n*<${
                     process.env.BASE_URL ?? 'http://localhost:3000'
-                  }/post/${post.id}|${title}>*`
+                  }/post/${post.id}|${
+                    this.language === Language.EN
+                      ? 'Read on chalmers.it'
+                      : 'Läs på chalmers.it'
+                  }>*`
                 }
               },
               ...content
