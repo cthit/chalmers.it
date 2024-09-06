@@ -1,6 +1,7 @@
 import { Prisma, NotifierType, Language } from '@prisma/client';
 import prisma from '@/prisma';
 import GammaService from './gammaService';
+import { markdownToBlocks } from '@tryfabric/mack';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -115,8 +116,9 @@ class SlackWebhookNotifier implements Notifier {
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
       (Language.EN ? 'Unknown user' : 'Okänd användare');
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
-    const content =
-      this.language === Language.EN ? post.contentEn : post.contentSv;
+    const content = await markdownToBlocks(
+      this.language === Language.EN ? post.contentEn : post.contentSv
+    );
     const msg =
       this.language === Language.EN
         ? `News published by *${nick}*`
@@ -150,13 +152,7 @@ class SlackWebhookNotifier implements Notifier {
                   }/post/${post.id}|${title}>*`
                 }
               },
-              {
-                type: 'section',
-                text: {
-                  type: 'mrkdwn',
-                  text: `${content}`
-                }
-              }
+              ...content
             ]
           }
         ]
