@@ -175,7 +175,6 @@ class SlackWebhookNotifier implements Notifier {
         this.language === Language.EN ? post.contentEn : post.contentSv
       )
     );
-    console.log(JSON.stringify(content));
     const msg =
       this.language === Language.EN
         ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
@@ -210,11 +209,16 @@ class SlackWebhookNotifier implements Notifier {
                   }>*`
                 }
               },
+              {
+                type: 'divider'
+              },
               ...content
             ]
           }
         ] as MessageAttachment[]
       })
+        .replaceAll('&#39;', "\\'")
+        .replaceAll('&quot;', '\\"')
     });
     if (!res.ok)
       console.trace(
