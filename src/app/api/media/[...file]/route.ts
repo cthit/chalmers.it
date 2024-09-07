@@ -6,6 +6,8 @@ export async function GET(
   ctx: { params: { file: string[] } }
 ) {
   const res = await MediaService.load(ctx.params.file.join('/'));
+  if (res === null)
+    return new NextResponse(null, { status: 404, statusText: 'Not Found' });
 
   const headers = new Headers();
   headers.set('Content-Type', res.extension);
