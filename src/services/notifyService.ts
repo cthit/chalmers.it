@@ -3,6 +3,7 @@ import prisma from '@/prisma';
 import GammaService from './gammaService';
 import { markdownToBlocks } from '@tryfabric/mack';
 import DivisionGroupService from './divisionGroupService';
+import { KnownBlock, MessageAttachment } from '@slack/types';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -116,19 +117,23 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  private cleanSections(blocks: any[]) {
-    const merged: any[] = [];
+  private cleanSections(blocks: KnownBlock[]) {
+    const cleaned: any[] = [];
     for (const block of blocks) {
-      if (block.type === 'section') {
-        if (merged.length > 0 && merged[merged.length - 1].type === 'section') {
-          merged[merged.length - 1].text.text += '\n\n' + block.text.text;
-        } else {
-          merged.push(block);
-        }
+      if (
+        block.type === 'section' &&
+        cleaned.length > 0 &&
+        cleaned[cleaned.length - 1].type === 'section' &&
+        block.text !== undefined
+      ) {
+        // Merge text blocks
+        cleaned[cleaned.length - 1].text.text += '\n\n' + block.text.text;
       } else if (
         block.type === 'image' &&
+        'image_url' in block &&
         block.image_url.startsWith('/api/media')
       ) {
+        // Replace relative URL with full URL
         const image_url = `${process.env.BASE_URL}${block.image_url}`;
 
         if (
@@ -136,7 +141,7 @@ class SlackWebhookNotifier implements Notifier {
           process.env.BASE_URL.includes('localhost')
         ) {
           // Display the image as a link to prevent illegal attachments
-          merged.push({
+          cleaned.push({
             type: 'section',
             text: {
               type: 'mrkdwn',
@@ -144,16 +149,16 @@ class SlackWebhookNotifier implements Notifier {
             }
           });
         } else {
-          merged.push({
+          cleaned.push({
             ...block,
             image_url
           });
         }
       } else {
-        merged.push(block);
+        cleaned.push(block);
       }
     }
-    return merged;
+    return cleaned;
   }
 
   async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
@@ -198,9 +203,7 @@ class SlackWebhookNotifier implements Notifier {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `*<${
-                    process.env.BASE_URL ?? 'http://localhost:3000'
-                  }/post/${post.id}|${
+                  text: `*<${process.env.BASE_URL ?? 'http://localhost:3000'}/post/${post.id}|${
                     this.language === Language.EN
                       ? 'Read on chalmers.it'
                       : 'Läs på chalmers.it'
@@ -210,7 +213,7 @@ class SlackWebhookNotifier implements Notifier {
               ...content
             ]
           }
-        ]
+        ] as MessageAttachment[]
       })
     });
     if (!res.ok)

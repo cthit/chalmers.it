@@ -72,6 +72,9 @@ importers:
         specifier: ^2.13.0
         version: 2.13.0
     devDependencies:
+      '@slack/types':
+        specifier: ^2.13.0
+        version: 2.13.0
       '@types/node':
         specifier: ^20.11.16
         version: 20.11.16
