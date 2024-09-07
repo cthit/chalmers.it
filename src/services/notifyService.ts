@@ -116,7 +116,7 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  private mergeSections(blocks: any[]) {
+  private cleanSections(blocks: any[]) {
     const merged: any[] = [];
     for (const block of blocks) {
       if (block.type === 'section') {
@@ -124,6 +124,30 @@ class SlackWebhookNotifier implements Notifier {
           merged[merged.length - 1].text.text += '\n\n' + block.text.text;
         } else {
           merged.push(block);
+        }
+      } else if (
+        block.type === 'image' &&
+        block.image_url.startsWith('/api/media')
+      ) {
+        const image_url = `${process.env.BASE_URL}${block.image_url}`;
+
+        if (
+          process.env.BASE_URL === undefined ||
+          process.env.BASE_URL.includes('localhost')
+        ) {
+          // Display the image as a link to prevent illegal attachments
+          merged.push({
+            type: 'section',
+            text: {
+              type: 'mrkdwn',
+              text: `*<${image_url}|${block.alt_text}>*`
+            }
+          });
+        } else {
+          merged.push({
+            ...block,
+            image_url
+          });
         }
       } else {
         merged.push(block);
@@ -141,22 +165,24 @@ class SlackWebhookNotifier implements Notifier {
         ? await DivisionGroupService.getInfo(post.divisionGroupId)
         : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
-    const content = this.mergeSections(
+    const content = this.cleanSections(
       await markdownToBlocks(
         this.language === Language.EN ? post.contentEn : post.contentSv
       )
     );
+    console.log(JSON.stringify(content));
     const msg =
       this.language === Language.EN
-        ? `Published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
-        : `Publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+        ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Nyhet publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
 
-    fetch(this.webhook, {
+    const res = await fetch(this.webhook, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        text: msg,
         attachments: [
           {
             color: '#00a8d3',
@@ -172,7 +198,7 @@ class SlackWebhookNotifier implements Notifier {
                 type: 'section',
                 text: {
                   type: 'mrkdwn',
-                  text: `${msg}\n*<${
+                  text: `*<${
                     process.env.BASE_URL ?? 'http://localhost:3000'
                   }/post/${post.id}|${
                     this.language === Language.EN
@@ -187,5 +213,11 @@ class SlackWebhookNotifier implements Notifier {
         ]
       })
     });
+    if (!res.ok)
+      console.trace(
+        'Request failed with response:',
+        res.status,
+        await res.text()
+      );
   }
 }
