@@ -1,6 +1,7 @@
 import prisma from '@/prisma';
 import { stat, readdir, readFile, writeFile } from 'fs/promises';
 import FileService, { MediaType } from './fileService';
+import { existsSync } from 'fs';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
@@ -67,8 +68,12 @@ export default class MediaService {
       }
     });
 
+    if (extension === null) return null;
+
     const meta = FileService.convertMimeType(extension!.extension);
     const filename = sha256 + '.' + meta?.extension;
+
+    if (!existsSync(`${mediaPath}/${filename}`)) return null;
 
     return {
       data: await readFile(`${mediaPath}/${filename}`),
