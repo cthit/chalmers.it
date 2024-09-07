@@ -1,6 +1,6 @@
 {
   "name": "chalmers.it",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "@tryfabric/mack": "^1.2.1",
     "ansis": "^1.5.6",
     "jest": "^29.7.0",
     "marked": "^11.2.0",
@@ -33,6 +34,7 @@
     "sanitize-html": "^2.13.0"
   },
   "devDependencies": {
+    "@slack/types": "^2.13.0",
     "@types/node": "^20.11.16",
     "@types/node-schedule": "^2.1.6",
     "@types/react": "^18.2.55",
