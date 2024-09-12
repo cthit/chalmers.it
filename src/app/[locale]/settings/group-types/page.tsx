@@ -5,7 +5,7 @@ import EditTypeForm from './EditTypeForm';
 
 export default async function Page() {
   let types = await DivisionGroupService.getGroupTypes();
-  types.pop()
+  types.pop();
 
   return (
     <main>
@@ -14,7 +14,7 @@ export default async function Page() {
       <ul>
         {types.map((type) => (
           <li key={type.id}>
-            {type.id} - {type.nameSv}
+            ID {type.id}
             <EditTypeForm type={type} />
           </li>
         ))}
