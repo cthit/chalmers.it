@@ -1,10 +1,10 @@
-import { Playfair_Display } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 import i18nService from '@/services/i18nService';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
+const poppins = Poppins({ subsets: ['latin'], weight: '500' });
 
 type Props = {
   locale: string;
@@ -28,7 +28,7 @@ const Navigation = ({ locale, desktop }: Props) => {
         <Link
           target="_blank"
           href="https://docs.chalmers.it/"
-          className={`${styles.navLink} ${playfair.className}`}
+          className={`${styles.navLink} ${poppins.className}`}
         >
           {l.docs.regulatory}&nbsp;&#8599;
         </Link>
@@ -101,20 +101,20 @@ const Navigation = ({ locale, desktop }: Props) => {
       </DropdownLink>
       <Link
         href="/pages/services"
-        className={`${styles.navLink} ${playfair.className}`}
+        className={`${styles.navLink} ${poppins.className}`}
       >
         {l.nav.services}
       </Link>
       <Link
         target="_blank"
         href="https://armit.chalmers.it/"
-        className={`${styles.navLink} ${playfair.className}`}
+        className={`${styles.navLink} ${poppins.className}`}
       >
         {l.nav.business}
       </Link>
       <Link
         href="/pages/contact"
-        className={`${styles.navLink} ${playfair.className}`}
+        className={`${styles.navLink} ${poppins.className}`}
       >
         {l.nav.contact}
       </Link>

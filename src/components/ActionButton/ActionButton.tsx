@@ -1,9 +1,9 @@
 import styles from './ActionButton.module.scss';
-import { Playfair_Display } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { ButtonHTMLAttributes } from 'react';
 import React from 'react';
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const poppins = Poppins({weight:['500'],subsets: ['latin'] });
 
 const ActionButton = ({
   className,
@@ -12,7 +12,7 @@ const ActionButton = ({
 }: ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
-      className={`${styles.button} ${playfair.className} ${className}`}
+      className={`${styles.button} ${poppins.className} ${className}`}
       {...rest}
     >
       {children}
