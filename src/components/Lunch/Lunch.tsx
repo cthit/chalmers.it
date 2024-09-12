@@ -3,6 +3,7 @@ import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import styles from './Lunch.module.scss';
 import i18nService from '@/services/i18nService';
+import Collapsible from '../Collapsible/Collapsible';
 
 const Lunch = async ({ locale }: { locale: string }) => {
   const lunch = await LunchService.getLunch();
@@ -10,7 +11,7 @@ const Lunch = async ({ locale }: { locale: string }) => {
   const en = locale === 'en';
   return (
     <ContentPane>
-      <div className={styles.scroll}>
+      <Collapsible>
         <h1>Lunch</h1>
         <Divider />
         {lunch.length === 0 && <p>{l.lunch.nolunch}</p>}
@@ -25,7 +26,7 @@ const Lunch = async ({ locale }: { locale: string }) => {
             ))}
           </div>
         ))}
-      </div>
+      </Collapsible>
     </ContentPane>
   );
 };
