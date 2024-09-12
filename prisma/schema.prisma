@@ -38,7 +38,7 @@ model DivisionGroup {
   DivisionPages       DivisionPage[]
   DivisionDocument    DivisionDocument[]
   priority            Int                @default(0)
-  type                DivisionGroupType? @relation(fields: [divisionGroupTypeId], references: [id])
+  type                DivisionGroupType? @relation(fields: [divisionGroupTypeId], references: [id], onDelete: SetNull)
   divisionGroupTypeId Int?
 }
 

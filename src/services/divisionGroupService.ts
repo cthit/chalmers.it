@@ -131,13 +131,18 @@ export default class DivisionGroupService {
     });
   }
 
-  static async editPriority(gammaSuperGroupId: string, priority: number) {
+  static async edit(
+    gammaSuperGroupId: string,
+    priority: number,
+    typeId: number | null
+  ) {
     return prisma.divisionGroup.update({
       where: {
         gammaSuperGroupId
       },
       data: {
-        priority
+        priority,
+        divisionGroupTypeId: typeId
       }
     });
   }
@@ -190,5 +195,39 @@ export default class DivisionGroupService {
       priority: 0
     });
     return types;
+  }
+
+  static async createType(nameEn: string, nameSv: string, priority?: number) {
+    await prisma.divisionGroupType.create({
+      data: {
+        nameEn,
+        nameSv,
+        priority
+      }
+    });
+  }
+
+  static async editType(
+    id: number,
+    nameEn: string,
+    nameSv: string,
+    priority: number
+  ) {
+    await prisma.divisionGroupType.update({
+      where: {
+        id
+      },
+      data: {
+        nameEn,
+        nameSv,
+        priority
+      }
+    });
+  }
+
+  static async deleteType(id: number) {
+    await prisma.divisionGroupType.delete({
+      where: { id }
+    });
   }
 }
