@@ -7,9 +7,10 @@ import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import DivisionPages from '../DivisionPages/DivisionPages';
+import React from 'react';
 
 const DivisionNavigation = async ({ locale }: { locale: string }) => {
-  const groups = await DivisionGroupService.getAll();
+  const types = await DivisionGroupService.getGroupTypes();
   const isAdmin = await SessionService.isAdmin();
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
@@ -24,20 +25,25 @@ const DivisionNavigation = async ({ locale }: { locale: string }) => {
       </ul>
       <h2>{l.pages.groups}</h2>
       <Divider />
-      <ul className={styles.links}>
-        {groups.map((group) => (
-          <li key={group.id}>
-            <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
-            <ul className={styles.links}>
-              <DivisionPages
-                en={en}
-                group={group.id}
-                slug={`/groups/${group.slug}`}
-              />
-            </ul>
-          </li>
-        ))}
-      </ul>
+      {types.map((type) => (
+        <React.Fragment key={type.id}>
+          <h3>{en ? type.nameEn : type.nameSv}</h3>
+          <ul className={styles.links}>
+            {type.DivisionGroup.map((group) => (
+              <li key={group.id}>
+                <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
+                <ul className={styles.links}>
+                  <DivisionPages
+                    en={en}
+                    group={group.id}
+                    slug={`/groups/${group.slug}`}
+                  />
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      ))}
     </ContentPane>
   );
 };
