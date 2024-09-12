@@ -167,4 +167,28 @@ export default class DivisionGroupService {
       });
     }
   }
+
+  static async getGroupTypes() {
+    const types = await prisma.divisionGroupType.findMany({
+      orderBy: { priority: 'desc' },
+      include: {
+        DivisionGroup: {
+          orderBy: {
+            priority: 'desc'
+          }
+        }
+      }
+    });
+    types.push({
+      DivisionGroup: await prisma.divisionGroup.findMany({
+        where: { divisionGroupTypeId: null },
+        orderBy: { priority: 'desc' }
+      }),
+      id: -1,
+      nameEn: 'Miscellaneous',
+      nameSv: 'Övrigt',
+      priority: 0
+    });
+    return types;
+  }
 }

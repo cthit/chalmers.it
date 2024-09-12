@@ -26,18 +26,28 @@ model NewsPost {
 }
 
 model DivisionGroup {
-  id                Int                @id @default(autoincrement())
-  gammaSuperGroupId String             @unique
-  slug              String             @unique
-  prettyName        String
-  descriptionSv     String
-  descriptionEn     String
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  NewsPost          NewsPost[]
-  DivisionPages     DivisionPage[]
-  DivisionDocument  DivisionDocument[]
-  priority          Int                @default(0)
+  id                  Int                @id @default(autoincrement())
+  gammaSuperGroupId   String             @unique
+  slug                String             @unique
+  prettyName          String
+  descriptionSv       String
+  descriptionEn       String
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  NewsPost            NewsPost[]
+  DivisionPages       DivisionPage[]
+  DivisionDocument    DivisionDocument[]
+  priority            Int                @default(0)
+  type                DivisionGroupType? @relation(fields: [divisionGroupTypeId], references: [id])
+  divisionGroupTypeId Int?
+}
+
+model DivisionGroupType {
+  id            Int             @id @default(autoincrement())
+  nameSv        String
+  nameEn        String
+  priority      Int             @default(0)
+  DivisionGroup DivisionGroup[]
 }
 
 model DivisionPage {
