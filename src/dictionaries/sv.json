@@ -113,7 +113,8 @@
     "content": "Innehåll",
     "close": "Stäng",
     "topLevel": "Toppnivå",
-    "sortPrio": "Sorteringsprioritet"
+    "sortPrio": "Sorteringsprioritet",
+    "create": "Skapa sida"
   },
   "events": {
     "events": "Evenemang",

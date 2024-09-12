@@ -18,7 +18,7 @@ const DivisionNavigation = async ({ locale }: { locale: string }) => {
   return (
     <ContentPane>
       <h2>{l.pages.about}</h2>
-      {isAdmin && <ActionLink href="/pages/new">{l.general.create}</ActionLink>}
+      {isAdmin && <ActionLink href="/pages/new">{l.pages.create}</ActionLink>}
       <Divider />
       <ul className={styles.links}>
         <DivisionPages en={en} slug={'/pages'} />

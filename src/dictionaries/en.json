@@ -113,7 +113,8 @@
     "content": "Content",
     "close": "Close",
     "topLevel": "Top level",
-    "sortPrio": "Sort priority"
+    "sortPrio": "Sort priority",
+    "create": "Create page"
   },
   "events": {
     "events": "Events",
