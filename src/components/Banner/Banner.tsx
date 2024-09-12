@@ -3,7 +3,7 @@ import styles from './Banner.module.scss';
 import { Roboto_Serif } from 'next/font/google';
 import i18nService from '@/services/i18nService';
 
-const robotoSerif = Roboto_Serif({weight:'600', subsets: ['latin'] });
+const robotoSerif = Roboto_Serif({ weight: '600', subsets: ['latin'] });
 
 const BannerTitle = ({ locale }: { locale?: string }) => {
   const l = i18nService.getLocale(locale);

@@ -3,7 +3,7 @@ import { Poppins } from 'next/font/google';
 import { ButtonHTMLAttributes } from 'react';
 import React from 'react';
 
-const poppins = Poppins({weight:['500'],subsets: ['latin'] });
+const poppins = Poppins({ weight: ['500'], subsets: ['latin'] });
 
 const ActionButton = ({
   className,
