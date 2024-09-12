@@ -1,0 +1,35 @@
+.collapsible {
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  background-color: var(--content-background-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--content-border-color);
+}
+
+.content {
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.open {
+  max-height: unset;
+}
+
+.closed {
+  max-height: 20rem;
+}
+
+.button {
+  padding: 0;
+  align-items: center;
+  width: 100%;
+  font-size: 3rem;
+  background: transparent;
+  border: none;
+}
