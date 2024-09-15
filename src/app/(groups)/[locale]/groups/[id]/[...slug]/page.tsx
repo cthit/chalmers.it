@@ -2,6 +2,7 @@ import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigati
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPage from '@/components/DivisionPage/DivisionPage';
+import ContactCard from '@/components/ContactCard/ContactCard';
 
 export default async function Page({
   params
@@ -17,7 +18,7 @@ export default async function Page({
       visitedSlug={['/groups', params.id, ...params.slug]}
     />
   );
-  const right = <></>;
+  const right = <ContactCard locale={params.locale} />;
 
   return <ThreePaneLayout left={left} middle={await main} right={right} />;
 }
