@@ -34,6 +34,9 @@ const DivisionNavigation = async ({
         <DivisionPages en={en} slug={'/pages'} visitedSlug={currentSlug} />
       </ul>
       <h2>{l.pages.groups}</h2>
+      {isAdmin && (
+        <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
+      )}
       <Divider />
       {types.map((type) => (
         <React.Fragment key={type.id}>

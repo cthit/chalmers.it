@@ -8,6 +8,8 @@ import i18nService from '@/services/i18nService';
 import DivisionPages from '@/components/DivisionPages/DivisionPages';
 import Link from 'next/link';
 import React from 'react';
+import ActionLink from '@/components/ActionButton/ActionLink';
+import SessionService from '@/services/sessionService';
 
 export default async function Page({
   params: { locale }
@@ -26,6 +28,7 @@ export default async function Page({
 
 const Groups = async ({ locale }: { locale: string }) => {
   const types = await DivisionGroupService.getGroupTypes();
+  const isAdmin = await SessionService.isAdmin();
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
 
@@ -33,6 +36,9 @@ const Groups = async ({ locale }: { locale: string }) => {
     <ContentPane>
       {' '}
       <h2>{l.pages.groups}</h2>
+      {isAdmin && (
+        <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
+      )}
       <Divider />
       {types.map((type) => (
         <React.Fragment key={type.id}>
