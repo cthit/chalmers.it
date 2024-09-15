@@ -1,7 +1,6 @@
 import styles from './page.module.scss';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import ContactCard from '@/components/ContactCard/ContactCard';
-import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import Divider from '@/components/Divider/Divider';
 import DivisionGroupService from '@/services/divisionGroupService';

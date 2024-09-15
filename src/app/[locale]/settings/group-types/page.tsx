@@ -4,7 +4,7 @@ import Divider from '@/components/Divider/Divider';
 import EditTypeForm from './EditTypeForm';
 
 export default async function Page() {
-  let types = await DivisionGroupService.getGroupTypes();
+  const types = await DivisionGroupService.getGroupTypes();
   types.pop();
 
   return (

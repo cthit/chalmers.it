@@ -39,14 +39,11 @@ const EditGroupForm = ({
   const edit = async (e: any) => {
     e.preventDefault();
 
-    await toast.promise(
-      editGroup(superGroupId, prio, type < 0 ? null : type),
-      {
-        pending: 'Editing group...',
-        success: 'Group edited!',
-        error: 'Failed to edit group'
-      }
-    );
+    await toast.promise(editGroup(superGroupId, prio, type < 0 ? null : type), {
+      pending: 'Editing group...',
+      success: 'Group edited!',
+      error: 'Failed to edit group'
+    });
   };
 
   return (
