@@ -1,24 +1,30 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import ActionButton from '../ActionButton/ActionButton';
+import ActionButton from '@/components/ActionButton/ActionButton';
 import { editGroup, removeGroup } from '@/actions/groups';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import DivisionGroupService from '@/services/divisionGroupService';
 
-const GammaGroupListItem = ({
+const EditGroupForm = ({
   id,
+  typeId,
   superGroupId,
   prettyName,
-  priority
+  priority,
+  groupTypes
 }: {
   id: number;
+  typeId: number;
   superGroupId: string;
   prettyName: string;
   priority: number;
+  groupTypes: Awaited<ReturnType<typeof DivisionGroupService.getGroupTypes>>;
 }) => {
   const router = useRouter();
   const [prio, setPrio] = useState(priority);
+  const [type, setType] = useState(typeId);
 
   const remove = async () => {
     confirm('Are you sure you want to delete this group?') &&
@@ -33,11 +39,14 @@ const GammaGroupListItem = ({
   const edit = async (e: any) => {
     e.preventDefault();
 
-    await toast.promise(editGroup(superGroupId, prio), {
-      pending: 'Editing group...',
-      success: 'Group edited!',
-      error: 'Failed to edit group'
-    });
+    await toast.promise(
+      editGroup(superGroupId, prio, type < 0 ? null : type),
+      {
+        pending: 'Editing group...',
+        success: 'Group edited!',
+        error: 'Failed to edit group'
+      }
+    );
   };
 
   return (
@@ -56,6 +65,16 @@ const GammaGroupListItem = ({
           onChange={(e) => setPrio(+e.target.value)}
           value={prio}
         />
+        <br />
+        <label>Category</label>
+        <select onChange={(e) => setType(+e.target.value)} value={type}>
+          {groupTypes.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.nameEn}
+            </option>
+          ))}
+        </select>
+        <br />
         <ActionButton type="submit" onClick={edit}>
           Spara
         </ActionButton>
@@ -67,4 +86,4 @@ const GammaGroupListItem = ({
   );
 };
 
-export default GammaGroupListItem;
+export default EditGroupForm;
