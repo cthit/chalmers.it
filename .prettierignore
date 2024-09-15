@@ -1,3 +1,4 @@
 .github
+.vscode
 pnpm-lock.yaml
 docker-compose*.yml
