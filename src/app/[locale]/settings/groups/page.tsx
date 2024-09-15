@@ -1,8 +1,8 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import GammaService from '@/services/gammaService';
 import AddGroupForm from './AddGroupForm';
-import GammaGroupListItem from '@/components/GammaGroupListItem/GammaGroupListItem';
 import Divider from '@/components/Divider/Divider';
+import EditGroupForm from './EditGroupForm';
 
 export default async function Page() {
   const groups = await DivisionGroupService.getAll();
@@ -13,6 +13,7 @@ export default async function Page() {
         undefined
     )
     .flatMap((g) => g.superGroup);
+  const types = await DivisionGroupService.getGroupTypes();
 
   return (
     <main>
@@ -20,11 +21,14 @@ export default async function Page() {
       <h1>Grupper</h1>
       <ul>
         {groups.map((group) => (
-          <GammaGroupListItem
+          <EditGroupForm
             key={group.id}
             id={group.id}
+            typeId={group.divisionGroupTypeId ?? -1}
             superGroupId={group.gammaSuperGroupId}
             prettyName={group.prettyName}
+            priority={group.priority}
+            groupTypes={types}
           />
         ))}
       </ul>

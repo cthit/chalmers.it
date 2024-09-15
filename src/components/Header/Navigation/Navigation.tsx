@@ -23,6 +23,7 @@ const Navigation = ({ locale, desktop }: Props) => {
         text={l.nav.division}
         desktop={desktop}
       >
+        <Link href="/pages">{l.pages.about}</Link>
         <Link href="/groups">{l.pages.groups}</Link>
         <Link href="/documents">{l.docs.operational}</Link>
         <Link
