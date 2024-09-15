@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import styles from './EscapeHatch.module.scss';
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Roboto_Serif, Poppins } from 'next/font/google';
 import i18nService from '@/services/i18nService';
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const robotoSerif = Roboto_Serif({ weight: ['500'], subsets: ['latin'] });
 const poppins = Poppins({ subsets: ['latin'], weight: '400' });
 
 const EscapeHatch = ({ locale }: { locale?: string }) => {
@@ -21,7 +21,7 @@ const EscapeHatch = ({ locale }: { locale?: string }) => {
       </Link>
 
       <Link href="/">
-        <h1 className={`${styles.title} ${playfair.className}`}>
+        <h1 className={`${styles.title} ${robotoSerif.className}`}>
           {l.site.title}
         </h1>
         <h2 className={`${styles.subtitle} ${poppins.className}`}>
