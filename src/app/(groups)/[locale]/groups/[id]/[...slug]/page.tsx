@@ -11,8 +11,13 @@ export default async function Page({
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
   const main = DivisionPage(params.locale, params.slug, group.id);
-  const left = <DivisionNavigation locale={params.locale} />;
-  const right = <div></div>;
+  const left = (
+    <DivisionNavigation
+      locale={params.locale}
+      visitedSlug={['/groups', params.id, ...params.slug]}
+    />
+  );
+  const right = <></>;
 
   return <ThreePaneLayout left={left} middle={await main} right={right} />;
 }

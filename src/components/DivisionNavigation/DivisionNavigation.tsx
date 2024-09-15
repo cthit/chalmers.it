@@ -9,11 +9,21 @@ import ActionLink from '../ActionButton/ActionLink';
 import DivisionPages from '../DivisionPages/DivisionPages';
 import React from 'react';
 
-const DivisionNavigation = async ({ locale }: { locale: string }) => {
+const DivisionNavigation = async ({
+  locale,
+  groupId,
+  visitedSlug
+}: {
+  locale: string;
+  groupId?: number;
+  visitedSlug?: string[];
+}) => {
   const types = await DivisionGroupService.getGroupTypes();
   const isAdmin = await SessionService.isAdmin();
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
+  const currentSlug =
+    visitedSlug !== undefined ? visitedSlug.join('/') : undefined;
 
   return (
     <ContentPane>
@@ -21,7 +31,7 @@ const DivisionNavigation = async ({ locale }: { locale: string }) => {
       {isAdmin && <ActionLink href="/pages/new">{l.pages.create}</ActionLink>}
       <Divider />
       <ul className={styles.links}>
-        <DivisionPages en={en} slug={'/pages'} />
+        <DivisionPages en={en} slug={'/pages'} visitedSlug={currentSlug} />
       </ul>
       <h2>{l.pages.groups}</h2>
       <Divider />
@@ -31,12 +41,22 @@ const DivisionNavigation = async ({ locale }: { locale: string }) => {
           <ul className={styles.links}>
             {type.DivisionGroup.map((group) => (
               <li key={group.id}>
-                <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
+                <Link
+                  href={`/groups/${group.slug}`}
+                  className={
+                    group.id === groupId && visitedSlug === undefined
+                      ? styles.selected
+                      : undefined
+                  }
+                >
+                  {group.prettyName}
+                </Link>
                 <ul className={styles.links}>
                   <DivisionPages
                     en={en}
                     group={group.id}
                     slug={`/groups/${group.slug}`}
+                    visitedSlug={currentSlug}
                   />
                 </ul>
               </li>
