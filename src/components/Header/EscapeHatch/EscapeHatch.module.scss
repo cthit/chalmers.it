@@ -1,5 +1,4 @@
 .escapeHatch {
-  flex: 1;
   justify-content: left;
   display: flex;
   flex-direction: row;
@@ -28,6 +27,7 @@
 @media (max-width: #{$header-breakpoint}) {
   .escapeHatch {
     padding-left: min(calc(0.25rem + 2vw), 1.25rem);
+    flex: 1;
   }
 
   .itlogo {
