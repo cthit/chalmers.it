@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './NewsSearchForm.module.scss';
-import { useCallback, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
@@ -30,37 +30,39 @@ const NewsSearchForm = ({
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
-  const onSearch = useCallback(async () => {
-    setResults(undefined);
+  const onSearch = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      setResults(undefined);
 
-    const isValidLength = query.length >= 3;
-    setValidLength(isValidLength);
-    setResults(isValidLength ? await search(query, locale, before, after) : []);
-  }, [query, locale, before, after]);
+      const isValidLength = query.length >= 3;
+      setValidLength(isValidLength);
+      setResults(
+        isValidLength ? await search(query, locale, before, after) : []
+      );
+    },
+    [query, locale, before, after]
+  );
 
   return (
     <>
       <ContentPane>
-        <h1>{l.search.search}</h1>
-        <Divider />
-        <label>{l.search.query}</label>
-        <TextArea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') onSearch();
-          }}
-        />
-        <br />
-        <label>{l.search.before}</label>
-        <br />
-        <DatePicker value={before} onChange={setBefore} />
-        <br />
-        <label>{l.search.after}</label>
-        <br />
-        <DatePicker value={after} onChange={setAfter} />
-        <br />
-        <ActionButton onClick={onSearch}>{l.search.search}</ActionButton>
+        <form onSubmit={onSearch}>
+          <h1>{l.search.search}</h1>
+          <Divider />
+          <label>{l.search.query}</label>
+          <TextArea value={query} onChange={(e) => setQuery(e.target.value)} />
+          <br />
+          <label>{l.search.before}</label>
+          <br />
+          <DatePicker value={before} onChange={setBefore} />
+          <br />
+          <label>{l.search.after}</label>
+          <br />
+          <DatePicker value={after} onChange={setAfter} />
+          <br />
+          <ActionButton type="submit">{l.search.search}</ActionButton>
+        </form>
       </ContentPane>
       <br />
       <ContentPane>
