@@ -10,7 +10,8 @@ const SearchBar = () => {
       className={styles.searchBarForm}
       onSubmit={(e) => {
         e.preventDefault();
-        router.push(`/post/search?q=${term}`);
+        if (term.trim() === '') router.push('/post/search');
+        else router.push(`/post/search?q=${term}`);
       }}
     >
       <input
