@@ -1,25 +1,32 @@
 'use client';
 
 import styles from './NewsSearchForm.module.scss';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
 import Divider from '../Divider/Divider';
 import TextArea from '../TextArea/TextArea';
 import { search } from '@/actions/newsList';
-import { useSearchParams } from 'next/navigation';
 import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 
-const NewsSearchForm = ({ locale }: { locale: string }) => {
+const NewsSearchForm = ({
+  locale,
+  initialQuery,
+  initialResults
+}: {
+  locale: string;
+  initialQuery: string;
+  initialResults?: Awaited<ReturnType<typeof search>>;
+}) => {
   const l = i18nService.getLocale(locale);
-  const q = useSearchParams().get('q') || '';
 
-  const [first, setFirst] = useState<boolean>(true);
-  const [results, setResults] = useState<any[] | undefined>(undefined);
-  const [query, setQuery] = useState(q);
-  const [validLength, setValidLength] = useState<boolean>(q.length >= 3);
+  const [results, setResults] = useState<any[] | undefined>(initialResults);
+  const [query, setQuery] = useState(initialQuery);
+  const [validLength, setValidLength] = useState<boolean>(
+    initialQuery.length >= 3
+  );
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
@@ -30,13 +37,6 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
     setValidLength(isValidLength);
     setResults(isValidLength ? await search(query, locale, before, after) : []);
   }, [query, locale, before, after]);
-
-  useEffect(() => {
-    if (first) {
-      onSearch();
-      setFirst(false);
-    }
-  }, [first, onSearch]);
 
   return (
     <>
