@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './NewsSearchForm.module.scss';
-import { FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
@@ -22,13 +22,13 @@ const NewsSearchForm = ({
 }) => {
   const l = i18nService.getLocale(locale);
 
-  const [results, setResults] = useState<any[] | undefined>(initialResults);
+  const [results, setResults] = useState(initialResults);
   const [query, setQuery] = useState(initialQuery);
-  const [validLength, setValidLength] = useState<boolean>(
-    initialQuery.length >= 3
-  );
+  const [searchedQuery, setSearchedQuery] = useState(initialQuery);
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
+
+  const validLength = searchedQuery.length >= 3;
 
   const onSearch = useCallback(
     async (e: FormEvent) => {
@@ -36,13 +36,19 @@ const NewsSearchForm = ({
       setResults(undefined);
 
       const isValidLength = query.length >= 3;
-      setValidLength(isValidLength);
+      setSearchedQuery(query);
       setResults(
         isValidLength ? await search(query, locale, before, after) : []
       );
     },
     [query, locale, before, after]
   );
+
+  useEffect(() => {
+    setQuery(initialQuery);
+    setSearchedQuery(initialQuery);
+    setResults(initialResults);
+  }, [initialQuery, initialResults]);
 
   return (
     <>
@@ -75,7 +81,7 @@ const NewsSearchForm = ({
         <ul className={styles.results}>
           {results !== undefined &&
             results.map((result) => (
-              <li key={result.id}>
+              <li key={result!.id}>
                 <NewsSearchResult post={result} locale={locale} />
               </li>
             ))}
