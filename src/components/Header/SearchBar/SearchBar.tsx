@@ -1,18 +1,26 @@
+import { useState } from 'react';
 import styles from './SearchBar.module.scss';
 import { useRouter } from 'next/navigation';
 
 const SearchBar = () => {
   const router = useRouter();
+  const [term, setTerm] = useState<string>('');
   return (
-    <input
-      className={styles.expandedSearchBar}
-      type="text"
-      placeholder="Search..."
-      onKeyDown={(e) => {
-        if (e.key === 'Enter')
-          router.push(`/post/search?q=${e.currentTarget.value}`);
+    <form
+      className={styles.searchBarForm}
+      onSubmit={(e) => {
+        e.preventDefault();
+        router.push(`/post/search?q=${term}`);
       }}
-    />
+    >
+      <input
+        className={styles.expandedSearchBar}
+        type="text"
+        placeholder="Search..."
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+      />
+    </form>
   );
 };
 

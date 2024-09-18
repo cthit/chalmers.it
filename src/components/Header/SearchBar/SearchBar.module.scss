@@ -1,18 +1,23 @@
+.searchBarForm {
+  width: min(100%, 18rem);
+  margin: 0 1rem;
+  transition: width 0.7s ease;
+}
+
+.searchBarForm:has(.expandedSearchBar:focus) {
+  width: 100%;
+}
+
 .expandedSearchBar {
   height: 2rem;
-  margin: 0 1rem;
+  margin: auto;
   padding: 1rem;
   box-sizing: border-box;
   border: solid;
   border-color: var(--border-color);
   border-radius: 1rem;
-  width: min(100%, 18rem);
-  transition: width 0.7s ease;
+  width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
-}
-
-.expandedSearchBar:focus {
   outline: none;
-  width: 100%;
 }
