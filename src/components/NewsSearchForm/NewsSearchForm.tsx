@@ -1,66 +1,74 @@
 'use client';
 
 import styles from './NewsSearchForm.module.scss';
-import { useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import ActionButton from '../ActionButton/ActionButton';
 import ContentPane from '../ContentPane/ContentPane';
 import DatePicker from '../DatePicker/DatePicker';
 import Divider from '../Divider/Divider';
 import TextArea from '../TextArea/TextArea';
 import { search } from '@/actions/newsList';
-import { useSearchParams } from 'next/navigation';
 import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 
-const NewsSearchForm = ({ locale }: { locale: string }) => {
+const NewsSearchForm = ({
+  locale,
+  initialQuery,
+  initialResults
+}: {
+  locale: string;
+  initialQuery: string;
+  initialResults?: Awaited<ReturnType<typeof search>>;
+}) => {
   const l = i18nService.getLocale(locale);
-  const q = useSearchParams().get('q') || '';
 
-  const [first, setFirst] = useState<boolean>(true);
-  const [results, setResults] = useState<any[] | undefined>(undefined);
-  const [query, setQuery] = useState(q);
-  const [validLength, setValidLength] = useState<boolean>(q.length >= 3);
+  const [results, setResults] = useState(initialResults);
+  const [query, setQuery] = useState(initialQuery);
+  const [searchedQuery, setSearchedQuery] = useState(initialQuery);
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
-  const onSearch = useCallback(async () => {
-    setResults(undefined);
+  const validLength = searchedQuery.length >= 3;
 
-    const isValidLength = query.length >= 3;
-    setValidLength(isValidLength);
-    setResults(isValidLength ? await search(query, locale, before, after) : []);
-  }, [query, locale, before, after]);
+  const onSearch = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      setResults(undefined);
+
+      const isValidLength = query.length >= 3;
+      setSearchedQuery(query);
+      setResults(
+        isValidLength ? await search(query, locale, before, after) : []
+      );
+    },
+    [query, locale, before, after]
+  );
 
   useEffect(() => {
-    if (first) {
-      onSearch();
-      setFirst(false);
-    }
-  }, [first, onSearch]);
+    setQuery(initialQuery);
+    setSearchedQuery(initialQuery);
+    setResults(initialResults);
+  }, [initialQuery, initialResults]);
 
   return (
     <>
       <ContentPane>
-        <h1>{l.search.search}</h1>
-        <Divider />
-        <label>{l.search.query}</label>
-        <TextArea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') onSearch();
-          }}
-        />
-        <br />
-        <label>{l.search.before}</label>
-        <br />
-        <DatePicker value={before} onChange={setBefore} />
-        <br />
-        <label>{l.search.after}</label>
-        <br />
-        <DatePicker value={after} onChange={setAfter} />
-        <br />
-        <ActionButton onClick={onSearch}>{l.search.search}</ActionButton>
+        <form onSubmit={onSearch}>
+          <h1>{l.search.search}</h1>
+          <Divider />
+          <label>{l.search.query}</label>
+          <TextArea value={query} onChange={(e) => setQuery(e.target.value)} />
+          <br />
+          <label>{l.search.before}</label>
+          <br />
+          <DatePicker value={before} onChange={setBefore} />
+          <br />
+          <label>{l.search.after}</label>
+          <br />
+          <DatePicker value={after} onChange={setAfter} />
+          <br />
+          <ActionButton type="submit">{l.search.search}</ActionButton>
+        </form>
       </ContentPane>
       <br />
       <ContentPane>
@@ -73,7 +81,7 @@ const NewsSearchForm = ({ locale }: { locale: string }) => {
         <ul className={styles.results}>
           {results !== undefined &&
             results.map((result) => (
-              <li key={result.id}>
+              <li key={result!.id}>
                 <NewsSearchResult post={result} locale={locale} />
               </li>
             ))}
