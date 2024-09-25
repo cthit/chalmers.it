@@ -25,7 +25,7 @@ const Navigation = ({ locale, desktop }: Props) => {
       >
         <Link href="/pages">{l.pages.about}</Link>
         <Link href="/groups">{l.pages.groups}</Link>
-        <Link href="/documents">{l.docs.operational}</Link>
+        <Link href="/pages/documents">{l.docs.operational}</Link>
         <Link
           target="_blank"
           href="https://docs.chalmers.it/"
