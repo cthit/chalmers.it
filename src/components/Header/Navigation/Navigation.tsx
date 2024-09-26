@@ -4,7 +4,6 @@ import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 import i18nService from '@/services/i18nService';
 
-
 const poppins = Poppins({ subsets: ['latin'], weight: '500' });
 
 type Props = {
@@ -95,9 +94,11 @@ const Navigation = ({ locale, desktop }: Props) => {
         <Link href="/pages/gamma">{l.nav.gamma}</Link>
       </DropdownLink>
 
-      <DropdownLink contentClassName={c}
+      <DropdownLink
+        contentClassName={c}
         text={l.nav.business}
-        desktop={desktop}>
+        desktop={desktop}
+      >
         <Link
           target="_blank"
           href="https://armit.chalmers.it/"
