@@ -7,14 +7,12 @@
   max-width: 30rem;
   margin: 0 auto;
   background-color: var(--content-background-color);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 2px solid var(--content-border-color);
 }
 
 .content {
   background-color: transparent;
   overflow: hidden;
+  padding-bottom: 0.5rem;
 }
 
 .open {
