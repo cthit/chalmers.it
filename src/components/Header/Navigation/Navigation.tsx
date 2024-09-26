@@ -24,7 +24,8 @@ const Navigation = ({ locale, desktop }: Props) => {
         desktop={desktop}
       >
         <Link href="/groups">{l.pages.groups}</Link>
-        <Link href="/pages/documents">{l.docs.operational}</Link>
+        <Link href="/documents">{l.docs.operational}</Link>
+        <Link href="/pages/documents">{l.docs.regulatory}</Link>
         <Link href="/pages/programledningen">{l.nav.pl}</Link>
         <Link href="/pages/samo">{l.nav.samo}</Link>
         <Link href="/pages/honorary-members">{l.nav.honorary}</Link>
