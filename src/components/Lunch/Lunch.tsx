@@ -1,6 +1,5 @@
 import LunchService from '@/services/lunchService';
 import Divider from '../Divider/Divider';
-import styles from './Lunch.module.scss';
 import i18nService from '@/services/i18nService';
 import ContentPaneCollapsible from '../ContentPane/ContentPaneCollapsible';
 
