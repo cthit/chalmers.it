@@ -8,7 +8,8 @@
     "upload": "Upload",
     "uploaded": "Uploaded",
     "close": "Close",
-    "save": "Save"
+    "save": "Save",
+    "manage": "Manage"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -113,7 +114,8 @@
     "content": "Content",
     "close": "Close",
     "topLevel": "Top level",
-    "sortPrio": "Sort priority"
+    "sortPrio": "Sort priority",
+    "create": "Create page"
   },
   "events": {
     "events": "Events",

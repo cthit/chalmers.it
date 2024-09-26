@@ -3,7 +3,11 @@ import GammaService from './gammaService';
 
 export default class DivisionGroupService {
   static async getAll() {
-    return prisma.divisionGroup.findMany();
+    return prisma.divisionGroup.findMany({
+      orderBy: {
+        priority: 'desc'
+      }
+    });
   }
 
   static async addGroup(
@@ -127,6 +131,22 @@ export default class DivisionGroupService {
     });
   }
 
+  static async edit(
+    gammaSuperGroupId: string,
+    priority: number,
+    typeId: number | null
+  ) {
+    return prisma.divisionGroup.update({
+      where: {
+        gammaSuperGroupId
+      },
+      data: {
+        priority,
+        divisionGroupTypeId: typeId
+      }
+    });
+  }
+
   static async getGammaSuperGroupIdFromInternalId(id: number) {
     return (
       await prisma.divisionGroup.findUnique({
@@ -151,5 +171,63 @@ export default class DivisionGroupService {
         data: { prettyName: gammaGroup.superGroup.prettyName }
       });
     }
+  }
+
+  static async getGroupTypes() {
+    const types = await prisma.divisionGroupType.findMany({
+      orderBy: { priority: 'desc' },
+      include: {
+        DivisionGroup: {
+          orderBy: {
+            priority: 'desc'
+          }
+        }
+      }
+    });
+    types.push({
+      DivisionGroup: await prisma.divisionGroup.findMany({
+        where: { divisionGroupTypeId: null },
+        orderBy: { priority: 'desc' }
+      }),
+      id: -1,
+      nameEn: 'Miscellaneous',
+      nameSv: 'Övrigt',
+      priority: 0
+    });
+    return types;
+  }
+
+  static async createType(nameEn: string, nameSv: string, priority?: number) {
+    await prisma.divisionGroupType.create({
+      data: {
+        nameEn,
+        nameSv,
+        priority
+      }
+    });
+  }
+
+  static async editType(
+    id: number,
+    nameEn: string,
+    nameSv: string,
+    priority: number
+  ) {
+    await prisma.divisionGroupType.update({
+      where: {
+        id
+      },
+      data: {
+        nameEn,
+        nameSv,
+        priority
+      }
+    });
+  }
+
+  static async deleteType(id: number) {
+    await prisma.divisionGroupType.delete({
+      where: { id }
+    });
   }
 }

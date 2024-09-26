@@ -18,8 +18,10 @@ export default async function Page({
 }: {
   params: { locale: string; id: string };
 }) {
+  const group = (await DivisionGroupService.getInfoBySlug(id))!;
+
   const main = await mainContent(locale, id);
-  const left = <DivisionNavigation locale={locale} />;
+  const left = <DivisionNavigation locale={locale} groupId={group.id} />;
   const right = <ContactCard locale={locale} />;
 
   return <ThreePaneLayout left={left} middle={main} right={right} />;

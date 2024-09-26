@@ -9,7 +9,9 @@ export default async function Page({
   params: { locale: string; slug: string[] };
 }) {
   const main = DivisionPage(locale, slug);
-  const left = <DivisionNavigation locale={locale} />;
+  const left = (
+    <DivisionNavigation locale={locale} visitedSlug={['/pages', ...slug]} />
+  );
   const right = <ContactCard locale={locale} />;
 
   return <ThreePaneLayout left={left} middle={await main} right={right} />;
