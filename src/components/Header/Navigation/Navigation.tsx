@@ -89,15 +89,29 @@ const Navigation = ({ locale, desktop }: Props) => {
         <Link target="_blank" href="https://wiki.chalmers.it/">
           {l.nav.wiki}&nbsp;&#8599;
         </Link>
+        <Link target="_blank" href="https://cthit.myspreadshop.it/">
+          {l.nav.merch}&nbsp;&#8599;
+        </Link>
         <Link href="/pages/gamma">{l.nav.gamma}</Link>
       </DropdownLink>
-      <Link
-        target="_blank"
-        href="https://armit.chalmers.it/"
-        className={`${styles.navLink} ${poppins.className}`}
-      >
-        {l.nav.business}
-      </Link>
+
+      <DropdownLink contentClassName={c}
+        text={l.nav.business}
+        desktop={desktop}>
+        <Link
+          target="_blank"
+          href="https://armit.chalmers.it/"
+          className={`${styles.navLink} ${poppins.className}`}
+        >
+          {l.nav.armit}&nbsp;&#8599;
+        </Link>
+        <Link
+          href="/pages/services"
+          className={`${styles.navLink} ${poppins.className}`}
+        >
+          {l.nav.services}
+        </Link>
+      </DropdownLink>
       <Link
         href="/pages/contact"
         className={`${styles.navLink} ${poppins.className}`}
