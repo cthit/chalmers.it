@@ -1,6 +1,6 @@
 .button {
   display: inline-flex;
-  text-wrap: nowrap;
+  text-wrap: wrap;
   background-color: var(--primary-color);
   font-size: 18px;
   border: none;
@@ -8,6 +8,7 @@
   border-radius: 0.4rem;
   color: black;
   cursor: pointer;
+  width: 100%;
 }
 
 .button:hover {
