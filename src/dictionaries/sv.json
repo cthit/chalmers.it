@@ -132,7 +132,7 @@
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
-    "subscribe": "Prenumerera (Google kalender)"
+    "subscribe": "Prenumerera"
   },
   "groups": {
     "members": "Nuvarande medlemmar",

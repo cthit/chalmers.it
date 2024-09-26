@@ -132,7 +132,7 @@
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
-    "subscribe": "Subscribe (Google Calendar)"
+    "subscribe": "Subscribe"
   },
   "groups": {
     "members": "Current members",

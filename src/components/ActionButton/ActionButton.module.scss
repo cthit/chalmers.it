@@ -8,6 +8,8 @@
   border-radius: 0.4rem;
   color: black;
   cursor: pointer;
+  max-width: 100%;
+  place-content: center;
 }
 
 .button:hover {
