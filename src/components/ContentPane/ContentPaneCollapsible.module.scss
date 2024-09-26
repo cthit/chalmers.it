@@ -31,5 +31,7 @@
   width: 100%;
   font-size: 3rem;
   background: transparent;
+  cursor: pointer;
   border: none;
+  border-top: 2px solid var(--content-border-color);
 }
