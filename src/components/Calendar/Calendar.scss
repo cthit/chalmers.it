@@ -53,4 +53,10 @@
   .react-calendar__navigation__next2-button {
     display: none;
   }
+  padding-bottom: 0.5rem;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
 }
