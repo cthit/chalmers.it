@@ -3,7 +3,7 @@ import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 import i18nService from '@/services/i18nService';
-import Dropdown from './Dropdown/Dropdown';
+
 
 const poppins = Poppins({ subsets: ['latin'], weight: '500' });
 
