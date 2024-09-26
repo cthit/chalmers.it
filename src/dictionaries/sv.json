@@ -37,7 +37,13 @@
     "studenthealth": "Studiehälsa",
     "services": "Tjänster",
     "business": "Företag",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "hubbit": "HubbIT",
+    "findit": "FindIT",
+    "bookit": "BookIT",
+    "documents": "Dokument",
+    "gamma": "Gamma",
+    "armit": "ArmIT"
   },
   "banner": {
     "top": "Teknologsektionen"

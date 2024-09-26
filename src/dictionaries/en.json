@@ -37,7 +37,13 @@
     "studenthealth": "Student Health",
     "services": "Services",
     "business": "Business",
-    "contact": "Contact"
+    "contact": "Contact",
+    "hubbit": "HubbIT",
+    "findit": "FindIT",
+    "bookit": "BookIT",
+    "documents": "Documents",
+    "gamma": "Gamma",
+    "armit": "ArmIT"
   },
   "banner": {
     "top": "Student Division"
