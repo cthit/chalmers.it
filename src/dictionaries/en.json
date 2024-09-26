@@ -37,7 +37,13 @@
     "studenthealth": "Student Health",
     "services": "Services",
     "business": "Business",
-    "contact": "Contact"
+    "contact": "Contact",
+    "hubbit": "HubbIT",
+    "findit": "FindIT",
+    "bookit": "BookIT",
+    "documents": "Documents",
+    "gamma": "Gamma",
+    "armit": "ArmIT"
   },
   "banner": {
     "top": "Student Division"
@@ -126,7 +132,7 @@
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
-    "subscribe": "Subscribe (Google Calendar)"
+    "subscribe": "Subscribe"
   },
   "groups": {
     "members": "Current members",

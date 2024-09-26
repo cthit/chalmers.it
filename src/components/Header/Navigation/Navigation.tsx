@@ -23,46 +23,12 @@ const Navigation = ({ locale, desktop }: Props) => {
         text={l.nav.division}
         desktop={desktop}
       >
-        <Link href="/pages">{l.pages.about}</Link>
         <Link href="/groups">{l.pages.groups}</Link>
         <Link href="/documents">{l.docs.operational}</Link>
-        <Link
-          target="_blank"
-          href="https://docs.chalmers.it/"
-          className={`${styles.navLink} ${poppins.className}`}
-        >
-          {l.docs.regulatory}&nbsp;&#8599;
-        </Link>
-        <Link target="_blank" href="https://wikit.chalmers.it/">
-          {l.nav.wiki}&nbsp;&#8599;
-        </Link>
-        <Link target="_blank" href="https://flashit.chalmers.it/">
-          {l.nav.pictures}&nbsp;&#8599;
-        </Link>
-        <Link target="_blank" href="https://cthit.myspreadshop.it/">
-          {l.nav.merch}&nbsp;&#8599;
-        </Link>
-        <Link href="/pages/honorary-members">{l.nav.honorary}</Link>
+        <Link href="/pages/documents">{l.docs.regulatory}</Link>
         <Link href="/pages/programledningen">{l.nav.pl}</Link>
         <Link href="/pages/samo">{l.nav.samo}</Link>
-      </DropdownLink>
-      <DropdownLink
-        contentClassName={c}
-        text={l.nav.applicants}
-        desktop={desktop}
-      >
-        <Link
-          target="_blank"
-          href="https://www.uhr.se/studier-och-antagning/antagningsstatistik/detaljsida/?utbildningId=81D7B349ADECC6C41777608CFE9EBBA6"
-        >
-          {l.nav.stats}&nbsp;&#8599;
-        </Link>
-        <Link target="_blank" href="https://nollk.it/">
-          {l.nav.nollkit}&nbsp;&#8599;
-        </Link>
-        <Link target="_blank" href="https://wiki.chalmers.it/index.php/Nollan">
-          {l.nav.studentlife}&nbsp;&#8599;
-        </Link>
+        <Link href="/pages/honorary-members">{l.nav.honorary}</Link>
       </DropdownLink>
       <DropdownLink
         contentClassName={c}
@@ -100,19 +66,54 @@ const Navigation = ({ locale, desktop }: Props) => {
           {l.nav.studenthealth}&nbsp;&#8599;
         </Link>
       </DropdownLink>
-      <Link
-        href="/pages/services"
-        className={`${styles.navLink} ${poppins.className}`}
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.services}
+        desktop={desktop}
       >
-        {l.nav.services}
-      </Link>
-      <Link
-        target="_blank"
-        href="https://armit.chalmers.it/"
-        className={`${styles.navLink} ${poppins.className}`}
+        <Link target="_blank" href="https://findit.chalmers.it/">
+          {l.nav.findit}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://hubbit.chalmers.it/">
+          {l.nav.hubbit}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://bookit.chalmers.it/">
+          {l.nav.bookit}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://flashit.chalmers.it/">
+          {l.nav.pictures}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://docs.chalmers.it/">
+          {l.nav.documents}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://wiki.chalmers.it/">
+          {l.nav.wiki}&nbsp;&#8599;
+        </Link>
+        <Link target="_blank" href="https://cthit.myspreadshop.it/">
+          {l.nav.merch}&nbsp;&#8599;
+        </Link>
+        <Link href="/pages/gamma">{l.nav.gamma}</Link>
+      </DropdownLink>
+
+      <DropdownLink
+        contentClassName={c}
+        text={l.nav.business}
+        desktop={desktop}
       >
-        {l.nav.business}
-      </Link>
+        <Link
+          target="_blank"
+          href="https://armit.chalmers.it/"
+          className={`${styles.navLink} ${poppins.className}`}
+        >
+          {l.nav.armit}&nbsp;&#8599;
+        </Link>
+        <Link
+          href="/pages/services"
+          className={`${styles.navLink} ${poppins.className}`}
+        >
+          {l.nav.services}
+        </Link>
+      </DropdownLink>
       <Link
         href="/pages/contact"
         className={`${styles.navLink} ${poppins.className}`}
