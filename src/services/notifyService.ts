@@ -127,6 +127,12 @@ class SlackWebhookNotifier implements Notifier {
         block.text !== undefined
       ) {
         // Merge text blocks
+        if (block.text.text.includes('/api/media')) {
+          block.text.text = block.text.text.replace(
+            '/api/media',
+            process.env.BASE_URL + '/api/media'
+          );
+        }
         cleaned[cleaned.length - 1].text.text += '\n\n' + block.text.text;
       } else if (
         block.type === 'image' &&

@@ -111,9 +111,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   };
 
   const copyFile = (sha256: string) => {
-    navigator.clipboard.writeText(
-      '[Text](https://chalmers.it/api/media/' + sha256 + ')'
-    );
+    navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
     toast(l.editor.linkCopied, { type: 'success' });
   };
 
