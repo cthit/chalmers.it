@@ -4,6 +4,8 @@ import GammaService from './gammaService';
 import { markdownToBlocks } from '@tryfabric/mack';
 import DivisionGroupService from './divisionGroupService';
 import { KnownBlock, MessageAttachment } from '@slack/types';
+import htmlToSlack from 'html-to-slack';
+import { marked } from 'marked';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -177,15 +179,32 @@ class SlackWebhookNotifier implements Notifier {
         ? await DivisionGroupService.getInfo(post.divisionGroupId)
         : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
-    const content = this.cleanSections(
+
+    marked.use({
+      pedantic: false,
+      breaks: true,
+      gfm: true
+    });
+    marked.Renderer.prototype.paragraph = (text) => {
+      if (text.startsWith("<img")) {
+        return text + "\n";
+      }
+      return "<p>" + text + "</p>";
+    };
+    const cHtml = await marked.parse(this.language === Language.EN ? post.contentEn : post.contentSv);
+    const content = htmlToSlack(cHtml);
+
+    /*const content = this.cleanSections(
       await markdownToBlocks(
         this.language === Language.EN ? post.contentEn : post.contentSv
       )
-    );
+    );*/
     const msg =
       this.language === Language.EN
-        ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
-        : `Nyhet publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+        ? `News published: *${post.titleEn}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Nyhet publicerad: *${post.titleSv}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+
+    console.log("Publishing with content", content);
 
     const res = await fetch(this.webhook, {
       method: 'POST',
