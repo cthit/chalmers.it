@@ -10,7 +10,7 @@ const Calendar = async ({ locale }: { locale: string }) => {
   const events = await getAllEvents();
 
   return (
-    <ContentPane>
+    <ContentPane className="centered">
       <h1>{l.events.events}</h1>
       <Divider />
       <CalendarClient locale={locale} events={events} />

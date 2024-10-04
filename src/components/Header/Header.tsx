@@ -5,6 +5,8 @@ import ThemeSelector from './ThemeSelector/ThemeSelector';
 import NavDrawer from './NavDrawer/NavDrawer';
 import EscapeHatch from './EscapeHatch/EscapeHatch';
 import Navigation from './Navigation/Navigation';
+import SearchIcon from './SearchBar/SearchIcon';
+import Link from 'next/link';
 
 const Header = ({ locale }: { locale: string }) => {
   return (
@@ -14,6 +16,9 @@ const Header = ({ locale }: { locale: string }) => {
           <Navigation locale={locale} desktop={false} />
           <User locale={locale} />
           <ThemeSelector />
+          <Link href="/post/search">
+            <SearchIcon />
+          </Link>
         </NavDrawer>
         <EscapeHatch locale={locale} />
       </div>

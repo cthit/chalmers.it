@@ -1,11 +1,11 @@
-import { Playfair_Display } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import styles from './Navigation.module.scss';
 import Link from 'next/link';
 import DropdownLink from './DropdownLink/DropdownLink';
 import i18nService from '@/services/i18nService';
 import NavService from '@/services/navService';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: '800' });
+const poppins = Poppins({ subsets: ['latin'], weight: '500' });
 
 type Props = {
   locale: string;
@@ -27,7 +27,7 @@ const Navigation = async ({ locale, desktop }: Props) => {
           <Link
             key={category.id}
             href={category.url}
-            className={`${styles.navLink} ${playfair.className}`}
+            className={`${styles.navLink} ${poppins.className}`}
             target={categoryTarget}
           >
             {l.en ? category.nameEn : category.nameSv}

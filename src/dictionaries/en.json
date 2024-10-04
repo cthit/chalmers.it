@@ -8,7 +8,8 @@
     "upload": "Upload",
     "uploaded": "Uploaded",
     "close": "Close",
-    "save": "Save"
+    "save": "Save",
+    "manage": "Manage"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -36,7 +37,13 @@
     "studenthealth": "Student Health",
     "services": "Services",
     "business": "Business",
-    "contact": "Contact"
+    "contact": "Contact",
+    "hubbit": "HubbIT",
+    "findit": "FindIT",
+    "bookit": "BookIT",
+    "documents": "Documents",
+    "gamma": "Gamma",
+    "armit": "ArmIT"
   },
   "banner": {
     "top": "Student Division"
@@ -113,7 +120,8 @@
     "content": "Content",
     "close": "Close",
     "topLevel": "Top level",
-    "sortPrio": "Sort priority"
+    "sortPrio": "Sort priority",
+    "create": "Create page"
   },
   "events": {
     "events": "Events",
@@ -124,7 +132,7 @@
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
-    "subscribe": "Subscribe (Google Calendar)"
+    "subscribe": "Subscribe"
   },
   "groups": {
     "members": "Current members",

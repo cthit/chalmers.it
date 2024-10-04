@@ -1,9 +1,9 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import styles from './Banner.module.scss';
-import { Playfair_Display } from 'next/font/google';
+import { Roboto_Serif } from 'next/font/google';
 import i18nService from '@/services/i18nService';
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+const robotoSerif = Roboto_Serif({ weight: '600', subsets: ['latin'] });
 
 const BannerTitle = ({ locale }: { locale?: string }) => {
   const l = i18nService.getLocale(locale);
@@ -38,7 +38,7 @@ const Banner = async ({ locale, name, url }: BannerProps) => {
   const validBanner = groupName !== undefined && groupUrl !== undefined;
 
   return (
-    <div className={`${styles.banner} ${playfair.className}`}>
+    <div className={`${styles.banner} ${robotoSerif.className}`}>
       <BannerTitle locale={locale} />
       <div className={styles.bannerImg}>
         {validBanner && (

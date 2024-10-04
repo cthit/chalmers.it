@@ -8,7 +8,8 @@
     "upload": "Ladda upp",
     "uploaded": "Uppladdad",
     "close": "Stäng",
-    "save": "Spara"
+    "save": "Spara",
+    "manage": "Hantera"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -36,7 +37,13 @@
     "studenthealth": "Studiehälsa",
     "services": "Tjänster",
     "business": "Företag",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "hubbit": "HubbIT",
+    "findit": "FindIT",
+    "bookit": "BookIT",
+    "documents": "Dokument",
+    "gamma": "Gamma",
+    "armit": "ArmIT"
   },
   "banner": {
     "top": "Teknologsektionen"
@@ -113,7 +120,8 @@
     "content": "Innehåll",
     "close": "Stäng",
     "topLevel": "Toppnivå",
-    "sortPrio": "Sorteringsprioritet"
+    "sortPrio": "Sorteringsprioritet",
+    "create": "Skapa sida"
   },
   "events": {
     "events": "Evenemang",
@@ -124,7 +132,7 @@
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
-    "subscribe": "Prenumerera (Google kalender)"
+    "subscribe": "Prenumerera"
   },
   "groups": {
     "members": "Nuvarande medlemmar",

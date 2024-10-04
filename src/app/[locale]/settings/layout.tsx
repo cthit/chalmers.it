@@ -21,6 +21,11 @@ const pages = [
     authFunc: SessionService.isAdmin
   },
   {
+    path: '/settings/group-types',
+    name: 'Group Types',
+    authFunc: async () => await SessionService.isAdmin()
+  },
+  {
     path: '/settings/sponsors',
     name: 'Sponsors',
     authFunc: async () =>
