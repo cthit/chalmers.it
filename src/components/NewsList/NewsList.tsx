@@ -3,26 +3,11 @@ import NewsPost from './NewsPost/NewsPost';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
-import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import React from 'react';
-import { getPage } from '@/actions/newsList';
+import { getData, getPage } from '@/actions/newsList';
 import InfiniteScroller from './InfiniteScroller';
-
-interface NewsPostInterface {
-  id: number;
-  title: string;
-  content: string;
-  author?: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  scheduledPublish?: Date;
-  status: PostStatus;
-  writtenFor?: string;
-  deletable: boolean;
-  editable: boolean;
-}
 
 const NewsList = async ({ locale }: { locale: string }) => {
   try {
@@ -40,7 +25,7 @@ const News = ({
   canPost,
   locale
 }: {
-  news: (NewsPostInterface | undefined)[];
+  news: Awaited<ReturnType<typeof getData>>[];
   canPost: boolean;
   locale: string;
 }) => {

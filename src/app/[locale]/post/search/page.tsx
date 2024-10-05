@@ -5,12 +5,18 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 
 export default async function Page({
   params: { locale },
-  searchParams: { q }
+  searchParams: { q, gid, uid }
 }: {
   params: { locale: string };
-  searchParams: { q?: string };
+  searchParams: { q?: string; gid?: string; uid?: string };
 }) {
-  const res = q !== undefined && q.length >= 3 ? await search(q, locale) : [];
+  const validQuery =
+    (q !== undefined && (q?.length ?? -1 >= 3)) ||
+    gid !== undefined ||
+    uid !== undefined;
+  const res = validQuery
+    ? await search(locale, q, undefined, undefined, uid, gid)
+    : [];
 
   return (
     <main>
@@ -20,6 +26,9 @@ export default async function Page({
             locale={locale}
             initialQuery={q ?? ''}
             initialResults={res}
+            groups={[]}
+            initialGroup={gid}
+            initialUser={uid}
           />
         }
         right={<ContactCard locale={locale} />}

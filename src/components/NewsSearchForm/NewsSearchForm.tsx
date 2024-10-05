@@ -14,10 +14,15 @@ import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 const NewsSearchForm = ({
   locale,
   initialQuery,
-  initialResults
+  initialResults,
+  initialGroup,
+  initialUser
 }: {
   locale: string;
+  groups: [string, string][];
   initialQuery: string;
+  initialGroup?: string;
+  initialUser?: string;
   initialResults?: Awaited<ReturnType<typeof search>>;
 }) => {
   const l = i18nService.getLocale(locale);
@@ -28,20 +33,20 @@ const NewsSearchForm = ({
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
-  const validLength = searchedQuery.length >= 3;
+  const validQuery = searchedQuery.length >= 3 || initialGroup !== undefined || initialUser !== undefined;
 
   const onSearch = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       setResults(undefined);
 
-      const isValidLength = query.length >= 3;
+      const isValidQuery = query.length >= 3 || initialGroup !== undefined || initialUser !== undefined;
       setSearchedQuery(query);
       setResults(
-        isValidLength ? await search(query, locale, before, after) : []
+        isValidQuery ? await search(locale, query, before, after, initialUser, initialGroup) : []
       );
     },
-    [query, locale, before, after]
+    [query, locale, before, after, initialGroup, initialUser]
   );
 
   useEffect(() => {
@@ -77,7 +82,7 @@ const NewsSearchForm = ({
         {results === undefined && <p>{l.search.loading}</p>}
         {results !== undefined &&
           results.length === 0 &&
-          (validLength ? <p>{l.search.empty}</p> : <p>{l.search.short}</p>)}
+          (validQuery ? <p>{l.search.empty}</p> : <p>{l.search.short}</p>)}
         <ul className={styles.results}>
           {results !== undefined &&
             results.map((result) => (
