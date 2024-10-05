@@ -21,7 +21,7 @@ const EditCategoryForm = ({ category }: { category: any }) => {
         success: 'Category edited',
         error: 'Failed to edit category'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   const handleDelete = async () => {
@@ -31,7 +31,7 @@ const EditCategoryForm = ({ category }: { category: any }) => {
         success: 'Category deleted',
         error: 'Failed to delete category'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   return (

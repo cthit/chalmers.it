@@ -21,7 +21,7 @@ const AddCategoryForm = () => {
         success: 'Category created',
         error: 'Failed to create category'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   return (

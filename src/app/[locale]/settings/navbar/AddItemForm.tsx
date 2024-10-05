@@ -21,7 +21,7 @@ const AddItemForm = ({ categoryId }: { categoryId: number }) => {
         success: 'Item created',
         error: 'Failed to create item'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   return (

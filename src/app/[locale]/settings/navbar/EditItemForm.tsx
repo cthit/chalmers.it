@@ -21,7 +21,7 @@ const EditItemForm = ({ item }: { item: any }) => {
         success: 'Item edited',
         error: 'Failed to edit item'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   const handleDelete = async () => {
@@ -31,7 +31,7 @@ const EditItemForm = ({ item }: { item: any }) => {
         success: 'Item deleted',
         error: 'Failed to delete item'
       })
-      .then(() => router.push('/settings/navbar'));
+      .then(() => router.refresh());
   };
 
   return (
