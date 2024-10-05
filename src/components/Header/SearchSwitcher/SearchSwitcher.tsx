@@ -4,14 +4,15 @@ import SearchBar from '../SearchBar/SearchBar';
 import SearchIcon from '../SearchBar/SearchIcon';
 import styles from '../Header.module.scss';
 import EscapeHatch from '../EscapeHatch/EscapeHatch';
-import Navigation from '../Navigation/Navigation';
 import { useState } from 'react';
 
 const SearchSwitcher = ({
   children,
+  nav,
   locale
 }: {
   children: React.ReactNode;
+  nav: React.ReactNode;
   locale: string;
 }) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -19,11 +20,7 @@ const SearchSwitcher = ({
   return (
     <>
       <EscapeHatch locale={locale} />
-      {showSearch ? (
-        <SearchBar />
-      ) : (
-        <Navigation locale={locale} desktop={true} />
-      )}
+      {showSearch ? <SearchBar /> : nav}
       <div className={styles.right}>
         {<SearchIcon onClick={() => setShowSearch(!showSearch)} />}
         {children}

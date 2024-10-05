@@ -58,6 +58,7 @@ The following environment variables are used:
 | GAMMA_CLIENT_ID           | Gamma OAuth client ID                                           | `id`                                                                   |
 | GAMMA_CLIENT_SECRET       | Gamma OAuth client secret                                       | `secret`                                                               |
 | GAMMA_ROOT_URL            | Gamma root URL                                                  | `https://auth.chalmers.it`                                             |
+| BASE_URL                  | URL that is used as a base for linking to news                  | `https://chalmers.it`                                                  |
 | NEXTAUTH_SECRET           | Secret used for signing cookies                                 | `secret`                                                               |
 | NEXTAUTH_URL              | URL to the NextAuth API                                         | `http://localhost:3000/api/auth`                                       |
 | MEDIA_PATH                | Path to store media                                             | `./media`                                                              |

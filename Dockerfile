@@ -40,6 +40,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --chown=nextjs:nodejs next-logger.config.js /app/
 COPY --chown=nextjs:nodejs pino-pretty-transport.js /app/
 
+# Copy database schema
+COPY --chown=nextjs:nodejs prisma ./prisma
+
 # Create media directory
 RUN mkdir -p $MEDIA_PATH
 RUN chown -R nextjs:nodejs $MEDIA_PATH
