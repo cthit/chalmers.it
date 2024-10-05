@@ -25,13 +25,14 @@ const EditItemForm = ({ item }: { item: any }) => {
   };
 
   const handleDelete = async () => {
-    toast
-      .promise(removeItem(item.id), {
-        pending: 'Deleting...',
-        success: 'Item deleted',
-        error: 'Failed to delete item'
-      })
-      .then(() => router.refresh());
+    confirm('Are you sure you want to delete this item?') &&
+      toast
+        .promise(removeItem(item.id), {
+          pending: 'Deleting...',
+          success: 'Item deleted',
+          error: 'Failed to delete item'
+        })
+        .then(() => router.refresh());
   };
 
   return (

@@ -25,13 +25,16 @@ const EditCategoryForm = ({ category }: { category: any }) => {
   };
 
   const handleDelete = async () => {
-    toast
-      .promise(removeCategory(category.id), {
-        pending: 'Deleting...',
-        success: 'Category deleted',
-        error: 'Failed to delete category'
-      })
-      .then(() => router.refresh());
+    confirm(
+      'Are you sure you want to delete this category? All sub-items will be deleted!'
+    ) &&
+      toast
+        .promise(removeCategory(category.id), {
+          pending: 'Deleting...',
+          success: 'Category deleted',
+          error: 'Failed to delete category'
+        })
+        .then(() => router.refresh());
   };
 
   return (
