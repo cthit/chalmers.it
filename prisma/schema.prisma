@@ -172,6 +172,6 @@ model NavbarItem {
   nameSv     String
   nameEn     String
   url        String
-  category   NavbarCategory @relation(fields: [categoryId], references: [id])
+  category   NavbarCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
 }

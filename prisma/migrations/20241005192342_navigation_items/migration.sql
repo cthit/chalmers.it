@@ -22,4 +22,4 @@ CREATE TABLE "NavbarItem" (
 );
 
 -- AddForeignKey
-ALTER TABLE "NavbarItem" ADD CONSTRAINT "NavbarItem_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "NavbarCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "NavbarItem" ADD CONSTRAINT "NavbarItem_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "NavbarCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
