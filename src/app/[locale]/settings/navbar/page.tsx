@@ -11,7 +11,7 @@ export default async function Page() {
 
   return (
     <main>
-      <title>Kontrollpanel - Navigering</title>
+      <title>Control Panel - Navigation</title>
       <p>
         <i>Note:</i> A higher priority value will be placed further left /
         further up
