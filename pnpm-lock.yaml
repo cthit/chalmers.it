@@ -18,8 +18,8 @@ importers:
         specifier: ^1.5.6
         version: 1.5.6
       html-to-slack:
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.3
+        version: 0.3.3
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.11.16)
@@ -1495,8 +1495,8 @@ packages:
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
 
-  html-to-slack@0.3.2:
-    resolution: {integrity: sha512-Le7AH413dgfvFQyqujLyxMXQCUzg25VaOX0qx29Qm4VRqP6eDEihQiMu1oYR8+zuuld1+Z2kYib5d9P9io/5nA==}
+  html-to-slack@0.3.3:
+    resolution: {integrity: sha512-Lmumh+kK+JZRbERPtkE7fKT8qzX4Ji4fkjeAi44ibhZNC1myHOZZRTUi4DJ3EH0GUbxuXgpuREvYzJU9yYeyWw==}
 
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
@@ -4556,7 +4556,7 @@ snapshots:
 
   html-escaper@2.0.2: {}
 
-  html-to-slack@0.3.2:
+  html-to-slack@0.3.3:
     dependencies:
       htmlparser2: 9.1.0
 
