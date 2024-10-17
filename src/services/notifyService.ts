@@ -120,21 +120,28 @@ class SlackWebhookNotifier implements Notifier {
   }
 
   private cleanSections(blocks: ReturnType<typeof htmlToSlack>) {
-    const cleaned = blocks;
-    for (const block of cleaned) {
-      if (block.type === 'rich_text') {
-        for (const sec of block.elements) {
-          if (sec.type === 'rich_text_section') {
-            sec.elements.forEach((el) => {
-              if (el.type === 'text') {
-                el.text += '\n';
+    return blocks
+      .filter((block) => block.type !== undefined)
+      .map((block) => {
+        if (block.type === 'rich_text') {
+          block.elements = block.elements
+            .filter((sec) => sec.type !== undefined)
+            .map((sec) => {
+              if (sec.type === 'rich_text_section') {
+                sec.elements = sec.elements
+                  .filter((el) => el.type !== undefined)
+                  .map((el) => {
+                    if (el.type === 'text') {
+                      el.text += '\n';
+                    }
+                    return el;
+                  });
               }
+              return sec;
             });
-          }
         }
-      }
-    }
-    return cleaned;
+        return block;
+      });
   }
 
   async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
