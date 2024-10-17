@@ -131,8 +131,8 @@ class SlackWebhookNotifier implements Notifier {
                 sec.elements = sec.elements
                   .filter((el) => el.type !== undefined)
                   .map((el) => {
-                    if (el.type === 'text') {
-                      el.text += '\n';
+                    if (el.type === 'text' && el.text.trim().length === 0) {
+                      el.text = '\n';
                     }
                     return el;
                   });
@@ -164,7 +164,9 @@ class SlackWebhookNotifier implements Notifier {
     const cHtml = await marked.parse(
       this.language === Language.EN ? post.contentEn : post.contentSv
     );
-    const content = this.cleanSections(htmlToSlack(cHtml));
+    const content = this.cleanSections(
+      htmlToSlack(cHtml.replaceAll('</p>', '</p><p> </p>'))
+    );
 
     const msg =
       this.language === Language.EN
