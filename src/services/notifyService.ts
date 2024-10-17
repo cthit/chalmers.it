@@ -5,6 +5,7 @@ import DivisionGroupService from './divisionGroupService';
 import { MessageAttachment } from '@slack/types';
 import htmlToSlack from 'html-to-slack';
 import { marked } from 'marked';
+import { baseUrl } from 'marked-base-url';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -151,7 +152,11 @@ class SlackWebhookNotifier implements Notifier {
       breaks: true,
       gfm: true
     });
-    const cHtml = await marked.parse(this.language === Language.EN ? post.contentEn : post.contentSv);
+    marked.use(baseUrl(process.env.BASE_URL ?? 'http://localhost:3000'));
+
+    const cHtml = await marked.parse(
+      this.language === Language.EN ? post.contentEn : post.contentSv
+    );
     const content = this.cleanSections(htmlToSlack(cHtml));
 
     const msg =
