@@ -2,7 +2,10 @@ import { marked } from 'marked';
 import style from './MarkdownView.module.scss';
 import sanitizeHtml from 'sanitize-html';
 
-const customAllowedTags = sanitizeHtml.defaults.allowedTags.concat(['img']);
+const customAllowedTags = sanitizeHtml.defaults.allowedTags.concat([
+  'img',
+  'del'
+]);
 const customAllowedSchemes = sanitizeHtml.defaults.allowedSchemes.concat([
   'blob'
 ]);
