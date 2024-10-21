@@ -1,31 +1,47 @@
 import ActionLink from '@/components/ActionButton/ActionLink';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
-import DivisionDocumentService from '@/services/divisionDocumentService';
+import DivisionDocumentService, {
+  DivisionDocument
+} from '@/services/divisionDocumentService';
 import styles from './page.module.scss';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import i18nService from '@/services/i18nService';
 import DeleteDocumentButton from './DeleteDocumentButton';
 import GroupActive from '@/components/Protected/GroupActive';
 import ContactCard from '@/components/ContactCard/ContactCard';
+import FilterDocumentsForm from './FilterDocumentsForm';
+import DivisionGroupService from '@/services/divisionGroupService';
+import { DocumentType } from '@prisma/client';
 
 export default async function Page({
-  params: { locale }
+  params: { locale },
+  searchParams: { q, gid, type }
 }: {
   params: { locale: string };
+  searchParams: { q?: string; gid?: string; type?: string };
 }) {
+  const groups = await DivisionGroupService.getAll();
+
+  const validType =
+    type === undefined ||
+    Object.values(DocumentType).includes(type as DocumentType);
+  const documents = validType
+    ? await DivisionDocumentService.filter(locale, q, gid, type as DocumentType)
+    : [];
+
   return (
     <main>
       <ThreePaneLayout
-        middle={await mainContent(locale)}
+        left={<FilterDocumentsForm locale={locale} groups={groups} />}
+        middle={await mainContent(locale, documents)}
         right={<ContactCard locale={locale} />}
       />
     </main>
   );
 }
 
-const mainContent = async (locale: string) => {
-  const documents = await DivisionDocumentService.get();
+const mainContent = async (locale: string, documents: DivisionDocument[]) => {
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
   return (
