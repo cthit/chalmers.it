@@ -1,9 +1,11 @@
 import { Prisma, NotifierType, Language } from '@prisma/client';
 import prisma from '@/prisma';
 import GammaService from './gammaService';
-import { markdownToBlocks } from '@tryfabric/mack';
 import DivisionGroupService from './divisionGroupService';
-import { KnownBlock, MessageAttachment } from '@slack/types';
+import { MessageAttachment } from '@slack/types';
+import htmlToSlack from 'html-to-slack';
+import { marked } from 'marked';
+import { baseUrl } from 'marked-base-url';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -117,55 +119,29 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  private cleanSections(blocks: KnownBlock[]) {
-    const cleaned: any[] = [];
-    for (const block of blocks) {
-      if (
-        block.type === 'section' &&
-        cleaned.length > 0 &&
-        cleaned[cleaned.length - 1].type === 'section' &&
-        block.text !== undefined
-      ) {
-        // Replace relative URL with full URL
-        if (block.text.text.includes('/api/media')) {
-          block.text.text = block.text.text.replace(
-            '/api/media',
-            process.env.BASE_URL + '/api/media'
-          );
+  private cleanSections(blocks: ReturnType<typeof htmlToSlack>) {
+    return blocks
+      .filter((block) => block.type !== undefined)
+      .map((block) => {
+        if (block.type === 'rich_text') {
+          block.elements = block.elements
+            .filter((sec) => sec.type !== undefined)
+            .map((sec) => {
+              if (sec.type === 'rich_text_section') {
+                sec.elements = sec.elements
+                  .filter((el) => el.type !== undefined)
+                  .map((el) => {
+                    if (el.type === 'text' && el.text.trim().length === 0) {
+                      el.text = '\n';
+                    }
+                    return el;
+                  });
+              }
+              return sec;
+            });
         }
-        // Merge text blocks
-        cleaned[cleaned.length - 1].text.text += '\n\n' + block.text.text;
-      } else if (
-        block.type === 'image' &&
-        'image_url' in block &&
-        block.image_url.startsWith('/api/media')
-      ) {
-        // Replace relative URL with full URL
-        const image_url = `${process.env.BASE_URL}${block.image_url}`;
-
-        if (
-          process.env.BASE_URL === undefined ||
-          process.env.BASE_URL.includes('localhost')
-        ) {
-          // Display the image as a link to prevent illegal attachments
-          cleaned.push({
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `*<${image_url}|${block.alt_text}>*`
-            }
-          });
-        } else {
-          cleaned.push({
-            ...block,
-            image_url
-          });
-        }
-      } else {
-        cleaned.push(block);
-      }
-    }
-    return cleaned;
+        return block;
+      });
   }
 
   async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
@@ -177,15 +153,25 @@ class SlackWebhookNotifier implements Notifier {
         ? await DivisionGroupService.getInfo(post.divisionGroupId)
         : null;
     const title = this.language === Language.EN ? post.titleEn : post.titleSv;
-    const content = this.cleanSections(
-      await markdownToBlocks(
-        this.language === Language.EN ? post.contentEn : post.contentSv
-      )
+
+    marked.use({
+      pedantic: false,
+      breaks: true,
+      gfm: true
+    });
+    marked.use(baseUrl(process.env.BASE_URL ?? 'http://localhost:3000'));
+
+    const cHtml = await marked.parse(
+      this.language === Language.EN ? post.contentEn : post.contentSv
     );
+    const content = this.cleanSections(
+      htmlToSlack(cHtml.replaceAll('</p>', '</p><p> </p>'))
+    );
+
     const msg =
       this.language === Language.EN
-        ? `News published${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
-        : `Nyhet publicerad${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+        ? `News published: *${post.titleEn}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Nyhet publicerad: *${post.titleSv}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
 
     const res = await fetch(this.webhook, {
       method: 'POST',
@@ -224,8 +210,6 @@ class SlackWebhookNotifier implements Notifier {
           }
         ] as MessageAttachment[]
       })
-        .replaceAll('&#39;', "\\'")
-        .replaceAll('&quot;', '\\"')
     });
     if (!res.ok)
       console.trace(
