@@ -33,17 +33,32 @@ const NewsSearchForm = ({
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
 
-  const validQuery = searchedQuery.length >= 3 || initialGroup !== undefined || initialUser !== undefined;
+  const validQuery =
+    searchedQuery.length >= 3 ||
+    initialGroup !== undefined ||
+    initialUser !== undefined;
 
   const onSearch = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       setResults(undefined);
 
-      const isValidQuery = query.length >= 3 || initialGroup !== undefined || initialUser !== undefined;
+      const isValidQuery =
+        query.length >= 3 ||
+        initialGroup !== undefined ||
+        initialUser !== undefined;
       setSearchedQuery(query);
       setResults(
-        isValidQuery ? await search(locale, query, before, after, initialUser, initialGroup) : []
+        isValidQuery
+          ? await search(
+              locale,
+              query,
+              before,
+              after,
+              initialUser,
+              initialGroup
+            )
+          : []
       );
     },
     [query, locale, before, after, initialGroup, initialUser]
