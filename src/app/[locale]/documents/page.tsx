@@ -63,8 +63,8 @@ const mainContent = async (locale: string, documents: DivisionDocument[]) => {
                 {l.docTypes[DivisionDocumentService.documentTypeKey(doc.type)]}
               </h4>
               <p className={styles.subtitle}>
-                {`${l.general.uploaded} ${i18nService.formatDate(doc.createdAt, false)}`}
-                {` ${l.news.for} ${doc.divisionGroupName}`}
+                {`${l.docs.adActa} ${doc.divisionGroupName}`}
+                {` ${i18nService.formatDate(doc.createdAt, false)}`}
               </p>
               <p>{en ? doc.descriptionEn : doc.descriptionSv}</p>
               <GroupActive group={doc.gammaSuperGroupId}>

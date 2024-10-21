@@ -168,7 +168,8 @@
     "deleteError": "Could not delete document!",
     "uploading": "Uploading...",
     "uploaded": "Uploaded!",
-    "uploadError": "Could not upload document!"
+    "uploadError": "Could not upload document!",
+    "adActa": "Put to files for"
   },
   "docTypes": {
     "budget": "Budget",
@@ -196,7 +197,13 @@
     "after": "After",
     "results": "Results",
     "query": "Query",
-    "short": "Search query must be at least 3 characters long"
+    "short": "Search query must be at least 3 characters long",
+    "group": "Group",
+    "allTypes": "All types",
+    "allGroups": "All groups",
+    "name": "Name",
+    "filter": "Filter",
+    "filterAction": "Filter"
   },
   "about": {
     "title": "About"

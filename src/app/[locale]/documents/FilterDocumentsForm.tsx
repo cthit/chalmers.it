@@ -41,7 +41,7 @@ const FilterDocumentsForm = ({
 
   return (
     <ContentPane>
-      <h1>Filter</h1>
+      <h1>{l.search.filter}</h1>
       <Divider />
       <form onSubmit={submitSearch}>
         <div>
@@ -58,7 +58,7 @@ const FilterDocumentsForm = ({
               setType(e.target.value !== '' ? e.target.value : undefined)
             }
           >
-            <option value={''}>Alla typer</option>
+            <option value={''}>{l.search.allTypes}</option>
             {Object.keys(DocumentType).map((type) => (
               <option key={type} value={type}>
                 {
@@ -73,14 +73,14 @@ const FilterDocumentsForm = ({
           </DropdownList>
         </div>
         <div>
-          <label>Grupp</label>
+          <label>{l.search.group}</label>
           <br />
           <DropdownList
             onChange={(e) =>
               setGroupId(e.target.value !== '' ? e.target.value : undefined)
             }
           >
-            <option value={''}>Alla grupper</option>
+            <option value={''}>{l.search.allGroups}</option>
             {groups.map((group) => (
               <option
                 key={group!.gammaSuperGroupId}
@@ -92,7 +92,7 @@ const FilterDocumentsForm = ({
           </DropdownList>
         </div>
         <br />
-        <ActionButton type="submit">Submit</ActionButton>
+        <ActionButton type="submit">{l.search.filterAction}</ActionButton>
       </form>
     </ContentPane>
   );

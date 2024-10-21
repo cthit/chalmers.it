@@ -168,7 +168,8 @@
     "deleteError": "Kunde inte radera dokument!",
     "uploading": "Laddar upp...",
     "uploaded": "Uppladdat!",
-    "uploadError": "Kunde inte ladda upp dokument!"
+    "uploadError": "Kunde inte ladda upp dokument!",
+    "adActa": "Lagd till handlingarna för"
   },
   "docTypes": {
     "budget": "Budget",
@@ -196,7 +197,13 @@
     "after": "Efter",
     "results": "Resultat",
     "query": "Sökfråga",
-    "short": "Sökfrågan måste vara minst 3 tecken"
+    "short": "Sökfrågan måste vara minst 3 tecken",
+    "group": "Grupp",
+    "allTypes": "Alla typer",
+    "allGroups": "Alla grupper",
+    "name": "Namn",
+    "filter": "Filter",
+    "filterAction": "Filtrera"
   },
   "about": {
     "title": "Om"
