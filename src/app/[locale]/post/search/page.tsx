@@ -6,18 +6,28 @@ import DivisionGroupService from '@/services/divisionGroupService';
 
 export default async function Page({
   params: { locale },
-  searchParams: { q, gid, uid }
+  searchParams: { q, gid, uid, before, after }
 }: {
   params: { locale: string };
-  searchParams: { q?: string; gid?: string; uid?: string };
+  searchParams: {
+    q?: string;
+    gid?: string;
+    uid?: string;
+    before: string;
+    after: string;
+  };
 }) {
   const validQuery =
     (q !== undefined && (q?.length ?? -1 >= 3)) ||
     gid !== undefined ||
     uid !== undefined;
+  const verifiedBefore = !isNaN(+before) ? new Date(+before) : undefined;
+  const verifiedAfter = !isNaN(+after) ? new Date(+after) : undefined;
+
   const res = validQuery
-    ? await search(locale, q, undefined, undefined, uid, gid)
+    ? await search(locale, q, verifiedBefore, verifiedAfter, uid, gid)
     : [];
+
   const groups = (await DivisionGroupService.getAll()).map((g) => [
     g.prettyName,
     g.gammaSuperGroupId
@@ -34,6 +44,8 @@ export default async function Page({
             groups={groups}
             initialGroup={gid}
             initialUser={uid}
+            initialBefore={verifiedBefore}
+            initialAfter={verifiedAfter}
           />
         }
         right={<ContactCard locale={locale} />}

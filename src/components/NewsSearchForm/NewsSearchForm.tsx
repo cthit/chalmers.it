@@ -18,6 +18,8 @@ const NewsSearchForm = ({
   locale,
   groups,
   initialQuery,
+  initialBefore,
+  initialAfter,
   initialResults,
   initialGroup,
   initialUser
@@ -25,6 +27,8 @@ const NewsSearchForm = ({
   locale: string;
   groups: [string, string][];
   initialQuery: string;
+  initialBefore?: Date;
+  initialAfter?: Date;
   initialGroup?: string;
   initialUser?: string;
   initialResults?: ResultsType;
@@ -33,8 +37,8 @@ const NewsSearchForm = ({
 
   const [results, setResults] = useState<ResultsType | null>(initialResults);
   const [query, setQuery] = useState(initialQuery);
-  const [before, setBefore] = useState<Date | undefined>(undefined);
-  const [after, setAfter] = useState<Date | undefined>(undefined);
+  const [before, setBefore] = useState<Date | undefined>(initialBefore);
+  const [after, setAfter] = useState<Date | undefined>(initialAfter);
   const [groupId, setGroupId] = useState<string | undefined>(initialGroup);
 
   const onSearch = useCallback(
@@ -48,6 +52,21 @@ const NewsSearchForm = ({
         isValidQuery
           ? await search(locale, query, before, after, initialUser, groupId)
           : null
+      );
+
+      const searchParams = new URLSearchParams();
+      if (query) searchParams.append('q', query);
+      if (before && !isNaN(before.getTime()))
+        searchParams.append('before', before.getTime().toString());
+      if (after && !isNaN(after.getTime()))
+        searchParams.append('after', after.getTime().toString());
+      if (groupId) searchParams.append('gid', groupId);
+      if (initialUser) searchParams.append('uid', initialUser);
+
+      window.history.pushState(
+        {},
+        '',
+        '/post/search?' + searchParams.toString()
       );
     },
     [query, locale, before, after, initialUser, groupId]
@@ -86,6 +105,7 @@ const NewsSearchForm = ({
               onChange={(e) =>
                 setGroupId(e.target.value !== '' ? e.target.value : undefined)
               }
+              value={groupId}
             >
               <option value={''}>{l.search.allGroups}</option>
               {groups.map(([name, id]) => (
