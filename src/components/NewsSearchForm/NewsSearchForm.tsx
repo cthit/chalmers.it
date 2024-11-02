@@ -12,6 +12,8 @@ import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 import DropdownList from '../DropdownList/DropdownList';
 
+type ResultsType = Awaited<ReturnType<typeof search>> | undefined;
+
 const NewsSearchForm = ({
   locale,
   groups,
@@ -25,21 +27,15 @@ const NewsSearchForm = ({
   initialQuery: string;
   initialGroup?: string;
   initialUser?: string;
-  initialResults?: Awaited<ReturnType<typeof search>>;
+  initialResults?: ResultsType;
 }) => {
   const l = i18nService.getLocale(locale);
 
-  const [results, setResults] = useState(initialResults);
+  const [results, setResults] = useState<ResultsType | null>(initialResults);
   const [query, setQuery] = useState(initialQuery);
-  const [searchedQuery, setSearchedQuery] = useState(initialQuery);
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
   const [groupId, setGroupId] = useState<string | undefined>(initialGroup);
-
-  const validQuery =
-    searchedQuery.length >= 3 ||
-    groupId !== undefined ||
-    initialUser !== undefined;
 
   const onSearch = useCallback(
     async (e: FormEvent) => {
@@ -48,11 +44,10 @@ const NewsSearchForm = ({
 
       const isValidQuery =
         query.length >= 3 || groupId !== undefined || initialUser !== undefined;
-      setSearchedQuery(query);
       setResults(
         isValidQuery
           ? await search(locale, query, before, after, initialUser, groupId)
-          : []
+          : null
       );
     },
     [query, locale, before, after, initialUser, groupId]
@@ -60,7 +55,6 @@ const NewsSearchForm = ({
 
   useEffect(() => {
     setQuery(initialQuery);
-    setSearchedQuery(initialQuery);
     setResults(initialResults);
   }, [initialQuery, initialResults]);
 
@@ -109,11 +103,11 @@ const NewsSearchForm = ({
         <h1>{l.search.results}</h1>
         <Divider />
         {results === undefined && <p>{l.search.loading}</p>}
-        {results !== undefined &&
-          results.length === 0 &&
-          (validQuery ? <p>{l.search.empty}</p> : <p>{l.search.short}</p>)}
+        {results === null && <p>{l.search.short}</p>}
+        {results?.length === 0 && <p>{l.search.empty}</p>}
         <ul className={styles.results}>
-          {results !== undefined &&
+          {results &&
+            results.length > 0 &&
             results.map((result) => (
               <li key={result!.id}>
                 <NewsSearchResult post={result} locale={locale} />
