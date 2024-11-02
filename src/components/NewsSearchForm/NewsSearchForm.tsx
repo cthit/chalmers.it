@@ -115,7 +115,9 @@ const NewsSearchForm = ({
               ))}
             </DropdownList>
           </div>
-          <ActionButton type="submit">{l.search.search}</ActionButton>
+          <ActionButton className={styles.submit} type="submit">
+            {l.search.search}
+          </ActionButton>
         </form>
       </ContentPane>
       <br />

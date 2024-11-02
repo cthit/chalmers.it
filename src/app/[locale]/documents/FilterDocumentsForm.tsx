@@ -1,5 +1,6 @@
 'use client';
 
+import styles from './FilterDocumentsForm.module.scss';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import Divider from '@/components/Divider/Divider';
@@ -91,8 +92,9 @@ const FilterDocumentsForm = ({
             ))}
           </DropdownList>
         </div>
-        <br />
-        <ActionButton type="submit">{l.search.filterAction}</ActionButton>
+        <ActionButton className={styles.submit} type="submit">
+          {l.search.filterAction}
+        </ActionButton>
       </form>
     </ContentPane>
   );
