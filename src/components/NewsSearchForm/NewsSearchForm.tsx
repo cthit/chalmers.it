@@ -10,9 +10,11 @@ import TextArea from '../TextArea/TextArea';
 import { search } from '@/actions/newsList';
 import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
+import DropdownList from '../DropdownList/DropdownList';
 
 const NewsSearchForm = ({
   locale,
+  groups,
   initialQuery,
   initialResults,
   initialGroup,
@@ -32,10 +34,11 @@ const NewsSearchForm = ({
   const [searchedQuery, setSearchedQuery] = useState(initialQuery);
   const [before, setBefore] = useState<Date | undefined>(undefined);
   const [after, setAfter] = useState<Date | undefined>(undefined);
+  const [groupId, setGroupId] = useState<string | undefined>(initialGroup);
 
   const validQuery =
     searchedQuery.length >= 3 ||
-    initialGroup !== undefined ||
+    groupId !== undefined ||
     initialUser !== undefined;
 
   const onSearch = useCallback(
@@ -44,24 +47,15 @@ const NewsSearchForm = ({
       setResults(undefined);
 
       const isValidQuery =
-        query.length >= 3 ||
-        initialGroup !== undefined ||
-        initialUser !== undefined;
+        query.length >= 3 || groupId !== undefined || initialUser !== undefined;
       setSearchedQuery(query);
       setResults(
         isValidQuery
-          ? await search(
-              locale,
-              query,
-              before,
-              after,
-              initialUser,
-              initialGroup
-            )
+          ? await search(locale, query, before, after, initialUser, groupId)
           : []
       );
     },
-    [query, locale, before, after, initialGroup, initialUser]
+    [query, locale, before, after, initialUser, groupId]
   );
 
   useEffect(() => {
@@ -76,17 +70,37 @@ const NewsSearchForm = ({
         <form onSubmit={onSearch}>
           <h1>{l.search.search}</h1>
           <Divider />
-          <label>{l.search.query}</label>
-          <TextArea value={query} onChange={(e) => setQuery(e.target.value)} />
-          <br />
-          <label>{l.search.before}</label>
-          <br />
-          <DatePicker value={before} onChange={setBefore} />
-          <br />
+          <div>
+            <label>{l.search.query}</label>
+            <TextArea
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>{l.search.before}</label>
+            <br />
+            <DatePicker value={before} onChange={setBefore} />
+          </div>
           <label>{l.search.after}</label>
           <br />
           <DatePicker value={after} onChange={setAfter} />
-          <br />
+          <div>
+            <label>{l.search.group}</label>
+            <br />
+            <DropdownList
+              onChange={(e) =>
+                setGroupId(e.target.value !== '' ? e.target.value : undefined)
+              }
+            >
+              <option value={''}>{l.search.allGroups}</option>
+              {groups.map(([name, id]) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))}
+            </DropdownList>
+          </div>
           <ActionButton type="submit">{l.search.search}</ActionButton>
         </form>
       </ContentPane>

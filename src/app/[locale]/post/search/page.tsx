@@ -2,6 +2,7 @@ import { search } from '@/actions/newsList';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import NewsSearchForm from '@/components/NewsSearchForm/NewsSearchForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
+import DivisionGroupService from '@/services/divisionGroupService';
 
 export default async function Page({
   params: { locale },
@@ -17,6 +18,10 @@ export default async function Page({
   const res = validQuery
     ? await search(locale, q, undefined, undefined, uid, gid)
     : [];
+  const groups = (await DivisionGroupService.getAll()).map((g) => [
+    g.prettyName,
+    g.gammaSuperGroupId
+  ]) as [string, string][];
 
   return (
     <main>
@@ -26,7 +31,7 @@ export default async function Page({
             locale={locale}
             initialQuery={q ?? ''}
             initialResults={res}
-            groups={[]}
+            groups={groups}
             initialGroup={gid}
             initialUser={uid}
           />
