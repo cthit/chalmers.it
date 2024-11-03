@@ -35,21 +35,30 @@ const AddGroupForm = ({
   }
 
   return (
-    <>
-      <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
-        <option value={undefined} hidden>
-          {l.settings.groups.select}
-        </option>
-        {gammaGroups
-          .filter((g) => g.type !== 'ALUMNI')
-          .map((group) => (
-            <option key={group.id} value={group.id}>
-              {group.prettyName}
-            </option>
-          ))}
-      </DropdownList>
-      <ActionButton onClick={importGroup}>{l.general.add}</ActionButton>
-    </>
+    <tr>
+      <td />
+      <td>
+        <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
+          <option value={undefined} hidden>
+            {l.settings.groups.select}
+          </option>
+          {gammaGroups
+            .filter((g) => g.type !== 'ALUMNI')
+            .map((group) => (
+              <option key={group.id} value={group.id}>
+                {group.prettyName}
+              </option>
+            ))}
+        </DropdownList>
+      </td>
+      <td />
+      <td />
+      <td>
+        <ActionButton onClick={importGroup}>
+          {l.settings.groups.import}
+        </ActionButton>
+      </td>
+    </tr>
   );
 };
 

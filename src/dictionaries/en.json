@@ -199,7 +199,7 @@
     },
     "groups": {
       "name": "Groups",
-      "add": "Import Group",
+      "import": "Import",
       "select": "Select a group",
       "category": "Category",
       "showOnGamma": "Show on Gamma"

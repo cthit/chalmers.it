@@ -51,13 +51,9 @@ export default async function Page({
               groupTypes={types}
             />
           ))}
+          <AddGroupForm gammaGroups={gammaGroups} locale={locale} />
         </tbody>
       </Table>
-
-      <Divider />
-
-      <h1>{l.settings.groups.add}</h1>
-      <AddGroupForm gammaGroups={gammaGroups} locale={locale} />
     </main>
   );
 }
