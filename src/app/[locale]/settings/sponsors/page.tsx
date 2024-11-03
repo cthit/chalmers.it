@@ -4,6 +4,7 @@ import AddSponsorForm from './AddSponsorForm';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import RemoveSponsorButton from './RemoveSponsorButton';
 import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
 export default async function Page({
   params: { locale }
@@ -19,21 +20,44 @@ export default async function Page({
         {l.settings.common.controlPanel + ' - ' + l.settings.sponsors.name}
       </title>
       <h1>{l.settings.sponsors.name}</h1>
-      <ul>
-        {sponsors.map((sponsor) => (
-          <li key={sponsor.id}>
-            <h2>{sponsor.nameSv}</h2>
-            <ActionLink href={sponsor.url}>
-              {l.settings.sponsors.link}
-            </ActionLink>{' '}
-            <RemoveSponsorButton locale={locale} sponsor={sponsor} />
-          </li>
-        ))}
-      </ul>
-
-      <Divider />
-      <h1>{l.settings.sponsors.add}</h1>
-      <AddSponsorForm locale={locale} />
+      <Table>
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>{l.settings.common.type}</td>
+            <td>{l.settings.common.name}</td>
+            <td>URL</td>
+            <td>{l.settings.sponsors.image}</td>
+            <td>{l.settings.common.actions}</td>
+          </tr>
+        </thead>
+        <tbody>
+          {sponsors.map((sponsor) => (
+            <tr key={sponsor.id}>
+              <td>{sponsor.id}</td>
+              <td>{sponsor.type}</td>
+              <td>{sponsor.nameSv}</td>
+              <td>
+                <ActionLink target="_blank" href={sponsor.url}>
+                  {l.settings.sponsors.link}
+                </ActionLink>
+              </td>
+              <td>
+                <ActionLink
+                  target="_blank"
+                  href={'/api/media/' + sponsor.mediaSha256}
+                >
+                  {l.settings.sponsors.openImage}
+                </ActionLink>
+              </td>
+              <td>
+                <RemoveSponsorButton locale={locale} sponsor={sponsor} />
+              </td>
+            </tr>
+          ))}
+          <AddSponsorForm locale={locale} />
+        </tbody>
+      </Table>
     </main>
   );
 }

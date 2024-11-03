@@ -62,41 +62,45 @@ const AddSponsorForm = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="sponsorType">{l.settings.common.type}</label>
-        <DropdownList value={type} onChange={(e) => setType(e.target.value as any)}>
+    <tr>
+      <td />
+      <td>
+        <DropdownList
+          value={type}
+          onChange={(e) => setType(e.target.value as any)}
+        >
           <option value="MAIN_PARTNER">{l.sponsors.main}</option>
           <option value="PARTNER">{l.sponsors.partner}</option>
         </DropdownList>
-      </div>
-      <div>
-        <label htmlFor="sponsorName">{l.settings.common.name}</label>
-        <TextArea
-          id="sponsorName"
-          value={sponsorName}
-          onChange={handleNameChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="sponsorName">URL</label>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            id="sponsorName"
+            value={sponsorName}
+            onChange={handleNameChange}
+          />
+        </form>
+      </td>
+      <td>
         <TextArea
           id="sponsorUrl"
           value={sponsorUrl}
           onChange={handleSponsorUrlChange}
         />
-      </div>
-      <div>
-        <label htmlFor="sponsorImage">{l.settings.sponsors.image}</label>
+      </td>
+      <td>
         <input
           type="file"
           id="sponsorImage"
           accept="image/*"
           onChange={handleImageChange}
         />
-      </div>
-      <ActionButton type="submit">{l.general.add}</ActionButton>
-    </form>
+      </td>
+      <td>
+        <ActionButton type="submit">{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 

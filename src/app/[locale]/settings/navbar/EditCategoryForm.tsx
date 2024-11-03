@@ -1,5 +1,6 @@
 'use client';
 
+import styles from './EditCategoryForm.module.scss';
 import { removeCategory, updateCategory } from '@/actions/navigation';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import TextArea from '@/components/TextArea/TextArea';
@@ -47,7 +48,7 @@ const EditCategoryForm = ({
   };
 
   return (
-    <tr>
+    <tr className={styles.noBorder}>
       <td>{category.id}</td>
       <td>Category</td>
       <td>

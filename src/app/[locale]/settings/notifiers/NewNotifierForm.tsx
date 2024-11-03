@@ -33,21 +33,26 @@ const NewNotifierForm = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <div>
-      <p>{l.settings.common.type}</p>
-      <DropdownList onChange={(e) => setType(e.target.value)}>
-        <option value="DISCORD">Discord</option>
-        <option value="SLACK">Slack</option>
-      </DropdownList>
-      <p>{l.settings.notifiers.language}</p>
-      <DropdownList onChange={(e) => setLanguage(e.target.value)}>
-        <option value="EN">English</option>
-        <option value="SV">Swedish</option>
-      </DropdownList>
-      <p>Webhook URL</p>
-      <TextArea onChange={(e) => setWebhook(e.target.value)} />
-      <ActionButton onClick={newNotifier}>{l.general.add}</ActionButton>
-    </div>
+    <tr>
+      <td>
+        <DropdownList onChange={(e) => setType(e.target.value)}>
+          <option value="DISCORD">Discord</option>
+          <option value="SLACK">Slack</option>
+        </DropdownList>
+      </td>
+      <td>
+        <DropdownList onChange={(e) => setLanguage(e.target.value)}>
+          <option value="EN">English</option>
+          <option value="SV">Swedish</option>
+        </DropdownList>
+      </td>
+      <td>
+        <TextArea onChange={(e) => setWebhook(e.target.value)} />
+      </td>
+      <td>
+        <ActionButton onClick={newNotifier}>{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 

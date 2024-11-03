@@ -1,11 +1,12 @@
+import styles from './page.module.scss';
 import NavService from '@/services/navService';
 import EditCategoryForm from './EditCategoryForm';
 import EditItemForm from './EditItemForm';
-import Divider from '@/components/Divider/Divider';
 import AddItemForm from './AddItemForm';
 import AddCategoryForm from './AddCategoryForm';
 import React from 'react';
 import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
 export default async function Page({
   params: { locale }
@@ -23,10 +24,10 @@ export default async function Page({
       <h1>{l.settings.navbar.name}</h1>
       <p>{l.settings.navbar.note}</p>
       <br />
-      <table>
+      <Table>
         <thead>
           <tr>
-          <th>ID</th>
+            <th>ID</th>
             <th>{l.settings.common.type}</th>
             <th>{l.settings.common.nameEn}</th>
             <th>{l.settings.common.nameSv}</th>
@@ -46,15 +47,16 @@ export default async function Page({
                 <AddItemForm locale={locale} categoryId={category.id} />
               ) : (
                 <tr>
-                  <td>{l.settings.navbar.hasUrl}</td>
+                  <td />
+                  <td colSpan={6}>{l.settings.navbar.hasUrl}</td>
                 </tr>
               )}
-              <tr><td>&nbsp;</td></tr>
+              <tr className={styles.spacer} />
             </React.Fragment>
           ))}
-      <AddCategoryForm locale={locale} />
+          <AddCategoryForm locale={locale} />
         </tbody>
-      </table>
+      </Table>
     </main>
   );
 }

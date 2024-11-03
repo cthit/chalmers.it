@@ -4,6 +4,7 @@ import AddGroupForm from './AddGroupForm';
 import Divider from '@/components/Divider/Divider';
 import EditGroupForm from './EditGroupForm';
 import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
 export default async function Page({
   params: { locale }
@@ -27,10 +28,10 @@ export default async function Page({
         {l.settings.common.controlPanel + ' - ' + l.settings.groups.name}
       </title>
       <h1>{l.settings.groups.name}</h1>
-      <table>
+      <Table>
         <thead>
           <tr>
-            <th>{l.settings.groups.localId}</th>
+            <th>ID</th>
             <th>{l.settings.common.name}</th>
             <th>{l.settings.common.priority}</th>
             <th>{l.settings.groups.category}</th>
@@ -51,7 +52,7 @@ export default async function Page({
             />
           ))}
         </tbody>
-      </table>
+      </Table>
 
       <Divider />
 

@@ -3,6 +3,7 @@ import AddTypeForm from './AddTypeForm';
 import Divider from '@/components/Divider/Divider';
 import EditTypeForm from './EditTypeForm';
 import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
 export default async function Page({
   params: { locale }
@@ -19,7 +20,7 @@ export default async function Page({
         {l.settings.common.controlPanel + ' - ' + l.settings.groupTypes.name}
       </title>
       <h1>{l.settings.groupTypes.name}</h1>
-      <table>
+      <Table>
         <thead>
           <tr>
             <th>ID</th>
@@ -33,13 +34,9 @@ export default async function Page({
           {types.map((type) => (
             <EditTypeForm key={type.id} type={type} locale={locale} />
           ))}
+          <AddTypeForm locale={locale} />
         </tbody>
-      </table>
-
-      <Divider />
-
-      <h1>{l.settings.groupTypes.add}</h1>
-      <AddTypeForm locale={locale} />
+      </Table>
     </main>
   );
 }

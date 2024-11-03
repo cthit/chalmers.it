@@ -195,15 +195,13 @@
       "name": "Allmänt"
     },
     "groupTypes": {
-      "name": "Grupptyper",
-      "add": "Lägg till grupptyp"
+      "name": "Grupptyper"
     },
     "groups": {
       "name": "Grupper",
-      "add": "Lägg till grupp",
+      "add": "Importera grupp",
       "select": "Välj en grupp",
       "category": "Kategori",
-      "localId": "Lokalt ID",
       "showOnGamma": "Visa på Gamma"
     },
     "media": {
@@ -214,21 +212,19 @@
     },
     "navbar": {
       "name": "Navigeringsfält",
-      "add": "Lägg till kategori",
       "note": "Notera: Ett högre prioriteringsvärde visas tidigare.",
       "addItem": "Lägg till länk",
       "hasUrl": "Kan inte lägga till underlänkar när kategorin har en URL"
     },
     "notifiers": {
       "name": "Notifieringar",
-      "add": "Lägg till notifiering",
       "language": "Språk"
     },
     "sponsors": {
       "name": "Sponsorer",
-      "add": "Lägg till sponsor",
-      "link": "Länk",
-      "image": "Bild"
+      "link": "Öppna länk",
+      "image": "Bild",
+      "openImage": "Öppna bild"
     }
   }
 }

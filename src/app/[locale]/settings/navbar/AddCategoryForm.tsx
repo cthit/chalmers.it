@@ -1,5 +1,6 @@
 'use client';
 
+import styles from './AddCategoryForm.module.scss';
 import { addCategory } from '@/actions/navigation';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import TextArea from '@/components/TextArea/TextArea';
@@ -28,26 +29,17 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <tr>
+    <tr className={styles.noBorder}>
       <td></td>
       <td>New Category</td>
       <td>
-        <TextArea
-          value={nameEn}
-          onChange={(e) => setNameEn(e.target.value)}
-        />
+        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
       </td>
       <td>
-        <TextArea
-          value={nameSv}
-          onChange={(e) => setNameSv(e.target.value)}
-        />
+        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
       </td>
       <td>
-        <TextArea
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
       </td>
       <td>
         <form onSubmit={handleSubmit}>
@@ -60,7 +52,7 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
       </td>
       <td>
         <ActionButton onClick={handleSubmit} type="submit">
-          {l.general.create}
+          {l.general.add}
         </ActionButton>
       </td>
     </tr>

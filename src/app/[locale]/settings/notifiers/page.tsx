@@ -3,6 +3,7 @@ import NotifyService from '@/services/notifyService';
 import NewNotifierForm from './NewNotifierForm';
 import RemoveNotifierButton from './RemoveNotifierButton';
 import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
 export default async function Page({
   params: { locale }
@@ -18,7 +19,7 @@ export default async function Page({
         {l.settings.common.controlPanel + ' - ' + l.settings.notifiers.name}
       </title>
       <h1>{l.settings.notifiers.name}</h1>
-      <table>
+      <Table>
         <thead>
           <tr>
             <th>{l.settings.common.type}</th>
@@ -38,11 +39,9 @@ export default async function Page({
               </td>
             </tr>
           ))}
+          <NewNotifierForm locale={locale} />
         </tbody>
-      </table>
-      <Divider />
-      <h1>{l.settings.notifiers.add}</h1>
-      <NewNotifierForm locale={locale} />
+      </Table>
     </main>
   );
 }

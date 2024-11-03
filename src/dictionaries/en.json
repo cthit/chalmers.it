@@ -195,15 +195,13 @@
       "name": "General"
     },
     "groupTypes": {
-      "name": "Group Types",
-      "add": "Add Group Type"
+      "name": "Group Types"
     },
     "groups": {
       "name": "Groups",
-      "add": "Add Group",
+      "add": "Import Group",
       "select": "Select a group",
       "category": "Category",
-      "localId": "Local ID",
       "showOnGamma": "Show on Gamma"
     },
     "media": {
@@ -214,21 +212,19 @@
     },
     "navbar": {
       "name": "Navbar",
-      "add": "Add Category",
       "note": "Note: A higher priority value will be placed earlier.",
       "addItem": "Add Item",
       "hasUrl": "Cannot add sub-items when category has a URL"
     },
     "notifiers": {
       "name": "Notifiers",
-      "add": "Add Notifier",
       "language": "Language"
     },
     "sponsors": {
       "name": "Sponsors",
-      "add": "Add Sponsor",
-      "link": "Link",
-      "image": "Image"
+      "link": "Open link",
+      "image": "Image",
+      "openImage": "Open image"
     }
   }
 }

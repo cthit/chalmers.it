@@ -28,24 +28,27 @@ const AddTypeForm = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <label>{l.settings.common.nameEn}</label>
+    <tr>
+      <td />
+      <td>
         <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
-        <br />
-        <label>{l.settings.common.nameSv}</label>
+      </td>
+      <td>
         <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
-        <br />
-        <label>{l.settings.common.priority}</label>
-        <TextArea
-          type="number"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        />
-        <br />
-        <ActionButton type="submit">{l.general.create}</ActionButton>
-      </form>
-    </>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            type="number"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <ActionButton type="submit">{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 
