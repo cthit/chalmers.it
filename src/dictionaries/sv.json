@@ -189,7 +189,8 @@
       "nameEn": "Namn (Engelska)",
       "nameSv": "Namn (Svenska)",
       "type": "Typ",
-      "actions": "Åtgärder"
+      "actions": "Åtgärder",
+      "category": "Kategori"
     },
     "general": {
       "name": "Allmänt"
@@ -201,7 +202,6 @@
       "name": "Grupper",
       "import": "Importera",
       "select": "Välj en grupp",
-      "category": "Kategori",
       "showOnGamma": "Visa på Gamma"
     },
     "media": {
@@ -214,7 +214,10 @@
       "name": "Navigeringsfält",
       "note": "Notera: Ett högre prioriteringsvärde visas tidigare.",
       "addItem": "Lägg till länk",
-      "hasUrl": "Kan inte lägga till underlänkar när kategorin har en URL"
+      "hasUrl": "Kan inte lägga till underlänkar när kategorin har en URL",
+      "newCategory": "Ny kategori",
+      "item": "Länk",
+      "newItem": "Ny länk"
     },
     "notifiers": {
       "name": "Notifieringar",

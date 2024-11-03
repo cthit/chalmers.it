@@ -36,24 +36,15 @@ const AddItemForm = ({
   return (
     <tr>
       <td></td>
-      <td>New Item</td>
+      <td>{l.settings.navbar.newItem}</td>
       <td>
-        <TextArea
-          value={nameEn}
-          onChange={(e) => setNameEn(e.target.value)}
-        />
+        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
       </td>
       <td>
-        <TextArea
-          value={nameSv}
-          onChange={(e) => setNameSv(e.target.value)}
-        />
+        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
       </td>
       <td>
-        <TextArea
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
+        <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
       </td>
       <td>
         <form onSubmit={handleSubmit}>

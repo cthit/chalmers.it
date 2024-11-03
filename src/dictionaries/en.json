@@ -189,7 +189,8 @@
       "nameEn": "Name (English)",
       "nameSv": "Name (Swedish)",
       "type": "Type",
-      "actions": "Actions"
+      "actions": "Actions",
+      "category": "Category"
     },
     "general": {
       "name": "General"
@@ -201,7 +202,6 @@
       "name": "Groups",
       "import": "Import",
       "select": "Select a group",
-      "category": "Category",
       "showOnGamma": "Show on Gamma"
     },
     "media": {
@@ -214,7 +214,10 @@
       "name": "Navbar",
       "note": "Note: A higher priority value will be placed earlier.",
       "addItem": "Add Item",
-      "hasUrl": "Cannot add sub-items when category has a URL"
+      "hasUrl": "Cannot add sub-items when category has a URL",
+      "newCategory": "New Category",
+      "item": "Item",
+      "newItem": "New Item"
     },
     "notifiers": {
       "name": "Notifiers",

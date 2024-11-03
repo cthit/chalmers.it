@@ -34,7 +34,7 @@ export default async function Page({
             <th>ID</th>
             <th>{l.settings.common.name}</th>
             <th>{l.settings.common.priority}</th>
-            <th>{l.settings.groups.category}</th>
+            <th>{l.settings.common.category}</th>
             <th>{l.settings.common.actions}</th>
           </tr>
         </thead>

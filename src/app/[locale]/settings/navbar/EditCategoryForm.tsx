@@ -50,7 +50,7 @@ const EditCategoryForm = ({
   return (
     <tr className={styles.noBorder}>
       <td>{category.id}</td>
-      <td>Category</td>
+      <td>{l.settings.common.category}</td>
       <td>
         <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
       </td>

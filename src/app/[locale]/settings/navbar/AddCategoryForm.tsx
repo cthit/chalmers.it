@@ -31,7 +31,7 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
   return (
     <tr className={styles.noBorder}>
       <td></td>
-      <td>New Category</td>
+      <td>{l.settings.navbar.newCategory}</td>
       <td>
         <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
       </td>

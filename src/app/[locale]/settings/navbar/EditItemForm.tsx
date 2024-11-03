@@ -41,7 +41,7 @@ const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
   return (
     <tr>
       <td>{item.id}</td>
-      <td>Item</td>
+      <td>{l.settings.navbar.item}</td>
       <td>
         <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
       </td>
