@@ -1,8 +1,30 @@
-export default async function Page() {
+import ThemeStatus from '@/components/ThemeStatus/ThemeStatus';
+import i18nService from '@/services/i18nService';
+import SessionService from '@/services/sessionService';
+
+export default async function Page({
+  params: { locale }
+}: {
+  params: { locale: string };
+}) {
+  const l = i18nService.getLocale(locale);
+  const user = await SessionService.getUser();
+
   return (
     <main>
-      <title>Kontrollpanel</title>
-      <p>There is nothing to see here yet. Please check back later!</p>
+      <title>
+        {l.settings.common.controlPanel + ' - ' + l.settings.general.name}
+      </title>
+      <h1>{l.settings.general.user}</h1>
+      {user ? (
+        <p>
+          {l.settings.general.loggedIn} {user.name}
+        </p>
+      ) : (
+        <p>{l.settings.general.notLoggedIn}</p>
+      )}
+      <h1>{l.settings.general.theme}</h1>
+      <ThemeStatus locale={locale} />
     </main>
   );
 }

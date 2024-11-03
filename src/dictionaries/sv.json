@@ -193,7 +193,15 @@
       "category": "Kategori"
     },
     "general": {
-      "name": "Allmänt"
+      "name": "Allmänt",
+      "user": "Användare",
+      "theme": "Tema",
+      "loggedIn": "Inloggad som",
+      "notLoggedIn": "Inte inloggad",
+      "themeResolved": "Aktuellt tema löst till",
+      "systemTheme": "Temapreferens löst till",
+      "noSystemTheme": "Ingen temapreferens",
+      "resolvingTheme": "Löser tema..."
     },
     "groupTypes": {
       "name": "Grupptyper"

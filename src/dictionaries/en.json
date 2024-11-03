@@ -193,7 +193,15 @@
       "category": "Category"
     },
     "general": {
-      "name": "General"
+      "name": "General",
+      "user": "User",
+      "theme": "Theme",
+      "loggedIn": "Logged in as",
+      "notLoggedIn": "Not logged in",
+      "themeResolved": "Current theme resolved to",
+      "systemTheme": "Theme preference resolved to",
+      "noSystemTheme": "No theme preference",
+      "resolvingTheme": "Resolving theme..."
     },
     "groupTypes": {
       "name": "Group Types"
