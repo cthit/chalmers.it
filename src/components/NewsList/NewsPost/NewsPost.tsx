@@ -2,25 +2,13 @@ import style from './NewsPost.module.scss';
 import Link from 'next/link';
 import DeletePostButton from './DeletePostButton';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
-import { PostStatus } from '@prisma/client';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
+import { getData } from '@/actions/newsList';
 
 interface NewsPostProps {
-  post: {
-    id: number;
-    title: string;
-    content: string;
-    author?: string;
-    createdAt: Date;
-    updatedAt?: Date;
-    scheduledPublish?: Date;
-    status: PostStatus;
-    writtenFor?: string;
-    deletable: boolean;
-    editable: boolean;
-  };
+  post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
   locale: string;
   standalone?: boolean;
 }

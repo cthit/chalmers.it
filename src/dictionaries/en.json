@@ -17,34 +17,6 @@
     "title": "Software Engineering (IT)",
     "subtitle": "Chalmers Student Union"
   },
-  "nav": {
-    "division": "The Division",
-    "wiki": "Wiki",
-    "pictures": "Pictures",
-    "merch": "Merch",
-    "honorary": "Honorary Members",
-    "pl": "Programme Management Team",
-    "samo": "SAMO",
-    "applicants": "Applicants",
-    "stats": "Admission Statistics",
-    "nollkit": "NollKIT's Website",
-    "studentlife": "Student Life",
-    "students": "Students",
-    "courses": "Courses",
-    "grouprooms": "Book a group room",
-    "schedule": "Schedule",
-    "print": "Print",
-    "studenthealth": "Student Health",
-    "services": "Services",
-    "business": "Business",
-    "contact": "Contact",
-    "hubbit": "HubbIT",
-    "findit": "FindIT",
-    "bookit": "BookIT",
-    "documents": "Documents",
-    "gamma": "Gamma",
-    "armit": "ArmIT"
-  },
   "banner": {
     "top": "Student Division"
   },
@@ -168,7 +140,8 @@
     "deleteError": "Could not delete document!",
     "uploading": "Uploading...",
     "uploaded": "Uploaded!",
-    "uploadError": "Could not upload document!"
+    "uploadError": "Could not upload document!",
+    "adActa": "Put to files for"
   },
   "docTypes": {
     "budget": "Budget",
@@ -196,7 +169,13 @@
     "after": "After",
     "results": "Results",
     "query": "Query",
-    "short": "Search query must be at least 3 characters long"
+    "short": "Search query must be at least 3 characters long",
+    "group": "Group",
+    "allTypes": "All types",
+    "allGroups": "All groups",
+    "name": "Name",
+    "filter": "Filter",
+    "filterAction": "Filter"
   },
   "about": {
     "title": "About"

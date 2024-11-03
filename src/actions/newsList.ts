@@ -59,7 +59,9 @@ export const getData = async (
     status: post.status,
     writtenFor: group,
     editable: ownsPost,
-    deletable
+    deletable,
+    writtenByGammaUserId: post.writtenByGammaUserId,
+    writtenForGammaSuperGroupId: post.writtenFor?.gammaSuperGroupId
   };
 };
 
@@ -76,20 +78,24 @@ export const getPage = async (page: number, locale: string) => {
 };
 
 export async function search(
-  query: string,
   locale: string,
+  query?: string,
   before?: Date,
-  after?: Date
+  after?: Date,
+  userId?: string,
+  groupId?: string
 ) {
   const user = await SessionService.getUser();
   const groups = await SessionService.getActiveGroups();
   const posts = await NewsService.search(
-    query,
     locale,
+    query,
     before ?? undefined,
     after ?? undefined,
     user?.id,
-    groups.map((g) => g.superGroup.id)
+    groups.map((g) => g.superGroup.id),
+    userId,
+    groupId
   );
   return Promise.all(posts.map((post) => getData(post, locale)));
 }

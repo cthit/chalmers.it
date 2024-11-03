@@ -58,7 +58,63 @@ export default class DivisionDocumentService {
       }
     });
 
-    return data.map((document) => ({
+    return this.cleanDocuments(data);
+  }
+
+  static async filter(
+    locale: string,
+    q?: string,
+    gid?: string,
+    type?: DocumentType
+  ): Promise<DivisionDocument[]> {
+    const data = await prisma.divisionDocument.findMany({
+      select: {
+        id: true,
+        titleSv: true,
+        titleEn: true,
+        descriptionSv: true,
+        descriptionEn: true,
+        createdAt: true,
+        type: true,
+        media: {
+          select: {
+            sha256: true
+          }
+        },
+        DivisionGroup: {
+          select: {
+            id: true,
+            gammaSuperGroupId: true,
+            prettyName: true
+          }
+        }
+      },
+      where: {
+        type,
+        DivisionGroup: {
+          gammaSuperGroupId: gid
+        },
+        ...(locale === 'en'
+          ? {
+              titleEn: {
+                contains: q,
+                mode: 'insensitive'
+              }
+            }
+          : {
+              titleSv: {
+                contains: q,
+                mode: 'insensitive'
+              }
+            })
+      }
+    });
+
+    return this.cleanDocuments(data);
+  }
+
+  private static cleanDocuments(documents: any[]) {
+    return documents.map((document) => ({
       id: document.id,
       titleSv: document.titleSv,
       titleEn: document.titleEn,

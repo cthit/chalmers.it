@@ -197,12 +197,14 @@ export default class NewsService {
   }
 
   static async search(
-    query: string,
     locale: string,
+    query?: string,
     before?: Date,
     after?: Date,
     userId?: string,
-    groupIds?: string[]
+    groupIds?: string[],
+    writtenByGammaUserId?: string,
+    writtenFor?: string
   ) {
     return await prisma.newsPost.findMany({
       orderBy: {
@@ -276,6 +278,14 @@ export default class NewsService {
                 }
               }
             ]
+          },
+          {
+            writtenByGammaUserId
+          },
+          {
+            writtenFor: {
+              gammaSuperGroupId: writtenFor
+            }
           }
         ],
         createdAt: {
