@@ -12,8 +12,8 @@ import TextArea from '@/components/TextArea/TextArea';
 const NewNotifierForm = ({ locale }: { locale: string }) => {
   const router = useRouter();
   const l = i18nService.getLocale(locale);
-  const [type, setType] = useState('DISCORD');
-  const [language, setLanguage] = useState('EN');
+  const [type, setType] = useState('SLACK');
+  const [language, setLanguage] = useState('SV');
   const [webhook, setWebhook] = useState('');
 
   const newNotifier = async () => {
@@ -36,14 +36,14 @@ const NewNotifierForm = ({ locale }: { locale: string }) => {
     <tr>
       <td>
         <DropdownList onChange={(e) => setType(e.target.value)}>
-          <option value="DISCORD">Discord</option>
           <option value="SLACK">Slack</option>
+          <option value="DISCORD">Discord</option>
         </DropdownList>
       </td>
       <td>
         <DropdownList onChange={(e) => setLanguage(e.target.value)}>
-          <option value="EN">English</option>
           <option value="SV">Swedish</option>
+          <option value="EN">English</option>
         </DropdownList>
       </td>
       <td>
