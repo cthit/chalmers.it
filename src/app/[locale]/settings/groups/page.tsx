@@ -1,7 +1,6 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import GammaService from '@/services/gammaService';
 import AddGroupForm from './AddGroupForm';
-import Divider from '@/components/Divider/Divider';
 import EditGroupForm from './EditGroupForm';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';

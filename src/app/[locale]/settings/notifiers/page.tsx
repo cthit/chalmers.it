@@ -1,4 +1,3 @@
-import Divider from '@/components/Divider/Divider';
 import NotifyService from '@/services/notifyService';
 import NewNotifierForm from './NewNotifierForm';
 import RemoveNotifierButton from './RemoveNotifierButton';

@@ -1,6 +1,5 @@
 import DivisionGroupService from '@/services/divisionGroupService';
 import AddTypeForm from './AddTypeForm';
-import Divider from '@/components/Divider/Divider';
 import EditTypeForm from './EditTypeForm';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';

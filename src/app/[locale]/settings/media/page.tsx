@@ -11,7 +11,9 @@ export default async function Page({
 
   return (
     <main>
-      <title>{l.settings.common.controlPanel + ' - ' + l.settings.media.name}</title>
+      <title>
+        {l.settings.common.controlPanel + ' - ' + l.settings.media.name}
+      </title>
       <h1>{l.settings.media.name}</h1>
       <p>
         {l.settings.media.stored}: {stats.count}
