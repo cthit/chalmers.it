@@ -4,7 +4,7 @@ import Link, { LinkProps } from 'next/link';
 import { AnchorHTMLAttributes } from 'react';
 import React from 'react';
 
-const poppins = Poppins({ weight: '600', subsets: ['latin'] });
+const poppins = Poppins({ weight: '500', subsets: ['latin'] });
 
 const ActionLink = ({
   className,
