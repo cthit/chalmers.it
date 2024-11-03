@@ -2,9 +2,17 @@
 
 import { removeNotifier } from '@/actions/notifiers';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
 
-const RemoveNotifierButton = ({ id }: { id: number }) => {
+const RemoveNotifierButton = ({
+  locale,
+  id
+}: {
+  locale: string;
+  id: number;
+}) => {
+  const l = i18nService.getLocale(locale);
   const remove = async () => {
     try {
       confirm('Are you sure you want to delete this notifier?') &&
@@ -18,7 +26,7 @@ const RemoveNotifierButton = ({ id }: { id: number }) => {
     }
   };
 
-  return <ActionButton onClick={remove}>Ta bort</ActionButton>;
+  return <ActionButton onClick={remove}>{l.general.delete}</ActionButton>;
 };
 
 export default RemoveNotifierButton;

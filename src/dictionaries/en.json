@@ -9,7 +9,8 @@
     "uploaded": "Uploaded",
     "close": "Close",
     "save": "Save",
-    "manage": "Manage"
+    "manage": "Manage",
+    "add": "Add"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -179,5 +180,55 @@
   },
   "about": {
     "title": "About"
+  },
+  "settings": {
+    "common": {
+      "controlPanel": "Control Panel",
+      "priority": "Sort priority",
+      "name": "Name",
+      "nameEn": "Name (English)",
+      "nameSv": "Name (Swedish)",
+      "type": "Type",
+      "actions": "Actions"
+    },
+    "general": {
+      "name": "General"
+    },
+    "groupTypes": {
+      "name": "Group Types",
+      "add": "Add Group Type"
+    },
+    "groups": {
+      "name": "Groups",
+      "add": "Add Group",
+      "select": "Select a group",
+      "category": "Category",
+      "localId": "Local ID",
+      "showOnGamma": "Show on Gamma"
+    },
+    "media": {
+      "name": "Media",
+      "stored": "Stored media count",
+      "usage": "Media usage",
+      "orphaned": "Orphaned media count"
+    },
+    "navbar": {
+      "name": "Navbar",
+      "add": "Add Category",
+      "note": "Note: A higher priority value will be placed earlier.",
+      "addItem": "Add Item",
+      "hasUrl": "Cannot add sub-items when category has a URL"
+    },
+    "notifiers": {
+      "name": "Notifiers",
+      "add": "Add Notifier",
+      "language": "Language"
+    },
+    "sponsors": {
+      "name": "Sponsors",
+      "add": "Add Sponsor",
+      "link": "Link",
+      "image": "Image"
+    }
   }
 }

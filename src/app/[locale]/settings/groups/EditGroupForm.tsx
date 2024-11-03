@@ -6,8 +6,14 @@ import { editGroup, removeGroup } from '@/actions/groups';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import DivisionGroupService from '@/services/divisionGroupService';
+import i18nService from '@/services/i18nService';
+import ActionLink from '@/components/ActionButton/ActionLink';
+import GammaService from '@/services/gammaService';
+import TextArea from '@/components/TextArea/TextArea';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
 const EditGroupForm = ({
+  locale,
   id,
   typeId,
   superGroupId,
@@ -15,6 +21,7 @@ const EditGroupForm = ({
   priority,
   groupTypes
 }: {
+  locale: string;
   id: number;
   typeId: number;
   superGroupId: string;
@@ -23,6 +30,7 @@ const EditGroupForm = ({
   groupTypes: Awaited<ReturnType<typeof DivisionGroupService.getGroupTypes>>;
 }) => {
   const router = useRouter();
+  const l = i18nService.getLocale(locale);
   const [prio, setPrio] = useState(priority);
   const [type, setType] = useState(typeId);
 
@@ -47,39 +55,42 @@ const EditGroupForm = ({
   };
 
   return (
-    <li>
-      <h2>{prettyName}</h2>
-      <p>
-        <strong>Gamma ID:</strong> {superGroupId}
-      </p>
-      <p>
-        <strong>Local ID:</strong> {id}
-      </p>
-      <form onSubmit={edit}>
-        <label>Priority</label>
-        <input
-          type="number"
-          onChange={(e) => setPrio(+e.target.value)}
-          value={prio}
-        />
-        <br />
-        <label>Category</label>
-        <select onChange={(e) => setType(+e.target.value)} value={type}>
+    <tr>
+      <td>{id}</td>
+      <td>{prettyName}</td>
+      <td>
+        <form onSubmit={edit}>
+          <TextArea
+            type="number"
+            onChange={(e) => setPrio(+e.target.value)}
+            value={prio}
+          />
+        </form>
+      </td>
+      <td>
+        <DropdownList onChange={(e) => setType(+e.target.value)} value={type}>
           {groupTypes.map((type) => (
             <option key={type.id} value={type.id}>
-              {type.nameEn}
+              {l.en ? type.nameEn : type.nameSv}
             </option>
           ))}
-        </select>
-        <br />
+        </DropdownList>
+      </td>
+      <td>
         <ActionButton type="submit" onClick={edit}>
-          Spara
-        </ActionButton>
+          {l.general.save}
+        </ActionButton>{' '}
         <ActionButton type="button" onClick={remove}>
-          Ta bort
-        </ActionButton>
-      </form>
-    </li>
+          {l.general.delete}
+        </ActionButton>{' '}
+        <ActionLink
+          target="_blank"
+          href={GammaService.gammaUrl + '/super-groups/' + superGroupId}
+        >
+          {l.settings.groups.showOnGamma}
+        </ActionLink>
+      </td>
+    </tr>
   );
 };
 

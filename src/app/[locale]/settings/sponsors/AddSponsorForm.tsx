@@ -3,8 +3,12 @@ import React, { useState } from 'react';
 import { addSponsor } from '@/actions/sponsors';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { toast } from 'react-toastify';
+import i18nService from '@/services/i18nService';
+import TextArea from '@/components/TextArea/TextArea';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
-const AddSponsorForm = () => {
+const AddSponsorForm = ({ locale }: { locale: string }) => {
+  const l = i18nService.getLocale(locale);
   const [sponsorUrl, setSponsorUrl] = useState('');
   const [sponsorName, setSponsorName] = useState('');
   const [sponsorImage, setSponsorImage] = useState<File | null>(null);
@@ -60,32 +64,30 @@ const AddSponsorForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="sponsorType">Sponsor Type:</label>
-        <select value={type} onChange={(e) => setType(e.target.value as any)}>
-          <option value="MAIN_PARTNER">Main Partner</option>
-          <option value="PARTNER">Partner</option>
-        </select>
+        <label htmlFor="sponsorType">{l.settings.common.type}</label>
+        <DropdownList value={type} onChange={(e) => setType(e.target.value as any)}>
+          <option value="MAIN_PARTNER">{l.sponsors.main}</option>
+          <option value="PARTNER">{l.sponsors.partner}</option>
+        </DropdownList>
       </div>
       <div>
-        <label htmlFor="sponsorName">Sponsor Name:</label>
-        <input
-          type="text"
+        <label htmlFor="sponsorName">{l.settings.common.name}</label>
+        <TextArea
           id="sponsorName"
           value={sponsorName}
           onChange={handleNameChange}
         />
       </div>
       <div>
-        <label htmlFor="sponsorName">Sponsor URL:</label>
-        <input
-          type="text"
+        <label htmlFor="sponsorName">URL</label>
+        <TextArea
           id="sponsorUrl"
           value={sponsorUrl}
           onChange={handleSponsorUrlChange}
         />
       </div>
       <div>
-        <label htmlFor="sponsorImage">Sponsor Image:</label>
+        <label htmlFor="sponsorImage">{l.settings.sponsors.image}</label>
         <input
           type="file"
           id="sponsorImage"
@@ -93,7 +95,7 @@ const AddSponsorForm = () => {
           onChange={handleImageChange}
         />
       </div>
-      <ActionButton type="submit">Add Sponsor</ActionButton>
+      <ActionButton type="submit">{l.general.add}</ActionButton>
     </form>
   );
 };

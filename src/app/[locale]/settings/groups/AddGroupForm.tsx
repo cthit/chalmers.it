@@ -7,9 +7,17 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import { toast } from 'react-toastify';
+import i18nService from '@/services/i18nService';
 
-const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
+const AddGroupForm = ({
+  gammaGroups,
+  locale
+}: {
+  gammaGroups: GammaSuperGroup[];
+  locale: string;
+}) => {
   const router = useRouter();
+  const l = i18nService.getLocale(locale);
   const [newGroup, setNewGroup] = useState('');
 
   async function importGroup() {
@@ -30,7 +38,7 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
     <>
       <DropdownList onChange={(e) => setNewGroup(e.target.value)}>
         <option value={undefined} hidden>
-          Select a group
+          {l.settings.groups.select}
         </option>
         {gammaGroups
           .filter((g) => g.type !== 'ALUMNI')
@@ -40,7 +48,7 @@ const AddGroupForm = ({ gammaGroups }: { gammaGroups: GammaSuperGroup[] }) => {
             </option>
           ))}
       </DropdownList>
-      <ActionButton onClick={importGroup}>Lägg till</ActionButton>
+      <ActionButton onClick={importGroup}>{l.general.add}</ActionButton>
     </>
   );
 };

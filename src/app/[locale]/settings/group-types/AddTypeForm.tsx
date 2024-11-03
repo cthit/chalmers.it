@@ -2,15 +2,18 @@
 
 import { createType } from '@/actions/groupTypes';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import TextArea from '@/components/TextArea/TextArea';
+import i18nService from '@/services/i18nService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const AddTypeForm = () => {
+const AddTypeForm = ({ locale }: { locale: string }) => {
   const router = useRouter();
   const [priority, setPriority] = useState('0');
   const [nameSv, setNameSv] = useState('');
   const [nameEn, setNameEn] = useState('');
+  const l = i18nService.getLocale(locale);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -26,22 +29,21 @@ const AddTypeForm = () => {
 
   return (
     <>
-      <h3>Lägg till typ</h3>
       <form onSubmit={handleSubmit}>
-        <label>Namn (en)</label>
-        <input value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+        <label>{l.settings.common.nameEn}</label>
+        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
         <br />
-        <label>Namn (sv)</label>
-        <input value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+        <label>{l.settings.common.nameSv}</label>
+        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
         <br />
-        <label>Prioritet</label>
-        <input
+        <label>{l.settings.common.priority}</label>
+        <TextArea
           type="number"
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
         />
         <br />
-        <ActionButton type="submit">Skapa</ActionButton>
+        <ActionButton type="submit">{l.general.create}</ActionButton>
       </form>
     </>
   );

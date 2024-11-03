@@ -2,12 +2,15 @@
 
 import { removeItem, updateItem } from '@/actions/navigation';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import TextArea from '@/components/TextArea/TextArea';
+import i18nService from '@/services/i18nService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const EditItemForm = ({ item }: { item: any }) => {
+const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
   const router = useRouter();
+  const l = i18nService.getLocale(locale);
   const [nameEn, setNameEn] = useState(item.nameEn);
   const [nameSv, setNameSv] = useState(item.nameSv);
   const [url, setUrl] = useState(item.url);
@@ -21,7 +24,7 @@ const EditItemForm = ({ item }: { item: any }) => {
         success: 'Item edited',
         error: 'Failed to edit item'
       })
-      .then(() => router.refresh());
+      .then(() => window.location.reload());
   };
 
   const handleDelete = async () => {
@@ -36,36 +39,36 @@ const EditItemForm = ({ item }: { item: any }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Name (En)</label>
-      <input
-        type="text"
-        value={nameEn}
-        onChange={(e) => setNameEn(e.target.value)}
-      />
-      <br />
-      <label>Name (Sv)</label>
-      <input
-        type="text"
-        value={nameSv}
-        onChange={(e) => setNameSv(e.target.value)}
-      />
-      <br />
-      <label>URL</label>
-      <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
-      <br />
-      <label>Priority</label>
-      <input
-        type="number"
-        value={priority}
-        onChange={(e) => setPriority(parseInt(e.target.value))}
-      />
-      <br />
-      <ActionButton type="submit">Save</ActionButton>
-      <ActionButton onClick={handleDelete} type="button">
-        Delete
-      </ActionButton>
-    </form>
+    <tr>
+      <td>{item.id}</td>
+      <td>Item</td>
+      <td>
+        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+      </td>
+      <td>
+        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        </form>
+      </td>
+      <td>
+        <TextArea
+          type="number"
+          value={priority}
+          onChange={(e) => setPriority(parseInt(e.target.value))}
+        />
+      </td>
+      <td>
+        <ActionButton onClick={handleSubmit} type="submit">
+          {l.general.save}
+        </ActionButton>{' '}
+        <ActionButton onClick={handleDelete} type="button">
+          {l.general.delete}
+        </ActionButton>
+      </td>
+    </tr>
   );
 };
 
