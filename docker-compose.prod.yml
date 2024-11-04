@@ -17,15 +17,3 @@ services:
       - ./db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
-  db-old:
-    image: mariadb:10
-    volumes:
-        - ./db-old:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    ports:
-        - "3306:3306"
