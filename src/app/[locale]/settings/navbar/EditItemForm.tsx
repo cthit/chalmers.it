@@ -16,7 +16,7 @@ const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
   const [url, setUrl] = useState(item.url);
   const [priority, setPriority] = useState(item.priority);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast
       .promise(updateItem(item.id, nameEn, nameSv, url, priority), {
@@ -43,10 +43,20 @@ const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
       <td>{item.id}</td>
       <td>{l.settings.navbar.item}</td>
       <td>
-        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
       </td>
       <td>
-        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
       </td>
       <td>
         <form onSubmit={handleSubmit}>
@@ -54,19 +64,17 @@ const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
         </form>
       </td>
       <td>
-        <TextArea
-          type="number"
-          value={priority}
-          onChange={(e) => setPriority(parseInt(e.target.value))}
-        />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            type="number"
+            value={priority}
+            onChange={(e) => setPriority(parseInt(e.target.value))}
+          />
+        </form>
       </td>
       <td>
-        <ActionButton onClick={handleSubmit} type="submit">
-          {l.general.save}
-        </ActionButton>{' '}
-        <ActionButton onClick={handleDelete} type="button">
-          {l.general.delete}
-        </ActionButton>
+        <ActionButton onClick={handleSubmit}>{l.general.save}</ActionButton>{' '}
+        <ActionButton onClick={handleDelete}>{l.general.delete}</ActionButton>
       </td>
     </tr>
   );

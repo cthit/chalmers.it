@@ -16,7 +16,8 @@ const NewNotifierForm = ({ locale }: { locale: string }) => {
   const [language, setLanguage] = useState('SV');
   const [webhook, setWebhook] = useState('');
 
-  const newNotifier = async () => {
+  const newNotifier = async (e: React.FormEvent) => {
+    e.preventDefault();
     const notifType = type as 'DISCORD' | 'SLACK';
     const notifLang = language as 'EN' | 'SV';
 
@@ -47,7 +48,9 @@ const NewNotifierForm = ({ locale }: { locale: string }) => {
         </DropdownList>
       </td>
       <td>
-        <TextArea onChange={(e) => setWebhook(e.target.value)} />
+        <form onSubmit={newNotifier}>
+          <TextArea onChange={(e) => setWebhook(e.target.value)} />
+        </form>
       </td>
       <td>
         <ActionButton onClick={newNotifier}>{l.general.add}</ActionButton>

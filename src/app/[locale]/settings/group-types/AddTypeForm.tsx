@@ -15,7 +15,7 @@ const AddTypeForm = ({ locale }: { locale: string }) => {
   const [nameEn, setNameEn] = useState('');
   const l = i18nService.getLocale(locale);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     await toast
@@ -31,10 +31,20 @@ const AddTypeForm = ({ locale }: { locale: string }) => {
     <tr>
       <td />
       <td>
-        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
       </td>
       <td>
-        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
       </td>
       <td>
         <form onSubmit={handleSubmit}>
@@ -46,7 +56,7 @@ const AddTypeForm = ({ locale }: { locale: string }) => {
         </form>
       </td>
       <td>
-        <ActionButton type="submit">{l.general.add}</ActionButton>
+        <ActionButton onClick={handleSubmit}>{l.general.add}</ActionButton>
       </td>
     </tr>
   );

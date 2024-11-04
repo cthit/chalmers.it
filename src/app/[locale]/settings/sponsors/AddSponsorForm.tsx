@@ -83,11 +83,13 @@ const AddSponsorForm = ({ locale }: { locale: string }) => {
         </form>
       </td>
       <td>
-        <TextArea
-          id="sponsorUrl"
-          value={sponsorUrl}
-          onChange={handleSponsorUrlChange}
-        />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            id="sponsorUrl"
+            value={sponsorUrl}
+            onChange={handleSponsorUrlChange}
+          />
+        </form>
       </td>
       <td>
         <input
@@ -98,7 +100,7 @@ const AddSponsorForm = ({ locale }: { locale: string }) => {
         />
       </td>
       <td>
-        <ActionButton type="submit">{l.general.add}</ActionButton>
+        <ActionButton>{l.general.add}</ActionButton>
       </td>
     </tr>
   );

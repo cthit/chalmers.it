@@ -17,7 +17,7 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
   const [url, setUrl] = useState('');
   const [priority, setPriority] = useState(0);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast
       .promise(addCategory(nameEn, nameSv, priority, url), {
@@ -30,16 +30,28 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
 
   return (
     <tr className={styles.noBorder}>
-      <td></td>
+      <td />
       <td>{l.settings.navbar.newCategory}</td>
       <td>
-        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
       </td>
       <td>
-        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
       </td>
       <td>
-        <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        </form>
       </td>
       <td>
         <form onSubmit={handleSubmit}>
@@ -51,9 +63,7 @@ const AddCategoryForm = ({ locale }: { locale: string }) => {
         </form>
       </td>
       <td>
-        <ActionButton onClick={handleSubmit} type="submit">
-          {l.general.add}
-        </ActionButton>
+        <ActionButton onClick={handleSubmit}>{l.general.add}</ActionButton>
       </td>
     </tr>
   );

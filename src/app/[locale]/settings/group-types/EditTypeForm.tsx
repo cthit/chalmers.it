@@ -27,7 +27,7 @@ const EditTypeForm = ({
   const [nameEn, setNameEn] = useState(type.nameEn);
   const l = i18nService.getLocale(locale);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     await toast
@@ -43,22 +43,32 @@ const EditTypeForm = ({
     <tr>
       <td>{type.id}</td>
       <td>
-        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
-      </td>
-      <td>
-        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
-      </td>
-      <td>
-        <TextArea
-          type="number"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-        />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
       </td>
       <td>
         <form onSubmit={handleSubmit}>
-          <ActionButton type="submit">{l.general.save}</ActionButton>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
         </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            type="number"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <ActionButton onClick={handleSubmit}>{l.general.save}</ActionButton>
       </td>
     </tr>
   );

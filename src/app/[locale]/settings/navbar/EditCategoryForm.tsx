@@ -23,7 +23,7 @@ const EditCategoryForm = ({
   const [url, setUrl] = useState(category.url);
   const [priority, setPriority] = useState(category.priority);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast
       .promise(updateCategory(category.id, nameEn, nameSv, priority, url), {
@@ -52,14 +52,26 @@ const EditCategoryForm = ({
       <td>{category.id}</td>
       <td>{l.settings.common.category}</td>
       <td>
-        <TextArea value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
       </td>
 
       <td>
-        <TextArea value={nameSv} onChange={(e) => setNameSv(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
       </td>
       <td>
-        <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        <form onSubmit={handleSubmit}>
+          <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        </form>
       </td>
       <td>
         <form onSubmit={handleSubmit}>
@@ -71,12 +83,8 @@ const EditCategoryForm = ({
         </form>
       </td>
       <td>
-        <ActionButton onClick={handleSubmit} type="submit">
-          {l.general.save}
-        </ActionButton>{' '}
-        <ActionButton onClick={handleDelete} type="button">
-          {l.general.delete}
-        </ActionButton>
+        <ActionButton onClick={handleSubmit}>{l.general.save}</ActionButton>{' '}
+        <ActionButton onClick={handleDelete}>{l.general.delete}</ActionButton>
       </td>
     </tr>
   );

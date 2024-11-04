@@ -44,7 +44,7 @@ const EditGroupForm = ({
     router.refresh();
   };
 
-  const edit = async (e: any) => {
+  const edit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     await toast.promise(editGroup(superGroupId, prio, type < 0 ? null : type), {
@@ -77,12 +77,8 @@ const EditGroupForm = ({
         </DropdownList>
       </td>
       <td>
-        <ActionButton type="submit" onClick={edit}>
-          {l.general.save}
-        </ActionButton>{' '}
-        <ActionButton type="button" onClick={remove}>
-          {l.general.delete}
-        </ActionButton>{' '}
+        <ActionButton onClick={edit}>{l.general.save}</ActionButton>{' '}
+        <ActionButton onClick={remove}>{l.general.delete}</ActionButton>{' '}
         <ActionLink
           target="_blank"
           href={GammaService.gammaUrl + '/super-groups/' + superGroupId}
