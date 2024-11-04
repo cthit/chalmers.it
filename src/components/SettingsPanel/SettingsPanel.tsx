@@ -28,7 +28,7 @@ const SettingsPanel = ({
             {pages.map((page) => (
               <Link
                 className={`${style.navLink} ${
-                  pathname === page.path && style.currentLink
+                  pathname.endsWith(page.path) && style.currentLink
                 }`}
                 href={page.path}
                 key={page.path}
