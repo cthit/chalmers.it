@@ -2,18 +2,21 @@
 
 import { removeItem, updateItem } from '@/actions/navigation';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import TextArea from '@/components/TextArea/TextArea';
+import i18nService from '@/services/i18nService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const EditItemForm = ({ item }: { item: any }) => {
+const EditItemForm = ({ locale, item }: { locale: string; item: any }) => {
   const router = useRouter();
+  const l = i18nService.getLocale(locale);
   const [nameEn, setNameEn] = useState(item.nameEn);
   const [nameSv, setNameSv] = useState(item.nameSv);
   const [url, setUrl] = useState(item.url);
   const [priority, setPriority] = useState(item.priority);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast
       .promise(updateItem(item.id, nameEn, nameSv, url, priority), {
@@ -21,7 +24,7 @@ const EditItemForm = ({ item }: { item: any }) => {
         success: 'Item edited',
         error: 'Failed to edit item'
       })
-      .then(() => router.refresh());
+      .then(() => window.location.reload());
   };
 
   const handleDelete = async () => {
@@ -36,36 +39,44 @@ const EditItemForm = ({ item }: { item: any }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Name (En)</label>
-      <input
-        type="text"
-        value={nameEn}
-        onChange={(e) => setNameEn(e.target.value)}
-      />
-      <br />
-      <label>Name (Sv)</label>
-      <input
-        type="text"
-        value={nameSv}
-        onChange={(e) => setNameSv(e.target.value)}
-      />
-      <br />
-      <label>URL</label>
-      <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
-      <br />
-      <label>Priority</label>
-      <input
-        type="number"
-        value={priority}
-        onChange={(e) => setPriority(parseInt(e.target.value))}
-      />
-      <br />
-      <ActionButton type="submit">Save</ActionButton>
-      <ActionButton onClick={handleDelete} type="button">
-        Delete
-      </ActionButton>
-    </form>
+    <tr>
+      <td>{item.id}</td>
+      <td>{l.settings.navbar.item}</td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            type="number"
+            value={priority}
+            onChange={(e) => setPriority(parseInt(e.target.value))}
+          />
+        </form>
+      </td>
+      <td>
+        <ActionButton onClick={handleSubmit}>{l.general.save}</ActionButton>{' '}
+        <ActionButton onClick={handleDelete}>{l.general.delete}</ActionButton>
+      </td>
+    </tr>
   );
 };
 

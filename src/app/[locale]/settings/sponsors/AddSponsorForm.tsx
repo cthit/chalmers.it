@@ -3,8 +3,12 @@ import React, { useState } from 'react';
 import { addSponsor } from '@/actions/sponsors';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { toast } from 'react-toastify';
+import i18nService from '@/services/i18nService';
+import TextArea from '@/components/TextArea/TextArea';
+import DropdownList from '@/components/DropdownList/DropdownList';
 
-const AddSponsorForm = () => {
+const AddSponsorForm = ({ locale }: { locale: string }) => {
+  const l = i18nService.getLocale(locale);
   const [sponsorUrl, setSponsorUrl] = useState('');
   const [sponsorName, setSponsorName] = useState('');
   const [sponsorImage, setSponsorImage] = useState<File | null>(null);
@@ -58,43 +62,47 @@ const AddSponsorForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="sponsorType">Sponsor Type:</label>
-        <select value={type} onChange={(e) => setType(e.target.value as any)}>
-          <option value="MAIN_PARTNER">Main Partner</option>
-          <option value="PARTNER">Partner</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="sponsorName">Sponsor Name:</label>
-        <input
-          type="text"
-          id="sponsorName"
-          value={sponsorName}
-          onChange={handleNameChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="sponsorName">Sponsor URL:</label>
-        <input
-          type="text"
-          id="sponsorUrl"
-          value={sponsorUrl}
-          onChange={handleSponsorUrlChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="sponsorImage">Sponsor Image:</label>
+    <tr>
+      <td />
+      <td>
+        <DropdownList
+          value={type}
+          onChange={(e) => setType(e.target.value as any)}
+        >
+          <option value="MAIN_PARTNER">{l.sponsors.main}</option>
+          <option value="PARTNER">{l.sponsors.partner}</option>
+        </DropdownList>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            id="sponsorName"
+            value={sponsorName}
+            onChange={handleNameChange}
+          />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            id="sponsorUrl"
+            value={sponsorUrl}
+            onChange={handleSponsorUrlChange}
+          />
+        </form>
+      </td>
+      <td>
         <input
           type="file"
           id="sponsorImage"
           accept="image/*"
           onChange={handleImageChange}
         />
-      </div>
-      <ActionButton type="submit">Add Sponsor</ActionButton>
-    </form>
+      </td>
+      <td>
+        <ActionButton>{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 

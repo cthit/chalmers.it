@@ -9,7 +9,8 @@
     "uploaded": "Uppladdad",
     "close": "Stäng",
     "save": "Spara",
-    "manage": "Hantera"
+    "manage": "Hantera",
+    "add": "Lägg till"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -179,5 +180,62 @@
   },
   "about": {
     "title": "Om"
+  },
+  "settings": {
+    "common": {
+      "controlPanel": "Kontrollpanel",
+      "priority": "Sorteringsprioritet",
+      "name": "Namn",
+      "nameEn": "Namn (Engelska)",
+      "nameSv": "Namn (Svenska)",
+      "type": "Typ",
+      "actions": "Åtgärder",
+      "category": "Kategori"
+    },
+    "general": {
+      "name": "Allmänt",
+      "user": "Användare",
+      "theme": "Tema",
+      "loggedIn": "Inloggad som",
+      "notLoggedIn": "Inte inloggad",
+      "themeResolved": "Aktuellt tema",
+      "systemTheme": "Temapreferens",
+      "noSystemTheme": "Ingen temapreferens",
+      "resolvingTheme": "Löser tema..."
+    },
+    "groupTypes": {
+      "name": "Grupptyper"
+    },
+    "groups": {
+      "name": "Grupper",
+      "import": "Importera",
+      "select": "Välj en grupp",
+      "showOnGamma": "Visa på Gamma"
+    },
+    "media": {
+      "name": "Media",
+      "stored": "Antal lagrade mediafiler",
+      "usage": "Mediaanvändning",
+      "orphaned": "Antal föräldralösa mediafiler"
+    },
+    "navbar": {
+      "name": "Navigeringsfält",
+      "note": "Notera: Ett högre prioriteringsvärde visas tidigare.",
+      "addItem": "Lägg till länk",
+      "hasUrl": "Kan inte lägga till underlänkar när kategorin har en URL",
+      "newCategory": "Ny kategori",
+      "item": "Länk",
+      "newItem": "Ny länk"
+    },
+    "notifiers": {
+      "name": "Notifieringar",
+      "language": "Språk"
+    },
+    "sponsors": {
+      "name": "Sponsorer",
+      "link": "Öppna länk",
+      "image": "Bild",
+      "openImage": "Öppna bild"
+    }
   }
 }

@@ -1,28 +1,46 @@
-import Divider from '@/components/Divider/Divider';
 import NotifyService from '@/services/notifyService';
 import NewNotifierForm from './NewNotifierForm';
 import RemoveNotifierButton from './RemoveNotifierButton';
+import i18nService from '@/services/i18nService';
+import Table from '@/components/Table/Table';
 
-export default async function Page() {
+export default async function Page({
+  params: { locale }
+}: {
+  params: { locale: string };
+}) {
+  const l = i18nService.getLocale(locale);
   const notifiers = await NotifyService.getNotifiers();
 
   return (
     <main>
-      <title>Kontrollpanel - Notifiers</title>
-      <h1>Notifiers</h1>
-      <ul>
-        {notifiers.map((notifier) => (
-          <li key={notifier.id}>
-            <h2>{notifier.type}</h2>
-            <p>{notifier.language}</p>
-            <p>{notifier.url}</p>
-            <RemoveNotifierButton id={notifier.id} />
-          </li>
-        ))}
-      </ul>
-      <Divider />
-      <h1>Add a notifier</h1>
-      <NewNotifierForm />
+      <title>
+        {l.settings.common.controlPanel + ' - ' + l.settings.notifiers.name}
+      </title>
+      <h1>{l.settings.notifiers.name}</h1>
+      <Table>
+        <thead>
+          <tr>
+            <th>{l.settings.common.type}</th>
+            <th>{l.settings.notifiers.language}</th>
+            <th>Webhook URL</th>
+            <th>{l.settings.common.actions}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {notifiers.map((notifier) => (
+            <tr key={notifier.id}>
+              <td>{notifier.type}</td>
+              <td>{notifier.language}</td>
+              <td>{notifier.url}</td>
+              <td>
+                <RemoveNotifierButton locale={locale} id={notifier.id} />
+              </td>
+            </tr>
+          ))}
+          <NewNotifierForm locale={locale} />
+        </tbody>
+      </Table>
     </main>
   );
 }

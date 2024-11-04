@@ -1,19 +1,23 @@
 'use client';
 
+import styles from './AddCategoryForm.module.scss';
 import { addCategory } from '@/actions/navigation';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import TextArea from '@/components/TextArea/TextArea';
+import i18nService from '@/services/i18nService';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const AddCategoryForm = () => {
+const AddCategoryForm = ({ locale }: { locale: string }) => {
   const router = useRouter();
+  const l = i18nService.getLocale(locale);
   const [nameEn, setNameEn] = useState('');
   const [nameSv, setNameSv] = useState('');
   const [url, setUrl] = useState('');
   const [priority, setPriority] = useState(0);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     toast
       .promise(addCategory(nameEn, nameSv, priority, url), {
@@ -25,33 +29,43 @@ const AddCategoryForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Name (En)</label>
-      <input
-        type="text"
-        value={nameEn}
-        onChange={(e) => setNameEn(e.target.value)}
-      />
-      <br />
-      <label>Name (Sv)</label>
-      <input
-        type="text"
-        value={nameSv}
-        onChange={(e) => setNameSv(e.target.value)}
-      />
-      <br />
-      <label>URL</label>
-      <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} />
-      <br />
-      <label>Priority</label>
-      <input
-        type="number"
-        value={priority}
-        onChange={(e) => setPriority(parseInt(e.target.value))}
-      />
-      <br />
-      <ActionButton type="submit">Create</ActionButton>
-    </form>
+    <tr className={styles.noBorder}>
+      <td />
+      <td>{l.settings.navbar.newCategory}</td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            value={nameSv}
+            onChange={(e) => setNameSv(e.target.value)}
+          />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea value={url} onChange={(e) => setUrl(e.target.value)} />
+        </form>
+      </td>
+      <td>
+        <form onSubmit={handleSubmit}>
+          <TextArea
+            type="number"
+            value={priority}
+            onChange={(e) => setPriority(parseInt(e.target.value))}
+          />
+        </form>
+      </td>
+      <td>
+        <ActionButton onClick={handleSubmit}>{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 

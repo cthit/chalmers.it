@@ -6,14 +6,18 @@ import { addNotifier } from '@/actions/notifiers';
 import { useRouter } from 'next/navigation';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import { toast } from 'react-toastify';
+import i18nService from '@/services/i18nService';
+import TextArea from '@/components/TextArea/TextArea';
 
-const NewNotifierForm = () => {
+const NewNotifierForm = ({ locale }: { locale: string }) => {
   const router = useRouter();
-  const [type, setType] = useState('DISCORD');
-  const [language, setLanguage] = useState('EN');
+  const l = i18nService.getLocale(locale);
+  const [type, setType] = useState('SLACK');
+  const [language, setLanguage] = useState('SV');
   const [webhook, setWebhook] = useState('');
 
-  const newNotifier = async () => {
+  const newNotifier = async (e: React.FormEvent) => {
+    e.preventDefault();
     const notifType = type as 'DISCORD' | 'SLACK';
     const notifLang = language as 'EN' | 'SV';
 
@@ -30,21 +34,28 @@ const NewNotifierForm = () => {
   };
 
   return (
-    <div>
-      <p>Type</p>
-      <DropdownList onChange={(e) => setType(e.target.value)}>
-        <option value="DISCORD">Discord</option>
-        <option value="SLACK">Slack</option>
-      </DropdownList>
-      <p>Language</p>
-      <DropdownList onChange={(e) => setLanguage(e.target.value)}>
-        <option value="EN">English</option>
-        <option value="SV">Swedish</option>
-      </DropdownList>
-      <p>Webhook URL</p>
-      <input type="text" onChange={(e) => setWebhook(e.target.value)} />
-      <ActionButton onClick={newNotifier}>Add</ActionButton>
-    </div>
+    <tr>
+      <td>
+        <DropdownList onChange={(e) => setType(e.target.value)}>
+          <option value="SLACK">Slack</option>
+          <option value="DISCORD">Discord</option>
+        </DropdownList>
+      </td>
+      <td>
+        <DropdownList onChange={(e) => setLanguage(e.target.value)}>
+          <option value="SV">Swedish</option>
+          <option value="EN">English</option>
+        </DropdownList>
+      </td>
+      <td>
+        <form onSubmit={newNotifier}>
+          <TextArea onChange={(e) => setWebhook(e.target.value)} />
+        </form>
+      </td>
+      <td>
+        <ActionButton onClick={newNotifier}>{l.general.add}</ActionButton>
+      </td>
+    </tr>
   );
 };
 
