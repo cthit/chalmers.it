@@ -1,4 +1,4 @@
-const ansis = require('ansis/colors');
+const ansis = require('ansis');
 const turquoise = ansis.hex('#09CDDA');
 
 module.exports = (opts) =>
