@@ -198,8 +198,8 @@
       "theme": "Tema",
       "loggedIn": "Inloggad som",
       "notLoggedIn": "Inte inloggad",
-      "themeResolved": "Aktuellt tema löst till",
-      "systemTheme": "Temapreferens löst till",
+      "themeResolved": "Aktuellt tema",
+      "systemTheme": "Temapreferens",
       "noSystemTheme": "Ingen temapreferens",
       "resolvingTheme": "Löser tema..."
     },
