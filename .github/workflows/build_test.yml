@@ -56,3 +56,5 @@ jobs:
         with:
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/cthit/chalmers.it:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
