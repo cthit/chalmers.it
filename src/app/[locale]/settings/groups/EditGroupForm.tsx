@@ -8,11 +8,11 @@ import { useState } from 'react';
 import DivisionGroupService from '@/services/divisionGroupService';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
-import GammaService from '@/services/gammaService';
 import TextArea from '@/components/TextArea/TextArea';
 import DropdownList from '@/components/DropdownList/DropdownList';
 
 const EditGroupForm = ({
+  gammaUrl,
   locale,
   id,
   typeId,
@@ -21,6 +21,7 @@ const EditGroupForm = ({
   priority,
   groupTypes
 }: {
+  gammaUrl: string;
   locale: string;
   id: number;
   typeId: number;
@@ -81,7 +82,7 @@ const EditGroupForm = ({
         <ActionButton onClick={remove}>{l.general.delete}</ActionButton>{' '}
         <ActionLink
           target="_blank"
-          href={GammaService.gammaUrl + '/super-groups/' + superGroupId}
+          href={gammaUrl + '/super-groups/' + superGroupId}
         >
           {l.settings.groups.showOnGamma}
         </ActionLink>

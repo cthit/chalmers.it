@@ -40,6 +40,7 @@ export default async function Page({
         <tbody>
           {groups.map((group) => (
             <EditGroupForm
+              gammaUrl={GammaService.gammaUrl ?? ''}
               key={group.id}
               locale={locale}
               id={group.id}
