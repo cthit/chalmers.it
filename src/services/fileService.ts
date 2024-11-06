@@ -1,12 +1,10 @@
-import { existsSync } from 'fs';
-
 // Default max size is 100 MiB
 const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE ?? '104857600');
 
 export enum MediaType {
   Image = 'image',
-   Document = 'document',
-    Container = 'container'
+  Document = 'document',
+  Container = 'container'
 }
 
 export interface MediaMeta {
