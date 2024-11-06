@@ -1,8 +1,10 @@
-name: Linting
+name: Code validation
 
 on:
   push:
     branches: [main]
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
   pull_request:
     branches: [main]
 
@@ -10,27 +12,46 @@ env:
   WORKFLOW_NODE_VERSION: 20.x
 
 jobs:
+  test:
+    name: Unit tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.WORKFLOW_NODE_VERSION }}
+
+      - name: pnpm install
+        run: npm install -g pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test
+
   run-linters:
     name: Execute linters
     runs-on: ubuntu-latest
 
     steps:
-      -
-        uses: actions/checkout@v3
-      -
-        name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.WORKFLOW_NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.WORKFLOW_NODE_VERSION }}
-      -
-        name: pnpm install
+
+      - name: pnpm install
         run: npm install -g pnpm
-      - 
-        run: pnpm install prettier
-      -
-        run: pnpm install --frozen-lockfile
-      -
-        name: ESLint
+
+      - run: pnpm install prettier
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: ESLint
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -38,8 +59,8 @@ jobs:
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
           tool_name: ESLint
-      -
-        name: Prettier
+
+      - name: Prettier
         uses: EPMatt/reviewdog-action-prettier@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
