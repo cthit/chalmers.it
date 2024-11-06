@@ -61,7 +61,7 @@ jobs:
           tool_name: ESLint
 
       - name: Prettier
-        uses: recitalsoftware/reviewdog-action-prettier@515af15
+        uses: recitalsoftware/reviewdog-action-prettier@515af15b62f88daec74c7d93d1c29b62dd0b8e11
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-annotations
