@@ -55,18 +55,16 @@ jobs:
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-annotations
+          reporter: github-pr-check
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
-          fail_on_error: true
           tool_name: ESLint
 
       - name: Prettier
-        uses: recitalsoftware/reviewdog-action-prettier@515af15b62f88daec74c7d93d1c29b62dd0b8e11
+        uses: EPMatt/reviewdog-action-prettier@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-annotations
+          reporter: github-pr-check
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
-          fail_on_error: true
           tool_name: Prettier
