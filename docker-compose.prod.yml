@@ -7,6 +7,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      NEXTAUTH_SECRET: secret
+      NEXTAUTH_URL: http://localhost:3000/api/auth
+    restart: unless-stopped
   db:
     image: postgres:16.0-alpine
     environment:
@@ -15,5 +20,3 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./db:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"

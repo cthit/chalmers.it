@@ -5,7 +5,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
-export default {
+const config = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
     prependData: `@import "@/styles/variables.scss";`
@@ -15,3 +15,5 @@ export default {
     instrumentationHook: true
   }
 };
+
+export default config;

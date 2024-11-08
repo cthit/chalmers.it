@@ -38,7 +38,7 @@ export default class MediaService {
       async () =>
         await writeFile(
           `${mediaPath}/${shaString}.${meta.extension}`,
-          Buffer.from(await file.arrayBuffer())
+          new Uint8Array(await file.arrayBuffer())
         )
     );
 

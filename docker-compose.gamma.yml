@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16.0-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
+  ################## Gamma ##################
+  auth:
+    image: ghcr.io/cthit/gamma:latest
+    environment:
+      ADMIN_SETUP: true
+      COOKIE_DOMAIN: localhost:9090
+      BASE_URL: http://localhost:9090
+      DB_HOST: gamma-db
+      DB_NAME: auth
+      DB_PASSWORD: auth-password
+      DB_USER: auth
+      REDIS_HOST: gamma-redis
+      ROOT_DEBUG_LEVEL: INFO
+      SERVER_PORT: 9090
+      PRODUCTION: false
+      IS_MOCKING: true
+      PROFILE: production
+      UPLOAD_FOLDER: /uploads/
+    volumes:
+      - ./gamma-images:/uploads
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+
+  gamma-redis:
+    image: redis:5.0
+
+  gamma-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_DB: auth
+      POSTGRES_PASSWORD: auth-password
