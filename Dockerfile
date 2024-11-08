@@ -43,8 +43,8 @@ HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
         CMD wget 127.0.0.1:3000/api/heartbeat -q -O - > /dev/null 2>&1
 
 # Copy logger configs
-COPY --chown=nextjs:nodejs next-logger.config.js /app/
-COPY --chown=nextjs:nodejs pino-pretty-transport.js /app/
+COPY --chown=nextjs:nodejs next-logger.config.cjs /app/
+COPY --chown=nextjs:nodejs pino-pretty-transport.cjs /app/
 
 # Copy database schema
 COPY --chown=nextjs:nodejs prisma ./prisma

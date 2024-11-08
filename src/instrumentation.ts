@@ -7,8 +7,6 @@ export async function register() {
     console.log('Patching logger');
     await require('pino');
     await require('pino-pretty');
-    await require('colorette');
-    await require('ansis');
     await require('next-logger');
 
     console.log('Scheduling tasks');

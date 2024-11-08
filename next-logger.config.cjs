@@ -1,7 +1,7 @@
 try {
-  require('./pino-pretty-transport');
+  require('./pino-pretty-transport.cjs');
 } catch (e) {
-  console.error('Failed to load pino-pretty-transport.js', e);
+  console.error('Failed to load pino-pretty-transport.cjs', e);
   throw e;
 }
 
@@ -12,7 +12,7 @@ const logger = (defaultConfig) =>
     ...defaultConfig,
     messageKey: 'message',
     transport: {
-      target: './pino-pretty-transport',
+      target: './pino-pretty-transport.cjs',
       options: {
         colorize: true,
         messageKey: 'message'
