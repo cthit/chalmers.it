@@ -33,7 +33,7 @@ ENV MEDIA_PATH=/app/media
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-RUN yarn global add prisma@5.21.1
+RUN yarn global add prisma@5.22.0
 
 # Create media directory
 RUN mkdir -p $MEDIA_PATH
