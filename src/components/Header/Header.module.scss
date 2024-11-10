@@ -48,8 +48,12 @@
   gap: 1.25rem;
 }
 
-.mobilePicture {
-  padding: 0 0 1.5rem 1rem;
+.mobileUser {
+  margin: 0 0 1.5rem 0.75rem !important;
+}
+
+button.mobileUser {
+  margin: 0 1rem 1.5rem 1rem !important;
 }
 
 @media screen and (max-width: #{$header-breakpoint}) {

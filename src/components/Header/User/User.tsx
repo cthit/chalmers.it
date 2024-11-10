@@ -20,7 +20,7 @@ const User = async ({
   const id = session?.user?.id;
 
   return id === undefined ? (
-    <LoginButton locale={locale} />
+    <LoginButton className={className} locale={locale} />
   ) : (
     <LoggedIn
       className={className}

@@ -13,7 +13,7 @@ const Header = ({ locale }: { locale: string }) => {
     <header className={styles.header}>
       <div className={styles.mobile}>
         <NavDrawer>
-          <User locale={locale} className={styles.mobilePicture} />
+          <User locale={locale} className={styles.mobileUser} />
           <Navigation locale={locale} desktop={false} />
           <div className={styles.mobileActions}>
             <ThemeSelector />
