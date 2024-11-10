@@ -5,7 +5,7 @@ import { BsFillSunFill, BsFillMoonFill, BsThreeDots } from 'react-icons/bs';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-const ThemeSelector = () => {
+const ThemeSelector = ({className}: {className?: string}) => {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -15,8 +15,8 @@ const ThemeSelector = () => {
 
   if (!mounted) {
     return (
-      <div className={`${styles.icon} ${styles.loading}`}>
-        <BsThreeDots />
+      <div className={`${styles.icon} ${className}`}>
+        <BsThreeDots className={styles.loading} />
       </div>
     );
   }
@@ -28,7 +28,7 @@ const ThemeSelector = () => {
   };
 
   return (
-    <a className={`${styles.icon} ${styles.toggle}`} onClick={toggleTheme}>
+    <a className={`${styles.icon} ${styles.toggle} ${className}`} onClick={toggleTheme}>
       {isDark ? <BsFillMoonFill /> : <BsFillSunFill />}
     </a>
   );

@@ -11,23 +11,25 @@ import Link from 'next/link';
 const Header = ({ locale }: { locale: string }) => {
   return (
     <header className={styles.header}>
-      <div className={`${styles.mobile}`}>
+      <div className={styles.mobile}>
         <NavDrawer>
+          <User locale={locale} className={styles.mobilePicture} />
           <Navigation locale={locale} desktop={false} />
-          <User locale={locale} />
-          <ThemeSelector />
-          <Link href="/post/search">
-            <SearchIcon />
-          </Link>
+          <div className={styles.mobileActions}>
+            <ThemeSelector />
+            <Link href="/post/search">
+              <SearchIcon />
+            </Link>
+          </div>
         </NavDrawer>
         <EscapeHatch locale={locale} />
       </div>
-      <div className={`${styles.desktop}`}>
+      <div className={styles.desktop}>
         <SearchSwitcher
           locale={locale}
           nav={<Navigation locale={locale} desktop />}
         >
-          <ThemeSelector />
+          <ThemeSelector className={styles.selector} />
           <User locale={locale} />
         </SearchSwitcher>
       </div>
