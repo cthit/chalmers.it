@@ -22,8 +22,8 @@ const Dropdown = ({
   contentClassName,
   ...rest
 }: Props & HTMLAttributes<HTMLDivElement>) => {
-  const [isComponentVisible, setIsComponentVisible] = useState(false);
-  const ref = useComponentClicked((f) => setIsComponentVisible(f));
+  const [isDroppedDown, setIsDroppedDown] = useState(false);
+  const ref = useComponentClicked((f) => setIsDroppedDown(f));
 
   return (
     <div ref={ref} className={`${styles.dropdown} ${className}`} {...rest}>
@@ -32,7 +32,8 @@ const Dropdown = ({
         id={id}
         name="dropdown"
         className={styles.dropdownInput}
-        checked={isComponentVisible}
+        checked={isDroppedDown}
+        readOnly
         hidden
       />
       <label htmlFor={id} className={styles.dropdownLabel}>
