@@ -1,6 +1,9 @@
+'use client';
+
 import { Poppins } from 'next/font/google';
 import styles from './Dropdown.module.scss';
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode, useState } from 'react';
+import useComponentClicked from '@/hooks/componentClicked';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['500'] });
 
@@ -19,13 +22,17 @@ const Dropdown = ({
   contentClassName,
   ...rest
 }: Props & HTMLAttributes<HTMLDivElement>) => {
+  const [isComponentVisible, setIsComponentVisible] = useState(false);
+  const ref = useComponentClicked((f) => setIsComponentVisible(f));
+
   return (
-    <div className={`${styles.dropdown} ${className}`} {...rest}>
+    <div ref={ref} className={`${styles.dropdown} ${className}`} {...rest}>
       <input
-        type="radio"
+        type="checkbox"
         id={id}
         name="dropdown"
         className={styles.dropdownInput}
+        checked={isComponentVisible}
         hidden
       />
       <label htmlFor={id} className={styles.dropdownLabel}>
