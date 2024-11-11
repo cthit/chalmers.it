@@ -2,8 +2,8 @@
 
 import { Poppins } from 'next/font/google';
 import styles from './Dropdown.module.scss';
-import { HTMLAttributes, ReactNode, useState } from 'react';
-import useComponentClicked from '@/hooks/componentClicked';
+import { HTMLAttributes, ReactNode, useRef, useState } from 'react';
+import useClickOutside from '@/hooks/clickOutside';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['500'] });
 
@@ -23,7 +23,8 @@ const Dropdown = ({
   ...rest
 }: Props & HTMLAttributes<HTMLDivElement>) => {
   const [isDroppedDown, setIsDroppedDown] = useState(false);
-  const ref = useComponentClicked((f) => setIsDroppedDown(f));
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => setIsDroppedDown(false));
 
   return (
     <div ref={ref} className={`${styles.dropdown} ${className}`} {...rest}>
@@ -36,7 +37,11 @@ const Dropdown = ({
         readOnly
         hidden
       />
-      <label htmlFor={id} className={styles.dropdownLabel}>
+      <label
+        htmlFor={id}
+        className={styles.dropdownLabel}
+        onClick={() => setIsDroppedDown((d) => !d)}
+      >
         {parent}
       </label>
       <div className={`${styles.dropdownHitbox}`} />
