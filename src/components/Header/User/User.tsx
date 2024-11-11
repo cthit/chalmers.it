@@ -45,15 +45,13 @@ const LoggedIn = ({
       className={className}
       parent={
         <div className={styles.pfpContainer}>
-          <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
-            <FallbackImage
-              src={image}
-              className={styles.pfp}
-              alt="Profile Picture"
-              width="3rem"
-              height="3rem"
-            />
-          </Link>
+          <FallbackImage
+            src={image}
+            className={styles.pfp}
+            alt="Profile Picture"
+            width="3rem"
+            height="3rem"
+          />
         </div>
       }
       id="user-dropdown"
