@@ -11,9 +11,11 @@ export default function useClickOutside(
       }
       handleOnClickOutside(event);
     };
-    document.addEventListener('click', listener);
+    document.addEventListener('mousedown', listener);
+    document.addEventListener('touchstart', listener);
     return () => {
-      document.removeEventListener('click', listener);
+      document.removeEventListener('mousedown', listener);
+      document.removeEventListener('touchstart', listener);
     };
   }, [ref, handleOnClickOutside]);
 }
