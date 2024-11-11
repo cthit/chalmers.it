@@ -10,17 +10,25 @@
   background-color: transparent;
   overflow: hidden;
   padding-bottom: 0.5rem;
+  max-height: 10rem;
 }
 
-.open {
+input:checked + .content {
   max-height: unset;
 }
 
-.closed {
-  max-height: 20rem;
+input:checked ~ .button {
+  .open {
+    display: none;
+  }
+  .close {
+    display: block;
+  }
 }
 
 .button {
+  display: flex;
+  flex-direction: column;
   padding: 0;
   align-items: center;
   width: 100%;
@@ -29,4 +37,11 @@
   cursor: pointer;
   border: none;
   border-top: 2px solid var(--content-border-color);
+
+  .open {
+    display: block;
+  }
+  .close {
+    display: none;
+  }
 }
