@@ -9,36 +9,49 @@ import i18nService from '@/services/i18nService';
 import GammaService from '@/services/gammaService';
 import FallbackImage from '@/components/FallbackImage/FallbackImage';
 
-const User = async ({ locale }: { locale: string }) => {
+const User = async ({
+  locale,
+  className
+}: {
+  locale: string;
+  className?: string;
+}) => {
   const session = await getServerSession(authConfig);
   const id = session?.user?.id;
 
-  return (
-    <div className={styles.user}>
-      {id === undefined ? (
-        <LoginButton locale={locale} />
-      ) : (
-        <LoggedIn image={GammaService.getUserAvatarURL(id)} locale={locale} />
-      )}
-    </div>
+  return id === undefined ? (
+    <LoginButton className={className} locale={locale} />
+  ) : (
+    <LoggedIn
+      className={className}
+      image={GammaService.getUserAvatarURL(id)}
+      locale={locale}
+    />
   );
 };
 
-const LoggedIn = ({ image, locale }: { image: string; locale: string }) => {
+const LoggedIn = ({
+  image,
+  locale,
+  className
+}: {
+  image: string;
+  locale: string;
+  className?: string;
+}) => {
   const l = i18nService.getLocale(locale);
   return (
     <Dropdown
+      className={className}
       parent={
         <div className={styles.pfpContainer}>
-          <Link target="_blank" href={GammaService.gammaUrl ?? ''}>
-            <FallbackImage
-              src={image}
-              className={styles.pfp}
-              alt="Profile Picture"
-              width="3rem"
-              height="3rem"
-            />
-          </Link>
+          <FallbackImage
+            src={image}
+            className={styles.pfp}
+            alt="Profile Picture"
+            width="3rem"
+            height="3rem"
+          />
         </div>
       }
       id="user-dropdown"
