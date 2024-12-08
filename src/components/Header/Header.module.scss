@@ -1,3 +1,7 @@
+.selector {
+  padding: 0 1rem;
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -30,6 +34,26 @@
 
 .mobile {
   display: none;
+  height: 4.75rem;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobileActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.mobileUser {
+  margin: 0 0 1.5rem 0.75rem !important;
+}
+
+button.mobileUser {
+  margin: 0 1rem 1.5rem 1rem !important;
 }
 
 @media screen and (max-width: #{$header-breakpoint}) {
@@ -37,12 +61,7 @@
     display: none;
   }
   .mobile {
-    height: 4.75rem;
-    width: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
   }
   .header {
     padding: 0;

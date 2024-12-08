@@ -5,12 +5,14 @@
   color: var(--text-color);
   height: min(calc(1.5rem + 2.5vw), 2.5rem);
   width: min(calc(1.5rem + 2.5vw), 2.5rem);
+  cursor: pointer;
 }
 
 .drawer {
   position: fixed;
   display: flex;
   flex-direction: row;
+  transition: left 0.5s;
   top: 0;
   left: 0;
   width: 100vw;
@@ -30,23 +32,15 @@
 .content {
   position: absolute;
   background-color: var(--header-color);
+  max-width: 25rem;
   width: 70vw;
   height: 100%;
   z-index: 10;
-  animation: slideIn 0.5s;
   padding: 1.875rem 0;
   display: flex;
   flex-direction: column;
   overflow: scroll;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  transition: left 0.5s;
 }
 
 .overlay {
@@ -54,7 +48,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
-  animation: fadeIn 0.5s;
+  transition: opacity 0.5s;
 }
 
 @keyframes fadeIn {
@@ -66,10 +60,22 @@
   }
 }
 
-.open {
-  display: block;
+.checkbox + .drawer {
+  pointer-events: none;
+  .content {
+    left: -100%;
+  }
+  .overlay {
+    opacity: 0;
+  }
 }
 
-.closed {
-  display: none;
+.checkbox:checked + .drawer {
+  pointer-events: all;
+  .content {
+    left: 0;
+  }
+  .overlay {
+    opacity: 1;
+  }
 }

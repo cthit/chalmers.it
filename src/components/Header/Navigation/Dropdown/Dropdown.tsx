@@ -1,6 +1,9 @@
+'use client';
+
 import { Poppins } from 'next/font/google';
 import styles from './Dropdown.module.scss';
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode, useRef, useState } from 'react';
+import useClickOutside from '@/hooks/clickOutside';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['500'] });
 
@@ -19,16 +22,26 @@ const Dropdown = ({
   contentClassName,
   ...rest
 }: Props & HTMLAttributes<HTMLDivElement>) => {
+  const [isDroppedDown, setIsDroppedDown] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => setIsDroppedDown(false));
+
   return (
-    <div className={`${styles.dropdown} ${className}`} {...rest}>
+    <div ref={ref} className={`${styles.dropdown} ${className}`} {...rest}>
       <input
-        type="radio"
+        type="checkbox"
         id={id}
         name="dropdown"
         className={styles.dropdownInput}
+        checked={isDroppedDown}
+        readOnly
         hidden
       />
-      <label htmlFor={id} className={styles.dropdownLabel}>
+      <label
+        htmlFor={id}
+        className={styles.dropdownLabel}
+        onClick={() => setIsDroppedDown((d) => !d)}
+      >
         {parent}
       </label>
       <div className={`${styles.dropdownHitbox}`} />

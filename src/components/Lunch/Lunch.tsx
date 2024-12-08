@@ -12,7 +12,7 @@ const Lunch = async ({ locale }: { locale: string }) => {
     <ContentPane>
       <h1>Lunch</h1>
       <Divider />
-      <Collapsible>
+      <Collapsible id="lunch">
         {lunch.length === 0 && <p>{l.lunch.nolunch}</p>}
         {lunch.map((restaurant) => (
           <div key={restaurant.name}>
