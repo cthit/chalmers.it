@@ -171,7 +171,7 @@ export default class NewsService {
     const publish =
       edited.scheduledPublish === null && post?.status === PostStatus.SCHEDULED;
 
-    return await prisma.newsPost.update({
+    const updatedPost = await prisma.newsPost.update({
       where: {
         id: edited.id
       },
@@ -187,6 +187,10 @@ export default class NewsService {
           : undefined
       }
     });
+
+    if (publish) NotifyService.notifyNewsPost(updatedPost);
+
+    return updatedPost;
   }
 
   static async remove(id: number) {
