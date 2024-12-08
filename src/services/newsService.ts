@@ -181,6 +181,7 @@ export default class NewsService {
         contentEn: edited.contentEn,
         contentSv: edited.contentSv,
         status: publish ? PostStatus.PUBLISHED : undefined,
+        createdAt: publish ? new Date() : undefined,
         scheduledPublish: updateScheduledPublish
           ? edited.scheduledPublish
           : undefined
