@@ -17,9 +17,15 @@ export async function create(
   divisionGroupId?: number,
   parentId?: number
 ) {
-  if (!(await SessionService.isAdmin())) {
+  if (
+    !(
+      (await SessionService.isPageEditor()) &&
+      (divisionGroupId === null || divisionGroupId === undefined)
+    )
+  ) {
     if (
       divisionGroupId === undefined ||
+      divisionGroupId === null ||
       !(await SessionService.canEditGroupByInternalId(divisionGroupId))
     ) {
       throw new Error('Unauthorized');
@@ -50,7 +56,12 @@ export async function create(
 export async function deletePage(id: number) {
   const divisionGroupId = (await DivisionPageService.getSingleById(id))
     ?.divisionGroupId;
-  if (!(await SessionService.isAdmin())) {
+  if (
+    !(
+      (await SessionService.isAdmin()) ||
+      ((await SessionService.isPageEditor()) && divisionGroupId === null)
+    )
+  ) {
     if (
       divisionGroupId === undefined ||
       divisionGroupId === null ||
@@ -79,11 +90,9 @@ export async function edit(
     throw new Error('Page not found');
   }
 
-  for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
-  }
-
-  if (!(await SessionService.isAdmin())) {
+  if (
+    !((await SessionService.isPageEditor()) && page.divisionGroupId === null)
+  ) {
     if (
       page.divisionGroupId === null ||
       !(await SessionService.canEditGroupByInternalId(page.divisionGroupId))
@@ -91,6 +100,11 @@ export async function edit(
       throw new Error('Unauthorized');
     }
   }
+
+  for (const file of files.getAll('file') as unknown as File[]) {
+    await MediaService.save(file, Object.values(MediaType));
+  }
+
   await DivisionPageService.edit(
     id,
     titleEn,
