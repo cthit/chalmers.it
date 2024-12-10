@@ -12,7 +12,7 @@
         buildInputs = with pkgs; [
           nodejs_20
           nodePackages.prisma
-          pnpm_8
+          pnpm
           openssl
           prisma-engines
         ];
