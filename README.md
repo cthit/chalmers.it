@@ -51,7 +51,7 @@ This project uses environment variables to configure its behavior.
 The following environment variables are used:
 
 | Variable                  | Description                                                                                  | Example Value                                                          |
-|---------------------------|----------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| ------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | DATABASE_URL              | Database connection URL                                                                      | `postgresql://postgres:postgres@localhost:5432/postgres?schema=public` |
 | GAMMA_API_KEY_ID          | Gamma info API key ID                                                                        | `api-key-id-uuid-here`                                                 |
 | GAMMA_API_KEY_TOKEN       | Gamma info API token                                                                         | `token`                                                                |
@@ -63,6 +63,6 @@ The following environment variables are used:
 | NEXTAUTH_URL              | URL to the NextAuth API                                                                      | `http://localhost:3000/api/auth`                                       |
 | MEDIA_PATH                | Path to store media                                                                          | `./media`                                                              |
 | ACTIVE_GROUP_TYPES        | Comma-separated list of group types that are considered active                               | `committee,society`                                                    |
-| ADMIN_GROUPS              | Comma-separated list of groups that are considered admin groups                              | `styrit,digit`                                                               |
-| PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | 'snit,motespresidit'                                                               |
+| ADMIN_GROUPS              | Comma-separated list of groups that are considered admin groups                              | `styrit,digit`                                                         |
+| PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
