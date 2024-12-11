@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   _req: NextRequest,
-  ctx: { params: { file: string[] } }
+  ctx: { params: Promise<{ file: string[] }> }
 ) {
-  const res = await MediaService.load(ctx.params.file.join('/'));
+  const res = await MediaService.load((await ctx.params).file.join('/'));
   if (res === null)
     return new NextResponse(null, { status: 404, statusText: 'Not Found' });
 

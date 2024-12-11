@@ -6,11 +6,17 @@ import i18nService from '@/services/i18nService';
 
 export const revalidate = 3600;
 
-export default function Home({
-  params: { locale }
-}: {
-  params: { locale: string };
-}) {
+export default async function Home(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   return (
     <main>
       <ThreePaneLayout

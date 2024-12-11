@@ -18,7 +18,7 @@ const Lunch = async ({ locale }: { locale: string }) => {
           <div key={restaurant.name}>
             <h2>{restaurant.name}</h2>
             {(en ? restaurant.meals.en : restaurant.meals.sv).map((meal) => (
-              <div key={meal.title}>
+              <div key={meal.summary}>
                 <h3>{meal.title}</h3>
                 <p>{meal.summary}</p>
               </div>
