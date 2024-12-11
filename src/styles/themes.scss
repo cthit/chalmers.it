@@ -1,8 +1,8 @@
-@import './colors.scss';
-@import './theme-toggle.scss';
+@use 'colors.scss' as *;
+@use 'theme-toggle.scss';
 
 :root {
-  @include light {
+  @include theme-toggle.light {
     --text-color: #{$darkgray-900};
     --text-hover-color: #{$turquoise-700};
     --link-color: #13aaea;
@@ -21,7 +21,7 @@
     --calendar-event-color: #{$turquoise-600};
   }
 
-  @include dark {
+  @include theme-toggle.dark {
     --text-color: #{$lightgray-200};
     --text-hover-color: #{$turquoise-300};
     --link-color: #{$turquoise-600};

@@ -1,3 +1,4 @@
+@use "sass:selector" as *;
 @mixin light() {
   @media (prefers-color-scheme: light) {
     @at-root #{selector-append(&, ':not([data-theme=light]):not([data-theme=dark])')} {
