@@ -6,6 +6,18 @@ import SessionService from '@/services/sessionService';
 import MediaService from '@/services/mediaService';
 import { MediaType } from '@/services/fileService';
 
+async function checkAuthorization(divisionGroupId?: number | null) {
+  const isPageEditor = await SessionService.isPageEditor();
+  const canEditGroup =
+    divisionGroupId !== undefined && divisionGroupId !== null
+      ? await SessionService.canEditGroupByInternalId(divisionGroupId)
+      : true;
+
+  if (!isPageEditor && !canEditGroup) {
+    throw new Error('Unauthorized');
+  }
+}
+
 export async function create(
   titleEn: string,
   titleSv: string,
@@ -17,14 +29,7 @@ export async function create(
   divisionGroupId?: number,
   parentId?: number
 ) {
-  if (!(await SessionService.isAdmin())) {
-    if (
-      divisionGroupId === undefined ||
-      !(await SessionService.canEditGroupByInternalId(divisionGroupId))
-    ) {
-      throw new Error('Unauthorized');
-    }
-  }
+  await checkAuthorization(divisionGroupId);
 
   for (const file of files.getAll('file') as unknown as File[]) {
     await MediaService.save(file, Object.values(MediaType));
@@ -50,15 +55,12 @@ export async function create(
 export async function deletePage(id: number) {
   const divisionGroupId = (await DivisionPageService.getSingleById(id))
     ?.divisionGroupId;
-  if (!(await SessionService.isAdmin())) {
-    if (
-      divisionGroupId === undefined ||
-      divisionGroupId === null ||
-      !(await SessionService.canEditGroupByInternalId(divisionGroupId))
-    ) {
-      throw new Error('Unauthorized');
-    }
+  const isAdmin = await SessionService.isAdmin();
+
+  if (!isAdmin) {
+    await checkAuthorization(divisionGroupId);
   }
+
   await DivisionPageService.delete(id);
   redirect('/groups');
 }
@@ -79,18 +81,12 @@ export async function edit(
     throw new Error('Page not found');
   }
 
+  await checkAuthorization(page.divisionGroupId);
+
   for (const file of files.getAll('file') as unknown as File[]) {
     await MediaService.save(file, Object.values(MediaType));
   }
 
-  if (!(await SessionService.isAdmin())) {
-    if (
-      page.divisionGroupId === null ||
-      !(await SessionService.canEditGroupByInternalId(page.divisionGroupId))
-    ) {
-      throw new Error('Unauthorized');
-    }
-  }
   await DivisionPageService.edit(
     id,
     titleEn,

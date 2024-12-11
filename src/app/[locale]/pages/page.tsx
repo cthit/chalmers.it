@@ -24,14 +24,17 @@ export default async function Groups({
 }
 
 const Pages = async ({ locale }: { locale: string }) => {
-  const isAdmin = await SessionService.isAdmin();
+  const isPageEditor = await SessionService.isPageEditor();
   const l = i18nService.getLocale(locale);
   const en = locale === 'en';
+  console.log(isPageEditor);
 
   return (
     <ContentPane>
       <h2>{l.pages.about}</h2>
-      {isAdmin && <ActionLink href="/pages/new">{l.pages.create}</ActionLink>}
+      {isPageEditor && (
+        <ActionLink href="/pages/new">{l.pages.create}</ActionLink>
+      )}
       <Divider />
       <ul className={styles.links}>
         <DivisionPages en={en} slug={'/pages'} />

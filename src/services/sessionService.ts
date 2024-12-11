@@ -59,7 +59,7 @@ export default class SessionService {
   static async isAdmin(s?: Session | null) {
     const session = s ?? (await SessionService.getSession());
 
-    const adminGroups = (process.env.ADMIN_GROUPS || 'styrit').split(',');
+    const adminGroups = (process.env.ADMIN_GROUPS || 'styrit,digit').split(',');
     const groups = SessionService.getActiveGroups();
 
     return session?.user?.id
@@ -78,6 +78,22 @@ export default class SessionService {
     return session?.user?.id
       ? (await groups).some(
           (g) => g.superGroup!.name === corporateRelationsGroup
+        )
+      : false;
+  }
+
+  static async isPageEditor(s?: Session | null) {
+    const session = s ?? (await SessionService.getSession());
+    if (await this.isAdmin(session)) return true;
+
+    const pageEditorGroups = (
+      process.env.PAGE_EDITOR_GROUPS || 'snit,motespresidit'
+    ).split(',');
+    const groups = SessionService.getActiveGroups();
+
+    return session?.user?.id
+      ? (await groups).some((g) =>
+          pageEditorGroups.includes(g.superGroup!.name)
         )
       : false;
   }
