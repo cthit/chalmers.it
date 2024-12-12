@@ -87,7 +87,7 @@ export default class SessionService {
     if (await this.isAdmin(session)) return true;
 
     const pageEditorGroups = (
-      process.env.PAGE_EDITOR_GROUPS || 'snit,motespresidit'
+      process.env.PAGE_EDITOR_GROUPS ?? 'snit,motespresidit'
     ).split(',');
     const groups = SessionService.getActiveGroups();
 
