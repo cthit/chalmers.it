@@ -59,7 +59,7 @@ export default class SessionService {
   static async isAdmin(s?: Session | null) {
     const session = s ?? (await SessionService.getSession());
 
-    const adminGroups = (process.env.ADMIN_GROUPS || 'styrit,digit').split(',');
+    const adminGroups = (process.env.ADMIN_GROUPS ?? 'styrit,digit').split(',');
     const groups = SessionService.getActiveGroups();
 
     return session?.user?.id
