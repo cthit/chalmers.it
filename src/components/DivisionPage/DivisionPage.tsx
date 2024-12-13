@@ -15,11 +15,12 @@ export default async function DivisionPage(
   id?: number,
   gammaSuperGroupId?: string
 ) {
+  const isPageEditor = await SessionService.isPageEditor();
   const isAdmin = await SessionService.isAdmin();
   const canEdit =
     id && gammaSuperGroupId
       ? await SessionService.canEditGroup(gammaSuperGroupId).catch(() => false)
-      : isAdmin;
+      : isPageEditor;
 
   const isEditing = slug[slug.length - 1] === 'edit';
   return isEditing && canEdit
