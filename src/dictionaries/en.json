@@ -105,7 +105,9 @@
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "comingEvents": "Coming Events",
+    "ongoing": "Ongoing"
   },
   "groups": {
     "members": "Current members",

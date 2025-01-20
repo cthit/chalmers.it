@@ -105,7 +105,9 @@
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
-    "subscribe": "Prenumerera"
+    "subscribe": "Prenumerera",
+    "comingEvents": "Kommande evenemang",
+    "ongoing": "Pågående"
   },
   "groups": {
     "members": "Nuvarande medlemmar",
