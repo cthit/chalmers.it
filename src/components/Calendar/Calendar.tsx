@@ -10,10 +10,7 @@ import EventService from '@/services/eventService';
 const Calendar = async ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
   const events = await getAllEvents();
-  const nextEvents = (await EventService.getAll())
-    .sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
-    .filter((event) => event.endTime > new Date())
-    .slice(0, 3);
+  const nextEvents = await EventService.getUpcoming(3);
 
   return (
     <ContentPane className={styles.centered}>
@@ -34,15 +31,24 @@ const Calendar = async ({ locale }: { locale: string }) => {
             <li key={event.id}>
               <h2 className={styles.upcomingEventTitle}>
                 {l.en ? event.titleEn : event.titleSv}
+                {ongoing && (
+                  <>
+                    <span className={styles.ongoingBullet}> &bull; </span>
+                    <span className={styles.ongoingText}>
+                      {l.events.ongoing}
+                    </span>
+                  </>
+                )}
               </h2>
               <p className={styles.upcomingEventDetails}>
-                {i18nService.formatDate(event.startTime, true)}
-                {event.location && ', ' + event.location}{' '}
-                {ongoing && `(${l.events.ongoing})`}
+                {i18nService.formatDate(event.startTime, true)} -{' '}
+                {i18nService.formatTime(event.endTime)}
+                {event.location && ' • ' + event.location}
               </p>
             </li>
           );
         })}
+        {nextEvents.length === 0 && <p>{l.events.noEvents}</p>}
       </ul>
     </ContentPane>
   );

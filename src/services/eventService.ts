@@ -5,6 +5,21 @@ export default class EventService {
     return new Date(d).setHours(0, 0, 0, 0) - d.getTimezoneOffset() * 60 * 1000;
   }
 
+  static async getUpcoming(max: number = 3) {
+    const now = new Date();
+    return await prisma.event.findMany({
+      where: {
+        endTime: {
+          gt: now
+        }
+      },
+      orderBy: {
+        startTime: 'asc'
+      },
+      take: max
+    });
+  }
+
   static async getAll() {
     return await prisma.event.findMany();
   }

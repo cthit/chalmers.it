@@ -8,10 +8,23 @@
 }
 
 .upcomingEventsTitle {
+  margin-top: 0.4rem;
+  margin-bottom: 0;
   font-size: 1.5rem;
 }
 
+.ongoingText,
+.ongoingBullet {
+  font-size: var(--text-small);
+  font-weight: normal;
+}
+
+.ongoingText {
+  color: var(--link-color);
+}
+
 .upcomingEventTitle {
+  margin-top: 0.3rem;
   font-size: var(--text-normal);
 }
 

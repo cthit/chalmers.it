@@ -98,6 +98,7 @@
   },
   "events": {
     "events": "Evenemang",
+    "noEvents": "Inga evenemang att visa",
     "start": "Start",
     "end": "Slut",
     "fullDay": "Heldag",
