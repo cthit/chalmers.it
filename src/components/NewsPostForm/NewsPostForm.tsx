@@ -69,7 +69,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
-  const [group, setGroup] = useState(newsPost.group ?? 'self');
+  const [group, setGroup] = useState(newsPost.group ?? '');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
   const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
@@ -115,7 +115,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     toast(l.editor.linkCopied, { type: 'success' });
   };
 
-  async function send() {
+  async function send(e: React.FormEvent) {
+    e.preventDefault();
     try {
       const formData = new FormData();
       for (const file of Object.values(uploadQueue)) {
@@ -228,175 +229,199 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     <>
       <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
       <Divider />
-      <h2>{l.editor.createAs}</h2>
-      <DropdownList value={group} onChange={(e) => setGroup(e.target.value)}>
-        <option value="self">{l.editor.self}</option>
-        {newsPost.groups.map((group) => (
-          <option key={group.superGroup!.id} value={group.superGroup!.id}>
-            {group.superGroup?.prettyName ?? group.prettyName}
-          </option>
-        ))}
-      </DropdownList>
-
-      <h2>{l.editor.title} (Eng)</h2>
-      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>{l.editor.content} (Eng)</h2>
-      <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentEn}
-        onChange={(e) => setContentEn(e.target.value)}
-      />
-
-      <h2>{l.editor.title} (Sv)</h2>
-      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>{l.editor.content} (Sv)</h2>
-      <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentSv}
-        onChange={(e) => setContentSv(e.target.value)}
-      />
-      <br />
-      <h2>{l.editor.uploaded}</h2>
-      {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noFiles}</p>}
-      <ul>
-        {Object.entries(uploadQueue).map(([sha256, file]) => (
-          <li className={style.fileActions} key={sha256}>
-            <p>{file.name}</p>{' '}
-            <ActionButton
-              onClick={() => {
-                copyFile(sha256);
-              }}
-            >
-              {l.editor.copyLink}
-            </ActionButton>{' '}
-            <ActionButton
-              onClick={() => {
-                delFile(sha256);
-              }}
-            >
-              {l.general.delete}
-            </ActionButton>
-          </li>
-        ))}
-      </ul>
-      <ActionButton onClick={() => fileInputRef.current!.click()}>
-        {l.editor.selectFiles}
-      </ActionButton>
-      <input
-        onChange={(e) => dropFiles(e.target.files!)}
-        multiple
-        ref={fileInputRef}
-        type="file"
-        hidden
-      />
-
-      <br />
-      <h2>{l.editor.publish}</h2>
-      <div className={style.actions}>
+      <form onSubmit={send}>
+        <h2>{l.editor.createAs}</h2>
         <DropdownList
-          value={publish}
-          onChange={(e) => setPublish(e.target.value)}
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+          required
         >
-          <option value="now">{l.editor.now}</option>
-          <option
-            disabled={newsPost.scheduledPublish === null}
-            value="schedule"
-          >
-            {l.editor.scheduled}
+          <option disabled hidden value="">
+            {l.editor.selectGroup}
           </option>
+          <option value="self">{l.editor.self}</option>
+          {newsPost.groups.map((group) => (
+            <option key={group.superGroup!.id} value={group.superGroup!.id}>
+              {group.superGroup?.prettyName ?? group.prettyName}
+            </option>
+          ))}
         </DropdownList>
-        <DatePicker
-          hidden={publish === 'now'}
-          value={scheduledFor}
-          onChange={(e) => setScheduledFor(e)}
+
+        <h2>{l.editor.title} (Eng)</h2>
+        <TextArea
+          value={titleEn}
+          onChange={(e) => setTitleEn(e.target.value)}
+          required
         />
-      </div>
+        <h2>{l.editor.content} (Eng)</h2>
+        <MarkdownEditor
+          onDragOver={(e) => {
+            e.preventDefault();
+          }}
+          onDrop={(e) => dropFiles(e.dataTransfer.files)}
+          value={contentEn}
+          onChange={(e) => setContentEn(e.target.value)}
+          required
+        />
 
-      <br />
-      <h2>{l.events.events}</h2>
-
-      <ul>
-        {events.map((e, i) => (
-          <li key={i} className={style.listItem}>
-            <h3>{l.editor.title} (Eng)</h3>
-            <TextArea
-              value={e.titleEn}
-              onChange={(e) => editEventState(i, 'titleEn', e.target.value)}
-            />
-
-            <h3>{l.editor.title} (Sv)</h3>
-            <TextArea
-              value={e.titleSv}
-              onChange={(e) => editEventState(i, 'titleSv', e.target.value)}
-            />
-
-            <h3>{l.events.start}</h3>
-            <DatePicker
-              value={e.startTime}
-              onChange={(d) => editEventState(i, 'startTime', d)}
-            />
-            <h3>{l.events.end}</h3>
-            <DatePicker
-              disabled={e.fullDay}
-              value={e.endTime}
-              onChange={(d) => editEventState(i, 'endTime', d)}
-            />
-            <br />
-            <label key={i} htmlFor={'fullDay' + i}>
-              {l.events.fullDay}{' '}
-            </label>
-            <input
-              type="checkbox"
-              id={'fullDay' + i}
-              name="fullDay"
-              checked={e.fullDay}
-              onChange={(e) => editEventState(i, 'fullDay', e.target.checked)}
-            />
-            <h3>{l.events.location}</h3>
-            <TextArea
-              value={e.location ?? ''}
-              onChange={(e) => editEventState(i, 'location', e.target.value)}
-            />
-
-            <br />
-            <br />
-            <ActionButton onClick={() => removeEventState(i, e.id)}>
-              {l.events.remove}
-            </ActionButton>
-          </li>
-        ))}
-      </ul>
-
-      {events.length === 0 ? (
-        <p>{l.events.empty}</p>
-      ) : (
-        <>
-          <br />
-          <br />
-        </>
-      )}
-      <ActionButton
-        onClick={() => {
-          setEvents([...events, { ...emptyEvent }]);
-        }}
-      >
-        {l.events.add}
-      </ActionButton>
-
-      <br />
-      <br />
-      <div className={style.actions}>
-        <ActionButton onClick={send}>
-          {newsPost.id !== undefined ? l.general.save : l.general.create}
+        <h2>{l.editor.title} (Sv)</h2>
+        <TextArea
+          value={titleSv}
+          onChange={(e) => setTitleSv(e.target.value)}
+          required
+        />
+        <h2>{l.editor.content} (Sv)</h2>
+        <MarkdownEditor
+          onDragOver={(e) => {
+            e.preventDefault();
+          }}
+          onDrop={(e) => dropFiles(e.dataTransfer.files)}
+          value={contentSv}
+          onChange={(e) => setContentSv(e.target.value)}
+          required
+        />
+        <br />
+        <h2>{l.editor.uploaded}</h2>
+        {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noFiles}</p>}
+        <ul>
+          {Object.entries(uploadQueue).map(([sha256, file]) => (
+            <li className={style.fileActions} key={sha256}>
+              <p>{file.name}</p>{' '}
+              <ActionButton
+                onClick={() => {
+                  copyFile(sha256);
+                }}
+              >
+                {l.editor.copyLink}
+              </ActionButton>{' '}
+              <ActionButton
+                onClick={() => {
+                  delFile(sha256);
+                }}
+              >
+                {l.general.delete}
+              </ActionButton>
+            </li>
+          ))}
+        </ul>
+        <ActionButton onClick={() => fileInputRef.current!.click()}>
+          {l.editor.selectFiles}
         </ActionButton>
-        <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
-      </div>
+        <input
+          onChange={(e) => dropFiles(e.target.files!)}
+          multiple
+          ref={fileInputRef}
+          type="file"
+          hidden
+        />
+
+        <br />
+        <h2>{l.editor.publish}</h2>
+        <div className={style.actions}>
+          <DropdownList
+            value={publish}
+            onChange={(e) => setPublish(e.target.value)}
+            required
+          >
+            <option value="now">{l.editor.now}</option>
+            <option
+              disabled={newsPost.scheduledPublish === null}
+              value="schedule"
+            >
+              {l.editor.scheduled}
+            </option>
+          </DropdownList>
+          <DatePicker
+            hidden={publish === 'now'}
+            value={scheduledFor}
+            onChange={(e) => setScheduledFor(e)}
+          />
+        </div>
+
+        <br />
+        <h2>{l.events.events}</h2>
+
+        <ul>
+          {events.map((e, i) => (
+            <li key={i} className={style.listItem}>
+              <h3>{l.editor.title} (Eng)</h3>
+              <TextArea
+                value={e.titleEn}
+                onChange={(e) => editEventState(i, 'titleEn', e.target.value)}
+                required
+              />
+
+              <h3>{l.editor.title} (Sv)</h3>
+              <TextArea
+                value={e.titleSv}
+                onChange={(e) => editEventState(i, 'titleSv', e.target.value)}
+                required
+              />
+
+              <h3>{l.events.start}</h3>
+              <DatePicker
+                value={e.startTime}
+                onChange={(d) => editEventState(i, 'startTime', d)}
+              />
+              <h3>{l.events.end}</h3>
+              <DatePicker
+                disabled={e.fullDay}
+                value={e.endTime}
+                onChange={(d) => editEventState(i, 'endTime', d)}
+              />
+              <br />
+              <label key={i} htmlFor={'fullDay' + i}>
+                {l.events.fullDay}{' '}
+              </label>
+              <input
+                type="checkbox"
+                id={'fullDay' + i}
+                name="fullDay"
+                checked={e.fullDay}
+                onChange={(e) => editEventState(i, 'fullDay', e.target.checked)}
+              />
+              <h3>{l.events.location}</h3>
+              <TextArea
+                value={e.location ?? ''}
+                onChange={(e) => editEventState(i, 'location', e.target.value)}
+              />
+
+              <br />
+              <br />
+              <ActionButton onClick={() => removeEventState(i, e.id)}>
+                {l.events.remove}
+              </ActionButton>
+            </li>
+          ))}
+        </ul>
+
+        {events.length === 0 ? (
+          <p>{l.events.empty}</p>
+        ) : (
+          <>
+            <br />
+            <br />
+          </>
+        )}
+        <ActionButton
+          onClick={() => {
+            setEvents([...events, { ...emptyEvent }]);
+          }}
+        >
+          {l.events.add}
+        </ActionButton>
+
+        <br />
+        <br />
+        <div className={style.actions}>
+          <ActionButton type="submit">
+            {newsPost.id !== undefined ? l.general.save : l.general.create}
+          </ActionButton>
+          <ActionButton onClick={preview}>
+            {l.editor.previewAction}
+          </ActionButton>
+        </div>
+      </form>
 
       <Popup
         modal
