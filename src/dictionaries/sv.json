@@ -50,7 +50,8 @@
   },
   "editor": {
     "createAs": "Skapa som",
-    "self": "Mig själv",
+    "selectGroup": "Välj en grupp",
+    "self": "Ingen grupp",
     "title": "Titel",
     "content": "Innehåll",
     "description": "Beskrivning",

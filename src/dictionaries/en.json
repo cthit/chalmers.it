@@ -50,7 +50,8 @@
   },
   "editor": {
     "createAs": "Create as",
-    "self": "Myself",
+    "selectGroup": "Select group",
+    "self": "No group",
     "title": "Title",
     "content": "Content",
     "description": "Description",
