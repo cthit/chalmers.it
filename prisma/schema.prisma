@@ -79,7 +79,7 @@ model Event {
   location      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  NewsPost      NewsPost? @relation(fields: [newsPostId], references: [id])
+  NewsPost      NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
   newsPostId    Int?
 }
 
