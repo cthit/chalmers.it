@@ -288,6 +288,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             <li className={style.fileActions} key={sha256}>
               <p>{file.name}</p>{' '}
               <ActionButton
+                type="button"
                 onClick={() => {
                   copyFile(sha256);
                 }}
@@ -295,6 +296,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                 {l.editor.copyLink}
               </ActionButton>{' '}
               <ActionButton
+                type="button"
                 onClick={() => {
                   delFile(sha256);
                 }}
@@ -304,7 +306,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             </li>
           ))}
         </ul>
-        <ActionButton onClick={() => fileInputRef.current!.click()}>
+        <ActionButton
+          type="button"
+          onClick={() => fileInputRef.current!.click()}
+        >
           {l.editor.selectFiles}
         </ActionButton>
         <input
@@ -388,7 +393,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
               <br />
               <br />
-              <ActionButton onClick={() => removeEventState(i, e.id)}>
+              <ActionButton
+                type="button"
+                onClick={() => removeEventState(i, e.id)}
+              >
                 {l.events.remove}
               </ActionButton>
             </li>
@@ -404,6 +412,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           </>
         )}
         <ActionButton
+          type="button"
           onClick={() => {
             setEvents([...events, { ...emptyEvent }]);
           }}
@@ -417,7 +426,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <ActionButton type="submit">
             {newsPost.id !== undefined ? l.general.save : l.general.create}
           </ActionButton>
-          <ActionButton onClick={preview}>
+          <ActionButton type="button" onClick={preview}>
             {l.editor.previewAction}
           </ActionButton>
         </div>
