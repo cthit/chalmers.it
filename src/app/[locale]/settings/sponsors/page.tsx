@@ -4,6 +4,7 @@ import ActionLink from '@/components/ActionButton/ActionLink';
 import RemoveSponsorButton from './RemoveSponsorButton';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';
+import { SponsorType } from '@prisma/client';
 
 export default async function Page({
   params: { locale }
@@ -34,7 +35,11 @@ export default async function Page({
           {sponsors.map((sponsor) => (
             <tr key={sponsor.id}>
               <td>{sponsor.id}</td>
-              <td>{sponsor.type}</td>
+              <td>
+                {sponsor.type === SponsorType.MAIN_PARTNER
+                  ? l.sponsors.main
+                  : l.sponsors.partner}
+              </td>
               <td>{sponsor.nameSv}</td>
               <td>
                 <ActionLink target="_blank" href={sponsor.url}>
