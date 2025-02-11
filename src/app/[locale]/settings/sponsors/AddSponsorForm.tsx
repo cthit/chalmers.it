@@ -92,15 +92,17 @@ const AddSponsorForm = ({ locale }: { locale: string }) => {
         </form>
       </td>
       <td>
-        <input
-          type="file"
-          id="sponsorImage"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="file"
+            id="sponsorImage"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </form>
       </td>
       <td>
-        <ActionButton>{l.general.add}</ActionButton>
+        <ActionButton onClick={handleSubmit}>{l.general.add}</ActionButton>
       </td>
     </tr>
   );
