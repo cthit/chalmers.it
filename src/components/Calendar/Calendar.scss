@@ -9,7 +9,9 @@
   }
 
   .react-calendar__month-view__days__day--neighboringMonth {
-    background-color: var(--calendar-neighboring-color);
+    .CalendarTiles_dateTile__QYHWt {
+      background-color: var(--calendar-neighboring-color);
+    }
   }
 
   .react-calendar__navigation {
