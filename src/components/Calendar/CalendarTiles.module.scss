@@ -5,20 +5,24 @@
   overflow: visible !important;
   position: relative;
   padding: 0.125rem;
-  background-color: transparent;
+  background-color: var(--content-background-color);
 }
 
 .tileEvent .dateTile {
   border-top: solid var(--tile-event-border-height) var(--calendar-event-color);
-  border-bottom: solid var(--tile-event-border-height)
-    var(--calendar-current-color);
-  &:hover {
-    border-bottom-color: transparent;
-  }
+  border-bottom: solid var(--tile-event-border-height) transparent;
 }
 
 .event {
   text-align: left;
+}
+
+.today .dateTile {
+  background-color: var(--calendar-event-color);
+}
+
+.today.tileEvent .dateTile {
+  border-top-color: var(--calendar-event-today-color);
 }
 
 .dropdown {
@@ -40,8 +44,4 @@
   width: 100%;
   height: 100%;
   background-color: var(--calendar-current-color);
-
-  &:hover {
-    background-color: transparent;
-  }
 }

@@ -33,11 +33,12 @@ const CalendarClient = ({
 
   const mapTileClass = useCallback(
     ({ date }: TileArgs) => {
+      const dayKey = EventService.stripTime(date);
+      const todayKey = EventService.stripTime(new Date());
       return [
         styles.tile,
-        ...((events[EventService.stripTime(date)] || []).length > 0
-          ? [styles.tileEvent]
-          : [])
+        ...(events[dayKey]?.length > 0 ? [styles.tileEvent] : []),
+        ...(dayKey === todayKey ? [styles.today] : [])
       ];
     },
     [events]
