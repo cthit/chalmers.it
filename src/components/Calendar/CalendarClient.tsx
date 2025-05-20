@@ -15,7 +15,8 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function DateTile({ date }: DateTileArgs) {
-  return <div className={`${styles.dateTile} ${styles.date}`} ><p>{date.getDate()}</p></div>;
+  const classNames = `${styles.dateTile} ${styles.date}`;
+  return <div className={classNames} ><p>{date.getDate()}</p></div>;
 };
 
 const CalendarClient = ({
@@ -49,6 +50,7 @@ const CalendarClient = ({
       if (view !== 'month') {
         return null;
       }
+      const classNames = `${styles.event} ${styles.dropdown}`;
       return events.hasOwnProperty(EventService.stripTime(date)) ? (
         <Dropdown
           className={styles.dropdown}
@@ -60,16 +62,21 @@ const CalendarClient = ({
           id={EventService.stripTime(date).toString()}
         >
           {
-            events[EventService.stripTime(date)]?.map((event) => (
-              <div key={event.id} className={`${styles.event} ${styles.dropdown}`}>
-                <h3>{en ? event.titleEn : event.titleSv}</h3>
-                <p>
-                  {event.fullDay
-                    ? l.events.fullDay
-                    : `${i18nService.formatTime(event.startTime)} - ${i18nService.formatTime(event.endTime)}`}
-                </p>
-              </div>
-            ))
+            events[EventService.stripTime(date)]?.map((event) => {
+              const i18nFormat = i18nService.formatTime;
+              const startTime = i18nFormat(event.startTime);
+              const endTime = i18nFormat(event.endTime);
+              return (
+                <div key={event.id} className={classNames}>
+                  <h3>{en ? event.titleEn : event.titleSv}</h3>
+                  <p>
+                    {event.fullDay
+                      ? l.events.fullDay
+                      : `${startTime} - ${endTime}`}
+                  </p>
+                </div>
+              )
+            })
           }
         </Dropdown >
       ) : (
