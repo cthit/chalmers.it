@@ -10,14 +10,18 @@ import EventService from '@/services/eventService';
 
 type DateTileArgs = {
   date: Date;
-}
+};
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function DateTile({ date }: DateTileArgs) {
   const classNames = `${styles.dateTile} ${styles.date}`;
-  return <div className={classNames} ><p>{date.getDate()}</p></div>;
-};
+  return (
+    <div className={classNames}>
+      <p>{date.getDate()}</p>
+    </div>
+  );
+}
 
 const CalendarClient = ({
   locale,
@@ -56,31 +60,29 @@ const CalendarClient = ({
           className={styles.dropdown}
           parent={
             <div className={styles.date}>
-              <DateTile date={date}></DateTile>
-            </div >
+              <DateTile date={date} />
+            </div>
           }
           id={EventService.stripTime(date).toString()}
         >
-          {
-            events[EventService.stripTime(date)]?.map((event) => {
-              const i18nFormat = i18nService.formatTime;
-              const startTime = i18nFormat(event.startTime);
-              const endTime = i18nFormat(event.endTime);
-              return (
-                <div key={event.id} className={classNames}>
-                  <h3>{en ? event.titleEn : event.titleSv}</h3>
-                  <p>
-                    {event.fullDay
-                      ? l.events.fullDay
-                      : `${startTime} - ${endTime}`}
-                  </p>
-                </div>
-              )
-            })
-          }
-        </Dropdown >
+          {events[EventService.stripTime(date)]?.map((event) => {
+            const i18nFormat = i18nService.formatTime;
+            const startTime = i18nFormat(event.startTime);
+            const endTime = i18nFormat(event.endTime);
+            return (
+              <div key={event.id} className={classNames}>
+                <h3>{en ? event.titleEn : event.titleSv}</h3>
+                <p>
+                  {event.fullDay
+                    ? l.events.fullDay
+                    : `${startTime} - ${endTime}`}
+                </p>
+              </div>
+            );
+          })}
+        </Dropdown>
       ) : (
-        <DateTile date={date}></DateTile>
+        <DateTile date={date} />
       );
     },
     [en, events, l]
