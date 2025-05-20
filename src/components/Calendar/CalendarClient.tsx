@@ -61,7 +61,7 @@ const CalendarClient = ({
         >
           {
             events[EventService.stripTime(date)]?.map((event) => (
-              <div key={event.id} className={styles.event}>
+              <div key={event.id} className={`${styles.event} ${styles.dropdown}`}>
                 <h3>{en ? event.titleEn : event.titleSv}</h3>
                 <p>
                   {event.fullDay

@@ -5,7 +5,7 @@
   overflow: visible !important;
   position: relative;
   padding: 0.125rem;
-  background-color: var(--content-background-color);
+  background-color: transparent;
 }
 
 .tileEvent .dateTile {
@@ -28,7 +28,7 @@
 .dropdown {
   width: 100%;
   height: 100%;
-  text-align: center;
+  background-color: var(--content-background-color);
 }
 
 .date {
@@ -40,7 +40,6 @@
 
 .dateTile {
   border-radius: 0.1rem;
-  background-color: green;
   width: 100%;
   height: 100%;
   background-color: var(--calendar-current-color);
