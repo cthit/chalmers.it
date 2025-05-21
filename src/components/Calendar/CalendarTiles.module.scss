@@ -8,13 +8,16 @@
   background-color: transparent;
 }
 
+.dateTile {
+  border-radius: 0.1rem;
+  width: 100%;
+  height: 100%;
+  background-color: var(--calendar-current-color);
+}
+
 .tileEvent .dateTile {
   border-top: solid var(--tile-event-border-height) var(--calendar-event-color);
   border-bottom: solid var(--tile-event-border-height) transparent;
-}
-
-.event {
-  text-align: left;
 }
 
 .today .dateTile {
@@ -38,9 +41,10 @@
   justify-content: center;
 }
 
-.dateTile {
-  border-radius: 0.1rem;
-  width: 100%;
-  height: 100%;
-  background-color: var(--calendar-current-color);
+.event {
+  text-align: left;
+}
+
+.date-tile {
+  @extend .dateTile;
 }

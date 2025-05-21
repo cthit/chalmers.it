@@ -8,10 +8,8 @@
     }
   }
 
-  .react-calendar__month-view__days__day--neighboringMonth {
-    .CalendarTiles_dateTile__QYHWt {
-      background-color: var(--calendar-neighboring-color);
-    }
+  .react-calendar__month-view__days__day--neighboringMonth .date-tile {
+    background-color: var(--calendar-neighboring-color);
   }
 
   .react-calendar__navigation {

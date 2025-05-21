@@ -15,7 +15,7 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 function DateTile({ date }: DateTileArgs) {
-  const classNames = `${styles.dateTile} ${styles.date}`;
+  const classNames = `${styles.dateTile} ${styles.date} date-tile`;
   return (
     <div className={classNames}>
       <p>{date.getDate()}</p>
