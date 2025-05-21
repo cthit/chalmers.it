@@ -8,8 +8,20 @@ import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
 import EventService from '@/services/eventService';
 
+type DateTileArgs = {
+  date: Date;
+};
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+function DateTile({ date }: DateTileArgs) {
+  const classNames = `${styles.dateTile} ${styles.date} date-tile`;
+  return (
+    <div className={classNames}>
+      <p>{date.getDate()}</p>
+    </div>
+  );
+}
 
 const CalendarClient = ({
   locale,
@@ -26,11 +38,12 @@ const CalendarClient = ({
 
   const mapTileClass = useCallback(
     ({ date }: TileArgs) => {
+      const dayKey = EventService.stripTime(date);
+      const todayKey = EventService.stripTime(new Date());
       return [
         styles.tile,
-        ...((events[EventService.stripTime(date)] || []).length > 0
-          ? [styles.tileEvent]
-          : [])
+        ...(events[dayKey]?.length > 0 ? [styles.tileEvent] : []),
+        ...(dayKey === todayKey ? [styles.today] : [])
       ];
     },
     [events]
@@ -41,29 +54,35 @@ const CalendarClient = ({
       if (view !== 'month') {
         return null;
       }
+      const classNames = `${styles.event} ${styles.dropdown}`;
       return events.hasOwnProperty(EventService.stripTime(date)) ? (
         <Dropdown
           className={styles.dropdown}
           parent={
             <div className={styles.date}>
-              <p>{date.getDate()}</p>
+              <DateTile date={date} />
             </div>
           }
           id={EventService.stripTime(date).toString()}
         >
-          {events[EventService.stripTime(date)]?.map((event) => (
-            <div key={event.id} className={styles.event}>
-              <h3>{en ? event.titleEn : event.titleSv}</h3>
-              <p>
-                {event.fullDay
-                  ? l.events.fullDay
-                  : `${i18nService.formatTime(event.startTime)} - ${i18nService.formatTime(event.endTime)}`}
-              </p>
-            </div>
-          ))}
+          {events[EventService.stripTime(date)]?.map((event) => {
+            const i18nFormat = i18nService.formatTime;
+            const startTime = i18nFormat(event.startTime);
+            const endTime = i18nFormat(event.endTime);
+            return (
+              <div key={event.id} className={classNames}>
+                <h3>{en ? event.titleEn : event.titleSv}</h3>
+                <p>
+                  {event.fullDay
+                    ? l.events.fullDay
+                    : `${startTime} - ${endTime}`}
+                </p>
+              </div>
+            );
+          })}
         </Dropdown>
       ) : (
-        <p>{date.getDate()}</p>
+        <DateTile date={date} />
       );
     },
     [en, events, l]

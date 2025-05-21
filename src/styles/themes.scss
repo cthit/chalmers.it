@@ -19,6 +19,7 @@
     --calendar-current-color: #{$lightgray-400};
     --calendar-neighboring-color: #{$lightgray-300};
     --calendar-event-color: #{$turquoise-600};
+    --calendar-event-today-color: #{$turquoise-800};
   }
 
   @include dark {
@@ -38,6 +39,7 @@
     --calendar-current-color: #{$darkgray-500};
     --calendar-neighboring-color: #{$darkgray-600};
     --calendar-event-color: #{$turquoise-700};
+    --calendar-event-today-color: #{$turquoise-400};
   }
 
   --primary-color: #{$turquoise-500};

@@ -8,7 +8,7 @@
     }
   }
 
-  .react-calendar__month-view__days__day--neighboringMonth {
+  .react-calendar__month-view__days__day--neighboringMonth .date-tile {
     background-color: var(--calendar-neighboring-color);
   }
 
