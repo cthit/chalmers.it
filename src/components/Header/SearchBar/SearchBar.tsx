@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './SearchBar.module.scss';
 import { useRouter } from 'next/navigation';
 
 const SearchBar = () => {
   const router = useRouter();
   const [term, setTerm] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   return (
     <form
       className={styles.searchBarForm}
@@ -16,7 +20,8 @@ const SearchBar = () => {
     >
       <input
         className={styles.expandedSearchBar}
-        type="text"
+        ref={inputRef}
+        type="search"
         placeholder="Search..."
         value={term}
         onChange={(e) => setTerm(e.target.value)}

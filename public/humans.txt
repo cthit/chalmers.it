@@ -13,7 +13,7 @@ Questions, bug reports or suggestions:
 DEVELOPMENT TEAM
 ----------------
 
-Next.js rewrite and redesign developed by digIT 23/24 and digIT 24/25:
+Next.js rewrite and redesign developed by digIT 23/24, digIT 24/25 and digIT 25/26:
 
 - Gustaf "Goose" Asplund
    Development lead
@@ -28,6 +28,14 @@ Next.js rewrite and redesign developed by digIT 23/24 and digIT 24/25:
    digIT 23/24
 
 - Simon "Casino" Westlin Green
+   Interface
+   digIT 24/25
+
+- Susanne "Meep" On Huang
+   Design and interface
+   digIT 25/26
+
+- Hampus "Hero" Siik
    Interface
    digIT 24/25
 
