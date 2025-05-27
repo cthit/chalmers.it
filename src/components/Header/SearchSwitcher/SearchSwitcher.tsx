@@ -3,7 +3,6 @@
 import SearchBar from '../SearchBar/SearchBar';
 import SearchIcon from '../SearchBar/SearchIcon';
 import styles from '../Header.module.scss';
-import EscapeHatch from '../EscapeHatch/EscapeHatch';
 import { useState } from 'react';
 
 const SearchSwitcher = () => {
