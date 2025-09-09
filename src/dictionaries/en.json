@@ -46,7 +46,9 @@
     "deleteError": "Could not delete news post!",
     "loading": "Loading posts",
     "loadEmpty": "No more posts to show",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "listView": "List View",
+    "gridView": "Grid View"
   },
   "editor": {
     "createAs": "Create as",

@@ -46,7 +46,9 @@
     "deleteError": "Kunde inte radera nyhet!",
     "loading": "Laddar inlägg",
     "loadEmpty": "Inga fler inlägg att visa",
-    "loadMore": "Ladda fler"
+    "loadMore": "Ladda fler",
+    "listView": "Listvy",
+    "gridView": "Rutnätsvy"
   },
   "editor": {
     "createAs": "Skapa som",

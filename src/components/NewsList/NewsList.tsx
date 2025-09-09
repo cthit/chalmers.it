@@ -7,7 +7,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import React from 'react';
 import { getData, getPage } from '@/actions/newsList';
-import InfiniteScroller from './InfiniteScroller';
+import NewsClient from './NewsClient';
 
 const NewsList = async ({ locale }: { locale: string }) => {
   try {
@@ -29,28 +29,9 @@ const News = ({
   canPost: boolean;
   locale: string;
 }) => {
-  const l = i18nService.getLocale(locale);
   return (
     <ContentPane>
-      <div className={styles.title}>
-        <h1>{l.news.title}</h1>
-        {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
-      </div>
-      {news.length === 0 && (
-        <>
-          <Divider />
-          <p>{l.news.empty}</p>
-        </>
-      )}
-      {news
-        .filter((p) => p !== undefined)
-        .map((newsPost) => (
-          <React.Fragment key={newsPost!.id}>
-            <Divider />
-            <NewsPost locale={locale} post={newsPost!} />
-          </React.Fragment>
-        ))}
-      <InfiniteScroller page={2} locale={locale} />
+      <NewsClient news={news} canPost={canPost} locale={locale} />
     </ContentPane>
   );
 };

@@ -8,8 +8,16 @@
   font-size: var(--text-large);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .title > h1 {
   flex-grow: 1;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
