@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import NewsPost from './NewsPost/NewsPost';
-import NewsCard from '@/components/NewsCard';
+import NewsCard from './NewsCard/NewsCard';
 import Divider from '../Divider/Divider';
 import InfiniteScroller from './InfiniteScroller';
 import ViewToggle from './ViewToggle';
@@ -52,6 +52,7 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
               {filteredNews.map((newsPost) => (
                 <NewsCard key={newsPost!.id} post={newsPost!} locale={locale} />
               ))}
+              <InfiniteScroller page={2} locale={locale} view={view} wrapInGrid={false} />
             </div>
           ) : (
             filteredNews.map((newsPost) => (
@@ -61,7 +62,7 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
               </React.Fragment>
             ))
           )}
-          <InfiniteScroller page={2} locale={locale} />
+          {view !== 'grid' && <InfiniteScroller page={2} locale={locale} view={view} />}
         </>
       )}
     </>
