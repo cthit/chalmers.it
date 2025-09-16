@@ -1,4 +1,4 @@
-.editor {
+.contentEditable {
   border: none;
   border-radius: 0.5rem;
   overflow-y: scroll;
@@ -15,5 +15,21 @@
   &:focus {
     outline: none;
     border-color: #007bff;
+  }
+}
+
+.editor {
+  :global(.mdxeditor-toolbar) {
+    margin-bottom: 0.25rem;
+    background-color: var(--header-color);
+
+    button {
+      background-color: var(--content-background-color);
+      color: var(--text-color);
+
+      svg {
+        color: var(--text-color);
+      }
+    }
   }
 }
