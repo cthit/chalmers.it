@@ -48,7 +48,7 @@
     "loadEmpty": "No more posts to show",
     "loadMore": "Load more",
     "listView": "List View",
-    "gridView": "Grid View"
+    "cardView": "Card View"
   },
   "editor": {
     "createAs": "Create as",

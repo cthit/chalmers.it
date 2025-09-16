@@ -26,11 +26,11 @@
   }
 
   &.active {
-    background: var(--accent-color);
+    background: var(--news-view-toggle-selected-color);
     color: var(--accent-text-color);
     
     &:hover {
-      background: var(--accent-color-hover);
+      background: var(--news-view-toggle-selected-color);
     }
   }
 

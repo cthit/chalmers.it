@@ -31,11 +31,13 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
   return (
     <>
       <div className={styles.title}>
-        <h1>{l.news.title}</h1>
-        <div className={styles.actions}>
+          <div className={styles.actions}>
           <ViewToggle locale={locale} onViewChange={handleViewChange} initialView={view} />
-          {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
-        </div>
+          </div>
+          <h1>{l.news.title}</h1>
+          <div className={styles.actions}>
+            {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
+          </div>
       </div>
       {news.length === 0 && (
         <>

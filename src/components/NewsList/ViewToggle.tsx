@@ -34,8 +34,8 @@ const ViewToggle = ({ locale, onViewChange, initialView = 'list' }: ViewTogglePr
       <button
         className={`${styles.button} ${currentView === 'grid' ? styles.active : ''}`}
         onClick={() => handleToggle('grid')}
-        title={l.news.gridView}
-        aria-label={l.news.gridView}
+        title={l.news.cardView}
+        aria-label={l.news.cardView}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/>

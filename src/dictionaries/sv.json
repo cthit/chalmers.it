@@ -48,7 +48,7 @@
     "loadEmpty": "Inga fler inlägg att visa",
     "loadMore": "Ladda fler",
     "listView": "Listvy",
-    "gridView": "Rutnätsvy"
+    "cardView": "Kortvy"
   },
   "editor": {
     "createAs": "Skapa som",
