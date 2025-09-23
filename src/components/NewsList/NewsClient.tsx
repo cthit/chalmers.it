@@ -31,17 +31,19 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
   return (
     <>
       <div className={styles.title}>
-          <div className={styles.actions}>
-          <ViewToggle locale={locale} onViewChange={handleViewChange} initialView={view} />
-          </div>
-          <h1>{l.news.title}</h1>
-          <div className={styles.actions}>
-            {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
-          </div>
+        <h1>{l.news.title}</h1>
+        <div className={styles.actions}>
+          <ViewToggle
+            locale={locale}
+            onViewChange={handleViewChange}
+            initialView={view}
+          />
+          {canPost && <ActionLink href="/post/new">{l.news.create}</ActionLink>}
+        </div>
       </div>
+      <Divider />
       {news.length === 0 && (
         <>
-          <Divider />
           <p>{l.news.empty}</p>
         </>
       )}
@@ -52,17 +54,23 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
               {filteredNews.map((newsPost) => (
                 <NewsCard key={newsPost!.id} post={newsPost!} locale={locale} />
               ))}
-              <InfiniteScroller page={2} locale={locale} view={view} wrapInGrid={false} />
+              <InfiniteScroller
+                page={2}
+                locale={locale}
+                view={view}
+                wrapInGrid={false}
+              />
             </div>
           ) : (
             filteredNews.map((newsPost) => (
               <React.Fragment key={newsPost!.id}>
-                <Divider />
                 <NewsPost locale={locale} post={newsPost!} />
               </React.Fragment>
             ))
           )}
-          {view !== 'grid' && <InfiniteScroller page={2} locale={locale} view={view} />}
+          {view !== 'grid' && (
+            <InfiniteScroller page={2} locale={locale} view={view} />
+          )}
         </>
       )}
     </>

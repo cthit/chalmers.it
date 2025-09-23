@@ -21,14 +21,13 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--background-hover);
-    color: var(--text-primary);
+    background: var(--primary-color);
   }
 
   &.active {
     background: var(--news-view-toggle-selected-color);
     color: var(--accent-text-color);
-    
+
     &:hover {
       background: var(--news-view-toggle-selected-color);
     }

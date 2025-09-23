@@ -12,20 +12,22 @@
     --content-background-color: #fffafa;
     --content-border-color: #{$lightgray-400};
     --border-color: #{$darkgray-200};
+    --card-border-color: #{$lightgray-600};
 
-    --divider-color: #{$turquoise-400};
+    --divider-color: #{$turquoise-600};
     --banner-top-opacity: 0;
 
-    --news-view-toggle-selected-color: #{$turquoise-600};
+    --news-view-toggle-selected-color: #{$turquoise-800};
 
     --calendar-current-color: #{$lightgray-400};
+    --calendar-current-date-color: #{$turquoise-800};
     --calendar-neighboring-color: #{$lightgray-300};
-    --calendar-event-color: #{$turquoise-600};
+    --calendar-event-color: #{$turquoise-700};
     --calendar-event-today-color: #{$turquoise-800};
   }
 
   @include dark {
-    --text-color: #{$lightgray-200};
+    --text-color: #{$lightgray-300};
     --text-hover-color: #{$turquoise-300};
     --link-color: #{$turquoise-600};
     --header-color: #{$darkgray-800};
@@ -34,20 +36,22 @@
     --content-background-color: #{$darkgray-700};
     --content-border-color: #{$darkgray-500};
     --border-color: #{$lightgray-800};
+    --card-border-color: #{$darkgray-200};
 
     --divider-color: #{$turquoise-800};
     --banner-top-opacity: 0.6;
 
     --news-view-toggle-selected-color: #{$turquoise-800};
-    
+
     --calendar-current-color: #{$darkgray-500};
+    --calendar-current-date-color: #{$turquoise-800};
     --calendar-neighboring-color: #{$darkgray-600};
     --calendar-event-color: #{$turquoise-700};
     --calendar-event-today-color: #{$turquoise-400};
   }
 
-  --primary-color: #{$turquoise-500};
-  --primary-color-highlight: #{$turquoise-400};
+  --primary-color: #{$turquoise-800};
+  --primary-color-highlight: #{$turquoise-600};
 
   --banner-bottom-opacity: 0.6;
 }
