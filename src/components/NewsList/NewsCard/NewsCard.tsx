@@ -10,8 +10,10 @@ interface NewsCardProps {
   locale: string;
 }
 
+const imgMatcher = /!\[.*?\]\((.*?)\)/;
+
 const extractFirstImage = (content: string) => {
-  const imgMatch = content.match(/!\[.*?\]\((.*?)\)/);
+  const imgMatch = content.match(imgMatcher);
   return imgMatch ? imgMatch[1] : null;
 };
 
