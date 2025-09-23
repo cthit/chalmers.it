@@ -22,7 +22,7 @@ A few things are required to run the project:
 In order to run the project in development mode, a few steps are required:
 
 1. Install packages with `pnpm install`
-2. Start services by running `docker-compose -f docker-compose.yml up -d`
+2. Start services by running `docker compose up -d`
 3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
 4. Run `pnpm run dev` to start the development server
 
