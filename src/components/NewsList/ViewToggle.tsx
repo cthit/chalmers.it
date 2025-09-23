@@ -10,7 +10,11 @@ interface ViewToggleProps {
   initialView?: 'list' | 'grid';
 }
 
-const ViewToggle = ({ locale, onViewChange, initialView = 'list' }: ViewToggleProps) => {
+const ViewToggle = ({
+  locale,
+  onViewChange,
+  initialView = 'list'
+}: ViewToggleProps) => {
   const [currentView, setCurrentView] = useState<'list' | 'grid'>(initialView);
   const l = i18nService.getLocale(locale);
 
@@ -28,7 +32,7 @@ const ViewToggle = ({ locale, onViewChange, initialView = 'list' }: ViewTogglePr
         aria-label={l.news.listView}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M2.5 3.5h11v1h-11v-1zm0 4h11v1h-11v-1zm0 4h11v1h-11v-1z"/>
+          <path d="M2.5 3.5h11v1h-11v-1zm0 4h11v1h-11v-1zm0 4h11v1h-11v-1z" />
         </svg>
       </button>
       <button
@@ -38,7 +42,7 @@ const ViewToggle = ({ locale, onViewChange, initialView = 'list' }: ViewTogglePr
         aria-label={l.news.cardView}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/>
+          <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z" />
         </svg>
       </button>
     </div>

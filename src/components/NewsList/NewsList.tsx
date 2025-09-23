@@ -1,10 +1,8 @@
 import styles from './NewsList.module.scss';
-import NewsPost from './NewsPost/NewsPost';
 import SessionService from '@/services/sessionService';
 import ContentPane from '../ContentPane/ContentPane';
 import Divider from '../Divider/Divider';
 import i18nService from '@/services/i18nService';
-import ActionLink from '../ActionButton/ActionLink';
 import React from 'react';
 import { getData, getPage } from '@/actions/newsList';
 import NewsClient from './NewsClient';

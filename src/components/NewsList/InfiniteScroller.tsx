@@ -64,22 +64,19 @@ const InfiniteScroller = ({
         </>
       ) : (
         <>
-          {view === 'grid'
-            ? (
-              wrapInGrid ? (
-                <div className={clientStyles.grid}>
-                  {news.map((post: any) => (
-                    <NewsCard key={post.id} post={post} locale={locale} />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {news.map((post: any) => (
-                    <NewsCard key={post.id} post={post} locale={locale} />
-                  ))}
-                </>
-              )
+          {view === 'grid' ? (
+            wrapInGrid ? (
+              <div className={clientStyles.grid}>
+                {news.map((post: any) => (
+                  <NewsCard key={post.id} post={post} locale={locale} />
+                ))}
+              </div>
             ) : (
+              news.map((post: any) => (
+                <NewsCard key={post.id} post={post} locale={locale} />
+              ))
+            )
+          ) : (
             news.map((post: any) => (
               <React.Fragment key={post.id}>
                 <Divider />
@@ -88,7 +85,12 @@ const InfiniteScroller = ({
             ))
           )}
           {news.length > 0 ? (
-            <InfiniteScroller page={page + 1} locale={locale} view={view} wrapInGrid={wrapInGrid} />
+            <InfiniteScroller
+              page={page + 1}
+              locale={locale}
+              view={view}
+              wrapInGrid={wrapInGrid}
+            />
           ) : (
             <p className={styles.loading}>{l.news.loadEmpty}</p>
           )}

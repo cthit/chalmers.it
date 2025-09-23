@@ -36,7 +36,9 @@ const NewsCard = ({ post, locale }: NewsCardProps) => {
 
         {firstImg && (
           <div className={styles.mediaColumn}>
-            <img src={firstImg} alt="" />
+            <picture>
+              <img src={firstImg} alt="" />
+            </picture>
           </div>
         )}
 
