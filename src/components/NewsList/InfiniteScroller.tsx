@@ -79,7 +79,6 @@ const InfiniteScroller = ({
           ) : (
             news.map((post: any) => (
               <React.Fragment key={post.id}>
-                <Divider />
                 <NewsPost key={post.id} post={post} locale={locale} />
               </React.Fragment>
             ))

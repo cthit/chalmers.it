@@ -17,13 +17,18 @@
     --divider-color: #{$turquoise-600};
     --banner-top-opacity: 0;
 
-    --news-view-toggle-selected-color: #{$turquoise-800};
+    --news-view-toggle-color: #{$turquoise-800};
+    --news-view-toggle-selected-color: #{$lightgray-100};
+    --news-view-toggle-selected-background-color: #{$turquoise-800};
+    --news-view-toggle-hovered-color: #{$lightgray-100};
+    --news-view-toggle-hovered-background-color: #{$turquoise-800};
 
     --calendar-current-color: #{$lightgray-400};
-    --calendar-current-date-color: #{$turquoise-800};
+    --calendar-current-date-background-color: #{$turquoise-800};
+    --calendar-current-date-color: #{$lightgray-200};
     --calendar-neighboring-color: #{$lightgray-300};
-    --calendar-event-color: #{$turquoise-700};
-    --calendar-event-today-color: #{$turquoise-800};
+    --calendar-event-color: #{$turquoise-600};
+    --calendar-event-today-color: #{$turquoise-600};
   }
 
   @include dark {
@@ -36,18 +41,23 @@
     --content-background-color: #{$darkgray-700};
     --content-border-color: #{$darkgray-500};
     --border-color: #{$lightgray-800};
-    --card-border-color: #{$darkgray-200};
+    --card-border-color: #{$turquoise-800};
 
     --divider-color: #{$turquoise-800};
     --banner-top-opacity: 0.6;
-
-    --news-view-toggle-selected-color: #{$turquoise-800};
+    
+    --news-view-toggle-color: #{$lightgray-400};
+    --news-view-toggle-selected-color: #{$lightgray-100};
+    --news-view-toggle-selected-background-color: #{$turquoise-800};
+    --news-view-toggle-hovered-color: #{$lightgray-100};
+    --news-view-toggle-hovered-background-color: #{$turquoise-800};
 
     --calendar-current-color: #{$darkgray-500};
-    --calendar-current-date-color: #{$turquoise-800};
+    --calendar-current-date-background-color: #{$turquoise-800};
+    --calendar-current-date-color: #{$lightgray-200};
     --calendar-neighboring-color: #{$darkgray-600};
     --calendar-event-color: #{$turquoise-700};
-    --calendar-event-today-color: #{$turquoise-400};
+    --calendar-event-today-color: #{$turquoise-600};
   }
 
   --primary-color: #{$turquoise-800};
