@@ -15,22 +15,19 @@
   height: 32px;
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--news-view-toggle-color);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--primary-color);
+    background: var(--news-view-toggle-hovered-background-color);
+    color: var(--news-view-toggle-hovered-color);
   }
 
   &.active {
-    background: var(--news-view-toggle-selected-color);
-    color: var(--accent-text-color);
-
-    &:hover {
-      background: var(--news-view-toggle-selected-color);
-    }
+    background: var(--news-view-toggle-selected-background-color);
+    color: var(--news-view-toggle-selected-color);
   }
 
   svg {
