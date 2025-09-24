@@ -8,7 +8,6 @@ import NewsCard from './NewsCard/NewsCard';
 import clientStyles from './NewsListClient.module.scss';
 import i18nService from '@/services/i18nService';
 import ActionButton from '../ActionButton/ActionButton';
-import Divider from '../Divider/Divider';
 
 const InfiniteScroller = ({
   page,
