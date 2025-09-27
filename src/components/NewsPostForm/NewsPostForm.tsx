@@ -72,8 +72,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [group, setGroup] = useState(newsPost.group ?? '');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
+  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
     newsPost.scheduledPublish ? 'schedule' : 'now'
   );
@@ -94,14 +94,17 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
+    const droppedFiles: { [key: string]: File } = {};
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
+      droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
+    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
   };
 
   const delFile = (sha256: string) => {
@@ -132,8 +135,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             newsPost.id!,
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             formData,
             publish === 'now' ? null : publishDate
           ),
@@ -149,8 +152,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           postForGroup(
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             group,
             formData,
             publishDate
@@ -163,7 +166,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       } else {
         postId = await toast.promise(
-          post(titleEn, titleSv, contentEn, contentSv, formData, publishDate),
+          post(
+            titleEn,
+            titleSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
+            formData,
+            publishDate
+          ),
           {
             pending: l.editor.posting,
             success: l.editor.posted,
@@ -219,8 +229,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   function preview() {
-    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
-    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
+    setPreviewContentSv(
+      FileService.replaceLocalFiles(
+        contentSvRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
+    setPreviewContentEn(
+      FileService.replaceLocalFiles(
+        contentEnRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
 
     setShowPreview(true);
   }
@@ -255,13 +275,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-          onDrop={(e) => dropFiles(e.dataTransfer.files)}
-          value={contentEn}
-          onChange={(e) => setContentEn(e.target.value)}
-          required
+          defaultMd={newsPost.contentEn}
+          ref={contentEnRef}
+          onUpload={dropFiles}
         />
 
         <h2>{l.editor.title} (Sv)</h2>
@@ -272,13 +288,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-          onDrop={(e) => dropFiles(e.dataTransfer.files)}
-          value={contentSv}
-          onChange={(e) => setContentSv(e.target.value)}
-          required
+          defaultMd={newsPost.contentSv}
+          ref={contentSvRef}
+          onUpload={dropFiles}
         />
         <br />
         <h2>{l.editor.uploaded}</h2>

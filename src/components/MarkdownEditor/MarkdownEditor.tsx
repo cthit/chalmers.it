@@ -13,7 +13,7 @@ import {
   turnIntoTextCommand,
   wrapInHeadingCommand
 } from '@milkdown/kit/preset/commonmark';
-import { upload } from '@milkdown/kit/plugin/upload';
+import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
 import { imageBlockComponent } from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
@@ -68,10 +68,34 @@ const insertImage = (ctx: Ctx) => {
   view.dispatch(tr);
 };
 
-const MilkdownEditor: React.FC = ({ ...rest }) => {
-  const [markdown, setMarkdown] = React.useState('');
+interface MilkdownEditorProps {
+  defaultMd?: string;
+  onUpload?: (files: FileList) => Promise<string[]>;
+}
+
+const MilkdownEditor = React.forwardRef<
+  { getMarkdown: () => string },
+  MilkdownEditorProps
+>(({ defaultMd, onUpload }, ref) => {
+  const [markdown, setMarkdown] = React.useState(defaultMd || '');
   const [viewMode, setViewMode] = React.useState(
     'wysiwyg' as 'wysiwyg' | 'raw' | 'preview'
+  );
+
+  const uploader: Uploader = useCallback(
+    async (files, schema) => {
+      if (!onUpload) return [];
+
+      const urls = await onUpload(files);
+      return urls
+        .map((url) => {
+          return schema.nodes.image.createAndFill({
+            src: url
+          });
+        })
+        .filter((n) => n !== null);
+    },
+    [onUpload]
   );
 
   const editor = useEditor((root) =>
@@ -81,6 +105,11 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
         ctx.set(defaultValueCtx, markdown);
 
         configureLinkTooltip(ctx);
+
+        ctx.update(uploadConfig.key, (prev) => ({
+          ...prev,
+          uploader
+        }));
       })
       .use(commonmark)
       .use(gfm)
@@ -88,6 +117,18 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
       .use(imageBlockComponent)
       .use(upload)
   );
+
+  // Update uploader in editor when onUpload changes
+  React.useEffect(() => {
+    if (editor.get()) {
+      editor.get()?.action((ctx) => {
+        ctx.update(uploadConfig.key, (prev) => ({
+          ...prev,
+          uploader
+        }));
+      });
+    }
+  }, [uploader]);
 
   const action = useCallback(
     (fn: (ctx: Ctx) => void) => {
@@ -142,6 +183,18 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
     },
     [action]
   );
+
+  const getMarkdownContent = useCallback((): string => {
+    if (viewMode === 'wysiwyg') {
+      return editor.get()?.action(getMarkdown()) || '';
+    } else {
+      return markdown;
+    }
+  }, [viewMode, editor, markdown]);
+
+  React.useImperativeHandle(ref, () => ({
+    getMarkdown: getMarkdownContent
+  }));
 
   return (
     <>
@@ -207,7 +260,7 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
         <div className={styles.buttonGroup}>
           <button
             className={viewMode === 'wysiwyg' ? styles.selectedButton : ''}
-            title="Switch to rich text"
+            title="Rich text"
             type="button"
             onClick={() => changeView('wysiwyg')}
           >
@@ -215,7 +268,7 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
           </button>
           <button
             className={viewMode === 'raw' ? styles.selectedButton : ''}
-            title="Switch to raw"
+            title="Markdown"
             type="button"
             onClick={() => changeView('raw')}
           >
@@ -223,7 +276,7 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
           </button>
           <button
             className={viewMode === 'preview' ? styles.selectedButton : ''}
-            title="Switch to preview"
+            title="Preview"
             type="button"
             onClick={() => changeView('preview')}
           >
@@ -232,7 +285,7 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
         </div>
       </div>
       <div className={styles.editor} hidden={viewMode !== 'wysiwyg'}>
-        <Milkdown {...rest} />
+        <Milkdown />
       </div>
       <textarea
         value={markdown}
@@ -247,14 +300,20 @@ const MilkdownEditor: React.FC = ({ ...rest }) => {
       )}
     </>
   );
-};
+});
 
-export const MilkdownEditorWrapper: React.FC = () => {
+export const MilkdownEditorWrapper = React.forwardRef<
+  { getMarkdown: () => string },
+  {
+    defaultMd?: string;
+    onUpload?: (files: FileList) => Promise<string[]>;
+  }
+>(({ defaultMd, onUpload }, ref) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor />
+      <MilkdownEditor defaultMd={defaultMd} onUpload={onUpload} ref={ref} />
     </MilkdownProvider>
   );
-};
+});
 
 export default MilkdownEditorWrapper;

@@ -43,8 +43,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [page, setPage] = useState(divisionPost.parentId);
   const [titleEn, setTitleEn] = useState(divisionPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(divisionPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(divisionPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(divisionPost.contentSv ?? '');
+  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
@@ -58,14 +58,17 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
+    const droppedFiles: { [key: string]: File } = {};
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
+      droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
+    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
   };
 
   const delFile = (sha256: string) => {
@@ -80,8 +83,18 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   };
 
   function preview() {
-    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
-    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
+    setPreviewContentSv(
+      FileService.replaceLocalFiles(
+        contentSvRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
+    setPreviewContentEn(
+      FileService.replaceLocalFiles(
+        contentEnRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
 
     setShowPreview(true);
   }
@@ -98,8 +111,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             divisionPost.editedId,
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             slug,
             prio,
             formData,
@@ -120,8 +133,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           create(
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             slug,
             prio,
             formData,
@@ -187,24 +200,18 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>{l.pages.content} (Eng)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentEn}
-        onChange={(e) => setContentEn(e.target.value)}
+        defaultMd={divisionPost.contentEn}
+        ref={contentEnRef}
+        onUpload={dropFiles}
       />
 
       <h2>{l.pages.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <h2>{l.pages.content} (Sv)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentSv}
-        onChange={(e) => setContentSv(e.target.value)}
+        defaultMd={divisionPost.contentSv}
+        ref={contentSvRef}
+        onUpload={dropFiles}
       />
 
       <br />
