@@ -6,6 +6,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
+import Divider from '@/components/Divider/Divider';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -26,21 +27,26 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
             <Link href={`/post/${post.id}`}>{post.title}</Link>
           )}
         </h2>
-        {post.editable && (
-          <ActionLink href={`/post/${post.id}/edit`}>
-            {l.general.edit}
-          </ActionLink>
-        )}
-        {post.deletable && (
-          <DeletePostButton
-            text={l.general.delete}
-            id={post.id}
-            locale={locale}
-          />
-        )}
       </div>
-      <NewsPostMeta post={post} locale={locale} />
+      <div className={style.footerArea}>
+        <NewsPostMeta post={post} locale={locale} />
+        <div className={style.footerButtons}>
+          {post.editable && (
+            <ActionLink href={`/post/${post.id}/edit`}>
+              {l.general.edit}
+            </ActionLink>
+          )}
+          {post.deletable && (
+            <DeletePostButton
+              text={l.general.delete}
+              id={post.id}
+              locale={locale}
+            />
+          )}
+        </div>
+      </div>
       <MarkdownView content={post.content} />
+      <Divider />
     </>
   );
 };

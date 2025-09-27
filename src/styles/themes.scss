@@ -11,19 +11,28 @@
     --background-color: #f5f5f5;
     --content-background-color: #fffafa;
     --content-border-color: #{$lightgray-400};
-    --border-color: #{$darkgray-200};
+    --border-color: #{$lightgray-600};
+    --card-border-color: #{$lightgray-600};
 
-    --divider-color: #{$turquoise-400};
+    --divider-color: #{$turquoise-600};
     --banner-top-opacity: 0;
 
+    --news-view-toggle-color: #{$turquoise-800};
+    --news-view-toggle-selected-color: #{$lightgray-100};
+    --news-view-toggle-selected-background-color: #{$turquoise-800};
+    --news-view-toggle-hovered-color: #{$lightgray-100};
+    --news-view-toggle-hovered-background-color: #{$turquoise-800};
+
     --calendar-current-color: #{$lightgray-400};
+    --calendar-current-date-background-color: #{$turquoise-800};
+    --calendar-current-date-color: #{$lightgray-200};
     --calendar-neighboring-color: #{$lightgray-300};
     --calendar-event-color: #{$turquoise-600};
-    --calendar-event-today-color: #{$turquoise-800};
+    --calendar-event-today-color: #{$turquoise-600};
   }
 
   @include dark {
-    --text-color: #{$lightgray-200};
+    --text-color: #{$lightgray-300};
     --text-hover-color: #{$turquoise-300};
     --link-color: #{$turquoise-600};
     --header-color: #{$darkgray-800};
@@ -31,19 +40,28 @@
     --background-color: #{$darkgray-900};
     --content-background-color: #{$darkgray-700};
     --content-border-color: #{$darkgray-500};
-    --border-color: #{$lightgray-800};
+    --border-color: #{$darkgray-400};
+    --card-border-color: #{$turquoise-800};
 
     --divider-color: #{$turquoise-800};
     --banner-top-opacity: 0.6;
 
+    --news-view-toggle-color: #{$lightgray-400};
+    --news-view-toggle-selected-color: #{$lightgray-100};
+    --news-view-toggle-selected-background-color: #{$turquoise-800};
+    --news-view-toggle-hovered-color: #{$lightgray-100};
+    --news-view-toggle-hovered-background-color: #{$turquoise-800};
+
     --calendar-current-color: #{$darkgray-500};
+    --calendar-current-date-background-color: #{$turquoise-800};
+    --calendar-current-date-color: #{$lightgray-200};
     --calendar-neighboring-color: #{$darkgray-600};
     --calendar-event-color: #{$turquoise-700};
-    --calendar-event-today-color: #{$turquoise-400};
+    --calendar-event-today-color: #{$turquoise-600};
   }
 
-  --primary-color: #{$turquoise-500};
-  --primary-color-highlight: #{$turquoise-400};
+  --primary-color: #{$turquoise-800};
+  --primary-color-highlight: #{$turquoise-600};
 
   --banner-bottom-opacity: 0.6;
 }
