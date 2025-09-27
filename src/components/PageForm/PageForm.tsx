@@ -30,8 +30,8 @@ interface NewPostFormProps {
 const PageForm = (description: NewPostFormProps) => {
   const l = i18nService.getLocale(description.locale);
 
-  const [contentEn, setContentEn] = useState(description.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(description.contentSv ?? '');
+  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [slug, setSlug] = useState(description.slug ?? '');
   const [showPreview, setShowPreview] = useState(false);
   const [previewContentSv, setPreviewContentSv] = useState('');
@@ -44,14 +44,17 @@ const PageForm = (description: NewPostFormProps) => {
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
+    const droppedFiles: { [key: string]: File } = {};
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
+      droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
+    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
   };
 
   const delFile = (sha256: string) => {
@@ -66,8 +69,18 @@ const PageForm = (description: NewPostFormProps) => {
   };
 
   function preview() {
-    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
-    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
+    setPreviewContentSv(
+      FileService.replaceLocalFiles(
+        contentSvRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
+    setPreviewContentEn(
+      FileService.replaceLocalFiles(
+        contentEnRef.current!.getMarkdown(),
+        uploadQueue
+      )
+    );
 
     setShowPreview(true);
   }
@@ -79,7 +92,13 @@ const PageForm = (description: NewPostFormProps) => {
         formData.append('file', file);
       }
       await toast.promise(
-        edit(description.id, contentEn, contentSv, slug, formData),
+        edit(
+          description.id,
+          contentEnRef.current!.getMarkdown(),
+          contentSvRef.current!.getMarkdown(),
+          slug,
+          formData
+        ),
         {
           pending: l.editor.saving,
           success: l.editor.saved,
@@ -101,22 +120,16 @@ const PageForm = (description: NewPostFormProps) => {
 
       <h2>{l.editor.content} (En)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentEn}
-        onChange={(e) => setContentEn(e.target.value)}
+        defaultMd={description.contentEn}
+        ref={contentEnRef}
+        onUpload={dropFiles}
       />
 
       <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentSv}
-        onChange={(e) => setContentSv(e.target.value)}
+        defaultMd={description.contentSv}
+        ref={contentSvRef}
+        onUpload={dropFiles}
       />
 
       <br />
