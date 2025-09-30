@@ -166,7 +166,18 @@
     "links": "Länkar",
     "images": "Bilder",
     "code": "Kodblock",
-    "tables": "Tabeller"
+    "tables": "Tabeller",
+    "setFormat": "Ställ in format...",
+    "paragraph": "Paragraf",
+    "heading": "Rubrik",
+    "bold": "Fetstil",
+    "italic": "Kursiv",
+    "strikethrough": "Genomstruken",
+    "richText": "Richtext",
+    "raw": "Markdown",
+    "preview": "Förhandsgranskning",
+    "link": "Länk",
+    "image": "Bild"
   },
   "search": {
     "search": "Sök",

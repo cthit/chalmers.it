@@ -123,6 +123,7 @@ const PageForm = (description: NewPostFormProps) => {
         defaultMd={description.contentEn}
         ref={contentEnRef}
         onUpload={dropFiles}
+        locale={description.locale}
       />
 
       <h2>{l.editor.content} (Sv)</h2>
@@ -130,6 +131,7 @@ const PageForm = (description: NewPostFormProps) => {
         defaultMd={description.contentSv}
         ref={contentSvRef}
         onUpload={dropFiles}
+        locale={description.locale}
       />
 
       <br />

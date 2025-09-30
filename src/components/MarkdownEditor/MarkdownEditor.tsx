@@ -40,6 +40,7 @@ import {
   BsTypeItalic,
   BsTypeStrikethrough
 } from 'react-icons/bs';
+import i18nService from '@/services/i18nService';
 
 const insertLink = (ctx: Ctx) => {
   const view = ctx.get(editorViewCtx);
@@ -73,12 +74,15 @@ const insertImage = (ctx: Ctx) => {
 interface MilkdownEditorProps {
   defaultMd?: string;
   onUpload?: (files: FileList) => Promise<string[]>;
+  locale: string;
 }
 
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
->(({ defaultMd, onUpload }, ref) => {
+>(({ defaultMd, onUpload, locale }, ref) => {
+  const l = i18nService.getLocale(locale);
+
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
   const [viewMode, setViewMode] = React.useState(
     'wysiwyg' as 'wysiwyg' | 'raw' | 'preview'
@@ -210,12 +214,14 @@ const MilkdownEditor = React.forwardRef<
                 <button
                   type="button"
                   onClick={() => action(callCommand(toggleStrongCommand.key))}
+                  title={l.markdown.bold}
                 >
                   <BsTypeBold />
                 </button>
                 <button
                   type="button"
                   onClick={() => action(callCommand(toggleEmphasisCommand.key))}
+                  title={l.markdown.italic}
                 >
                   <BsTypeItalic />
                 </button>
@@ -224,6 +230,7 @@ const MilkdownEditor = React.forwardRef<
                   onClick={() =>
                     action(callCommand(toggleStrikethroughCommand.key))
                   }
+                  title={l.markdown.strikethrough}
                 >
                   <BsTypeStrikethrough />
                 </button>
@@ -234,20 +241,21 @@ const MilkdownEditor = React.forwardRef<
                 className={styles.toolbarDropdown}
               >
                 <option disabled hidden value="format">
-                  Set format...
+                  {l.markdown.setFormat}
                 </option>
-                <option value="paragraph">Paragraph</option>
-                <option value="heading1">Heading 1</option>
-                <option value="heading2">Heading 2</option>
-                <option value="heading3">Heading 3</option>
-                <option value="heading4">Heading 4</option>
-                <option value="heading5">Heading 5</option>
-                <option value="heading6">Heading 6</option>
+                <option value="paragraph">{l.markdown.paragraph}</option>
+                <option value="heading1">{l.markdown.heading} 1</option>
+                <option value="heading2">{l.markdown.heading} 2</option>
+                <option value="heading3">{l.markdown.heading} 3</option>
+                <option value="heading4">{l.markdown.heading} 4</option>
+                <option value="heading5">{l.markdown.heading} 5</option>
+                <option value="heading6">{l.markdown.heading} 6</option>
               </DropdownList>
               <button
                 onClick={() => action(insertLink)}
                 type="button"
                 className={styles.toolbarButton}
+                title={l.markdown.link}
               >
                 <BsLink />
               </button>
@@ -255,6 +263,7 @@ const MilkdownEditor = React.forwardRef<
                 onClick={() => action(insertImage)}
                 type="button"
                 className={styles.toolbarButton}
+                title={l.markdown.image}
               >
                 <BsImage />
               </button>
@@ -264,7 +273,7 @@ const MilkdownEditor = React.forwardRef<
         <div className={styles.buttonGroup}>
           <button
             className={viewMode === 'wysiwyg' ? styles.selectedButton : ''}
-            title="Rich text"
+            title={l.markdown.richText}
             type="button"
             onClick={() => changeView('wysiwyg')}
           >
@@ -272,7 +281,7 @@ const MilkdownEditor = React.forwardRef<
           </button>
           <button
             className={viewMode === 'raw' ? styles.selectedButton : ''}
-            title="Markdown"
+            title={l.markdown.raw}
             type="button"
             onClick={() => changeView('raw')}
           >
@@ -280,7 +289,7 @@ const MilkdownEditor = React.forwardRef<
           </button>
           <button
             className={viewMode === 'preview' ? styles.selectedButton : ''}
-            title="Preview"
+            title={l.markdown.preview}
             type="button"
             onClick={() => changeView('preview')}
           >
@@ -308,20 +317,26 @@ const MilkdownEditor = React.forwardRef<
 
 MilkdownEditor.displayName = 'MilkdownEditor';
 
-export const MilkdownEditorWrapper = React.forwardRef<
+export const MarkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   {
     defaultMd?: string;
     onUpload?: (files: FileList) => Promise<string[]>;
+    locale: string;
   }
->(({ defaultMd, onUpload }, ref) => {
+>(({ defaultMd, onUpload, locale }, ref) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor defaultMd={defaultMd} onUpload={onUpload} ref={ref} />
+      <MilkdownEditor
+        defaultMd={defaultMd}
+        onUpload={onUpload}
+        ref={ref}
+        locale={locale}
+      />
     </MilkdownProvider>
   );
 });
 
-MilkdownEditorWrapper.displayName = 'MilkdownEditorWrapper';
+MarkdownEditor.displayName = 'MarkdownEditor';
 
-export default MilkdownEditorWrapper;
+export default MarkdownEditor;

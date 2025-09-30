@@ -99,7 +99,8 @@
       margin: 0 0.5rem;
     }
 
-    :global(.link-edit-button), :global(.link-remove-button) {
+    :global(.link-edit-button),
+    :global(.link-remove-button) {
       cursor: pointer;
       background: var(--primary-color);
       padding: 0.25rem;

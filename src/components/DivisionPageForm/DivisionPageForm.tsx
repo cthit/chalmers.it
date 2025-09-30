@@ -203,6 +203,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         defaultMd={divisionPost.contentEn}
         ref={contentEnRef}
         onUpload={dropFiles}
+        locale={divisionPost.locale}
       />
 
       <h2>{l.pages.title} (Sv)</h2>
@@ -212,6 +213,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         defaultMd={divisionPost.contentSv}
         ref={contentSvRef}
         onUpload={dropFiles}
+        locale={divisionPost.locale}
       />
 
       <br />

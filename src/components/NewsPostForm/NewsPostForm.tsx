@@ -278,6 +278,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           defaultMd={newsPost.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
+          locale={newsPost.locale}
         />
 
         <h2>{l.editor.title} (Sv)</h2>
@@ -291,6 +292,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           defaultMd={newsPost.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
+          locale={newsPost.locale}
         />
         <br />
         <h2>{l.editor.uploaded}</h2>
