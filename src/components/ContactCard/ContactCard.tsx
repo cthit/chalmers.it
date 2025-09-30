@@ -7,35 +7,10 @@ import styles from './ContactCard.module.scss';
 import i18nService from '@/services/i18nService';
 
 const ContactCard = ({ locale }: { locale?: string }) => {
-  const router = useRouter();
-  const currentPathname = usePathname();
-
   const l = i18nService.getLocale(locale);
-
-  const switchLocale = (toSv: boolean) => {
-    if (currentPathname.startsWith('/en') && toSv) {
-      router.push(currentPathname.replace(`/en`, `/sv`));
-    } else if (!currentPathname.startsWith('/en') && !toSv) {
-      router.push(`/en${currentPathname}`);
-    }
-  };
 
   return (
     <div className={styles.contactCard}>
-      <div className={styles.languageToggle}>
-        <a onClick={() => switchLocale(true)} className={styles.button}>
-          <picture className={styles.flag}>
-            <img src="/sweden.svg" alt="Swedish flag" />
-          </picture>
-          <p>Svenska</p>
-        </a>
-        <a onClick={() => switchLocale(false)} className={styles.button}>
-          <picture className={styles.flag}>
-            <img src="/uk.svg" alt="English flag" />
-          </picture>
-          <p>English</p>
-        </a>
-      </div>
       <Divider />
       <p>
         <strong>{l.footer.postadress}</strong>
