@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import styles from './LanguageToggle.module.scss';
-import i18nService from '@/services/i18nService';
 
 type Lang = 'sv' | 'en';
 
