@@ -17,6 +17,8 @@ import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
 import { imageBlockComponent } from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
+import { history } from '@milkdown/kit/plugin/history';
+import { clipboard } from '@milkdown/kit/plugin/clipboard';
 import React, { useCallback } from 'react';
 import styles from './MarkdownEditor.module.scss';
 import {
@@ -64,7 +66,7 @@ const insertImage = (ctx: Ctx) => {
   const emptyImage = view.state.schema.nodes['image-block'].createAndFill();
   if (!emptyImage) return;
 
-  let tr = view.state.tr.insert(selection.from, emptyImage);
+  const tr = view.state.tr.insert(selection.from, emptyImage);
   view.dispatch(tr);
 };
 
@@ -111,6 +113,8 @@ const MilkdownEditor = React.forwardRef<
           uploader
         }));
       })
+      .use(history)
+      .use(clipboard)
       .use(commonmark)
       .use(gfm)
       .use(linkTooltipPlugin)
@@ -128,14 +132,14 @@ const MilkdownEditor = React.forwardRef<
         }));
       });
     }
-  }, [uploader]);
+  }, [uploader, editor]);
 
   const action = useCallback(
     (fn: (ctx: Ctx) => void) => {
       if (editor.loading) return;
       editor.get()?.action(fn);
     },
-    [editor.loading]
+    [editor]
   );
 
   const changeView = useCallback(
@@ -143,13 +147,13 @@ const MilkdownEditor = React.forwardRef<
       if (mode === 'wysiwyg') {
         editor.get()?.action(replaceAll(markdown));
       } else if (viewMode === 'wysiwyg') {
-        const md = editor.get()?.action(getMarkdown()) || '';
+        const md: string = editor.get()?.action(getMarkdown()) || '';
         setMarkdown(md);
       }
 
       setViewMode(mode);
     },
-    [viewMode, markdown]
+    [viewMode, markdown, editor]
   );
 
   const setFormat = useCallback(
@@ -302,6 +306,8 @@ const MilkdownEditor = React.forwardRef<
   );
 });
 
+MilkdownEditor.displayName = 'MilkdownEditor';
+
 export const MilkdownEditorWrapper = React.forwardRef<
   { getMarkdown: () => string },
   {
@@ -315,5 +321,7 @@ export const MilkdownEditorWrapper = React.forwardRef<
     </MilkdownProvider>
   );
 });
+
+MilkdownEditorWrapper.displayName = 'MilkdownEditorWrapper';
 
 export default MilkdownEditorWrapper;
