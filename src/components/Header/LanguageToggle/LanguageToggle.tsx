@@ -15,7 +15,6 @@ interface Props {
 const LanguageToggle = ({ locale, onLocaleChange }: Props) => {
   const router = useRouter();
   const currentPathname = usePathname();
-  const l = i18nService.getLocale(locale);
 
   const detectLocaleFromPath = (p: string) =>
     p === '/en' || p.startsWith('/en/') ? 'en' : 'sv';

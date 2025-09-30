@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Divider from '../Divider/Divider';
 import styles from './ContactCard.module.scss';
