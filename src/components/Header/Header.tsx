@@ -31,7 +31,7 @@ const Header = ({ locale }: { locale: string }) => {
           locale={locale}
           nav={<Navigation locale={locale} desktop />}
         >
-          <ThemeSelector className={styles.selector} />
+          <ThemeSelector />
           <LanguageToggle locale={locale} />
           <User locale={locale} />
         </SearchSwitcher>
