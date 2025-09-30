@@ -7,6 +7,7 @@ import EscapeHatch from './EscapeHatch/EscapeHatch';
 import Navigation from './Navigation/Navigation';
 import SearchIcon from './SearchBar/SearchIcon';
 import Link from 'next/link';
+import LanguageToggle from './LanguageToggle/LanguageToggle';
 
 const Header = ({ locale }: { locale: string }) => {
   return (
@@ -16,6 +17,7 @@ const Header = ({ locale }: { locale: string }) => {
           <User locale={locale} className={styles.mobileUser} />
           <Navigation locale={locale} desktop={false} />
           <div className={styles.mobileActions}>
+            <LanguageToggle locale={locale} />
             <ThemeSelector />
             <Link href="/post/search">
               <SearchIcon />
@@ -29,7 +31,8 @@ const Header = ({ locale }: { locale: string }) => {
           locale={locale}
           nav={<Navigation locale={locale} desktop />}
         >
-          <ThemeSelector className={styles.selector} />
+          <ThemeSelector />
+          <LanguageToggle locale={locale} />
           <User locale={locale} />
         </SearchSwitcher>
       </div>
