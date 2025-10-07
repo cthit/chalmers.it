@@ -20,13 +20,19 @@
   grid-template-rows: auto 1fr auto;
   gap: 1rem;
   height: 100%;
-  min-height: 10rem;
   transition: all 0.2s ease;
+}
 
-  &:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+.cardNoImage {
+  grid-template-areas:
+    'header'
+    'text'
+    'footer';
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+
+  .textColumn {
+    grid-column: 1;
   }
 }
 
@@ -46,19 +52,21 @@
 
 .textColumn {
   grid-area: text;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  max-height: 10rem;
+  font-size: 80%; // Scale everything down to 80% of parent size
 
-  :global(p) {
-    margin: 0;
-    font-size: var(--text-small);
-    line-height: 1.5;
-    color: var(--text-secondary);
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4; // Shows approximately 4 lines of text
+  // Scale headers relative to the new base size
+  :global(h1) {
+    font-size: 140%;
+  }
+  :global(h2) {
+    font-size: 130%;
+  }
+  :global(h3) {
+    font-size: 120%;
   }
 }
 
@@ -120,5 +128,9 @@
 
   .title {
     font-size: var(--text-medium);
+  }
+
+  .textColumn {
+    max-height: 5rem;
   }
 }

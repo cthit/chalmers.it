@@ -26,9 +26,24 @@ const NewsCard = ({ post, locale }: NewsCardProps) => {
   const firstImg = extractFirstImage(post.content);
   const textContent = post.content.replace(/!\[.*?\]\(.*?\)/g, ''); // Remove Markdown image syntax from the post content
 
+  const mediaColumn = firstImg ? (
+    <div className={styles.mediaColumn}>
+      <picture>
+        <img src={firstImg} alt="" />
+      </picture>
+    </div>
+  ) : null;
+
   return (
-    <Link href={`/post/${post.id}`} className={styles.cardLink}>
-      <article className={styles.card}>
+    <Link
+      href={`/post/${post.id}`}
+      className={styles.cardLink}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <article
+        className={`${styles.card} ${!firstImg ? styles.cardNoImage : ''}`}
+      >
         <div className={styles.textColumn}>
           <div className={styles.header}>
             <h3 className={styles.title}>{post.title}</h3>
@@ -36,19 +51,24 @@ const NewsCard = ({ post, locale }: NewsCardProps) => {
           <MarkdownView content={textContent} />
         </div>
 
-        {firstImg && (
-          <div className={styles.mediaColumn}>
-            <picture>
-              <img src={firstImg} alt="" />
-            </picture>
-          </div>
-        )}
+        {mediaColumn}
 
         <div className={styles.footer}>
           <p className={styles.metaLine}>
             {isScheduled && `${l.news.scheduled} `}
             {i18nService.formatDate(displayDate)}
-            {` | ${l.news.written} ${l.news.by} `}
+            {` | ${l.news.written} `}
+            {post.writtenFor && (
+              <>
+                {l.news.for}{' '}
+                <Link
+                  href={`/post/search?gid=${post.writtenForGammaSuperGroupId}`}
+                >
+                  {post.writtenFor}
+                </Link>{' '}
+              </>
+            )}
+            {l.news.by}{' '}
             <Link href={`/post/search?uid=${post.writtenByGammaUserId}`}>
               {post.author ?? l.news.unknown}
             </Link>
