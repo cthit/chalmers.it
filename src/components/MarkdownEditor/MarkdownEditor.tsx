@@ -9,7 +9,6 @@ import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
 import {
   commonmark,
   linkSchema,
-  paragraphSchema,
   toggleEmphasisCommand,
   toggleStrongCommand,
   turnIntoTextCommand,
@@ -17,10 +16,7 @@ import {
 } from '@milkdown/kit/preset/commonmark';
 import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
-import {
-  imageBlockComponent,
-  imageBlockView
-} from '@milkdown/kit/component/image-block';
+import { imageBlockComponent } from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
@@ -159,7 +155,7 @@ const MilkdownEditor = React.forwardRef<
 
         ctx.set(editorViewOptionsCtx, {
           markViews: {
-            link: (mark /* ProseMirror Mark */, inline, view) => {
+            link: (mark) => {
               const dom = document.createElement('span');
               dom.className = 'md-link-as-span';
               dom.setAttribute(
@@ -269,7 +265,7 @@ const MilkdownEditor = React.forwardRef<
 
       setViewMode(mode);
     },
-    [viewMode, markdown, editor]
+    [viewMode, markdown, editor, localFiles]
   );
 
   const setFormat = useCallback(

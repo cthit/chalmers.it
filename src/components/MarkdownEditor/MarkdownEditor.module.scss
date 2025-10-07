@@ -108,7 +108,6 @@
 
     :global(.link-display) {
       color: var(--link-color);
-      text-decoration: underline;
       margin: 0 0.5rem;
     }
 
@@ -159,6 +158,11 @@
       &:hover {
         background-color: var(--primary-color-highlight);
       }
+    }
+
+    :global(.input-area) {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
     }
   }
 
