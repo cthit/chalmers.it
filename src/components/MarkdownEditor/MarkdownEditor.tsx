@@ -155,6 +155,38 @@ const MilkdownEditor = React.forwardRef<
             }
           });
         });
+
+        ctx.set(editorViewOptionsCtx, {
+          markViews: {
+            link: (mark /* ProseMirror Mark */, inline, view) => {
+              const dom = document.createElement('span');
+              dom.className = 'md-link-as-span';
+              dom.setAttribute(
+                'data-href',
+                mark.attrs?.href ?? mark.attrs?.url ?? ''
+              );
+              if (mark.attrs?.title)
+                dom.setAttribute('title', mark.attrs.title);
+
+              // accessibility: make it keyboard-focusable and announce as link if you want
+              dom.tabIndex = 0;
+              dom.setAttribute('role', 'link');
+
+              return {
+                dom,
+                update(newMark: any) {
+                  // called when mark attrs change; return false if view must be recreated
+                  if (newMark.type !== mark.type) return false;
+                  if (newMark.attrs?.href !== mark.attrs?.href) {
+                    dom.setAttribute('data-href', newMark.attrs.href ?? '');
+                  }
+                  return true;
+                }
+              };
+            }
+          }
+        });
+
         ctx.update(uploadConfig.key, (prev) => ({
           ...prev,
           uploader
