@@ -79,6 +79,18 @@
     a {
       color: var(--link-color);
     }
+
+    img {
+      max-height: 50vh;
+    }
+  }
+
+  :global(.md-link-as-span) {
+    color: var(--link-color);
+
+    &:focus {
+      outline: none;
+    }
   }
 
   :global(.milkdown-link-preview) {

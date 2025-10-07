@@ -104,7 +104,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
-    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
+    return Object.entries(droppedFiles).map(([sha256, file]) => ({
+      file,
+      url: '/api/media/' + sha256
+    }));
   };
 
   const delFile = (sha256: string) => {
@@ -256,7 +259,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           onChange={(e) => setGroup(e.target.value)}
           required
         >
-          <option disabled hidden value="">
+          <option disabled hidden={group !== ''} value="">
             {l.editor.selectGroup}
           </option>
           <option value="self">{l.editor.self}</option>
@@ -279,6 +282,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           ref={contentEnRef}
           onUpload={dropFiles}
           locale={newsPost.locale}
+          localFiles={uploadQueue}
         />
 
         <h2>{l.editor.title} (Sv)</h2>
@@ -293,6 +297,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           ref={contentSvRef}
           onUpload={dropFiles}
           locale={newsPost.locale}
+          localFiles={uploadQueue}
         />
         <br />
         <h2>{l.editor.uploaded}</h2>

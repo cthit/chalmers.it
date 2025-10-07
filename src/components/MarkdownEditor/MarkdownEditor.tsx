@@ -2,12 +2,14 @@ import {
   defaultValueCtx,
   Editor,
   editorViewCtx,
+  editorViewOptionsCtx,
   rootCtx
 } from '@milkdown/kit/core';
 import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
 import {
   commonmark,
   linkSchema,
+  paragraphSchema,
   toggleEmphasisCommand,
   toggleStrongCommand,
   turnIntoTextCommand,
@@ -15,7 +17,10 @@ import {
 } from '@milkdown/kit/preset/commonmark';
 import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
-import { imageBlockComponent } from '@milkdown/kit/component/image-block';
+import {
+  imageBlockComponent,
+  imageBlockView
+} from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
@@ -41,6 +46,8 @@ import {
   BsTypeStrikethrough
 } from 'react-icons/bs';
 import i18nService from '@/services/i18nService';
+import FileService from '@/services/fileService';
+import { listener, listenerCtx } from '@milkdown/kit/plugin/listener';
 
 const insertLink = (ctx: Ctx) => {
   const view = ctx.get(editorViewCtx);
@@ -73,14 +80,22 @@ const insertImage = (ctx: Ctx) => {
 
 interface MilkdownEditorProps {
   defaultMd?: string;
-  onUpload?: (files: FileList) => Promise<string[]>;
+  onUpload?: (files: FileList) => Promise<
+    {
+      file: File;
+      url: string;
+    }[]
+  >;
+  localFiles: {
+    [key: string]: File;
+  };
   locale: string;
 }
 
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
->(({ defaultMd, onUpload, locale }, ref) => {
+>(({ defaultMd, onUpload, locale, localFiles }, ref) => {
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
@@ -94,10 +109,15 @@ const MilkdownEditor = React.forwardRef<
 
       const urls = await onUpload(files);
       return urls
-        .map((url) => {
-          return schema.nodes.image.createAndFill({
-            src: url
-          });
+        .map(({ file, url }) => {
+          return FileService.isMimeEmbeddable(file.type)
+            ? schema.nodes['image-block'].createAndFill({
+                src: url,
+                caption: undefined
+              })
+            : schema.text(file.name || 'File', [
+                schema.marks.link.create({ href: url })
+              ]);
         })
         .filter((n) => n !== null);
     },
@@ -112,11 +132,35 @@ const MilkdownEditor = React.forwardRef<
 
         configureLinkTooltip(ctx);
 
+        const listener = ctx.get(listenerCtx);
+        listener.updated((ctx, docChanged) => {
+          if (!docChanged) return;
+
+          const view = ctx.get(editorViewCtx);
+          const dom = view.dom;
+
+          dom.querySelectorAll('img').forEach((img) => {
+            const src = img.getAttribute('src') ?? '';
+            const match = src.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
+            if (!match) return;
+
+            const hash = match[1];
+            const localFile = localFiles[hash];
+
+            if (localFile) {
+              const localUrl = URL.createObjectURL(localFile);
+              if (img.src !== localUrl) {
+                img.src = localUrl;
+              }
+            }
+          });
+        });
         ctx.update(uploadConfig.key, (prev) => ({
           ...prev,
           uploader
         }));
       })
+      .use(listener)
       .use(history)
       .use(clipboard)
       .use(commonmark)
@@ -137,6 +181,33 @@ const MilkdownEditor = React.forwardRef<
       });
     }
   }, [uploader, editor]);
+
+  // Update local file replacer in editor when localFiles changes
+  React.useEffect(() => {
+    if (editor.get()) {
+      editor.get()?.action((ctx) => {
+        const listener = ctx.get(listenerCtx);
+        listener.updated((ctx, docChanged) => {
+          if (!docChanged) return;
+          const view = ctx.get(editorViewCtx);
+          const dom = view.dom;
+          dom.querySelectorAll('img').forEach((img) => {
+            const src = img.getAttribute('src') ?? '';
+            const match = src.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
+            if (!match) return;
+            const hash = match[1];
+            const localFile = localFiles[hash];
+            if (localFile) {
+              const localUrl = URL.createObjectURL(localFile);
+              if (img.src !== localUrl) {
+                img.src = localUrl;
+              }
+            }
+          });
+        });
+      });
+    }
+  }, [localFiles, editor]);
 
   const action = useCallback(
     (fn: (ctx: Ctx) => void) => {
@@ -321,10 +392,18 @@ export const MarkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   {
     defaultMd?: string;
-    onUpload?: (files: FileList) => Promise<string[]>;
+    onUpload?: (files: FileList) => Promise<
+      {
+        file: File;
+        url: string;
+      }[]
+    >;
     locale: string;
+    localFiles?: {
+      [key: string]: File;
+    };
   }
->(({ defaultMd, onUpload, locale }, ref) => {
+>(({ defaultMd, onUpload, locale, localFiles }, ref) => {
   return (
     <MilkdownProvider>
       <MilkdownEditor
@@ -332,6 +411,7 @@ export const MarkdownEditor = React.forwardRef<
         onUpload={onUpload}
         ref={ref}
         locale={locale}
+        localFiles={localFiles ?? {}}
       />
     </MilkdownProvider>
   );
