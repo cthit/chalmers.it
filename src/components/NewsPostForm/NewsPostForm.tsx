@@ -11,18 +11,12 @@ import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
-import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
-import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
-import MarkdownView from '../MarkdownView/MarkdownView';
 import { toast } from 'react-toastify';
 
-const PreviewContentStyle = {
-  backgroundColor: '#000000AA'
-};
 const validUploadTypes = Object.values(MediaType);
 
 interface NewPostFormProps {
@@ -80,9 +74,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [scheduledFor, setScheduledFor] = useState(
     newsPost.scheduledPublish ?? new Date()
   );
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewContentSv, setPreviewContentSv] = useState('');
-  const [previewContentEn, setPreviewContentEn] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
@@ -229,23 +220,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     if (id !== undefined) {
       setRemoveQueue([...removeQueue, id]);
     }
-  }
-
-  function preview() {
-    setPreviewContentSv(
-      FileService.replaceLocalFiles(
-        contentSvRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-    setPreviewContentEn(
-      FileService.replaceLocalFiles(
-        contentEnRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-
-    setShowPreview(true);
   }
 
   return (
@@ -445,35 +419,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <ActionButton type="submit">
             {newsPost.id !== undefined ? l.general.save : l.general.create}
           </ActionButton>
-          <ActionButton type="button" onClick={preview}>
-            {l.editor.previewAction}
-          </ActionButton>
         </div>
       </form>
-
-      <Popup
-        modal
-        className={style.dialog}
-        open={showPreview}
-        onClose={() => setShowPreview(false)}
-        overlayStyle={PreviewContentStyle}
-      >
-        <ContentPane className={style.dialog}>
-          <h1>{l.editor.preview}</h1>
-          <Divider />
-          <h1>{titleEn}</h1>
-          <MarkdownView content={previewContentEn} allowBlob />
-
-          <Divider />
-
-          <h1>{titleSv}</h1>
-          <MarkdownView content={previewContentSv} allowBlob />
-
-          <ActionButton onClick={() => setShowPreview(false)}>
-            {l.general.close}
-          </ActionButton>
-        </ContentPane>
-      </Popup>
     </>
   );
 };

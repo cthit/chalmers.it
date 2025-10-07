@@ -99,6 +99,7 @@ const MilkdownEditor = React.forwardRef<
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
+  const [markdownPreview, setMarkdownPreview] = React.useState('');
   const [viewMode, setViewMode] = React.useState(
     'wysiwyg' as 'wysiwyg' | 'raw' | 'preview'
   );
@@ -258,6 +259,14 @@ const MilkdownEditor = React.forwardRef<
         setMarkdown(md);
       }
 
+      if (mode === 'preview') {
+        const md: string =
+          viewMode === 'wysiwyg'
+            ? editor.get()?.action(getMarkdown()) || ''
+            : markdown;
+        setMarkdownPreview(FileService.replaceLocalFiles(md, localFiles));
+      }
+
       setViewMode(mode);
     },
     [viewMode, markdown, editor]
@@ -408,10 +417,14 @@ const MilkdownEditor = React.forwardRef<
         onChange={(e) => setMarkdown(e.target.value)}
         hidden={viewMode !== 'raw'}
         className={styles.rawEditor}
+        onDragOver={(e) => {
+          e.preventDefault();
+        }}
+        onDrop={(e) => onUpload?.(e.dataTransfer.files)}
       />
       {viewMode === 'preview' && (
         <div className={styles.rawEditor}>
-          <MarkdownView content={markdown} />
+          <MarkdownView content={markdownPreview} allowBlob />
         </div>
       )}
     </>

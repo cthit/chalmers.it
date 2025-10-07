@@ -81,6 +81,7 @@
     }
 
     img {
+      height: inherit !important;
       max-height: 50vh;
     }
   }
@@ -161,6 +162,31 @@
     }
   }
 
+  :global(.milkdown-image-block > .image-wrapper > .operation) {
+    position: absolute;
+  }
+
+  :global(
+      .milkdown-image-block > .image-wrapper > .operation > .operation-item
+    ) {
+    transition: opacity 0.2s;
+    display: inline-flex;
+    justify-content: center;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    height: 2rem;
+    width: 2rem;
+    margin-top: 0.25rem;
+    margin-left: 0.25rem;
+    opacity: 0.4;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   :global(.milkdown-image-block input) {
     background: transparent;
     outline: none;
@@ -170,7 +196,9 @@
   :global(.milkdown-image-block > .caption-input) {
     display: block;
     width: 100%;
-    text-align: center;
+    background-color: var(--content-background-color);
+    padding: 0.25rem;
+    border-radius: 0.2rem;
   }
 
   :global(.milkdown-image-block > .image-edit) {

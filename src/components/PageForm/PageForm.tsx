@@ -7,16 +7,10 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { useRef, useState } from 'react';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
-import Popup from 'reactjs-popup';
 import i18nService from '@/services/i18nService';
-import MarkdownView from '../MarkdownView/MarkdownView';
 import FileService, { MediaType } from '@/services/fileService';
-import ContentPane from '../ContentPane/ContentPane';
 import { toast } from 'react-toastify';
 
-const PreviewContentStyle = {
-  backgroundColor: '#000000AA'
-};
 const validUploadTypes = Object.values(MediaType);
 
 interface NewPostFormProps {
@@ -33,9 +27,6 @@ const PageForm = (description: NewPostFormProps) => {
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [slug, setSlug] = useState(description.slug ?? '');
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewContentSv, setPreviewContentSv] = useState('');
-  const [previewContentEn, setPreviewContentEn] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
@@ -54,7 +45,10 @@ const PageForm = (description: NewPostFormProps) => {
       droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
-    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
+    return Object.entries(droppedFiles).map(([sha256, file]) => ({
+      file,
+      url: '/api/media/' + sha256
+    }));
   };
 
   const delFile = (sha256: string) => {
@@ -67,23 +61,6 @@ const PageForm = (description: NewPostFormProps) => {
     navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
     toast(l.editor.linkCopied, { type: 'success' });
   };
-
-  function preview() {
-    setPreviewContentSv(
-      FileService.replaceLocalFiles(
-        contentSvRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-    setPreviewContentEn(
-      FileService.replaceLocalFiles(
-        contentEnRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-
-    setShowPreview(true);
-  }
 
   async function send() {
     try {
@@ -124,6 +101,7 @@ const PageForm = (description: NewPostFormProps) => {
         ref={contentEnRef}
         onUpload={dropFiles}
         locale={description.locale}
+        localFiles={uploadQueue}
       />
 
       <h2>{l.editor.content} (Sv)</h2>
@@ -132,6 +110,7 @@ const PageForm = (description: NewPostFormProps) => {
         ref={contentSvRef}
         onUpload={dropFiles}
         locale={description.locale}
+        localFiles={uploadQueue}
       />
 
       <br />
@@ -176,28 +155,7 @@ const PageForm = (description: NewPostFormProps) => {
         <ActionButton onClick={send}>
           {description.id !== undefined ? l.general.save : l.general.create}
         </ActionButton>
-        <ActionButton onClick={preview}>{l.editor.previewAction}</ActionButton>
       </div>
-
-      <Popup
-        modal
-        className={styles.dialog}
-        open={showPreview}
-        onClose={() => setShowPreview(false)}
-        overlayStyle={PreviewContentStyle}
-      >
-        <ContentPane className={styles.dialog}>
-          <h1>{l.editor.preview}</h1>
-          <Divider />
-          <MarkdownView content={previewContentEn} allowBlob />
-          <Divider />
-          <MarkdownView content={previewContentSv} allowBlob />
-
-          <ActionButton onClick={() => setShowPreview(false)}>
-            {l.general.close}
-          </ActionButton>
-        </ContentPane>
-      </Popup>
     </>
   );
 };

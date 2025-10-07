@@ -7,20 +7,14 @@ import TextArea from '@/components/TextArea/TextArea';
 import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
-import Popup from 'reactjs-popup';
 import DivisionPageService, {
   DivisionPage
 } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
-import MarkdownView from '../MarkdownView/MarkdownView';
 import FileService, { MediaType } from '@/services/fileService';
-import ContentPane from '../ContentPane/ContentPane';
 
-const PreviewContentStyle = {
-  backgroundColor: '#000000AA'
-};
 const validUploadTypes = Object.values(MediaType);
 
 interface DivisionPostFormProps {
@@ -46,10 +40,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
-  const [showPreview, setShowPreview] = useState(false);
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
-  const [previewContentSv, setPreviewContentSv] = useState('');
-  const [previewContentEn, setPreviewContentEn] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
@@ -68,7 +59,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
-    return Object.keys(droppedFiles).map((sha256) => '/api/media/' + sha256);
+    return Object.entries(droppedFiles).map(([sha256, file]) => ({
+      file,
+      url: '/api/media/' + sha256
+    }));
   };
 
   const delFile = (sha256: string) => {
@@ -81,23 +75,6 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
     toast(l.editor.linkCopied, { type: 'success' });
   };
-
-  function preview() {
-    setPreviewContentSv(
-      FileService.replaceLocalFiles(
-        contentSvRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-    setPreviewContentEn(
-      FileService.replaceLocalFiles(
-        contentEnRef.current!.getMarkdown(),
-        uploadQueue
-      )
-    );
-
-    setShowPreview(true);
-  }
 
   async function apply() {
     const formData = new FormData();
@@ -204,6 +181,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         ref={contentEnRef}
         onUpload={dropFiles}
         locale={divisionPost.locale}
+        localFiles={uploadQueue}
       />
 
       <h2>{l.pages.title} (Sv)</h2>
@@ -214,6 +192,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         ref={contentSvRef}
         onUpload={dropFiles}
         locale={divisionPost.locale}
+        localFiles={uploadQueue}
       />
 
       <br />
@@ -259,30 +238,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             ? l.general.save
             : l.general.create}
         </ActionButton>
-        <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>
-
-      <Popup
-        modal
-        className={styles.dialog}
-        open={showPreview}
-        onClose={() => setShowPreview(false)}
-        overlayStyle={PreviewContentStyle}
-      >
-        <ContentPane className={styles.dialog}>
-          <h1>{l.pages.preview}</h1>
-          <Divider />
-          <h2>{titleEn}</h2>
-          <MarkdownView content={previewContentEn} allowBlob />
-          <Divider />
-          <h2>{titleSv}</h2>
-          <MarkdownView content={previewContentSv} allowBlob />
-
-          <ActionButton onClick={() => setShowPreview(false)}>
-            {l.pages.close}
-          </ActionButton>
-        </ContentPane>
-      </Popup>
     </>
   );
 };
