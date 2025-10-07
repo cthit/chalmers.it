@@ -19,28 +19,30 @@ const ViewToggle = ({
 }: ViewToggleProps) => {
   const l = i18nService.getLocale(locale);
 
-  // Initialize with initialView, will be updated by useEffect
+  const [mounted, setMounted] = useState(false);
   const [currentView, setCurrentView] = useState<'list' | 'grid'>(initialView);
 
-  // Handle view changes and persist to localStorage
+  // On mount, sync with localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(VIEW_PREFERENCE_KEY);
+    if (saved === 'list' || saved === 'grid') {
+      setCurrentView(saved);
+      onViewChange(saved);
+    } else {
+      onViewChange(initialView);
+    }
+    setMounted(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleToggle = (view: 'list' | 'grid') => {
     setCurrentView(view);
     onViewChange(view);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(VIEW_PREFERENCE_KEY, view);
-    }
+    localStorage.setItem(VIEW_PREFERENCE_KEY, view);
   };
 
-  // Load saved preference on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(VIEW_PREFERENCE_KEY);
-      if (saved === 'list' || saved === 'grid') {
-        setCurrentView(saved);
-        onViewChange(saved);
-      }
-    }
-  }, []); // Run once on mount
+  // Don't render until mounted on client
+  if (!mounted) return null;
 
   return (
     <div className={styles.toggle}>
