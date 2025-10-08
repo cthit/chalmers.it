@@ -71,8 +71,11 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     setUploadQueue(newQueue);
   };
 
-  const copyFile = (sha256: string) => {
-    navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
+  const copyFile = (sha256: string, file: File) => {
+    const embed = FileService.isMimeEmbeddable(file.type);
+    navigator.clipboard.writeText(
+      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
+    );
     toast(l.editor.linkCopied, { type: 'success' });
   };
 
@@ -202,11 +205,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         {Object.entries(uploadQueue).map(([sha256, file]) => (
           <li className={styles.fileActions} key={sha256}>
             <p>{file.name}</p>{' '}
-            <ActionButton
-              onClick={() => {
-                copyFile(sha256);
-              }}
-            >
+            <ActionButton type="button" onClick={() => copyFile(sha256, file)}>
               {l.editor.copyLink}
             </ActionButton>{' '}
             <ActionButton
