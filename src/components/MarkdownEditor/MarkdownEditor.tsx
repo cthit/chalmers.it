@@ -208,12 +208,12 @@ const MilkdownEditor = React.forwardRef<
         uploader
       }));
     });
-  }, [uploader, editor]);
+  }, [uploader, editor, action]);
 
   // Update local file replacer in editor when localFiles changes
   useEffect(
     () => action((ctx) => setLocalImageViewer(ctx, localFiles)),
-    [localFiles, editor]
+    [localFiles, editor, action]
   );
 
   const changeView = useCallback(
@@ -235,7 +235,7 @@ const MilkdownEditor = React.forwardRef<
 
       setViewMode(mode);
     },
-    [viewMode, markdown, editor, localFiles]
+    [viewMode, markdown, editor, localFiles, action]
   );
 
   const setFormat = useCallback(
