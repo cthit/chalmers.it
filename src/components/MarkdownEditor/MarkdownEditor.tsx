@@ -20,7 +20,7 @@ import { imageBlockComponent } from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styles from './MarkdownEditor.module.scss';
 import {
   configureLinkTooltip,
@@ -44,6 +44,52 @@ import {
 import i18nService from '@/services/i18nService';
 import FileService from '@/services/fileService';
 import { listener, listenerCtx } from '@milkdown/kit/plugin/listener';
+
+const setCustomLinkRenderer = (ctx: Ctx) => {
+  ctx.set(editorViewOptionsCtx, {
+    markViews: {
+      link: (mark) => {
+        const dom = document.createElement('span');
+        dom.className = 'md-link-as-span';
+        dom.setAttribute(
+          'data-href',
+          mark.attrs?.href ?? mark.attrs?.url ?? ''
+        );
+        if (mark.attrs?.title) dom.setAttribute('title', mark.attrs.title);
+        dom.tabIndex = 0;
+        dom.setAttribute('role', 'link');
+        return {
+          dom,
+          update: (newMark: any) => {
+            if (newMark.type !== mark.type) return false;
+            if (newMark.attrs?.href !== mark.attrs?.href) {
+              dom.setAttribute('data-href', newMark.attrs.href ?? '');
+            }
+            return true;
+          }
+        };
+      }
+    }
+  });
+};
+
+const setLocalImageViewer = (ctx: Ctx, localFiles: { [key: string]: File }) => {
+  ctx.get(listenerCtx).updated((ctx, docChanged) => {
+    if (!docChanged) return;
+    ctx
+      .get(editorViewCtx)
+      .dom.querySelectorAll('img')
+      .forEach((img) => {
+        const match = img
+          .getAttribute('src')
+          ?.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
+        if (match && localFiles[match[1]]) {
+          const localUrl = URL.createObjectURL(localFiles[match[1]]);
+          if (img.src !== localUrl) img.src = localUrl;
+        }
+      });
+  });
+};
 
 const insertLink = (ctx: Ctx) => {
   const view = ctx.get(editorViewCtx);
@@ -128,61 +174,8 @@ const MilkdownEditor = React.forwardRef<
         ctx.set(defaultValueCtx, markdown);
 
         configureLinkTooltip(ctx);
-
-        const listener = ctx.get(listenerCtx);
-        listener.updated((ctx, docChanged) => {
-          if (!docChanged) return;
-
-          const view = ctx.get(editorViewCtx);
-          const dom = view.dom;
-
-          dom.querySelectorAll('img').forEach((img) => {
-            const src = img.getAttribute('src') ?? '';
-            const match = src.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
-            if (!match) return;
-
-            const hash = match[1];
-            const localFile = localFiles[hash];
-
-            if (localFile) {
-              const localUrl = URL.createObjectURL(localFile);
-              if (img.src !== localUrl) {
-                img.src = localUrl;
-              }
-            }
-          });
-        });
-
-        ctx.set(editorViewOptionsCtx, {
-          markViews: {
-            link: (mark) => {
-              const dom = document.createElement('span');
-              dom.className = 'md-link-as-span';
-              dom.setAttribute(
-                'data-href',
-                mark.attrs?.href ?? mark.attrs?.url ?? ''
-              );
-              if (mark.attrs?.title)
-                dom.setAttribute('title', mark.attrs.title);
-
-              // accessibility: make it keyboard-focusable and announce as link if you want
-              dom.tabIndex = 0;
-              dom.setAttribute('role', 'link');
-
-              return {
-                dom,
-                update(newMark: any) {
-                  // called when mark attrs change; return false if view must be recreated
-                  if (newMark.type !== mark.type) return false;
-                  if (newMark.attrs?.href !== mark.attrs?.href) {
-                    dom.setAttribute('data-href', newMark.attrs.href ?? '');
-                  }
-                  return true;
-                }
-              };
-            }
-          }
-        });
+        setLocalImageViewer(ctx, localFiles);
+        setCustomLinkRenderer(ctx);
 
         ctx.update(uploadConfig.key, (prev) => ({
           ...prev,
@@ -199,45 +192,6 @@ const MilkdownEditor = React.forwardRef<
       .use(upload)
   );
 
-  // Update uploader in editor when onUpload changes
-  React.useEffect(() => {
-    if (editor.get()) {
-      editor.get()?.action((ctx) => {
-        ctx.update(uploadConfig.key, (prev) => ({
-          ...prev,
-          uploader
-        }));
-      });
-    }
-  }, [uploader, editor]);
-
-  // Update local file replacer in editor when localFiles changes
-  React.useEffect(() => {
-    if (editor.get()) {
-      editor.get()?.action((ctx) => {
-        const listener = ctx.get(listenerCtx);
-        listener.updated((ctx, docChanged) => {
-          if (!docChanged) return;
-          const view = ctx.get(editorViewCtx);
-          const dom = view.dom;
-          dom.querySelectorAll('img').forEach((img) => {
-            const src = img.getAttribute('src') ?? '';
-            const match = src.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
-            if (!match) return;
-            const hash = match[1];
-            const localFile = localFiles[hash];
-            if (localFile) {
-              const localUrl = URL.createObjectURL(localFile);
-              if (img.src !== localUrl) {
-                img.src = localUrl;
-              }
-            }
-          });
-        });
-      });
-    }
-  }, [localFiles, editor]);
-
   const action = useCallback(
     (fn: (ctx: Ctx) => void) => {
       if (editor.loading) return;
@@ -246,10 +200,26 @@ const MilkdownEditor = React.forwardRef<
     [editor]
   );
 
+  // Update uploader in editor when onUpload changes
+  useEffect(() => {
+    action((ctx) => {
+      ctx.update(uploadConfig.key, (prev) => ({
+        ...prev,
+        uploader
+      }));
+    });
+  }, [uploader, editor]);
+
+  // Update local file replacer in editor when localFiles changes
+  useEffect(
+    () => action((ctx) => setLocalImageViewer(ctx, localFiles)),
+    [localFiles, editor]
+  );
+
   const changeView = useCallback(
     (mode: 'wysiwyg' | 'raw' | 'preview') => {
       if (mode === 'wysiwyg') {
-        editor.get()?.action(replaceAll(markdown));
+        action(replaceAll(markdown));
       } else if (viewMode === 'wysiwyg') {
         const md: string = editor.get()?.action(getMarkdown()) || '';
         setMarkdown(md);
