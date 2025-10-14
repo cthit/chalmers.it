@@ -100,4 +100,9 @@ export default class FileService {
       types.includes(mimeTypes[key].type)
     );
   }
+
+  static isMimeEmbeddable(mime: string) {
+    const meta = this.convertMimeType(mime);
+    return meta?.type === MediaType.Image;
+  }
 }
