@@ -1,8 +1,8 @@
 import Layout, { generateMetadata as genMeta } from '@/app/[locale]/layout';
 import { cookies } from 'next/headers';
 
-export function generateMetadata() {
-  const locale = cookies().get('NEXT_LOCALE')?.value ?? 'en';
+export async function generateMetadata() {
+  const locale = (await cookies()).get('NEXT_LOCALE')?.value ?? 'en';
   return genMeta({
     params: {
       locale
@@ -10,12 +10,14 @@ export function generateMetadata() {
   });
 }
 
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  const locale = cookies().get('NEXT_LOCALE')?.value ?? 'en';
+export default async function RootLayout(
+  {
+    children
+  }: {
+    children: React.ReactNode;
+  }
+) {
+  const locale = (await cookies()).get('NEXT_LOCALE')?.value ?? 'en';
   return (
     <Layout
       params={{

@@ -7,11 +7,17 @@ import i18nService from '@/services/i18nService';
 import Forbidden from '@/components/ErrorPages/403/403';
 import ContactCard from '@/components/ContactCard/ContactCard';
 
-export default async function Page({
-  params: { locale }
-}: {
-  params: { locale: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const groups = await SessionService.getActiveAddedGroups();
   if (groups.length === 0) {
     return <Forbidden />;

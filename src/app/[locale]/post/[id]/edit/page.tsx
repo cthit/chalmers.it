@@ -8,11 +8,12 @@ import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatShe
 import ContactCard from '@/components/ContactCard/ContactCard';
 import Forbidden from '@/components/ErrorPages/403/403';
 
-export default async function Page({
-  params
-}: {
-  params: { locale: string; id: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string; id: string }>;
+  }
+) {
+  const params = await props.params;
   const groups = await SessionService.getActiveAddedGroups();
   const newsPost = await NewsService.get(Number.parseInt(params.id));
 

@@ -8,11 +8,17 @@ import Calendar from '@/components/Calendar/Calendar';
 
 export const revalidate = 3600;
 
-export default function Home({
-  params: { locale }
-}: {
-  params: { locale: string };
-}) {
+export default async function Home(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   return (
     <main className={styles.main}>
       <ThreePaneLayout

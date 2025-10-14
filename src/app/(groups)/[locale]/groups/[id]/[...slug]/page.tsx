@@ -4,11 +4,12 @@ import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPage from '@/components/DivisionPage/DivisionPage';
 import ContactCard from '@/components/ContactCard/ContactCard';
 
-export default async function Page({
-  params
-}: {
-  params: { locale: string; id: string; slug: string[] };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string; id: string; slug: string[] }>;
+  }
+) {
+  const params = await props.params;
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 
   const main = DivisionPage(params.locale, params.slug, group.id);

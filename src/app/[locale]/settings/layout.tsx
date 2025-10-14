@@ -56,13 +56,22 @@ const pages: {
   }
 ];
 
-export default async function SettingsLayout({
-  params: { locale },
-  children
-}: {
-  params: { locale: string };
-  children: React.ReactNode;
-}) {
+export default async function SettingsLayout(
+  props: {
+    params: Promise<{ locale: string }>;
+    children: React.ReactNode;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const l = i18nService.getLocale(locale);
   const session = await SessionService.getUser();
 
