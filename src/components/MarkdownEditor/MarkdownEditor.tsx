@@ -95,7 +95,15 @@ const insertLink = (ctx: Ctx) => {
   const view = ctx.get(editorViewCtx);
   const { selection, doc } = view.state;
 
-  if (selection.empty) return;
+  if (selection.empty) {
+    const schema = view.state.schema;
+    const text = schema.text('text', [schema.marks.link.create({ href: '' })]);
+    view.dispatch(view.state.tr.insert(selection.from, text));
+    view.focus();
+    ctx.get(linkTooltipAPI.key).addLink(selection.from, selection.from + 4);
+
+    return;
+  }
 
   if (ctx.get(linkTooltipState.key).mode === 'edit') return;
 
