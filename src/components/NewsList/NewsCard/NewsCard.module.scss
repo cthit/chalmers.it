@@ -23,6 +23,10 @@
   height: 100%;
   max-height: 25rem;
   transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+  }
 }
 
 // When card container is narrow, stack image below text
@@ -89,6 +93,39 @@
   font-size: 80%; // Scale everything down to 80% of parent size
   min-height: 0; // Allow flex item to shrink below content size
   max-height: 100%; // Allow it to fill available space in the grid
+
+  // Hide scrollbar by default
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari/Opera
+  }
+
+  // Show scrollbar on hover or focus
+  &:hover,
+  &:focus-within {
+    scrollbar-width: thin; // Firefox
+    -ms-overflow-style: auto; // IE/Edge
+
+    &::-webkit-scrollbar {
+      display: block;
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+  }
 
   // Scale headers relative to the new base size
   :global(h1) {
