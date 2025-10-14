@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const config = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
-    prependData: `@import "@/styles/variables.scss";`
+    prependData: `@use "@/styles/variables.scss" as *;`
   },
   output: 'standalone',
   experimental: {
