@@ -229,6 +229,8 @@ const MilkdownEditor = React.forwardRef<
 
   const changeView = useCallback(
     (mode: 'wysiwyg' | 'raw' | 'preview') => {
+      if (mode === viewMode) return;
+
       if (mode === 'wysiwyg') {
         action(replaceAll(markdown));
       } else if (viewMode === 'wysiwyg') {
