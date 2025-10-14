@@ -3,13 +3,14 @@
   color: inherit;
   display: block;
   height: 100%;
+  container-type: inline-size;
 }
 
 .card {
   cursor: pointer;
   background: var(--background-secondary);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: 1.5rem;
   display: grid;
   grid-template-areas:
@@ -17,10 +18,39 @@
     'text media'
     'footer footer';
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 1rem;
   height: 100%;
+  max-height: 25rem;
   transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+  }
+}
+
+// When card container is narrow, stack image below text
+@container (max-width: 18rem) {
+  .card {
+    grid-template-areas:
+      'header'
+      'text'
+      'media'
+      'footer';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(6rem, auto) auto auto;
+  }
+
+  .mediaColumn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      max-height: 12rem;
+    }
+  }
 }
 
 .cardNoImage {
@@ -48,6 +78,11 @@
   font-size: var(--text-large);
   line-height: 1.3;
   color: var(--text-primary);
+  /* Allow very long words or URLs in titles to break/wrap instead of overflowing */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: normal;
 }
 
 .textColumn {
@@ -55,8 +90,42 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  max-height: 10rem;
   font-size: 80%; // Scale everything down to 80% of parent size
+  min-height: 0; // Allow flex item to shrink below content size
+  max-height: 100%; // Allow it to fill available space in the grid
+
+  // Hide scrollbar by default
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari/Opera
+  }
+
+  // Show scrollbar on hover or focus
+  &:hover,
+  &:focus-within {
+    scrollbar-width: thin; // Firefox
+    -ms-overflow-style: auto; // IE/Edge
+
+    &::-webkit-scrollbar {
+      display: block;
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+  }
 
   // Scale headers relative to the new base size
   :global(h1) {
@@ -72,18 +141,18 @@
 
 .mediaColumn {
   grid-area: media;
-  width: 180px;
+  max-width: 11rem;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
 
   img {
     max-width: 100%;
-    max-height: 140px;
+    max-height: 9rem;
     width: auto;
     height: auto;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 0.5rem;
   }
 }
 
@@ -109,7 +178,7 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 27rem) {
   .card {
     grid-template-areas:
       'header'
@@ -137,9 +206,5 @@
 
   .title {
     font-size: var(--text-medium);
-  }
-
-  .textColumn {
-    max-height: 8rem;
   }
 }
