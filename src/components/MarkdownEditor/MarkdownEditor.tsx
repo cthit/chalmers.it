@@ -202,11 +202,14 @@ const MilkdownEditor = React.forwardRef<
 
   // Update uploader in editor when onUpload changes
   useEffect(() => {
+    if (editor.loading) return;
     action((ctx) => {
-      ctx.update(uploadConfig.key, (prev) => ({
-        ...prev,
-        uploader
-      }));
+      if (ctx.isInjected(uploadConfig.key)) {
+        ctx.update(uploadConfig.key, (prev) => ({
+          ...prev,
+          uploader
+        }));
+      }
     });
   }, [uploader, editor, action]);
 
