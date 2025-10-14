@@ -294,7 +294,7 @@ const MilkdownEditor = React.forwardRef<
   }));
 
   return (
-    <>
+    <div>
       <div className={styles.toolbar}>
         <div>
           {viewMode === 'wysiwyg' && (
@@ -404,7 +404,7 @@ const MilkdownEditor = React.forwardRef<
           <MarkdownView content={markdownPreview} allowBlob />
         </div>
       )}
-    </>
+    </div>
   );
 });
 

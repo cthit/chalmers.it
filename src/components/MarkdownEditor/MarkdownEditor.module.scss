@@ -352,6 +352,8 @@
 }
 
 .toolbar {
+  position: sticky;
+  top: 5rem;
   border-radius: 0.5rem;
   padding: 0.5rem;
   font-size: var(--text-normal);
