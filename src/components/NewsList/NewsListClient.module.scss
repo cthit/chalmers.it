@@ -1,20 +1,15 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-top: 1rem;
 }
 
-// Responsive grid adjustments
-@media (max-width: 768px) {
+// Single column only on very small screens
+@media (max-width: 450px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    grid-auto-rows: auto;
     gap: 1rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }

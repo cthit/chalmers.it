@@ -3,6 +3,7 @@
   color: inherit;
   display: block;
   height: 100%;
+  container-type: inline-size;
 }
 
 .card {
@@ -17,10 +18,35 @@
     'text media'
     'footer footer';
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 1rem;
   height: 100%;
+  max-height: 400px;
   transition: all 0.2s ease;
+}
+
+// When card container is narrow, stack image below text
+@container (max-width: 280px) {
+  .card {
+    grid-template-areas:
+      'header'
+      'text'
+      'media'
+      'footer';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(6rem, auto) auto auto;
+  }
+
+  .mediaColumn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      max-height: 200px;
+    }
+  }
 }
 
 .cardNoImage {
@@ -48,6 +74,11 @@
   font-size: var(--text-large);
   line-height: 1.3;
   color: var(--text-primary);
+  /* Allow very long words or URLs in titles to break/wrap instead of overflowing */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: normal;
 }
 
 .textColumn {
@@ -55,8 +86,9 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  max-height: 10rem;
   font-size: 80%; // Scale everything down to 80% of parent size
+  min-height: 0; // Allow flex item to shrink below content size
+  max-height: 100%; // Allow it to fill available space in the grid
 
   // Scale headers relative to the new base size
   :global(h1) {
@@ -72,7 +104,7 @@
 
 .mediaColumn {
   grid-area: media;
-  width: 180px;
+  max-width: 180px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -109,7 +141,7 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 430px) {
   .card {
     grid-template-areas:
       'header'
@@ -137,9 +169,5 @@
 
   .title {
     font-size: var(--text-medium);
-  }
-
-  .textColumn {
-    max-height: 8rem;
   }
 }
