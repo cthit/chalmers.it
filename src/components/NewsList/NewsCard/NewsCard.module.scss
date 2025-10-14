@@ -10,7 +10,7 @@
   cursor: pointer;
   background: var(--background-secondary);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: 1.5rem;
   display: grid;
   grid-template-areas:
@@ -21,12 +21,12 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 1rem;
   height: 100%;
-  max-height: 400px;
+  max-height: 25rem;
   transition: all 0.2s ease;
 }
 
 // When card container is narrow, stack image below text
-@container (max-width: 280px) {
+@container (max-width: 18rem) {
   .card {
     grid-template-areas:
       'header'
@@ -44,7 +44,7 @@
 
     img {
       max-width: 100%;
-      max-height: 200px;
+      max-height: 12rem;
     }
   }
 }
@@ -104,18 +104,18 @@
 
 .mediaColumn {
   grid-area: media;
-  max-width: 180px;
+  max-width: 11rem;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
 
   img {
     max-width: 100%;
-    max-height: 140px;
+    max-height: 9rem;
     width: auto;
     height: auto;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 0.5rem;
   }
 }
 
@@ -141,7 +141,7 @@
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 27rem) {
   .card {
     grid-template-areas:
       'header'
