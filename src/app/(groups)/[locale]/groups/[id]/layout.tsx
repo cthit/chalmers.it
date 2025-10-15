@@ -12,7 +12,11 @@ import GammaService from '@/services/gammaService';
 import { Metadata } from 'next';
 import i18nService from '@/services/i18nService';
 
-const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
+const poppins = Poppins({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-poppins'
+});
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; id: string }>;
@@ -56,7 +60,7 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale}>
-      <body style={{ display: 'unset' }} className={poppins.className}>
+      <body style={{ display: 'unset' }} className={poppins.variable}>
         <ThemeProvider>
           <TopLoader />
           <Header locale={locale} />
