@@ -1,4 +1,4 @@
-FROM node:20.8.0-alpine AS deps
+FROM node:20.19.5-alpine AS deps
 LABEL maintainer="digIT <digit@chalmers.it>"
 
 RUN apk add --no-cache libc6-compat
@@ -11,7 +11,7 @@ RUN pnpm i --frozen-lockfile
 ##########################
 #      BUILD STAGE       #
 ##########################
-FROM node:20.8.0-alpine AS builder
+FROM node:20.19.5-alpine AS builder
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -22,7 +22,7 @@ RUN yarn build
 ##########################
 #    PRODUCTION STAGE    #
 ##########################
-FROM node:20.8.0-alpine AS runner
+FROM node:20.19.5-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
@@ -41,10 +41,6 @@ RUN chown -R nextjs:nodejs $MEDIA_PATH
 
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
         CMD wget 127.0.0.1:3000/api/heartbeat -q -O - > /dev/null 2>&1
-
-# Copy logger configs
-COPY --chown=nextjs:nodejs next-logger.config.cjs /app/
-COPY --chown=nextjs:nodejs pino-pretty-transport.cjs /app/
 
 # Copy database schema
 COPY --chown=nextjs:nodejs prisma ./prisma
