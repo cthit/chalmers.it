@@ -4,16 +4,12 @@ import EditTypeForm from './EditTypeForm';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const types = await DivisionGroupService.getGroupTypes();
   types.pop();

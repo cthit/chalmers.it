@@ -7,11 +7,9 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ id: string; locale: string }>;
+}) {
   const params = await props.params;
   const group = (await DivisionGroupService.getInfoBySlug(params.id))!;
 

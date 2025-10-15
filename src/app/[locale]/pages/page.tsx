@@ -8,16 +8,12 @@ import SessionService from '@/services/sessionService';
 import DivisionPages from '@/components/DivisionPages/DivisionPages';
 import ContentPane from '@/components/ContentPane/ContentPane';
 
-export default async function Groups(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Groups(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   return (
     <main>

@@ -6,16 +6,12 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 import Forbidden from '@/components/ErrorPages/403/403';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const groups = await SessionService.getActiveAddedGroups();
 

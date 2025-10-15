@@ -6,16 +6,12 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionPageService from '@/services/divisionPageService';
 import SessionService from '@/services/sessionService';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   if (!(await SessionService.isActive())) {
     return <Forbidden />;

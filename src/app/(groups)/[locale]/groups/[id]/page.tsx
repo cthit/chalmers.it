@@ -13,17 +13,12 @@ import ActionLink from '@/components/ActionButton/ActionLink';
 
 export const revalidate = 3600;
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string; id: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale,
-    id
-  } = params;
+  const { locale, id } = params;
 
   const group = (await DivisionGroupService.getInfoBySlug(id))!;
 

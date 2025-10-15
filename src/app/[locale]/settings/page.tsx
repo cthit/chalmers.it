@@ -2,16 +2,12 @@ import ThemeStatus from '@/components/ThemeStatus/ThemeStatus';
 import i18nService from '@/services/i18nService';
 import SessionService from '@/services/sessionService';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const l = i18nService.getLocale(locale);
   const user = await SessionService.getUser();

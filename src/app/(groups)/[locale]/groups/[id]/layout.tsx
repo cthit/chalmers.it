@@ -14,17 +14,12 @@ import i18nService from '@/services/i18nService';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string; id: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale,
-    id
-  } = params;
+  const { locale, id } = params;
 
   const group = await DivisionGroupService.getInfoBySlug(id).catch(() => {
     return null;
@@ -41,22 +36,15 @@ export async function generateMetadata(
 
 export const dynamicParams = false;
 
-export default async function RootLayout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string; id: string }>;
-  }
-) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale,
-    id
-  } = params;
+  const { locale, id } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const group = await DivisionGroupService.getInfoBySlug(id).catch((e) => {
     console.error(`${e.name}:`, e.message);

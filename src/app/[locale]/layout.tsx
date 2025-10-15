@@ -14,16 +14,12 @@ import NotFound from '@/components/ErrorPages/404/404';
 
 const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const l = i18nService.getLocale(locale);
   return {
@@ -40,21 +36,15 @@ export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 export const revalidate = false;
 
-export default async function RootLayout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const invalidLocale = !i18nConfig.locales.includes(locale);
   return (

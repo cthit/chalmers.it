@@ -4,16 +4,12 @@ import RemoveNotifierButton from './RemoveNotifierButton';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const l = i18nService.getLocale(locale);
   const notifiers = await NotifyService.getNotifiers();

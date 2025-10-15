@@ -4,33 +4,23 @@ import NewsSearchForm from '@/components/NewsSearchForm/NewsSearchForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<{
-      q?: string;
-      gid?: string;
-      uid?: string;
-      before: string;
-      after: string;
-    }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{
+    q?: string;
+    gid?: string;
+    uid?: string;
+    before: string;
+    after: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
 
-  const {
-    q,
-    gid,
-    uid,
-    before,
-    after
-  } = searchParams;
+  const { q, gid, uid, before, after } = searchParams;
 
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const validQuery =
     (q !== undefined && (q?.length ?? -1 >= 3)) ||
