@@ -10,6 +10,7 @@ import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
+import GroupAvatar from '@/components/GroupAvatar/GroupAvatar';
 
 export const revalidate = 3600;
 
@@ -79,6 +80,11 @@ const mainContent = async (locale: string, id: string) => {
           ))}
         </ul>
       )}
+      {<GroupAvatar
+        groupAvatarUrl={GammaService.getGroupAvatarURL(group.gammaSuperGroupId)}
+        groupName={group.prettyName}
+        fetchedURL={GammaService.getGroupAvatarURL(group.gammaSuperGroupId)}
+      />}
     </ContentArticle>
   );
 };
