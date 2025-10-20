@@ -21,6 +21,7 @@ const GroupAvatar = ({
       {/* Render the URL on the page for quick debugging */}
       <div>{groupAvatarUrl}</div>
       <div>{fetchedURL}</div>
+      <div>{groupName}</div>
     </div>
   );
 };
