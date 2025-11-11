@@ -5,7 +5,14 @@ import parser from '@typescript-eslint/parser';
 
 export default [
   {
-    ignores: ['.next/**', 'node_modules/**', 'out/**', 'build/**', 'db/**', 'media/**']
+    ignores: [
+      '.next/**',
+      'node_modules/**',
+      'out/**',
+      'build/**',
+      'db/**',
+      'media/**'
+    ]
   },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
