@@ -14,7 +14,7 @@ const NewsPostMeta = ({
   const l = i18nService.getLocale(locale);
   const scheduled = post.status === PostStatus.SCHEDULED;
   const date = scheduled
-    ? post.scheduledPublish ?? post.createdAt
+    ? (post.scheduledPublish ?? post.createdAt)
     : post.createdAt;
   return (
     <p className={styles.subtitle}>

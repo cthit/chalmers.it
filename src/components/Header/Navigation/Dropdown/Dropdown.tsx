@@ -1,11 +1,8 @@
 'use client';
 
-import { Poppins } from 'next/font/google';
 import styles from './Dropdown.module.scss';
 import { HTMLAttributes, ReactNode, useRef, useState } from 'react';
 import useClickOutside from '@/hooks/clickOutside';
-
-const poppins = Poppins({ subsets: ['latin'], weight: ['500'] });
 
 type Props = {
   parent: ReactNode;
@@ -47,9 +44,7 @@ const Dropdown = ({
       <div className={`${styles.dropdownHitbox}`} />
 
       <div className={`${styles.dropdownContainer} ${contentClassName}`}>
-        <div className={`${styles.dropdownContent} ${poppins.className}`}>
-          {children}
-        </div>
+        <div className={styles.dropdownContent}>{children}</div>
       </div>
     </div>
   );

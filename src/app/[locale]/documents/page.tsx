@@ -14,13 +14,18 @@ import FilterDocumentsForm from './FilterDocumentsForm';
 import DivisionGroupService from '@/services/divisionGroupService';
 import { DocumentType } from '@prisma/client';
 
-export default async function Page({
-  params: { locale },
-  searchParams: { q, gid, type }
-}: {
-  params: { locale: string };
-  searchParams: { q?: string; gid?: string; type?: string };
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string; gid?: string; type?: string }>;
 }) {
+  const searchParams = await props.searchParams;
+
+  const { q, gid, type } = searchParams;
+
+  const params = await props.params;
+
+  const { locale } = params;
+
   const groups = await DivisionGroupService.getAll();
 
   const validType =

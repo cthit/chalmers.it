@@ -5,11 +5,13 @@ import EditGroupForm from './EditGroupForm';
 import i18nService from '@/services/i18nService';
 import Table from '@/components/Table/Table';
 
-export default async function Page({
-  params: { locale }
-}: {
-  params: { locale: string };
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const l = i18nService.getLocale(locale);
   const groups = await DivisionGroupService.getAll();
   const gammaGroups = (await GammaService.getAllSuperGroups())

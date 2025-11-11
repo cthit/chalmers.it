@@ -12,13 +12,19 @@ import GammaService from '@/services/gammaService';
 import { Metadata } from 'next';
 import i18nService from '@/services/i18nService';
 
-const poppins = Poppins({ weight: ['400'], subsets: ['latin'] });
+const poppins = Poppins({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-poppins'
+});
 
-export async function generateMetadata({
-  params: { locale, id }
-}: {
-  params: { locale: string; id: string };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale, id } = params;
+
   const group = await DivisionGroupService.getInfoBySlug(id).catch(() => {
     return null;
   });
@@ -34,13 +40,16 @@ export async function generateMetadata({
 
 export const dynamicParams = false;
 
-export default async function RootLayout({
-  children,
-  params: { locale, id }
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { locale: string; id: string };
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale, id } = params;
+
+  const { children } = props;
+
   const group = await DivisionGroupService.getInfoBySlug(id).catch((e) => {
     console.error(`${e.name}:`, e.message);
     return null;
@@ -51,7 +60,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body style={{ display: 'unset' }} className={poppins.className}>
+      <body style={{ display: 'unset' }} className={poppins.variable}>
         <ThemeProvider>
           <TopLoader />
           <Header locale={locale} />
