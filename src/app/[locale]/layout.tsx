@@ -25,7 +25,7 @@ const bitter = Bitter({
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {;
+}): Promise<Metadata> {
   const { locale } = await props.params;
 
   const l = i18nService.getLocale(locale);
