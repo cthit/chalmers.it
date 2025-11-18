@@ -5,7 +5,6 @@ import '@/styles/themes.scss';
 import '@/styles/globals.scss';
 import type { Metadata } from 'next';
 import { Bitter, Poppins } from 'next/font/google';
-import Banner from '@/components/Banner/Banner';
 import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider';
 import TopLoader from '@/components/TopLoader/TopLoader';
 import i18nService from '@/services/i18nService';
@@ -27,9 +26,7 @@ const bitter = Bitter({
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const params = await props.params;
-
-  const { locale } = params;
+  const { locale } = await props.params;
 
   const l = i18nService.getLocale(locale);
   return {
@@ -66,7 +63,6 @@ export default async function RootLayout(props: {
         <ThemeProvider>
           <TopLoader />
           <Header locale={locale} />
-          <Banner locale={locale} />
           {invalidLocale ? <NotFound /> : children}
           <ToastContainerWrapper />
         </ThemeProvider>
