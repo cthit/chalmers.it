@@ -68,3 +68,4 @@ The following environment variables are used:
 | ADMIN_GROUPS              | Comma-separated list of groups that are considered admin groups                              | `styrit,digit`                                                         |
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
+| MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
