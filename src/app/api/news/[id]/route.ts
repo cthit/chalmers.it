@@ -1,5 +1,6 @@
 import ApiService from '@/services/apiService';
 import NewsService from '@/services/newsService';
+import { PostStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -12,7 +13,7 @@ export async function GET(
   if (isNaN(id)) return ApiService.jsonError('Invalid news id');
 
   const newsPost = await NewsService.get(id);
-  if (newsPost === null) {
+  if (newsPost === null || newsPost.status !== PostStatus.PUBLISHED) {
     return ApiService.jsonError('News post not found', 404);
   }
 
