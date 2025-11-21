@@ -91,6 +91,21 @@ export default class NewsService {
             gammaSuperGroupId: true,
             prettyName: true
           }
+        },
+        connectedEvents: {
+          select: {
+            id: true,
+            titleEn: true,
+            titleSv: true,
+            descriptionEn: true,
+            descriptionSv: true,
+            fullDay: true,
+            startTime: true,
+            endTime: true,
+            location: true,
+            createdAt: true,
+            updatedAt: true
+          }
         }
       },
       where: {

@@ -32,6 +32,30 @@ export default class EventService {
     });
   }
 
+  static async getPage(page: number, pageSize: number) {
+    return await prisma.event.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        descriptionEn: true,
+        descriptionSv: true,
+        fullDay: true,
+        startTime: true,
+        endTime: true,
+        location: true,
+        createdAt: true,
+        updatedAt: true,
+        newsPostId: true
+      }
+    });
+  }
+
   static async create(event: {
     titleEn: string;
     titleSv: string;
