@@ -6,6 +6,11 @@ const config: NextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
     prependData: `@use "@/styles/variables.scss" as *;`
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '500mb'
+    }
+  },
   output: 'standalone'
 };
 
