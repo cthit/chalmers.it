@@ -40,11 +40,17 @@ This is done by running `pnpm run build`, which will build the project to `.next
 Services will however be needed to be started separately.
 The project is also compiled this way when building the docker image.
 
-## UTF-8 Symbols
+## Getting the correct GAMMA_API_KEY_ID and GAMMA_API_KEY_TOKEN
 
-There is a known issue where `pino-pretty` handles UTF-8 symbols incorrectly on Windows.
-For example, checkmarks may display as `Ô£ô` instead of `✓`.
-Should these symbols appear, change the current code page to UTF-8 by running `chcp 65001` in the terminal that will be used to run the project.
+You need to be a Gamma admin. Go to https://auth.chalmers.it/api-keys/create and type a key name and description. In the drop down, select **"INFO"**.
+
+DO NOT copy "Api key". Copy the string under "To authorize when doing API requests, simply add this header:" which will look something like **`Authorization: pre-shared a53b0390-xxx-xxxx-xxx-xxxxxx : xxxxxxxxx`**.
+
+The part you need is the KEY_ID : KEY which is **`a53b0390-xxx-xxxx-xxx-xxxxxx : xxxxxxxxx`**. Store this in your .env file or somewhere local.
+
+## Getting the correct GAMMA_CLIENT_ID and GAMMA_CLIENT_SECRET
+
+As a Gamma admin, go to https://auth.chalmers.it/clients. It only works with official client, not user client because... reasons. Pick a name and description. **Set redirect url to** `http://localhost:3000/api/auth/callback/gamma` and add eventual restrictions. Copy the **client secret**, it will look something like `CR66SWjbwYHd8XXXxXXxXXXXxxxXX` Store it in your .env file or somewhere local. The **client ID** is shown in the client details and looks something like `TJFDH7H2E8USXXXXXXXX`.
 
 ## Environment Variables
 
