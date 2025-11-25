@@ -41,6 +41,7 @@ Services will however be needed to be started separately.
 The project is also compiled this way when building the docker image.
 
 ## Getting the correct GAMMA_API_KEY_ID and GAMMA_API_KEY_TOKEN
+
 You need to be a Gamma admin. Go to https://auth.chalmers.it/api-keys/create and type a key name and description. In the drop down, select **"INFO"**.
 
 DO NOT copy "Api key". Copy the string under "To authorize when doing API requests, simply add this header:" which will look something like **`Authorization: pre-shared a53b0390-xxx-xxxx-xxx-xxxxxx : xxxxxxxxx`**.
@@ -48,6 +49,7 @@ DO NOT copy "Api key". Copy the string under "To authorize when doing API reques
 The part you need is the KEY_ID : KEY which is **`a53b0390-xxx-xxxx-xxx-xxxxxx : xxxxxxxxx`**. Store this in your .env file or somewhere local.
 
 ## Getting the correct GAMMA_CLIENT_ID and GAMMA_CLIENT_SECRET
+
 As a Gamma admin, go to https://auth.chalmers.it/clients. It only works with official client, not user client because... reasons. Pick a name and description. **Set redirect url to** `http://localhost:3000/api/auth/callback/gamma` and add eventual restrictions. Copy the **client secret**, it will look something like `CR66SWjbwYHd8XXXxXXxXXXXxxxXX` Store it in your .env file or somewhere local. The **client ID** is shown in the client details and looks something like `TJFDH7H2E8USXXXXXXXX`.
 
 
