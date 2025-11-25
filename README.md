@@ -52,7 +52,6 @@ The part you need is the KEY_ID : KEY which is **`a53b0390-xxx-xxxx-xxx-xxxxxx :
 
 As a Gamma admin, go to https://auth.chalmers.it/clients. It only works with official client, not user client because... reasons. Pick a name and description. **Set redirect url to** `http://localhost:3000/api/auth/callback/gamma` and add eventual restrictions. Copy the **client secret**, it will look something like `CR66SWjbwYHd8XXXxXXxXXXXxxxXX` Store it in your .env file or somewhere local. The **client ID** is shown in the client details and looks something like `TJFDH7H2E8USXXXXXXXX`.
 
-
 ## Environment Variables
 
 This project uses environment variables to configure its behavior.
