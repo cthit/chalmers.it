@@ -11,18 +11,12 @@ import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
-import Popup from 'reactjs-popup';
 import DatePicker from '../DatePicker/DatePicker';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
-import ContentPane from '../ContentPane/ContentPane';
 import { useRouter } from 'next/navigation';
-import MarkdownView from '../MarkdownView/MarkdownView';
 import { toast } from 'react-toastify';
 
-const PreviewContentStyle = {
-  backgroundColor: '#000000AA'
-};
 const validUploadTypes = Object.values(MediaType);
 
 interface NewPostFormProps {
@@ -72,17 +66,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [group, setGroup] = useState(newsPost.group ?? '');
   const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(newsPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(newsPost.contentSv ?? '');
+  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
     newsPost.scheduledPublish ? 'schedule' : 'now'
   );
   const [scheduledFor, setScheduledFor] = useState(
     newsPost.scheduledPublish ?? new Date()
   );
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewContentSv, setPreviewContentSv] = useState('');
-  const [previewContentEn, setPreviewContentEn] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
@@ -94,14 +85,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
+    const droppedFiles: { [key: string]: File } = {};
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
+      droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
+    return Object.entries(droppedFiles).map(([sha256, file]) => ({
+      file,
+      url: '/api/media/' + sha256
+    }));
   };
 
   const delFile = (sha256: string) => {
@@ -110,8 +107,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setUploadQueue(newQueue);
   };
 
-  const copyFile = (sha256: string) => {
-    navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
+  const copyFile = (sha256: string, file: File) => {
+    const embed = FileService.isMimeEmbeddable(file.type);
+    navigator.clipboard.writeText(
+      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
+    );
     toast(l.editor.linkCopied, { type: 'success' });
   };
 
@@ -132,8 +132,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             newsPost.id!,
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             formData,
             publish === 'now' ? null : publishDate
           ),
@@ -149,8 +149,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           postForGroup(
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             group,
             formData,
             publishDate
@@ -163,7 +163,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       } else {
         postId = await toast.promise(
-          post(titleEn, titleSv, contentEn, contentSv, formData, publishDate),
+          post(
+            titleEn,
+            titleSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
+            formData,
+            publishDate
+          ),
           {
             pending: l.editor.posting,
             success: l.editor.posted,
@@ -218,13 +225,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }
   }
 
-  function preview() {
-    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
-    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
-
-    setShowPreview(true);
-  }
-
   return (
     <>
       <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
@@ -236,7 +236,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           onChange={(e) => setGroup(e.target.value)}
           required
         >
-          <option disabled hidden value="">
+          <option disabled hidden={group !== ''} value="">
             {l.editor.selectGroup}
           </option>
           <option value="self">{l.editor.self}</option>
@@ -255,13 +255,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-          onDrop={(e) => dropFiles(e.dataTransfer.files)}
-          value={contentEn}
-          onChange={(e) => setContentEn(e.target.value)}
-          required
+          defaultMd={newsPost.contentEn}
+          ref={contentEnRef}
+          onUpload={dropFiles}
+          locale={newsPost.locale}
+          localFiles={uploadQueue}
         />
 
         <h2>{l.editor.title} (Sv)</h2>
@@ -272,13 +270,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          onDragOver={(e) => {
-            e.preventDefault();
-          }}
-          onDrop={(e) => dropFiles(e.dataTransfer.files)}
-          value={contentSv}
-          onChange={(e) => setContentSv(e.target.value)}
-          required
+          defaultMd={newsPost.contentSv}
+          ref={contentSvRef}
+          onUpload={dropFiles}
+          locale={newsPost.locale}
+          localFiles={uploadQueue}
         />
         <br />
         <h2>{l.editor.uploaded}</h2>
@@ -289,9 +285,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <p>{file.name}</p>{' '}
               <ActionButton
                 type="button"
-                onClick={() => {
-                  copyFile(sha256);
-                }}
+                onClick={() => copyFile(sha256, file)}
               >
                 {l.editor.copyLink}
               </ActionButton>{' '}
@@ -426,35 +420,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           <ActionButton type="submit">
             {newsPost.id !== undefined ? l.general.save : l.general.create}
           </ActionButton>
-          <ActionButton type="button" onClick={preview}>
-            {l.editor.previewAction}
-          </ActionButton>
         </div>
       </form>
-
-      <Popup
-        modal
-        className={style.dialog}
-        open={showPreview}
-        onClose={() => setShowPreview(false)}
-        overlayStyle={PreviewContentStyle}
-      >
-        <ContentPane className={style.dialog}>
-          <h1>{l.editor.preview}</h1>
-          <Divider />
-          <h1>{titleEn}</h1>
-          <MarkdownView content={previewContentEn} allowBlob />
-
-          <Divider />
-
-          <h1>{titleSv}</h1>
-          <MarkdownView content={previewContentSv} allowBlob />
-
-          <ActionButton onClick={() => setShowPreview(false)}>
-            {l.general.close}
-          </ActionButton>
-        </ContentPane>
-      </Popup>
     </>
   );
 };

@@ -166,7 +166,18 @@
     "links": "Links",
     "images": "Images",
     "code": "Code Blocks",
-    "tables": "Tables"
+    "tables": "Tables",
+    "setFormat": "Set format...",
+    "paragraph": "Paragraph",
+    "heading": "Heading",
+    "bold": "Bold",
+    "italic": "Italic",
+    "strikethrough": "Strikethrough",
+    "richText": "Rich Text",
+    "raw": "Markdown",
+    "preview": "Preview",
+    "link": "Link",
+    "image": "Image"
   },
   "search": {
     "search": "Search",
