@@ -86,7 +86,7 @@ const mainContent = async (locale: string, id: string) => {
         groupAvatarUrl={
           gammaGroup?.superGroup.id
             ? GammaService.getSuperGroupAvatarURL(gammaGroup.superGroup.id)
-            : ''
+            : '/smurf.svg'
         }
         groupName={group.prettyName}
       />
