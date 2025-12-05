@@ -3,25 +3,20 @@ import styles from './GroupAvatar.module.scss';
 
 const GroupAvatar = ({
   groupAvatarUrl,  
-  groupName,
-  fetchedURL
+  groupName
 }: {
   groupAvatarUrl: string;
   groupName: string;
-  fetchedURL: string;
 }) => {
   return (
-    <div>
+    <div className={styles.container}>
       <FallbackImage
-
         src={groupAvatarUrl}
         className={styles.picture}
         alt={'Group avatar for ' + groupName}
       />
       {/* Render the URL on the page for quick debugging */}
-      <div>{groupAvatarUrl}</div>
-      <div>{fetchedURL}</div>
-      <div>{groupName}</div>
+      <div className={styles.url}>{groupAvatarUrl}</div>
     </div>
   );
 };
