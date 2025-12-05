@@ -15,8 +15,6 @@ const GroupAvatar = ({
         className={styles.picture}
         alt={'Group avatar for ' + groupName}
       />
-      {/* Render the URL on the page for quick debugging */}
-      <div className={styles.url}>{groupAvatarUrl}</div>
     </div>
   );
 };
