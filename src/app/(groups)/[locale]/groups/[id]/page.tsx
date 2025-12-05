@@ -81,9 +81,8 @@ const mainContent = async (locale: string, id: string) => {
         </ul>
       )}
       {<GroupAvatar
-        groupAvatarUrl={gammaGroup?.superGroup.id ? GammaService.getGroupAvatarURL(gammaGroup.superGroup.id) : ''}
+        groupAvatarUrl={gammaGroup?.superGroup.id ? GammaService.getSuperGroupAvatarURL(gammaGroup.superGroup.id) : ''}
         groupName={group.prettyName}
-        fetchedURL={gammaGroup?.superGroup.id ? GammaService.getGroupAvatarURL(gammaGroup.superGroup.id) : ''}
       />}
     </ContentArticle>
   );
