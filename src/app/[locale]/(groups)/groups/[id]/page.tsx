@@ -59,6 +59,16 @@ const mainContent = async (locale: string, id: string) => {
           : gammaGroup?.superGroup.svDescription
       }
       titleSide={side}
+      titleLeft={
+        <GroupAvatar
+          groupAvatarUrl={
+            gammaGroup?.superGroup.id
+              ? GammaService.getSuperGroupAvatarURL(gammaGroup.superGroup.id)
+              : '/smurf.svg'
+          }
+          groupName={group.prettyName}
+        />
+      }
     >
       <MarkdownView content={en ? group.descriptionEn : group.descriptionSv} />
       <h2>{l.groups.members}</h2>
@@ -82,14 +92,6 @@ const mainContent = async (locale: string, id: string) => {
           ))}
         </ul>
       )}
-      <GroupAvatar
-        groupAvatarUrl={
-          gammaGroup?.superGroup.id
-            ? GammaService.getSuperGroupAvatarURL(gammaGroup.superGroup.id)
-            : '/smurf.svg'
-        }
-        groupName={group.prettyName}
-      />
     </ContentArticle>
   );
 };

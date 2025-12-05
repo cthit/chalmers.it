@@ -1,14 +1,11 @@
 .picture {
-  width: 8rem;
-  height: 8rem;
-  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
   object-fit: cover;
 }
 
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
