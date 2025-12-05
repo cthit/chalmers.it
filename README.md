@@ -2,6 +2,8 @@
 
 A rewrite and redesign of [chalmersit-rails](https://github.com/cthit/chalmersit-rails) in Next.js
 
+<img width="3840" height="2160" alt="Homepage of chalmers.it" src="https://github.com/user-attachments/assets/93fc0d13-2118-4904-9316-1bc3787ca407" />
+
 ## Suggestions and Contributions
 
 Suggestions are very welcome, and if you wish to create one, please create an issue using one of the templates.
