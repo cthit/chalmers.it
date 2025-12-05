@@ -33,6 +33,10 @@ export default class GammaService {
     return `${this.gammaUrl}/images/group/banner/${gid}`;
   }
 
+  static getSuperGroupAvatarURL(gid: string) {
+    return `${this.gammaUrl}/images/super-group/avatar/${gid}`;
+  }
+
   static isSuperGroupActive(sg: { type: string }) {
     return activeGroupTypes.includes(sg.type);
   }

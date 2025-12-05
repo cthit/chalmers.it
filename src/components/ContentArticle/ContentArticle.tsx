@@ -7,6 +7,7 @@ interface ContentArticleProps {
   title: string;
   subtitle?: string;
   titleSide?: React.ReactNode;
+  titleLeft?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -14,6 +15,7 @@ const ContentArticle = (a: ContentArticleProps) => {
   return (
     <ContentPane>
       <div className={style.title}>
+        {a.titleLeft && <div className={style.titleLeft}>{a.titleLeft}</div>}
         <h1>{a.title}</h1>
         {a.subtitle && (
           <>
