@@ -4,11 +4,6 @@ import DivisionGroupService from './services/divisionGroupService';
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    console.log('Patching logger');
-    await require('pino');
-    await require('pino-pretty');
-    await require('next-logger');
-
     console.log('Scheduling tasks');
     const newsPublishRule = new schedule.RecurrenceRule();
     newsPublishRule.second = 0;

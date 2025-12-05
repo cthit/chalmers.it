@@ -2,18 +2,18 @@
 
 import { ImgHTMLAttributes, useEffect, useRef, useState } from 'react';
 
-const FallbackImage = ({
-  src,
-  alt,
-  fallback,
-  ...rest
-}: ImgHTMLAttributes<HTMLImageElement> & { fallback?: string }) => {
+type FallbackImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> & {
+  src: string;
+  fallback?: string;
+};
+
+const FallbackImage = ({ src, alt, fallback, ...rest }: FallbackImageProps) => {
   const [hasRendered, setHasRendered] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     if (imgRef.current && hasRendered) {
-      imgRef.current!.src = src || '';
+      imgRef.current.src = src;
     }
   }, [src, hasRendered]);
 
@@ -27,10 +27,10 @@ const FallbackImage = ({
         {...rest}
         alt={alt}
         src={src}
-        ref={imgRef as any}
+        ref={imgRef}
         onError={({ currentTarget }) => {
           currentTarget.onerror = null;
-          currentTarget.src = fallback || '/smurf.svg';
+          currentTarget.src = fallback ?? '/smurf.svg';
         }}
       />
     </picture>
