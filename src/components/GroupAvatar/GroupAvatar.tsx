@@ -2,7 +2,7 @@ import FallbackImage from '../FallbackImage/FallbackImage';
 import styles from './GroupAvatar.module.scss';
 
 const GroupAvatar = ({
-  groupAvatarUrl,  
+  groupAvatarUrl,
   groupName
 }: {
   groupAvatarUrl: string;
