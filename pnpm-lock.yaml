@@ -16,8 +16,8 @@ importers:
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
       html-to-slack:
-        specifier: 0.3.5
-        version: 0.3.5
+        specifier: 0.3.7
+        version: 0.3.7
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.11.16)
@@ -1711,8 +1711,8 @@ packages:
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
 
-  html-to-slack@0.3.5:
-    resolution: {integrity: sha512-MO+2TcJChlaaN+rYhW2gZWg6Rd1nu43J68LnCarN3O2s23FAEDHq0d6QJBMcNJsbiC4aZav9+q6rgPnA7Mb3aA==}
+  html-to-slack@0.3.7:
+    resolution: {integrity: sha512-dT81ID6F3YYddCPDK1pOBG4hvlHnY0UAiW9HneSy40sM05Pt8NsO7BXMoj24NBJE2Hph3uAi5qsy9UOtNIllTA==}
 
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
@@ -4987,7 +4987,7 @@ snapshots:
 
   html-escaper@2.0.2: {}
 
-  html-to-slack@0.3.5:
+  html-to-slack@0.3.7:
     dependencies:
       htmlparser2: 9.1.0
 
