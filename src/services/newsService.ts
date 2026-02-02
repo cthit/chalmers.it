@@ -119,7 +119,7 @@ export default class NewsService {
           {
             writtenFor: {
               gammaSuperGroupId: {
-                in: groupIds
+                in: groupIds ?? []
               }
             }
           }
