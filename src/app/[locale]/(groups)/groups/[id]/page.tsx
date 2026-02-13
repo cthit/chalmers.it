@@ -10,6 +10,7 @@ import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
+import GroupAvatar from '@/components/GroupAvatar/GroupAvatar';
 
 export const revalidate = 3600;
 
@@ -58,6 +59,16 @@ const mainContent = async (locale: string, id: string) => {
           : gammaGroup?.superGroup.svDescription
       }
       titleSide={side}
+      titleLeft={
+        <GroupAvatar
+          groupAvatarUrl={
+            gammaGroup?.superGroup.id
+              ? GammaService.getSuperGroupAvatarURL(gammaGroup.superGroup.id)
+              : '/smurf.svg'
+          }
+          groupName={group.prettyName}
+        />
+      }
     >
       <MarkdownView content={en ? group.descriptionEn : group.descriptionSv} />
       <h2>{l.groups.members}</h2>
