@@ -8,6 +8,7 @@
   margin: auto;
   margin-top: 1rem;
   display: none;
+  background-color: var(--load-more-button);
 }
 
 @media (max-width: #{$mobile-layout-breakpoint}) {
