@@ -8,6 +8,7 @@ import {
 import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
 import {
   commonmark,
+  imageSchema,
   linkSchema,
   toggleEmphasisCommand,
   toggleStrongCommand,
@@ -16,7 +17,11 @@ import {
 } from '@milkdown/kit/preset/commonmark';
 import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
-import { imageBlockComponent } from '@milkdown/kit/component/image-block';
+import {
+  imageBlockComponent,
+  imageBlockConfig,
+  imageBlockSchema
+} from '@milkdown/kit/component/image-block';
 import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
@@ -195,9 +200,50 @@ const MilkdownEditor = React.forwardRef<
       .use(clipboard)
       .use(commonmark)
       .use(gfm)
+      .config((ctx) => {
+        // Do not parse image markdown, use custom parser defined later
+        ctx.update(imageSchema.key, (prev) => (ctx) => ({
+          ...prev(ctx),
+          parseMarkdown: {
+            match: () => false,
+            runner: () => {}
+          }
+        }));
+      })
       .use(linkTooltipPlugin)
       .use(imageBlockComponent)
       .use(upload)
+      .config((ctx) => {
+        ctx.update(imageBlockSchema.key, (prev) => (ctx) => ({
+          ...prev(ctx),
+          parseMarkdown: {
+            match: (node: any) =>
+              node.type === 'image' || node.type === 'image-block',
+            runner: (state: any, node: any, type: any) => {
+              state.addNode(type, {
+                src: node.url || node.attrs?.src,
+                caption: node.alt || node.attrs?.caption,
+                title: node.title || node.attrs?.title
+              });
+            }
+          },
+          toMarkdown: {
+            match: (node: any) => node.type.name === 'image-block',
+            runner: (state: any, node: any) => {
+              state.addNode('image', undefined, undefined, {
+                url: node.attrs.src,
+                alt: node.attrs.caption || '',
+                title: node.attrs.title || undefined
+              });
+            }
+          }
+        }));
+
+        ctx.update(imageBlockConfig.key, (prev) => ({
+          ...prev,
+          captionPlaceholder: 'Add image caption...'
+        }));
+      })
   );
 
   const action = useCallback(

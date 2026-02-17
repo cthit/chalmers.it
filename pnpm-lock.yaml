@@ -13,13 +13,13 @@ importers:
   .:
     dependencies:
       '@milkdown/kit':
-        specifier: ^7.16.0
+        specifier: ^7.18.0
         version: 7.18.0(@codemirror/language@6.12.1)(@codemirror/state@6.5.4)(@codemirror/view@6.39.14)(typescript@5.6.3)
       '@milkdown/react':
-        specifier: ^7.16.0
+        specifier: ^7.18.0
         version: 7.18.0(@codemirror/language@6.12.1)(@codemirror/state@6.5.4)(@codemirror/view@6.39.14)(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.6)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.6.3)
       '@milkdown/utils':
-        specifier: ^7.16.0
+        specifier: ^7.18.0
         version: 7.18.0
       '@prisma/client':
         specifier: 5.22.0
