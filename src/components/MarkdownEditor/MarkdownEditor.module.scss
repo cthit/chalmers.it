@@ -55,7 +55,7 @@
 }
 
 .toolbarDropdown {
-  background: var(--content-background-color);
+  background: var(--content-background-color) !important;
   margin: 0 0.25rem;
 }
 
@@ -364,7 +364,7 @@
 
 .toolbar {
   position: sticky;
-  top: 5rem;
+  top: 4.75rem;
   border-radius: 0.5rem;
   padding: 0.5rem;
   font-size: var(--text-normal);
