@@ -8,7 +8,6 @@ import {
 import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
 import {
   commonmark,
-  imageSchema,
   linkSchema,
   toggleEmphasisCommand,
   toggleStrongCommand,
@@ -200,16 +199,6 @@ const MilkdownEditor = React.forwardRef<
       .use(clipboard)
       .use(commonmark)
       .use(gfm)
-      .config((ctx) => {
-        // Do not parse image markdown, use custom parser defined later
-        ctx.update(imageSchema.key, (prev) => (ctx) => ({
-          ...prev(ctx),
-          parseMarkdown: {
-            match: () => false,
-            runner: () => {}
-          }
-        }));
-      })
       .use(linkTooltipPlugin)
       .use(imageBlockComponent)
       .use(upload)
@@ -218,7 +207,7 @@ const MilkdownEditor = React.forwardRef<
           ...prev(ctx),
           parseMarkdown: {
             match: (node: any) =>
-              node.type === 'image' || node.type === 'image-block',
+              node.type === 'image-block' || node.type === 'image',
             runner: (state: any, node: any, type: any) => {
               state.addNode(type, {
                 src: node.url || node.attrs?.src,
@@ -228,13 +217,16 @@ const MilkdownEditor = React.forwardRef<
             }
           },
           toMarkdown: {
-            match: (node: any) => node.type.name === 'image-block',
+            match: (node: any) =>
+              node.type.name === 'image-block' || node.type.name === 'image',
             runner: (state: any, node: any) => {
+              state.openNode('paragraph');
               state.addNode('image', undefined, undefined, {
                 url: node.attrs.src,
                 alt: node.attrs.caption || '',
                 title: node.attrs.title || undefined
               });
+              state.closeNode();
             }
           }
         }));
