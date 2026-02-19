@@ -234,6 +234,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <DropdownList
           value={group}
           onChange={(e) => setGroup(e.target.value)}
+          disabled={newsPost.group !== undefined}
           required
         >
           <option disabled hidden={group !== ''} value="">
