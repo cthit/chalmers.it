@@ -39,6 +39,7 @@ The navigation bar and groups page require data in the database to display prope
 **Tip:** You can ask an AI assistant to generate a complete seed script based on your production data structure. Just share the Prisma schema and describe what data you need.
 
 **Database models for reference:**
+
 - `NavbarCategory`: Navigation dropdown menus (nameSv, nameEn, url, priority)
 - `NavbarItem`: Items inside dropdowns (categoryId, nameSv, nameEn, url, priority)
 - `DivisionGroupType`: Group categories like "Committees" (nameSv, nameEn, priority)
