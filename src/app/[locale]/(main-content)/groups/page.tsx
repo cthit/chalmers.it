@@ -36,31 +36,37 @@ const Groups = async ({ locale }: { locale: string }) => {
 
   return (
     <ContentPane>
-      {' '}
-      <h2>{l.pages.groups}</h2>
-      {isAdmin && (
-        <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
-      )}
+      <div className={styles.header}>
+        <h2>{l.pages.groups}</h2>
+        {isAdmin && (
+          <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
+        )}
+      </div>
       <Divider />
-      {types.map((type) => (
-        <React.Fragment key={type.id}>
-          <h3>{en ? type.nameEn : type.nameSv}</h3>
-          <ul className={styles.links}>
-            {type.DivisionGroup.map((group) => (
-              <li key={group.id}>
-                <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
-                <ul className={styles.links}>
-                  <DivisionPages
-                    en={en}
-                    group={group.id}
-                    slug={`/groups/${group.slug}`}
-                  />
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </React.Fragment>
-      ))}
+      {types.map((type) => {
+        const sortedGroups = [...type.DivisionGroup].sort((a, b) =>
+          a.prettyName.localeCompare(b.prettyName, locale)
+        );
+        return (
+          <div key={type.id} className={styles.groupSection}>
+            <h3>{en ? type.nameEn : type.nameSv}</h3>
+            <ul className={styles.links}>
+              {sortedGroups.map((group) => (
+                <li key={group.id}>
+                  <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
+                  <ul className={styles.links}>
+                    <DivisionPages
+                      en={en}
+                      group={group.id}
+                      slug={`/groups/${group.slug}`}
+                    />
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
     </ContentPane>
   );
 };

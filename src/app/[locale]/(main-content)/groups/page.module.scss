@@ -1,3 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .links {
   list-style: none;
+}
+
+.groupSection {
+  margin-bottom: 2rem;
+}
+
+.groupSection:last-child {
+  margin-bottom: 0;
 }
