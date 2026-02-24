@@ -43,15 +43,11 @@ const Groups = async ({ locale }: { locale: string }) => {
         )}
       </div>
       <Divider />
-      {types.map((type) => {
-        const sortedGroups = [...type.DivisionGroup].sort((a, b) =>
-          a.prettyName.localeCompare(b.prettyName, locale)
-        );
-        return (
+      {types.map((type) => (
           <div key={type.id} className={styles.groupSection}>
             <h3>{en ? type.nameEn : type.nameSv}</h3>
             <ul className={styles.links}>
-              {sortedGroups.map((group) => (
+              {type.DivisionGroup.map((group) => (
                 <li key={group.id}>
                   <Link href={`/groups/${group.slug}`}>{group.prettyName}</Link>
                   <ul className={styles.links}>
@@ -65,8 +61,7 @@ const Groups = async ({ locale }: { locale: string }) => {
               ))}
             </ul>
           </div>
-        );
-      })}
+      ))}
     </ContentPane>
   );
 };
