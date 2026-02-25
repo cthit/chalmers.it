@@ -179,7 +179,7 @@ export default class DivisionGroupService {
       include: {
         DivisionGroup: {
           orderBy: {
-            priority: 'desc'
+            prettyName: 'asc'
           }
         }
       }
@@ -187,7 +187,7 @@ export default class DivisionGroupService {
     types.push({
       DivisionGroup: await prisma.divisionGroup.findMany({
         where: { divisionGroupTypeId: null },
-        orderBy: { priority: 'desc' }
+        orderBy: { prettyName: 'asc' }
       }),
       id: -1,
       nameEn: 'Miscellaneous',
