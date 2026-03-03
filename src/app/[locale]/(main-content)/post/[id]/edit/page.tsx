@@ -23,6 +23,10 @@ export default async function Page(props: {
     return <Forbidden />;
   }
 
+  const group = groups.find(
+    (group) => group.superGroup.id === newsPost.writtenFor?.gammaSuperGroupId
+  );
+
   return (
     <main>
       <ThreePaneLayout
@@ -39,7 +43,7 @@ export default async function Page(props: {
               contentSv={newsPost!.contentSv}
               writtenByGammaUserId={newsPost!.writtenByGammaUserId}
               connectedEvents={newsPost!.connectedEvents}
-              group={newsPost!.writtenFor?.gammaSuperGroupId}
+              group={group?.superGroup.id ?? 'self'}
               scheduledPublish={newsPost!.scheduledPublish}
             />
           </ContentPane>
