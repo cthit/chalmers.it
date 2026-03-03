@@ -36,14 +36,15 @@ const Groups = async ({ locale }: { locale: string }) => {
 
   return (
     <ContentPane>
-      {' '}
-      <h2>{l.pages.groups}</h2>
-      {isAdmin && (
-        <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
-      )}
+      <div className={styles.header}>
+        <h2>{l.pages.groups}</h2>
+        {isAdmin && (
+          <ActionLink href="/settings/groups">{l.general.manage}</ActionLink>
+        )}
+      </div>
       <Divider />
       {types.map((type) => (
-        <React.Fragment key={type.id}>
+        <div key={type.id} className={styles.groupSection}>
           <h3>{en ? type.nameEn : type.nameSv}</h3>
           <ul className={styles.links}>
             {type.DivisionGroup.map((group) => (
@@ -59,7 +60,7 @@ const Groups = async ({ locale }: { locale: string }) => {
               </li>
             ))}
           </ul>
-        </React.Fragment>
+        </div>
       ))}
     </ContentPane>
   );

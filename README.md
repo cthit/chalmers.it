@@ -32,6 +32,21 @@ If you wish to modify anything in the database, the recommended way to go is to 
 
 If you want to add images to the news posts, you need to create a folder in the root folder called "media" (otherwise an error will pop up), or whatever is defined in the MEDIA_PATH env variable. You also need to copy the image link and add it somewhere in the news post.
 
+### Seeding Development Data (Navigation bar etc)
+
+The navigation bar and groups page require data in the database to display properly. The easiest way is to create a seed script.
+
+**Tip:** You can ask an AI assistant to generate a complete seed script based on your production data structure. Just share the Prisma schema and describe what data you need.
+
+**Database models for reference:**
+
+- `NavbarCategory`: Navigation dropdown menus (nameSv, nameEn, url, priority)
+- `NavbarItem`: Items inside dropdowns (categoryId, nameSv, nameEn, url, priority)
+- `DivisionGroupType`: Group categories like "Committees" (nameSv, nameEn, priority)
+- `DivisionGroup`: Individual groups (gammaSuperGroupId, slug, prettyName, descriptions, divisionGroupTypeId)
+
+Note: Groups without a `divisionGroupTypeId` automatically appear under "Övrigt/Miscellaneous".
+
 ## Production Use
 
 The easiest to run the project in production mode is to use the docker-compose file in the root of the project.
