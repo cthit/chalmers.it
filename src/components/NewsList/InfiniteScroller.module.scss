@@ -8,7 +8,15 @@
   margin: auto;
   margin-top: 1rem;
   display: none;
-  background-color: var(--load-more-button);
+  background-color: transparent;
+  border: 2px solid var(--load-more-button);
+  color: var(--text-color);
+
+  &:hover {
+    background-color: var(--load-more-button-hover-bg);
+    color: var(--load-more-button-hover-text);
+    border-color: var(--load-more-button-hover-bg);
+  }
 }
 
 @media (max-width: #{$mobile-layout-breakpoint}) {

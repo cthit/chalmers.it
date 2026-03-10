@@ -26,9 +26,12 @@ In order to run the project in development mode, a few steps are required:
 1. Install packages with `pnpm install`
 2. Start services by running `docker compose up -d`
 3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
-4. Run `pnpm run dev` to start the development server
+4. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
+5. Run `pnpm run dev` to start the development server
 
 If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
+
+> **Note:** The seed script (`prisma/seed.ts`) clears existing navbar and news data before inserting, so you can re-run it to reset to a clean state.
 
 If you want to add images to the news posts, you need to create a folder in the root folder called "media" (otherwise an error will pop up), or whatever is defined in the MEDIA_PATH env variable. You also need to copy the image link and add it somewhere in the news post.
 
