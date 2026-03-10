@@ -10,7 +10,7 @@ const Lunch = async ({ locale }: { locale: string }) => {
   const en = locale === 'en';
   return (
     <ContentPane>
-      <h1 className={styles.title}>{en ? 'Lunch Menu' : 'Lunchmeny'}</h1>
+      <h1 className={styles.title}>{l.lunch.title}</h1>
       <Divider />
       {lunch.length === 0 && <p>{l.lunch.nolunch}</p>}
       {lunch.map((restaurant, index) => (
