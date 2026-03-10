@@ -7,20 +7,14 @@ import TextArea from '@/components/TextArea/TextArea';
 import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
-import Popup from 'reactjs-popup';
 import DivisionPageService, {
   DivisionPage
 } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
-import MarkdownView from '../MarkdownView/MarkdownView';
 import FileService, { MediaType } from '@/services/fileService';
-import ContentPane from '../ContentPane/ContentPane';
 
-const PreviewContentStyle = {
-  backgroundColor: '#000000AA'
-};
 const validUploadTypes = Object.values(MediaType);
 
 interface DivisionPostFormProps {
@@ -43,13 +37,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [page, setPage] = useState(divisionPost.parentId);
   const [titleEn, setTitleEn] = useState(divisionPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(divisionPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(divisionPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(divisionPost.contentSv ?? '');
+  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
-  const [showPreview, setShowPreview] = useState(false);
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
-  const [previewContentSv, setPreviewContentSv] = useState('');
-  const [previewContentEn, setPreviewContentEn] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<{
@@ -58,14 +49,20 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
+    const droppedFiles: { [key: string]: File } = {};
     for (let i = 0; i < f.length; i++) {
       const file = f[i];
       if (!FileService.checkValidFile(file, validUploadTypes)) continue;
 
       const sha256 = await FileService.fileSha256Browser(file);
       newQueue[sha256] = file;
+      droppedFiles[sha256] = file;
     }
     setUploadQueue(newQueue);
+    return Object.entries(droppedFiles).map(([sha256, file]) => ({
+      file,
+      url: '/api/media/' + sha256
+    }));
   };
 
   const delFile = (sha256: string) => {
@@ -74,17 +71,13 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     setUploadQueue(newQueue);
   };
 
-  const copyFile = (sha256: string) => {
-    navigator.clipboard.writeText('[Text](/api/media/' + sha256 + ')');
+  const copyFile = (sha256: string, file: File) => {
+    const embed = FileService.isMimeEmbeddable(file.type);
+    navigator.clipboard.writeText(
+      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
+    );
     toast(l.editor.linkCopied, { type: 'success' });
   };
-
-  function preview() {
-    setPreviewContentSv(FileService.replaceLocalFiles(contentSv, uploadQueue));
-    setPreviewContentEn(FileService.replaceLocalFiles(contentEn, uploadQueue));
-
-    setShowPreview(true);
-  }
 
   async function apply() {
     const formData = new FormData();
@@ -98,8 +91,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             divisionPost.editedId,
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             slug,
             prio,
             formData,
@@ -120,8 +113,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           create(
             titleEn,
             titleSv,
-            contentEn,
-            contentSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
             slug,
             prio,
             formData,
@@ -187,24 +180,22 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>{l.pages.content} (Eng)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentEn}
-        onChange={(e) => setContentEn(e.target.value)}
+        defaultMd={divisionPost.contentEn}
+        ref={contentEnRef}
+        onUpload={dropFiles}
+        locale={divisionPost.locale}
+        localFiles={uploadQueue}
       />
 
       <h2>{l.pages.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <h2>{l.pages.content} (Sv)</h2>
       <MarkdownEditor
-        onDragOver={(e) => {
-          e.preventDefault();
-        }}
-        onDrop={(e) => dropFiles(e.dataTransfer.files)}
-        value={contentSv}
-        onChange={(e) => setContentSv(e.target.value)}
+        defaultMd={divisionPost.contentSv}
+        ref={contentSvRef}
+        onUpload={dropFiles}
+        locale={divisionPost.locale}
+        localFiles={uploadQueue}
       />
 
       <br />
@@ -214,11 +205,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         {Object.entries(uploadQueue).map(([sha256, file]) => (
           <li className={styles.fileActions} key={sha256}>
             <p>{file.name}</p>{' '}
-            <ActionButton
-              onClick={() => {
-                copyFile(sha256);
-              }}
-            >
+            <ActionButton type="button" onClick={() => copyFile(sha256, file)}>
               {l.editor.copyLink}
             </ActionButton>{' '}
             <ActionButton
@@ -250,30 +237,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             ? l.general.save
             : l.general.create}
         </ActionButton>
-        <ActionButton onClick={preview}>Förhandsgranska</ActionButton>
       </div>
-
-      <Popup
-        modal
-        className={styles.dialog}
-        open={showPreview}
-        onClose={() => setShowPreview(false)}
-        overlayStyle={PreviewContentStyle}
-      >
-        <ContentPane className={styles.dialog}>
-          <h1>{l.pages.preview}</h1>
-          <Divider />
-          <h2>{titleEn}</h2>
-          <MarkdownView content={previewContentEn} allowBlob />
-          <Divider />
-          <h2>{titleSv}</h2>
-          <MarkdownView content={previewContentSv} allowBlob />
-
-          <ActionButton onClick={() => setShowPreview(false)}>
-            {l.pages.close}
-          </ActionButton>
-        </ContentPane>
-      </Popup>
     </>
   );
 };
