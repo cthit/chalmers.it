@@ -65,6 +65,7 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
             filteredNews.map((newsPost) => (
               <React.Fragment key={newsPost!.id}>
                 <NewsPost locale={locale} post={newsPost!} />
+                <Divider />
               </React.Fragment>
             ))
           )}

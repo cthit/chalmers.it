@@ -1,8 +1,8 @@
 import LunchService from '@/services/lunchService';
 import Divider from '../Divider/Divider';
 import i18nService from '@/services/i18nService';
-import Collapsible from '../ContentPane/Collapsible/Collapsible';
 import ContentPane from '../ContentPane/ContentPane';
+import styles from './Lunch.module.scss';
 
 const Lunch = async ({ locale }: { locale: string }) => {
   const lunch = await LunchService.getLunch();
@@ -10,22 +10,25 @@ const Lunch = async ({ locale }: { locale: string }) => {
   const en = locale === 'en';
   return (
     <ContentPane>
-      <h1>Lunch</h1>
+      <h1 className={styles.title}>{l.lunch.title}</h1>
       <Divider />
-      <Collapsible id="lunch">
-        {lunch.length === 0 && <p>{l.lunch.nolunch}</p>}
-        {lunch.map((restaurant) => (
-          <div key={restaurant.name}>
-            <h2>{restaurant.name}</h2>
-            {(en ? restaurant.meals.en : restaurant.meals.sv).map((meal) => (
-              <div key={meal.title}>
-                <h3>{meal.title}</h3>
-                <p>{meal.summary}</p>
-              </div>
-            ))}
-          </div>
-        ))}
-      </Collapsible>
+      {lunch.length === 0 && <p>{l.lunch.nolunch}</p>}
+      {lunch.map((restaurant, index) => (
+        <div key={restaurant.name} className={styles.restaurant}>
+          <h2>{restaurant.name}</h2>
+          {(en ? restaurant.meals.en : restaurant.meals.sv).map((meal) => (
+            <div key={meal.title} className={styles.meal}>
+              <h3>{meal.title}</h3>
+              <p>{meal.summary}</p>
+            </div>
+          ))}
+          {index < lunch.length - 1 && (
+            <div className={styles.divider}>
+              <Divider />
+            </div>
+          )}
+        </div>
+      ))}
     </ContentPane>
   );
 };

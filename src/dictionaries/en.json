@@ -120,6 +120,7 @@
     "createSubpage": "Create subpage"
   },
   "lunch": {
+    "title": "Lunch Menu",
     "nolunch": "No lunch for today"
   },
   "sponsors": {
