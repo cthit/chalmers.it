@@ -28,6 +28,9 @@
     --news-view-toggle-hovered-color: #{colors.$lightgray-100};
     --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
 
+    --lunch-text-color: #{colors.$darkgray-900};
+    --lunch-divider-color: #{colors.$lightgray-600};
+
     --calendar-current-color: #{colors.$lightgray-400};
     --calendar-current-date-background-color: #{colors.$turquoise-800};
     --calendar-current-date-color: #{colors.$lightgray-200};
@@ -56,6 +59,9 @@
     --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
     --news-view-toggle-hovered-color: #{colors.$lightgray-100};
     --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
+
+    --lunch-text-color: #{colors.$lightgray-200};
+    --lunch-divider-color: #{colors.$lightgray-700};
 
     --calendar-current-color: #{colors.$darkgray-500};
     --calendar-current-date-background-color: #{colors.$turquoise-800};

@@ -8,7 +8,7 @@
 .restaurant {
   text-align: left;
   margin-bottom: 0.5rem;
-  color: var(--text-primary, white);
+  color: var(--lunch-text-color);
 
   h2 {
     font-size: 1.35rem;
@@ -35,6 +35,6 @@
 
 .divider {
   hr {
-    border-color: #a8a8a8;
+    border-color: var(--lunch-divider-color);
   }
 }
