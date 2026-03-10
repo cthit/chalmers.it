@@ -31,7 +31,8 @@ In order to run the project in development mode, a few steps are required:
 
 If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
 
-> **Note:** The seed script (`prisma/seed.ts`) clears existing navbar and news data before inserting, so you can re-run it to reset to a clean state.
+> [!NOTE]
+> The seed script (`prisma/seed.ts`) clears existing navbar and news data before inserting, so you can re-run it to reset to a clean state.
 
 If you want to add images to the news posts, you need to create a folder in the root folder called "media" (otherwise an error will pop up), or whatever is defined in the MEDIA_PATH env variable. You also need to copy the image link and add it somewhere in the news post.
 
