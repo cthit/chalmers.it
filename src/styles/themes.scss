@@ -27,6 +27,9 @@
     --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
     --news-view-toggle-hovered-color: #{colors.$lightgray-100};
     --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
+    --load-more-button: #{colors.$turquoise-700};
+    --load-more-button-hover-bg: #{colors.$turquoise-700};
+    --load-more-button-hover-text: #{colors.$lightgray-100};
 
     --lunch-text-color: #{colors.$darkgray-900};
     --lunch-divider-color: #{colors.$lightgray-600};
@@ -59,6 +62,9 @@
     --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
     --news-view-toggle-hovered-color: #{colors.$lightgray-100};
     --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
+    --load-more-button: #{colors.$turquoise-800};
+    --load-more-button-hover-bg: #{colors.$turquoise-800};
+    --load-more-button-hover-text: #{colors.$lightgray-100};
 
     --lunch-text-color: #{colors.$lightgray-200};
     --lunch-divider-color: #{colors.$lightgray-700};
