@@ -6,7 +6,6 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
-import Divider from '@/components/Divider/Divider';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -46,7 +45,6 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
         </div>
       </div>
       <MarkdownView content={post.content} />
-      <Divider />
     </>
   );
 };
