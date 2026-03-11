@@ -179,6 +179,19 @@ const MilkdownEditor = React.forwardRef<
     [onUpload]
   );
 
+  const imageBlockUploader = useCallback(
+    async (file: File) => {
+      if (!onUpload) return '';
+
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      const [uploadedFile] = await onUpload(dataTransfer.files);
+
+      return uploadedFile?.url ?? '';
+    },
+    [onUpload]
+  );
+
   const editor = useEditor((root) =>
     Editor.make()
       .config((ctx) => {
@@ -233,6 +246,7 @@ const MilkdownEditor = React.forwardRef<
 
         ctx.update(imageBlockConfig.key, (prev) => ({
           ...prev,
+          onUpload: imageBlockUploader,
           captionPlaceholder: 'Add image caption...'
         }));
       })
@@ -256,8 +270,15 @@ const MilkdownEditor = React.forwardRef<
           uploader
         }));
       }
+
+      if (ctx.isInjected(imageBlockConfig.key)) {
+        ctx.update(imageBlockConfig.key, (prev) => ({
+          ...prev,
+          onUpload: imageBlockUploader
+        }));
+      }
     });
-  }, [uploader, editor, action]);
+  }, [uploader, imageBlockUploader, editor, action]);
 
   // Update local file replacer in editor when localFiles changes
   useEffect(
