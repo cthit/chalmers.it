@@ -4,10 +4,11 @@ import { PostStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   ctx: { params: Promise<{ id: string }> }
 ) {
   const params = await ctx.params;
+  const queryParams = Object.fromEntries(new URL(request.url).searchParams);
   const id: number = parseInt(params.id);
 
   if (isNaN(id)) return ApiService.jsonError('Invalid news id');
@@ -17,5 +18,12 @@ export async function GET(
     return ApiService.jsonError('News post not found', 404);
   }
 
-  return NextResponse.json(newsPost);
+  switch (queryParams.type ?? 'json') {
+    case 'slack':
+      const lang = queryParams.lang === 'en' ? 'EN' : 'SV';
+      return NextResponse.json(await NewsService.serializeToSlack(id, lang));
+    case 'json':
+    default:
+      return NextResponse.json(newsPost);
+  }
 }

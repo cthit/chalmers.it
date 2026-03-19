@@ -1,6 +1,11 @@
 import prisma from '@/prisma';
 import { PostStatus } from '@prisma/client';
-import NotifyService from './notifyService';
+import NotifyService, { SlackWebhookNotifier } from './notifyService';
+import { Language } from '@prisma/client';
+import GammaService from './gammaService';
+import { marked } from 'marked';
+import { baseUrl } from 'marked-base-url';
+import DivisionGroupService from './divisionGroupService';
 
 export default class NewsService {
   static async getAll() {
@@ -338,5 +343,23 @@ export default class NewsService {
         })
         .then((res) => NotifyService.notifyNewsPost(res));
     });
+  }
+
+  static async serializeToSlack(id: number, language: Language) {
+    const post = await prisma.newsPost.findUnique({
+      where: {
+        id
+      },
+      include: {
+        writtenFor: true,
+        connectedEvents: true
+      }
+    });
+    if (!post) return null;
+
+    const notifier = new SlackWebhookNotifier('', language);
+    const postData = await notifier.serializeNewsPost(post);
+
+    return postData;
   }
 }
