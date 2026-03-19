@@ -2,10 +2,6 @@ import prisma from '@/prisma';
 import { PostStatus } from '@prisma/client';
 import NotifyService, { SlackWebhookNotifier } from './notifyService';
 import { Language } from '@prisma/client';
-import GammaService from './gammaService';
-import { marked } from 'marked';
-import { baseUrl } from 'marked-base-url';
-import DivisionGroupService from './divisionGroupService';
 
 export default class NewsService {
   static async getAll() {
