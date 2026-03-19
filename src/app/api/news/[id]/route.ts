@@ -18,7 +18,7 @@ export async function GET(
     return ApiService.jsonError('News post not found', 404);
   }
 
-  switch (queryParams.type ?? 'json') {
+  switch (queryParams.format ?? 'json') {
     case 'slack':
       const lang = queryParams.lang === 'en' ? 'EN' : 'SV';
       return NextResponse.json(await NewsService.serializeToSlack(id, lang));
