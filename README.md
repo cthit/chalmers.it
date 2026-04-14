@@ -25,7 +25,7 @@ In order to run the project in development mode, a few steps are required:
 
 1. Install packages with `pnpm install`
 2. Start services by running `docker compose up -d`
-3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
+3. Set up the database by running `pnpm prisma generate` and `pnpm prisma migrate deploy`
 4. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
 5. Run `pnpm run dev` to start the development server
 
@@ -50,6 +50,30 @@ The navigation bar and groups page require data in the database to display prope
 - `DivisionGroup`: Individual groups (gammaSuperGroupId, slug, prettyName, descriptions, divisionGroupTypeId)
 
 Note: Groups without a `divisionGroupTypeId` automatically appear under "Övrigt/Miscellaneous".
+
+### Modifying the Database
+
+Use **migrations** for any database changes (schema or data), not by directly editing `seed.ts`.
+
+**Schema changes:**
+
+```bash
+pnpm prisma migrate dev --name <migration_name>
+```
+
+**Data changes (update/insert/delete):**
+
+```bash
+pnpm prisma migrate dev --name <migration_name> --create-only
+```
+
+Then edit `prisma/migrations/<timestamp>_<migration_name>/migration.sql` and add your SQL.
+
+**Apply migrations in production:**
+
+```bash
+pnpm prisma migrate deploy
+```
 
 ## Production Use
 
