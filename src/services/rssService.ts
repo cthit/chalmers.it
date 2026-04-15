@@ -68,11 +68,11 @@ export default class RssFeedService {
   static generateFeed(
     newsItems: NewsItem[],
     locale: string = 'sv',
-    baseUrl: string = 'https://chalmers.it'
   ): string {
     const i18n = i18nService.getLocale(locale);
     const isSv = locale === 'sv';
     const langTag = isSv ? 'sv-SE' : 'en-US';
+    const baseUrl = process.env.BASE_URL || 'https://chalmers.it';
     const baseUrlWithoutSlash = baseUrl.endsWith('/')
       ? baseUrl.slice(0, -1)
       : baseUrl;
@@ -82,7 +82,7 @@ export default class RssFeedService {
       .map((item) => {
         const title = isSv ? item.titleSv : item.titleEn;
         const content = isSv ? item.contentSv : item.contentEn;
-        const pubDate = this.dateToRFC822(item.createdAt);
+        const pubDate = new Date(item.createdAt).toUTCString();
         const link = `${baseUrlWithoutSlash}/post/${item.id}`;
         const category = item.writtenFor?.prettyName || '';
 

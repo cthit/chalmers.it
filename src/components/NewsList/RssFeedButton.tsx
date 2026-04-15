@@ -1,6 +1,5 @@
-'use client';
-
 import i18nService from '@/services/i18nService';
+import Link from 'next/link';
 import { FaRss } from 'react-icons/fa';
 import styles from './RssFeedButton.module.scss';
 
@@ -12,7 +11,7 @@ const RssFeedButton = ({ locale }: RssFeedButtonProps) => {
   const l = i18nService.getLocale(locale);
 
   return (
-    <a
+    <Link
       href={`/api/news?format=rss&locale=${locale}`}
       aria-label={l.news.subscribe}
       className={styles.button}
@@ -21,7 +20,7 @@ const RssFeedButton = ({ locale }: RssFeedButtonProps) => {
       rel='noopener noreferrer'
     >
       <FaRss />
-    </a>
+    </Link>
   );
 };
 
