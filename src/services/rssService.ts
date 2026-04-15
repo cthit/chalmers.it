@@ -14,39 +14,6 @@ interface NewsItem {
 
 export default class RssFeedService {
   /**
-   * Converts a date to RFC 822 format for RSS feeds
-   * Example: "Mon, 14 Apr 2025 10:00:00 GMT"
-   */
-  private static dateToRFC822(date: Date | string): string {
-    const d = typeof date === 'string' ? new Date(date) : date;
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-
-    const dayName = days[d.getUTCDay()];
-    const dayNum = String(d.getUTCDate()).padStart(2, '0');
-    const monthName = months[d.getUTCMonth()];
-    const year = d.getUTCFullYear();
-    const hours = String(d.getUTCHours()).padStart(2, '0');
-    const minutes = String(d.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(d.getUTCSeconds()).padStart(2, '0');
-
-    return `${dayName}, ${dayNum} ${monthName} ${year} ${hours}:${minutes}:${seconds} GMT`;
-  }
-
-  /**
    * Escapes XML special characters
    */
   private static escapeXml(str: string): string {
