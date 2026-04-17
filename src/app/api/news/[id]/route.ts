@@ -7,20 +7,20 @@ export async function GET(
   request: NextRequest,
   ctx: { params: Promise<{ id: string }> }
 ) {
+  const search = request.nextUrl.searchParams;
   const params = await ctx.params;
-  const queryParams = Object.fromEntries(new URL(request.url).searchParams);
-  const id: number = parseInt(params.id);
 
-  if (isNaN(id)) return ApiService.jsonError('Invalid news id');
+  const id: number = parseInt(params.id);
+  if (isNaN(id) || id < 0) return ApiService.jsonError('Invalid news id');
 
   const newsPost = await NewsService.get(id);
   if (newsPost === null || newsPost.status !== PostStatus.PUBLISHED) {
     return ApiService.jsonError('News post not found', 404);
   }
 
-  switch (queryParams.format ?? 'json') {
+  switch (search.get('format') ?? 'json') {
     case 'slack':
-      const lang = queryParams.lang === 'en' ? 'EN' : 'SV';
+      const lang = search.get('lang') === 'en' ? 'EN' : 'SV';
       return NextResponse.json(await NewsService.serializeToSlack(id, lang));
     case 'json':
     default:
