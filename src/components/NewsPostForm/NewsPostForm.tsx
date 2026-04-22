@@ -78,6 +78,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [group, setGroup] = useState(newsPost.group ?? '');
   const [titleEn, setTitleEn] = useState(draft?.titleEn ?? newsPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(draft?.titleSv ?? newsPost.titleSv ?? '');
+  const [contentEn, setContentEn] = useState(draft?.contentEn ?? newsPost.contentEn ?? '');
+  const [contentSv, setContentSv] = useState(draft?.contentSv ?? newsPost.contentSv ?? '');
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
@@ -98,8 +100,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   useEffect(() => {
     return () => {
       try {
-        const contentEn = contentEnRef.current?.getMarkdown() ?? '';
-        const contentSv = contentSvRef.current?.getMarkdown() ?? '';
+        const contentEn = contentEnRef.current!.getMarkdown() ?? '';
+        const contentSv = contentSvRef.current!.getMarkdown() ?? '';
 
         localStorage.setItem(
           LOCAL_DRAFT_KEY,
@@ -107,7 +109,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       } catch {}
     };
-  }, [titleEn, titleSv,contentEnRef,contentSvRef]);
+  }, [titleEn, titleSv,contentEn,contentSv]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -298,9 +300,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentEn}
+          defaultMd={draft?.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
+          onChange={(contents)=>{setContentEn(contents)}}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -308,14 +311,15 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <h2>{l.editor.title} (Sv)</h2>
         <TextArea
           value={titleSv}
-          onChange={(e) => setTitleSv(e.target.value)}
+          onChange={(e) => {setTitleSv(e.target.value);console.log("settitlesv")}}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentSv}
+          defaultMd={draft?.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
+          onChange={(contents)=>{setContentEn(contents)}}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />

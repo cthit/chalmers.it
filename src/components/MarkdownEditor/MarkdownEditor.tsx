@@ -140,6 +140,7 @@ interface MilkdownEditorProps {
       url: string;
     }[]
   >;
+  onChange?: (markdown : string) => void;
   localFiles: {
     [key: string]: File;
   };
@@ -149,7 +150,7 @@ interface MilkdownEditorProps {
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
->(({ defaultMd, onUpload, locale, localFiles }, ref) => {
+>(({ defaultMd, onUpload,onChange, locale, localFiles }, ref) => {
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
@@ -206,6 +207,9 @@ const MilkdownEditor = React.forwardRef<
           ...prev,
           uploader
         }));
+        ctx.get(listenerCtx).markdownUpdated((_ctx,md)=>{
+          onChange?.(md);
+        })
       })
       .use(listener)
       .use(history)
@@ -452,7 +456,7 @@ const MilkdownEditor = React.forwardRef<
       </div>
       <textarea
         value={markdown}
-        onChange={(e) => setMarkdown(e.target.value)}
+        onChange={(e) => {setMarkdown(e.target.value); onChange?.(e.target.value)}}
         hidden={viewMode !== 'raw'}
         className={styles.rawEditor}
         onDragOver={(e) => {
@@ -481,17 +485,19 @@ export const MarkdownEditor = React.forwardRef<
         url: string;
       }[]
     >;
+    onChange?: (markdown : string) => void;
     locale: string;
     localFiles?: {
       [key: string]: File;
     };
   }
->(({ defaultMd, onUpload, locale, localFiles }, ref) => {
+>(({ defaultMd, onUpload, onChange, locale, localFiles }, ref) => {
   return (
     <MilkdownProvider>
       <MilkdownEditor
         defaultMd={defaultMd}
         onUpload={onUpload}
+        onChange={onChange}
         ref={ref}
         locale={locale}
         localFiles={localFiles ?? {}}
