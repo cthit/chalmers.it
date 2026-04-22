@@ -7,7 +7,7 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { GammaGroup } from '@/types/gamma';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import { marked } from 'marked';
 import style from './NewsPostForm.module.scss';
@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 const validUploadTypes = Object.values(MediaType);
+
+const LOCAL_DRAFT_KEY = 'LocalDraftKey';
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -43,6 +45,13 @@ interface Event {
   id?: number;
 }
 
+interface EventDraft {
+  titleEn: string;
+  titleSv: string;
+  contentEn: string;
+  contentSv: string;
+}
+
 const emptyEvent: Event = {
   titleEn: '',
   titleSv: '',
@@ -52,6 +61,7 @@ const emptyEvent: Event = {
   location: '',
   id: undefined
 };
+
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
   marked.use({
@@ -63,9 +73,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
+  const draft = loadDraft();
+
   const [group, setGroup] = useState(newsPost.group ?? '');
-  const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
+  const [titleEn, setTitleEn] = useState(draft?.titleEn ?? newsPost.titleEn ?? '');
+  const [titleSv, setTitleSv] = useState(draft?.titleSv ?? newsPost.titleSv ?? '');
+  const [contentEn, setContentEn] = useState(draft?.contentEn ?? newsPost.contentEn ?? '');
+  const [contentSv, setContentSv] = useState(draft?.contentSv ?? newsPost.contentSv ?? '');
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
@@ -82,6 +96,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        const contentEn = contentEnRef.current!.getMarkdown() ?? '';
+        const contentSv = contentSvRef.current!.getMarkdown() ?? '';
+
+        localStorage.setItem(
+          LOCAL_DRAFT_KEY,
+          JSON.stringify({ titleEn, titleSv, contentEn, contentSv })
+        );
+      } catch {}
+    };
+  }, [titleEn, titleSv,contentEn,contentSv]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -203,6 +231,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         await deleteEvent(id);
       }
 
+      clearDraft();
       router.push('/');
     } catch {
       console.log('Failed to post news article');
@@ -223,6 +252,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     if (id !== undefined) {
       setRemoveQueue([...removeQueue, id]);
     }
+  }
+
+  function loadDraft(): EventDraft | null {
+    try {
+      const loaded = localStorage.getItem(LOCAL_DRAFT_KEY);
+      return loaded ? JSON.parse(loaded) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function clearDraft(){
+    try{
+      localStorage.removeItem(LOCAL_DRAFT_KEY)
+    } catch {}
   }
 
   return (
@@ -256,9 +300,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentEn}
+          defaultMd={draft?.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
+          onChange={(contents)=>{setContentEn(contents)}}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -266,14 +311,15 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <h2>{l.editor.title} (Sv)</h2>
         <TextArea
           value={titleSv}
-          onChange={(e) => setTitleSv(e.target.value)}
+          onChange={(e) => {setTitleSv(e.target.value);console.log("settitlesv")}}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentSv}
+          defaultMd={draft?.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
+          onChange={(contents)=>{setContentSv(contents)}}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
