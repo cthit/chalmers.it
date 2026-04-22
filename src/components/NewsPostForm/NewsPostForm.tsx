@@ -319,7 +319,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           defaultMd={draft?.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
-          onChange={(contents)=>{setContentEn(contents)}}
+          onChange={(contents)=>{setContentSv(contents)}}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
