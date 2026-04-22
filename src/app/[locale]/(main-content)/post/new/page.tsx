@@ -16,7 +16,7 @@ export default async function Page(props: {
   const groups = await SessionService.getActiveAddedGroups();
 
   if (!(await SessionService.isActive())) {
-    // return <Forbidden />;
+    return <Forbidden />;
   }
 
   return (
