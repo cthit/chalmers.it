@@ -1,13 +1,6 @@
 import i18nService from '@/services/i18nService';
 import MediaService from '@/services/mediaService';
 
-function bytesToSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
-}
-
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
 }) {
@@ -28,7 +21,7 @@ export default async function Page(props: {
         {l.settings.media.stored}: {stats.count}
       </p>
       <p>
-        {l.settings.media.usage}: {bytesToSize(stats.size)}
+        {l.settings.media.usage}: {MediaService.bytesToSize(stats.size)}
       </p>
       <p>
         {l.settings.media.orphaned}: {stats.count - stats.used}
