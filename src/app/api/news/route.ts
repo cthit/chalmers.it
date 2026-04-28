@@ -13,7 +13,6 @@ export async function GET(
 ) {
   const search = request.nextUrl.searchParams;
 
-
   const page: number = parseInt(search.get('page') ?? '1');
   const pageSize: number = parseInt(search.get('pageSize') ?? '10');
 
@@ -33,10 +32,7 @@ export async function GET(
   const responseFormat = search.get('format');
   if (responseFormat === 'rss') {
     const locale = search.get('locale') ?? 'sv';
-    const rssXml = RssFeedService.generateFeed(
-      news,
-      locale,
-    );
+    const rssXml = RssFeedService.generateFeed(news, locale);
 
     return new NextResponse(rssXml, {
       status: 200,

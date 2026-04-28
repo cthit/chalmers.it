@@ -1,4 +1,3 @@
-
 'use client';
 import i18nService from '@/services/i18nService';
 import { useRef, useState } from 'react';
@@ -12,7 +11,6 @@ interface RssFeedButtonProps {
 export default function RssFeedButton({ locale }: RssFeedButtonProps) {
   const l = i18nService.getLocale(locale);
   const rssUrl = `/api/news?format=rss&locale=${locale}`;
-
 
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const tooltipTimeout = useRef<NodeJS.Timeout | null>(null);

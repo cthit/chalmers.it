@@ -32,10 +32,7 @@ export default class RssFeedService {
    * @param baseUrl Base URL for the site (e.g., https://chalmers.it)
    * @returns RSS 2.0 XML string
    */
-  static generateFeed(
-    newsItems: NewsItem[],
-    locale: string = 'sv',
-  ): string {
+  static generateFeed(newsItems: NewsItem[], locale: string = 'sv'): string {
     const i18n = i18nService.getLocale(locale);
     const isSv = locale === 'sv';
     const langTag = isSv ? 'sv-SE' : 'en-US';
