@@ -1,13 +1,18 @@
 .button {
+  background-color: transparent;
+  border: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 2rem;
+  width: 2rem;
   padding: 0.5rem;
   margin-top: 0.25rem;
   border-radius: 0.25rem;
   color: inherit;
   cursor: pointer;
   transition: opacity 0.2s ease;
+  position: relative;
 
   &:hover {
     opacity: 0.8;
@@ -17,4 +22,34 @@
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+// Tooltip inspired by GitHub, themed
+.tooltip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translateY(-50%);
+  background: var(--background-color, #24292f);
+  color: var(--news-view-toggle-selected-color, #fff);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.tooltipVisible {
+  opacity: 1;
 }
