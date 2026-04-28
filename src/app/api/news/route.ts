@@ -36,7 +36,6 @@ export async function GET(
     const rssXml = RssFeedService.generateFeed(
       news,
       locale,
-      process.env.BASE_URL ?? 'http://localhost:3000'
     );
 
     return new NextResponse(rssXml, {
