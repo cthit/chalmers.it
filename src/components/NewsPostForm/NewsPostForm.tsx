@@ -62,7 +62,6 @@ const emptyEvent: Event = {
   id: undefined
 };
 
-
 const NewsPostForm = (newsPost: NewPostFormProps) => {
   marked.use({
     pedantic: false,
@@ -76,10 +75,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const draft = loadDraft();
 
   const [group, setGroup] = useState(newsPost.group ?? '');
-  const [titleEn, setTitleEn] = useState(draft?.titleEn ?? newsPost.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(draft?.titleSv ?? newsPost.titleSv ?? '');
-  const [contentEn, setContentEn] = useState(draft?.contentEn ?? newsPost.contentEn ?? '');
-  const [contentSv, setContentSv] = useState(draft?.contentSv ?? newsPost.contentSv ?? '');
+  const [titleEn, setTitleEn] = useState(
+    draft?.titleEn ?? newsPost.titleEn ?? ''
+  );
+  const [titleSv, setTitleSv] = useState(
+    draft?.titleSv ?? newsPost.titleSv ?? ''
+  );
+  const [contentEn, setContentEn] = useState(
+    draft?.contentEn ?? newsPost.contentEn ?? ''
+  );
+  const [contentSv, setContentSv] = useState(
+    draft?.contentSv ?? newsPost.contentSv ?? ''
+  );
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
@@ -109,7 +116,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       } catch {}
     };
-  }, [titleEn, titleSv,contentEn,contentSv]);
+  }, [titleEn, titleSv, contentEn, contentSv]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -263,9 +270,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }
   }
 
-  function clearDraft(){
-    try{
-      localStorage.removeItem(LOCAL_DRAFT_KEY)
+  function clearDraft() {
+    try {
+      localStorage.removeItem(LOCAL_DRAFT_KEY);
     } catch {}
   }
 
@@ -303,7 +310,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           defaultMd={draft?.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
-          onChange={(contents)=>{setContentEn(contents)}}
+          onChange={(contents) => {
+            setContentEn(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -311,7 +320,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <h2>{l.editor.title} (Sv)</h2>
         <TextArea
           value={titleSv}
-          onChange={(e) => {setTitleSv(e.target.value);console.log("settitlesv")}}
+          onChange={(e) => {
+            setTitleSv(e.target.value);
+            console.log('settitlesv');
+          }}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
@@ -319,7 +331,9 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           defaultMd={draft?.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
-          onChange={(contents)=>{setContentSv(contents)}}
+          onChange={(contents) => {
+            setContentSv(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
