@@ -1,7 +1,7 @@
 import prisma from '@/prisma';
-import { stat, readdir, readFile, writeFile } from 'fs/promises';
-import FileService, { MediaType } from './fileService';
 import { existsSync } from 'fs';
+import { readdir, readFile, stat, writeFile } from 'fs/promises';
+import FileService, { MediaType } from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 
@@ -95,5 +95,12 @@ export default class MediaService {
     const used = await prisma.media.count();
 
     return { count: dir.length, size, used };
+  }
+
+  static bytesToSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round(bytes / Math.pow(1024, i)) + ' ' + sizes[i];
   }
 }
