@@ -1,5 +1,6 @@
 import ApiService from '@/services/apiService';
 import NewsService from '@/services/newsService';
+import RssFeedService from '@/services/rssService';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -27,5 +28,20 @@ export async function GET(
     );
 
   const news = await NewsService.getPage(page, pageSize);
+
+  const responseFormat = search.get('format');
+  if (responseFormat === 'rss') {
+    const locale = search.get('locale') ?? 'sv';
+    const rssXml = RssFeedService.generateFeed(news, locale);
+
+    return new NextResponse(rssXml, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/rss+xml; charset=utf-8',
+        'Content-Disposition': 'inline; filename="news.xml"'
+      }
+    });
+  }
+
   return NextResponse.json(news);
 }
