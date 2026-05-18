@@ -2,7 +2,7 @@ FROM node:24.11.0-alpine AS deps
 LABEL maintainer="digIT <digit@chalmers.it>"
 
 RUN apk add --no-cache libc6-compat
-RUN yarn global add pnpm
+RUN yarn global add pnpm@10.28.0
 
 WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
