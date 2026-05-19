@@ -4,7 +4,7 @@
 FROM node:26.1-alpine AS deps
 LABEL maintainer="digIT <digit@chalmers.it>"
 
-RUN apk add --no-cache libc6-compat && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache libc6-compat && corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
@@ -15,7 +15,7 @@ RUN pnpm i --frozen-lockfile
 ##########################
 FROM node:26.1-alpine AS builder
 
-RUN apk add --no-cache openssl && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache openssl && corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -29,7 +29,7 @@ RUN pnpm build
 ##########################
 FROM node:26.1-alpine AS runner
 
-RUN apk add --no-cache openssl && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache openssl && corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 ENV NODE_ENV=production
