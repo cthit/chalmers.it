@@ -6,6 +6,19 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import NewsService from '@/services/newsService';
 import { notFound } from 'next/navigation';
 
+export async function generateMetadata(props: {
+  params: Promise<{ id: string; locale: string }>;
+}) {
+  const params = await props.params;
+  const post = await NewsService.get(+params.id);
+  if (!post) notFound();
+  const isEn = params.locale === 'en';
+
+  return {
+    title: isEn ? post.titleEn : post.titleSv
+  };
+}
+
 export default async function Page(props: {
   params: Promise<{ id: string; locale: string }>;
 }) {
