@@ -18,8 +18,8 @@ export async function generateMetadata(props: {
   return {
     title:
       group !== null
-        ? group.prettyName + ' - ' + l.site.siteTitle
-        : l.site.siteTitle,
+        ? group.prettyName
+        : undefined,
     description: l.site.siteDescription
   } as Metadata;
 }
