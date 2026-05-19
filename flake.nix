@@ -10,8 +10,8 @@
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
         buildInputs = with pkgs; [
-          nodejs_20
-          nodePackages.prisma
+          nodejs_25
+          prisma_7
           pnpm
           openssl
           prisma-engines
