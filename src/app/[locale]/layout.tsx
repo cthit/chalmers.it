@@ -30,7 +30,10 @@ export async function generateMetadata(props: {
 
   const l = i18nService.getLocale(locale);
   return {
-    title: l.site.siteTitle,
+    title: {
+      template: '%s | ' + l.site.siteTitle,
+      default: l.site.siteTitle,
+    },
     description: l.site.siteDescription
   };
 }
