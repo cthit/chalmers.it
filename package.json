@@ -38,7 +38,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@slack/types": "2.14.0",
-    "@types/node": "^26.1",
+    "@types/node": "^25.9",
     "@types/node-schedule": "^2.1.6",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
