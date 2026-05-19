@@ -27,10 +27,7 @@ export async function generateMetadata(props: {
   });
   const l = i18nService.getLocale(locale);
   return {
-    title:
-      group !== null
-        ? group.prettyName
-        : undefined,
+    title: group !== null ? group.prettyName : undefined,
     description: l.site.siteDescription
   } as Metadata;
 }

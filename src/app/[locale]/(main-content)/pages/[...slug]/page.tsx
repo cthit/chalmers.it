@@ -18,7 +18,7 @@ export async function generateMetadata(props: {
   const isEn = locale === 'en';
 
   return {
-    title: isEn ? page.titleEn : page.titleSv,
+    title: isEn ? page.titleEn : page.titleSv
   };
 }
 
