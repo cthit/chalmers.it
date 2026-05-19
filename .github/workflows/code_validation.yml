@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  WORKFLOW_NODE_VERSION: 20.x
+  WORKFLOW_NODE_VERSION: 26.x
 
 jobs:
   test:
