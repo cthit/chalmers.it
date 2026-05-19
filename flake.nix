@@ -10,7 +10,7 @@
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
         buildInputs = with pkgs; [
-          nodejs_20
+          nodejs_25
           nodePackages.prisma
           pnpm
           openssl
