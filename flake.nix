@@ -11,7 +11,7 @@
         nativeBuildInputs = [ pkgs.bashInteractive ];
         buildInputs = with pkgs; [
           nodejs_25
-          nodePackages.prisma
+          prisma_7
           pnpm
           openssl
           prisma-engines
