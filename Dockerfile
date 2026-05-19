@@ -1,4 +1,4 @@
-FROM node:24.11.0-alpine AS deps
+FROM node:26.1-alpine AS deps
 LABEL maintainer="digIT <digit@chalmers.it>"
 
 RUN apk add --no-cache libc6-compat
@@ -11,7 +11,7 @@ RUN pnpm i --frozen-lockfile
 ##########################
 #      BUILD STAGE       #
 ##########################
-FROM node:24.11.0-alpine AS builder
+FROM node:26.1-alpine AS builder
 
 RUN apk add --no-cache openssl
 
@@ -24,7 +24,7 @@ RUN yarn build
 ##########################
 #    PRODUCTION STAGE    #
 ##########################
-FROM node:24.11.0-alpine AS runner
+FROM node:26.1-alpine AS runner
 
 RUN apk add --no-cache openssl
 
