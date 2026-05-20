@@ -1,0 +1,67 @@
+.title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: transparent;
+  border: 1px solid var(--subscribe-border-color, var(--text-color, #333));
+  border-radius: 0.5rem;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.3rem;
+  position: relative;
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    background-color: var(--subscribe-hover-bg, rgba(0, 0, 0, 0.05));
+    border-color: var(--subscribe-hover-border-color, var(--text-color, #333));
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translateY(-50%);
+  background: var(--background-color, #24292f);
+  color: var(--news-view-toggle-selected-color, #fff);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.tooltipVisible {
+  opacity: 1;
+}
