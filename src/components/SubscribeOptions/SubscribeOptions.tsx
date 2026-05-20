@@ -1,6 +1,7 @@
 'use client';
 
 import i18nService from '@/services/i18nService';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { FaRss } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
@@ -59,9 +60,16 @@ export default function SubscribeOptions({ locale }: SubscribeOptionsProps) {
           <MdEmail />
         </button>
 
-        <button type="button" className={styles.iconButton} disabled>
+        <Link
+          href={l.slack.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.iconButton}
+          title={l.slack.join}
+          aria-label={l.slack.join}
+        >
           <SiSlack />
-        </button>
+        </Link>
       </div>
     </ContentPane>
   );

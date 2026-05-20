@@ -130,6 +130,10 @@
     "main": "Huvudpartner",
     "partner": "Samarbetspartner"
   },
+  "slack": {
+    "join": "Gå med i Slack",
+    "url": "https://cthit.slack.com/archives/C0647T859KP"
+  },
   "user": {
     "login": "Logga in",
     "logout": "Logga ut",

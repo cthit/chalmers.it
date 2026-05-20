@@ -130,6 +130,10 @@
     "main": "Main Partner",
     "partner": "Partner"
   },
+  "slack": {
+    "join": "Join Slack",
+    "url": "https://cthit.slack.com/archives/C06RQUB7R8Q"
+  },
   "user": {
     "login": "Log in",
     "logout": "Log out",
