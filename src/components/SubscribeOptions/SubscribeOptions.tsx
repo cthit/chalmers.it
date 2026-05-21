@@ -1,75 +1,54 @@
-'use client';
-
 import i18nService from '@/services/i18nService';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
-import { FaRss } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { SiSlack } from 'react-icons/si';
 import ContentPane from '../ContentPane/ContentPane';
+import RssButton from './RssButton';
 import styles from './SubscribeOptions.module.scss';
+import getSlackSubscribeLink from '@/hooks/getSlackSubscribeLink';
 
 interface SubscribeOptionsProps {
   locale: string;
 }
 
-export default function SubscribeOptions({ locale }: SubscribeOptionsProps) {
+export default async function SubscribeOptions({
+  locale
+}: SubscribeOptionsProps) {
   const l = i18nService.getLocale(locale);
-  const rssUrl = `/api/news?format=rss&locale=${locale}`;
-
-  const [tooltipVisible, setTooltipVisible] = useState(false);
-  const tooltipTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const handleRssClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    try {
-      await navigator.clipboard.writeText(window.location.origin + rssUrl);
-      setTooltipVisible(true);
-      if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
-      tooltipTimeout.current = setTimeout(() => setTooltipVisible(false), 1500);
-    } catch {
-      // Fallback: open in new tab
-      window.open(rssUrl, '_blank', 'noopener,noreferrer');
-    }
-  };
+  const slackSubscribeUrl = await getSlackSubscribeLink();
 
   return (
     <ContentPane>
       <h2 className={styles.title}>{l.news.subscribe}</h2>
       <div className={styles.optionsContainer}>
+        {slackSubscribeUrl && (
+          <Link
+            href={slackSubscribeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.iconButton}
+            title={l.news.subscribeViaSlack}
+            aria-label={l.news.subscribeViaSlack}
+          >
+            <SiSlack />
+          </Link>
+        )}
+
         <button
           type="button"
           className={styles.iconButton}
-          aria-label={l.news.subscribe}
-          title={l.news.subscribe}
-          onClick={handleRssClick}
+          title={l.general.comingSoon}
+          aria-label={l.general.comingSoon}
+          disabled
         >
-          <FaRss />
-          <span
-            className={
-              styles.tooltip + (tooltipVisible ? ' ' + styles.tooltipVisible : '')
-            }
-            role="status"
-            aria-live="polite"
-          >
-            {l.editor.linkCopied}
-          </span>
-        </button>
-
-        <button type="button" className={styles.iconButton} disabled>
           <MdEmail />
         </button>
 
-        <Link
-          href={l.slack.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.iconButton}
-          title={l.slack.join}
-          aria-label={l.slack.join}
-        >
-          <SiSlack />
-        </Link>
+        <RssButton
+          rssUrl={`/api/news?format=rss&locale=${locale}`}
+          label={l.news.subscribeViaRss}
+          tooltipText={l.editor.linkCopied}
+        />
       </div>
     </ContentPane>
   );

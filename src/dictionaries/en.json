@@ -10,7 +10,8 @@
     "close": "Close",
     "save": "Save",
     "manage": "Manage",
-    "add": "Add"
+    "add": "Add",
+    "comingSoon": "Comming soon"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -41,6 +42,8 @@
     "by": "by",
     "unknown": "unknown author",
     "subscribe": "Subscribe to news feed",
+    "subscribeViaRss": "Follow us via RSS",
+    "subscribeViaSlack": "Join our Slack",
     "confirmDelete": "Are you sure you want to delete this post? This action cannot be undone.",
     "deleting": "Deleting...",
     "deleted": "Deleted!",
@@ -129,10 +132,6 @@
     "empty": "Would you like to advertise here? Please contact",
     "main": "Main Partner",
     "partner": "Partner"
-  },
-  "slack": {
-    "join": "Join Slack",
-    "url": "https://cthit.slack.com/archives/C06RQUB7R8Q"
   },
   "user": {
     "login": "Log in",

@@ -10,7 +10,8 @@
     "close": "Stäng",
     "save": "Spara",
     "manage": "Hantera",
-    "add": "Lägg till"
+    "add": "Lägg till",
+    "comingSoon": "Kommer snart"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -41,6 +42,8 @@
     "by": "av",
     "unknown": "okänd användare",
     "subscribe": "Prenumerera på nyheter",
+    "subscribeViaRss": "Följ oss via RSS",
+    "subscribeViaSlack": "Gå med i vår Slack",
     "confirmDelete": "Vill du radera nyheten? Detta går inte att ångra!",
     "deleting": "Raderar...",
     "deleted": "Raderad!",
@@ -129,10 +132,6 @@
     "empty": "Vill du synas här? Kontakta",
     "main": "Huvudpartner",
     "partner": "Samarbetspartner"
-  },
-  "slack": {
-    "join": "Gå med i Slack",
-    "url": "https://cthit.slack.com/archives/C0647T859KP"
   },
   "user": {
     "login": "Logga in",
