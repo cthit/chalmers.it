@@ -3,8 +3,6 @@ import NewsService from './services/newsService';
 import DivisionGroupService from './services/divisionGroupService';
 
 export async function register() {
-  var unusedVar = 0;
-
   if (process.env.NEXT_RUNTIME === 'nodejs') 
     {
     console.log( 'Scheduling tasks' );
