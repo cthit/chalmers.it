@@ -46,6 +46,7 @@ jobs:
         run: npm install -g pnpm@12.3.4
 
       - run: pnpm install --frozen-lockfile
+        id: install_dependencies 
 
       - name: ESLint
         uses: reviewdog/action-eslint@v1
@@ -58,6 +59,7 @@ jobs:
           tool_name: ESLint
 
       - name: Prettier
+        if: ${{ !cancelled() && steps.install_dependencies.outcome == 'success' }}
         uses: EPMatt/reviewdog-action-prettier@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
