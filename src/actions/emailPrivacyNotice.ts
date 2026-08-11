@@ -23,10 +23,5 @@ export async function saveEmailPrivacyNotice(
     throw new Error('Invalid privacy notice');
   }
 
-  await EmailPrivacyNoticeService.save(
-    titleSv,
-    contentSv,
-    titleEn,
-    contentEn
-  );
+  await EmailPrivacyNoticeService.save(titleSv, contentSv, titleEn, contentEn);
 }

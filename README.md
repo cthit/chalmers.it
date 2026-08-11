@@ -99,10 +99,10 @@ The following environment variables are used:
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
-| SMTP_HOST                 | SMTP server hostname                                                                          | `smtp.gmail.com`                                                       |
-| SMTP_PORT                 | SMTP server port                                                                              | `587`                                                                  |
-| SMTP_SECURE               | Use implicit TLS; keep false for STARTTLS on port 587                                         | `false`                                                                |
-| SMTP_REQUIRE_TLS          | Require STARTTLS; use true with Gmail and false with local Mailpit                            | `true`                                                                 |
-| SMTP_USER                 | SMTP account username                                                                         | `digit-noreply@chalmers.it`                                            |
-| SMTP_PASSWORD             | SMTP application password                                                                     |                                                                        |
-| SMTP_FROM                 | Sender name and address                                                                       | `chalmers.it <digit-noreply@chalmers.it>`                              |
+| SMTP_HOST                 | SMTP server hostname                                                                         | `smtp.gmail.com`                                                       |
+| SMTP_PORT                 | SMTP server port                                                                             | `587`                                                                  |
+| SMTP_SECURE               | Use implicit TLS; keep false for STARTTLS on port 587                                        | `false`                                                                |
+| SMTP_REQUIRE_TLS          | Require STARTTLS; use true with Gmail and false with local Mailpit                           | `true`                                                                 |
+| SMTP_USER                 | SMTP account username                                                                        | `digit-noreply@chalmers.it`                                            |
+| SMTP_PASSWORD             | SMTP application password                                                                    |                                                                        |
+| SMTP_FROM                 | Sender name and address                                                                      | `chalmers.it <digit-noreply@chalmers.it>`                              |

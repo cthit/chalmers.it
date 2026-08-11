@@ -89,7 +89,11 @@ export default function PrivacyNoticeForm({
           onChange={(event) => setSwedishTitle(event.target.value)}
         />
         <label>{l.editor.content}</label>
-        <MarkdownEditor defaultMd={contentSv} ref={contentSvRef} locale={locale} />
+        <MarkdownEditor
+          defaultMd={contentSv}
+          ref={contentSvRef}
+          locale={locale}
+        />
       </div>
       <div role="tabpanel" hidden={language !== 'en'}>
         <label htmlFor="privacy-title-en">{l.editor.title}</label>
@@ -100,7 +104,11 @@ export default function PrivacyNoticeForm({
           onChange={(event) => setEnglishTitle(event.target.value)}
         />
         <label>{l.editor.content}</label>
-        <MarkdownEditor defaultMd={contentEn} ref={contentEnRef} locale={locale} />
+        <MarkdownEditor
+          defaultMd={contentEn}
+          ref={contentEnRef}
+          locale={locale}
+        />
       </div>
 
       <ActionButton disabled={pending} onClick={save}>
