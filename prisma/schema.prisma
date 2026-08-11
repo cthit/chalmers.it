@@ -126,6 +126,15 @@ model EventNotifiers {
   language Language
 }
 
+model EmailPrivacyNotice {
+  id        Int      @id @default(1)
+  titleSv   String
+  titleEn   String
+  contentSv String
+  contentEn String
+  updatedAt DateTime @updatedAt
+}
+
 enum DocumentType {
   PROTOCOL
   BUDGET

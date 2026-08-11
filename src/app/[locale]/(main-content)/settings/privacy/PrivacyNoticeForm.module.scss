@@ -1,0 +1,55 @@
+.languageTabs {
+  display: flex;
+  gap: 0.4rem;
+  margin: 1rem 0;
+
+  button {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--text-color);
+    border-radius: 0.4rem;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+}
+
+.languageTabs .selected {
+  color: white;
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+}
+
+.languageTabs + div,
+.languageTabs + div + div {
+  margin-bottom: 1rem;
+
+  > label {
+    display: block;
+    margin: 0.75rem 0 0.35rem;
+    font-weight: 600;
+  }
+}
+
+.emailTest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
+
+  input,
+  select {
+    width: min(100%, 30rem);
+  }
+
+  select {
+    height: 2rem;
+    padding: 0 0.4rem;
+    border: 0;
+    border-radius: 4px;
+    color: var(--text-color);
+    background-color: var(--header-color);
+  }
+}

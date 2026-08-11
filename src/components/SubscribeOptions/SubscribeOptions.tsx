@@ -1,6 +1,5 @@
 import i18nService from '@/services/i18nService';
 import Link from 'next/link';
-import { MdEmail } from 'react-icons/md';
 import { SiSlack } from 'react-icons/si';
 import ContentPane from '../ContentPane/ContentPane';
 import RssButton from './RssButton';
@@ -33,16 +32,6 @@ export default async function SubscribeOptions({
             <SiSlack />
           </Link>
         )}
-
-        <button
-          type="button"
-          className={styles.iconButton}
-          title={l.general.comingSoon}
-          aria-label={l.general.comingSoon}
-          disabled
-        >
-          <MdEmail />
-        </button>
 
         <RssButton
           rssUrl={`/api/news?format=rss&locale=${locale}`}

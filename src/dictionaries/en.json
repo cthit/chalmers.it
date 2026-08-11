@@ -41,7 +41,7 @@
     "for": "for",
     "by": "by",
     "unknown": "unknown author",
-    "subscribe": "Subscribe to news feed",
+    "subscribe": "Follow our news",
     "subscribeViaRss": "Follow us via RSS",
     "subscribeViaSlack": "Join our Slack",
     "confirmDelete": "Are you sure you want to delete this post? This action cannot be undone.",
@@ -224,6 +224,20 @@
       "systemTheme": "Theme preference resolved to",
       "noSystemTheme": "No theme preference",
       "resolvingTheme": "Resolving theme..."
+    },
+    "privacy": {
+      "name": "Privacy notice",
+      "title": "Email privacy notice",
+      "swedish": "Swedish",
+      "english": "English",
+      "testTitle": "Test email delivery",
+      "testDescription": "Send a localized test message through the configured SMTP server.",
+      "emailAddress": "Recipient email address",
+      "language": "Email language",
+      "sendTest": "Send test email",
+      "sendingTest": "Sending test email...",
+      "testSent": "Test email sent.",
+      "testError": "Could not send the test email."
     },
     "groupTypes": {
       "name": "Group Types"

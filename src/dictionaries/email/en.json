@@ -1,0 +1,9 @@
+{
+  "locale": "en",
+  "test": {
+    "subject": "chalmers.it email delivery test",
+    "heading": "Email delivery works",
+    "body": "This message was sent from the chalmers.it administrator settings to verify the configured SMTP delivery.",
+    "timestamp": "Sent at"
+  }
+}

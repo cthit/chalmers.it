@@ -41,7 +41,7 @@
     "for": "för",
     "by": "av",
     "unknown": "okänd användare",
-    "subscribe": "Prenumerera på nyheter",
+    "subscribe": "Följ våra nyheter",
     "subscribeViaRss": "Följ oss via RSS",
     "subscribeViaSlack": "Gå med i vår Slack",
     "confirmDelete": "Vill du radera nyheten? Detta går inte att ångra!",
@@ -224,6 +224,20 @@
       "systemTheme": "Temapreferens",
       "noSystemTheme": "Ingen temapreferens",
       "resolvingTheme": "Löser tema..."
+    },
+    "privacy": {
+      "name": "Integritetsinformation",
+      "title": "Integritetsinformation för e-post",
+      "swedish": "Svenska",
+      "english": "Engelska",
+      "testTitle": "Testa e-postutskick",
+      "testDescription": "Skicka ett lokaliserat testmeddelande genom den konfigurerade SMTP-servern.",
+      "emailAddress": "Mottagarens e-postadress",
+      "language": "Språk för testmejlet",
+      "sendTest": "Skicka testmejl",
+      "sendingTest": "Skickar testmejl...",
+      "testSent": "Testmejlet har skickats.",
+      "testError": "Det gick inte att skicka testmejlet."
     },
     "groupTypes": {
       "name": "Grupptyper"

@@ -14,7 +14,8 @@ const pages: {
     | 'groupTypes'
     | 'sponsors'
     | 'media'
-    | 'navbar';
+    | 'navbar'
+    | 'privacy';
   authFunc: () => Promise<boolean>;
 }[] = [
   {
@@ -52,6 +53,11 @@ const pages: {
   {
     path: '/settings/navbar',
     lPath: 'navbar',
+    authFunc: SessionService.isAdmin
+  },
+  {
+    path: '/settings/privacy',
+    lPath: 'privacy',
     authFunc: SessionService.isAdmin
   }
 ];
