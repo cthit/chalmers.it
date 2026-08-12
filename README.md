@@ -24,10 +24,13 @@ A few things are required to run the project:
 In order to run the project in development mode, a few steps are required:
 
 1. Install packages with `pnpm install`
-2. Start services by running `docker compose up -d`
+2. Start Postgres and Gotify in mock mode by running `docker compose up -d`
 3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
 4. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
 5. Run `pnpm run dev` to start the development server
+
+Development emails are handled by Gotify in mock mode instead of being sent externally.
+Run `docker compose logs gotify` to inspect test deliveries.
 
 If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
 
@@ -96,3 +99,6 @@ The following environment variables are used:
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
+| GOTIFY_ROOT_URL           | Gotify service root URL                                                                      | `http://localhost:8082`                                                |
+| GOTIFY_TOKEN              | Gotify pre-shared authentication token                                                       | `123abc`                                                               |
+| EMAIL_FROM                | Sender email address                                                                         | `noreply@chalmers.it`                                                  |

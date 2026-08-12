@@ -5,6 +5,7 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import Lunch from '@/components/Lunch/Lunch';
 import Sponsors from '@/components/Sponsors/Sponsors';
 import Calendar from '@/components/Calendar/Calendar';
+import SubscribeOptions from '@/components/SubscribeOptions/SubscribeOptions';
 
 export const revalidate = 3600;
 
@@ -34,6 +35,7 @@ export default async function Home(props: {
 const LeftBar = ({ locale }: { locale: string }) => {
   return (
     <div className={styles.sidePanel}>
+      <SubscribeOptions locale={locale} />
       <Lunch locale={locale} />
       <Sponsors locale={locale} />
     </div>

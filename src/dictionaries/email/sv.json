@@ -1,0 +1,9 @@
+{
+  "locale": "sv",
+  "test": {
+    "subject": "Test av e-postutskick från chalmers.it",
+    "heading": "E-postutskicket fungerar",
+    "body": "Det här meddelandet skickades från administratörsinställningarna på chalmers.it för att verifiera den konfigurerade e-postleveransen.",
+    "timestamp": "Skickat"
+  }
+}

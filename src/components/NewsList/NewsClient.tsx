@@ -10,7 +10,6 @@ import NewsCard from './NewsCard/NewsCard';
 import styles from './NewsList.module.scss';
 import clientStyles from './NewsListClient.module.scss';
 import NewsPost from './NewsPost/NewsPost';
-import RssFeedButton from './RssFeedButton';
 import ViewToggle from './ViewToggle';
 
 interface NewsClientProps {
@@ -34,7 +33,6 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
       <div className={styles.title}>
         <div className={styles.heading}>
           <h1>{l.news.title}</h1>
-          <RssFeedButton locale={locale} />
         </div>
         <div className={styles.actions}>
           <ViewToggle

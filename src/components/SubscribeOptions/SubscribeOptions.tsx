@@ -1,0 +1,44 @@
+import i18nService from '@/services/i18nService';
+import Link from 'next/link';
+import { SiSlack } from 'react-icons/si';
+import ContentPane from '../ContentPane/ContentPane';
+import RssButton from './RssButton';
+import styles from './SubscribeOptions.module.scss';
+import getSlackSubscribeLink from '@/hooks/getSlackSubscribeLink';
+
+interface SubscribeOptionsProps {
+  locale: string;
+}
+
+export default async function SubscribeOptions({
+  locale
+}: SubscribeOptionsProps) {
+  const l = i18nService.getLocale(locale);
+  const slackSubscribeUrl = await getSlackSubscribeLink();
+
+  return (
+    <ContentPane>
+      <h2 className={styles.title}>{l.news.subscribe}</h2>
+      <div className={styles.optionsContainer}>
+        {slackSubscribeUrl && (
+          <Link
+            href={slackSubscribeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.iconButton}
+            title={l.news.subscribeViaSlack}
+            aria-label={l.news.subscribeViaSlack}
+          >
+            <SiSlack />
+          </Link>
+        )}
+
+        <RssButton
+          rssUrl={`/api/news?format=rss&locale=${locale}`}
+          label={l.news.subscribeViaRss}
+          tooltipText={l.editor.linkCopied}
+        />
+      </div>
+    </ContentPane>
+  );
+}
