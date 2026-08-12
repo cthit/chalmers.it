@@ -231,7 +231,7 @@
       "swedish": "Swedish",
       "english": "English",
       "testTitle": "Test email delivery",
-      "testDescription": "Send a localized test message through the configured SMTP server.",
+      "testDescription": "Send a localized test message through the configured email service.",
       "emailAddress": "Recipient email address",
       "language": "Email language",
       "sendTest": "Send test email",

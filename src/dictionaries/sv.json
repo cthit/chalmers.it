@@ -231,7 +231,7 @@
       "swedish": "Svenska",
       "english": "Engelska",
       "testTitle": "Testa e-postutskick",
-      "testDescription": "Skicka ett lokaliserat testmeddelande genom den konfigurerade SMTP-servern.",
+      "testDescription": "Skicka ett lokaliserat testmeddelande genom den konfigurerade e-posttjänsten.",
       "emailAddress": "Mottagarens e-postadress",
       "language": "Språk för testmejlet",
       "sendTest": "Skicka testmejl",
