@@ -8,7 +8,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "test:integration": "node tests/integration/run.cjs"
   },
   "dependencies": {
     "@milkdown/kit": "^7.18.0",

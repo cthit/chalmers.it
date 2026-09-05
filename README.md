@@ -96,3 +96,39 @@ The following environment variables are used:
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
+
+## Gamma integration smoke test
+
+With Node.js 20+, pnpm 9.15.9 and Docker Compose v2 available, run:
+
+```sh
+npx pnpm@9.15.9 install --frozen-lockfile
+npx pnpm@9.15.9 test:integration
+```
+
+This runs Jest against the production `GammaService` and a real Gamma information
+API. It checks the seeded Michael Scott user's identity and nickname, and verifies
+that an invalid API token produces a 401 error. It does not cover browser sign-in,
+OAuth callbacks or the production Gamma deployment.
+
+The runner creates a uniquely named Compose project with fresh PostgreSQL
+16.0-alpine and Redis 5.0.14-alpine services. Gamma is pinned by digest in
+`tests/integration/compose.yml` (published image retrieved September 5, 2026).
+The image is amd64; Docker needs emulation on ARM machines. When updating the
+image, verify its built-in seed user and INFO-key bootstrap log format, then rerun
+this test before committing the new digest.
+
+`IS_MOCKING=true` enables Gamma's built-in development seed data and generated API
+keys; HTTP requests, authorization and database reads still use the real Gamma
+implementation. The runner reads the fresh INFO credentials from that isolated
+container's bootstrap logs. No production secrets, existing `.env`, website
+database or development Compose services are required. Only Gamma is exposed,
+on a random loopback port. Startup has a bounded wait, failures print service logs,
+and the runner removes its containers, network and database volumes after success
+or failure.
+If forcibly killed, find the project's `chalmersit-gamma-test-` name with
+`docker compose ls` and remove it with
+`docker compose -p <project-name> -f tests/integration/compose.yml down --volumes`.
+
+The Code validation workflow runs this same command on pull requests targeting
+`main` and pushes to `main`. The existing `pnpm test` remains independent of Docker.
