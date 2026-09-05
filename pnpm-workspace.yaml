@@ -9,3 +9,13 @@ allowBuilds:
   sharp: true
   esbuild: true
   unrs-resolver: true
+  # Optional native optimizations are unnecessary for the local Docker connection.
+  cpu-features: false
+  ssh2: false
+  # protobufjs only prints a version-scheme warning in its postinstall hook.
+  protobufjs: false
+# Keep the explicitly selected Playwright release installable during its release-age window.
+minimumReleaseAgeExclude:
+  - '@playwright/test@1.63.0'
+  - playwright-core@1.63.0
+  - playwright@1.63.0

@@ -10,22 +10,26 @@ permissions:
   contents: read
 
 jobs:
-  gamma:
-    name: Gamma browser flow
+  browser:
+    name: Browser flows and Slack notifications
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
         with:
           node-version: 24.x
       - run: npm install -g pnpm@12.3.4
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec prisma generate
+      - run: pnpm typecheck
       - run: pnpm test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7.0.1
         if: failure()
         with:
-          name: gamma-browser-traces
-          path: test-results/
+          name: e2e-diagnostics
+          path: |
+            test-results/
+            playwright-report/
           retention-days: 7

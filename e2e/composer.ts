@@ -15,6 +15,9 @@ import {
 } from 'testcontainers';
 import { execFileSync, spawn, type ChildProcess } from 'node:child_process';
 import { once } from 'node:events';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { startWebhookReceiver, type WebhookReceiver } from './helpers/webhook';
 import { createServer, type AddressInfo } from 'node:net';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -64,17 +67,55 @@ const gammaSeed = {
   ]
 };
 
-type Environment = { websiteUrl: string; gammaUrl: string };
+export type Environment = {
+  websiteUrl: string;
+  gammaUrl: string;
+  db: PrismaClient;
+  webhook: WebhookReceiver;
+  logs: () => { gamma: string; website: string };
+};
 
-export const test = base.extend<{ environment: Environment }>({
-  environment: [
-    async ({ browser }, use, testInfo) => {
-      const network = await new Network().start();
+export const test = base.extend<
+  { environment: Environment },
+  { stack: Environment }
+>({
+  environment: async ({ stack }, use, testInfo) => {
+    // Each test gets fresh content and a fresh browser context; Gamma is shared.
+    await stack.db.eventNotifiers.deleteMany();
+    await stack.db.newsPost.deleteMany();
+    await stack.db.divisionPage.deleteMany();
+    await stack.db.media.deleteMany();
+    stack.webhook.reset();
+    try {
+      await use(stack);
+    } finally {
+      if (testInfo.status !== testInfo.expectedStatus) {
+        for (const [name, body] of Object.entries(stack.logs())) {
+          await testInfo.attach(`${name}.log`, {
+            body,
+            contentType: 'text/plain'
+          });
+        }
+        await testInfo.attach('webhooks.json', {
+          body: JSON.stringify(stack.webhook.requests, null, 2),
+          contentType: 'application/json'
+        });
+      }
+    }
+  },
+  stack: [
+    async ({ browser }, use, workerInfo) => {
+      const network = new Network();
+      let startedNetwork: Awaited<ReturnType<Network['start']>> | undefined;
+      const mediaPath = await mkdtemp(
+        path.join(tmpdir(), 'chalmersit-e2e-media-')
+      );
+      let webhook: WebhookReceiver | undefined;
+      let db: PrismaClient | undefined;
       const containers: StartedTestContainer[] = [];
       let website: ChildProcess | undefined;
       let gammaLogs = '';
       let websiteLogs = '';
-      let failed = false;
       const track = async <T extends StartedTestContainer>(
         pending: Promise<T>
       ): Promise<T> => {
@@ -83,12 +124,14 @@ export const test = base.extend<{ environment: Environment }>({
         return container;
       };
       try {
+        startedNetwork = await network.start();
+        webhook = await startWebhookReceiver();
         console.log(
           'Starting Gamma, PostgreSQL and Redis with Testcontainers...'
         );
         const gammaDb = await track(
           new PostgreSqlContainer('postgres:16.0-alpine')
-            .withNetwork(network)
+            .withNetwork(startedNetwork)
             .withNetworkAliases('gamma-db')
             .withDatabase('gamma_test')
             .withUsername('gamma_test')
@@ -97,7 +140,7 @@ export const test = base.extend<{ environment: Environment }>({
         );
         await track(
           new GenericContainer('redis:5.0.14-alpine')
-            .withNetwork(network)
+            .withNetwork(startedNetwork)
             .withNetworkAliases('redis')
             .withWaitStrategy(Wait.forLogMessage('Ready to accept connections'))
             .start()
@@ -112,7 +155,7 @@ export const test = base.extend<{ environment: Environment }>({
         const gamma = await track(
           new GenericContainer(gammaImage)
             .withPlatform('linux/amd64')
-            .withNetwork(network)
+            .withNetwork(startedNetwork)
             .withEnvironment({
               DB_HOST: 'gamma-db',
               DB_NAME: gammaDb.getDatabase(),
@@ -149,9 +192,14 @@ export const test = base.extend<{ environment: Environment }>({
             .start()
         );
         const gammaUrl = `http://${gamma.getHost()}:${gamma.getMappedPort(8081)}`;
-        const credentials = gammaLogs.match(
-          /Api key of type INFO has been generated with id: ([\w-]+) and code: (\S+)/
-        );
+        const credentialPattern =
+          /Api key of type INFO has been generated with id: ([\w-]+) and code: ([A-Za-z0-9]+)/;
+        // The wait strategy and log consumer use separate streams. Wait until
+        // the consumer has received the credentials before reading them.
+        await expect
+          .poll(() => gammaLogs, { timeout: 30000 })
+          .toMatch(credentialPattern);
+        const credentials = gammaLogs.match(credentialPattern);
         if (!credentials)
           throw new Error('Gamma did not emit its bootstrap INFO credentials');
         const env = await configureWebsite(
@@ -160,6 +208,9 @@ export const test = base.extend<{ environment: Environment }>({
           websiteDb.getConnectionUri(),
           credentials[1]
         );
+        db = new PrismaClient({
+          adapter: new PrismaPg({ connectionString: env.DATABASE_URL })
+        });
         website = spawn(
           process.execPath,
           [
@@ -177,6 +228,12 @@ export const test = base.extend<{ environment: Environment }>({
             env: {
               ...process.env,
               ...env,
+              NODE_ENV: 'development',
+              MEDIA_PATH: mediaPath,
+              ACTIVE_GROUP_TYPES: 'committee',
+              ADMIN_GROUPS: 'digit',
+              PAGE_EDITOR_GROUPS: 'digit',
+              NEXT_TELEMETRY_DISABLED: '1',
               GAMMA_API_KEY_ID: credentials[1],
               GAMMA_API_KEY_TOKEN: credentials[2]
             }
@@ -204,36 +261,49 @@ export const test = base.extend<{ environment: Environment }>({
             { timeout: 180000, intervals: [500, 1000] }
           )
           .toBe(200);
-        await use({ websiteUrl: env.BASE_URL, gammaUrl });
+        await use({
+          websiteUrl: env.BASE_URL,
+          gammaUrl,
+          db,
+          webhook,
+          logs: () => ({ gamma: gammaLogs, website: websiteLogs })
+        });
       } catch (error) {
-        failed = true;
+        const logPath = path.join(
+          workerInfo.project.outputDir,
+          `startup-${workerInfo.workerIndex}.log`
+        );
+        await writeFile(
+          logPath,
+          `Gamma:
+${gammaLogs}
+Website:
+${websiteLogs}`
+        ).catch(() => {});
+        console.error(`E2E environment failed. Logs: ${logPath}
+${websiteLogs.slice(-8000)}`);
         throw error;
       } finally {
-        if (failed || testInfo.status !== testInfo.expectedStatus) {
-          await testInfo.attach('gamma.log', {
-            body: gammaLogs,
-            contentType: 'text/plain'
-          });
-          await testInfo.attach('website.log', {
-            body: websiteLogs,
-            contentType: 'text/plain'
-          });
-        }
-        try {
-          await stopWebsite(website);
-        } finally {
-          const stopped = await Promise.allSettled(
-            containers.map((container) => container.stop())
-          );
-          await network.stop();
-          const failure = stopped.find(
-            (result) => result.status === 'rejected'
-          );
-          if (failure?.status === 'rejected') throw failure.reason;
-        }
+        // Always attempt every cleanup, including when a startup step failed.
+        const stopped = await Promise.allSettled([
+          stopWebsite(website),
+          db?.$disconnect(),
+          webhook?.close()
+        ]);
+        const containersStopped = await Promise.allSettled(
+          containers.reverse().map((container) => container.stop())
+        );
+        const rest = await Promise.allSettled([
+          startedNetwork?.stop(),
+          rm(mediaPath, { recursive: true, force: true })
+        ]);
+        const failure = [...stopped, ...containersStopped, ...rest].find(
+          (result) => result.status === 'rejected'
+        );
+        if (failure?.status === 'rejected') throw failure.reason;
       }
     },
-    { timeout: 480000 }
+    { scope: 'worker', timeout: 480000 }
   ],
   baseURL: async ({ environment }, use) => {
     await use(environment.websiteUrl);
@@ -330,7 +400,7 @@ async function configureWebsite(
   }
   execFileSync(
     process.execPath,
-    [require.resolve('prisma'), 'db', 'push'],
+    [require.resolve('prisma/build/index.js'), 'db', 'push'],
     {
       env: { ...process.env, DATABASE_URL: databaseUrl },
       stdio: 'inherit'

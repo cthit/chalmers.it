@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "prisma generate && playwright test"
   },
   "dependencies": {
     "@milkdown/kit": "7.22.1",
@@ -54,9 +54,9 @@
     "dotenv": "17.4.2",
     "tsx": "4.23.13",
     "@types/jest": "30.0.0",
-    "@playwright/test": "1.55.1",
-    "@testcontainers/postgresql": "11.5.1",
-    "testcontainers": "11.5.1"
+    "@playwright/test": "1.63.0",
+    "@testcontainers/postgresql": "12.1.0",
+    "testcontainers": "12.1.0"
   },
   "packageManager": "pnpm@12.3.4",
   "engines": {
