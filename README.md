@@ -15,9 +15,9 @@ Contributions are also welcome, feel free to create a pull request with your cha
 
 A few things are required to run the project:
 
-1. [Node.js](https://nodejs.org/en/) v20 for running the web server
+1. [Node.js](https://nodejs.org/en/) v24 for running the web server
 2. Docker for running other services
-3. pnpm (installed with `npm install -g pnpm`)
+3. pnpm 12.3.4 (installed with `npm install -g pnpm@12.3.4`)
 
 ## Development
 

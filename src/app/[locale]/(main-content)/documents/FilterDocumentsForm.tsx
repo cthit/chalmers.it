@@ -1,12 +1,13 @@
 'use client';
 
+import { documentTypeKey } from '@/utils/documentType';
+
 import styles from './FilterDocumentsForm.module.scss';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import Divider from '@/components/Divider/Divider';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import TextArea from '@/components/TextArea/TextArea';
-import DivisionDocumentService from '@/services/divisionDocumentService';
 import DivisionGroupService from '@/services/divisionGroupService';
 import i18nService from '@/services/i18nService';
 import { DocumentType } from '@prisma/client';
@@ -62,13 +63,7 @@ const FilterDocumentsForm = ({
             <option value={''}>{l.search.allTypes}</option>
             {Object.keys(DocumentType).map((type) => (
               <option key={type} value={type}>
-                {
-                  l.docTypes[
-                    DivisionDocumentService.documentTypeKey(
-                      type as DocumentType
-                    )
-                  ]
-                }
+                {l.docTypes[documentTypeKey(type as DocumentType)]}
               </option>
             ))}
           </DropdownList>
