@@ -35,18 +35,22 @@ const NewsCard = ({ post, locale }: NewsCardProps) => {
   ) : null;
 
   return (
-    <Link
-      href={`/post/${post.id}`}
-      className={styles.cardLink}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <div className={styles.cardLink}>
       <article
         className={`${styles.card} ${!firstImg ? styles.cardNoImage : ''}`}
       >
         <div className={styles.textColumn}>
           <div className={styles.header}>
-            <h3 className={styles.title}>{post.title}</h3>
+            <h3 className={styles.title}>
+              <Link
+                href={`/post/${post.id}`}
+                className={styles.titleLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {post.title}
+              </Link>
+            </h3>
           </div>
           <MarkdownView content={textContent} />
         </div>
@@ -77,7 +81,7 @@ const NewsCard = ({ post, locale }: NewsCardProps) => {
           </p>
         </div>
       </article>
-    </Link>
+    </div>
   );
 };
 

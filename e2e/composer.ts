@@ -5,6 +5,7 @@ import {
   type Page
 } from '@playwright/test';
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import {
   GenericContainer,
@@ -329,14 +330,14 @@ async function configureWebsite(
   }
   execFileSync(
     process.execPath,
-    [require.resolve('prisma'), 'db', 'push', '--skip-generate'],
+    [require.resolve('prisma'), 'db', 'push'],
     {
       env: { ...process.env, DATABASE_URL: databaseUrl },
       stdio: 'inherit'
     }
   );
   const prisma = new PrismaClient({
-    datasources: { db: { url: databaseUrl } }
+    adapter: new PrismaPg({ connectionString: databaseUrl })
   });
   try {
     // Website stores only its group mapping; member name and post live exclusively in Gamma.
