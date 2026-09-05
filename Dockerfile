@@ -1,30 +1,30 @@
-FROM node:24.11.0-alpine AS deps
+FROM node:24.20.0-alpine AS deps
 LABEL maintainer="digIT <digit@chalmers.it>"
 
 RUN apk add --no-cache libc6-compat
-RUN yarn global add pnpm@10.28.0
+RUN npm install -g pnpm@12.3.4
 
 WORKDIR /app
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* pnpm-workspace.yaml ./
 RUN pnpm i --frozen-lockfile
 
 ##########################
 #      BUILD STAGE       #
 ##########################
-FROM node:24.11.0-alpine AS builder
+FROM node:24.20.0-alpine AS builder
 
 RUN apk add --no-cache openssl
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN yarn prisma generate
-RUN yarn build
+RUN ./node_modules/.bin/prisma generate
+RUN npm run build
 
 ##########################
 #    PRODUCTION STAGE    #
 ##########################
-FROM node:24.11.0-alpine AS runner
+FROM node:24.20.0-alpine AS runner
 
 RUN apk add --no-cache openssl
 
@@ -37,7 +37,7 @@ ENV MEDIA_PATH=/app/media
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-RUN yarn global add prisma@5.22.0
+RUN npm install --prefix /opt/prisma prisma@7.10.0 dotenv@17.4.2
 
 # Create media directory
 RUN mkdir -p $MEDIA_PATH
@@ -47,7 +47,8 @@ HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
         CMD wget 127.0.0.1:3000/api/heartbeat -q -O - > /dev/null 2>&1
 
 # Copy database schema
-COPY --chown=nextjs:nodejs prisma ./prisma
+COPY --chown=nextjs:nodejs prisma /opt/prisma/prisma
+COPY --chown=nextjs:nodejs prisma.config.ts /opt/prisma/prisma.config.ts
 
 # Copy built files
 COPY --from=builder /app/public ./public
@@ -60,4 +61,4 @@ EXPOSE 3000
 ENV PORT=3000
 
 SHELL ["/bin/sh", "-c"]
-CMD npx prisma migrate deploy && node server.js
+CMD /opt/prisma/node_modules/.bin/prisma migrate deploy --config /opt/prisma/prisma.config.ts && node server.js

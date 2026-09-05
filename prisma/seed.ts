@@ -1,6 +1,6 @@
-import { Prisma, PostStatus, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import 'dotenv/config';
+import { Prisma, PostStatus } from '@prisma/client';
+import prisma from '../src/prisma';
 
 async function main() {
   // Clean existing data (order matters due to foreign keys)

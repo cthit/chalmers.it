@@ -1,5 +1,7 @@
 'use client';
 
+import { checkValidMoveTargets } from '@/utils/pageMoveTargets';
+
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -7,9 +9,7 @@ import TextArea from '@/components/TextArea/TextArea';
 import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
-import DivisionPageService, {
-  DivisionPage
-} from '@/services/divisionPageService';
+import type { DivisionPage } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
@@ -134,7 +134,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   }
 
   const maxDepth = divisionPost.divisionGroupId !== undefined ? 1 : 2;
-  const validPages = DivisionPageService.checkValidMoveTargets(
+  const validPages = checkValidMoveTargets(
     divisionPost.pages,
     maxDepth,
     divisionPost.editedId
