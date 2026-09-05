@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest",
-    "test:integration": "node tests/integration/run.cjs"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@milkdown/kit": "^7.18.0",
@@ -40,6 +40,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@playwright/test": "1.55.1",
     "@slack/types": "2.14.0",
+    "@testcontainers/postgresql": "11.5.1",
     "@types/node": "^20.11.16",
     "@types/node-schedule": "^2.1.6",
     "@types/react": "19.2.7",
@@ -54,6 +55,7 @@
     "prettier": "3.3.3",
     "prisma": "5.22.0",
     "sass": "1.80.6",
+    "testcontainers": "11.5.1",
     "typescript": "5.6.3",
     "typescript-eslint": "7.18.0"
   },

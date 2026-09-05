@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ env.WORKFLOW_NODE_VERSION }}
 
       - name: pnpm install
-        run: npm install -g pnpm@9.15.9
+        run: npm install -g pnpm
 
       - run: pnpm install --frozen-lockfile
 
@@ -43,7 +43,7 @@ jobs:
           node-version: ${{ env.WORKFLOW_NODE_VERSION }}
 
       - name: pnpm install
-        run: npm install -g pnpm@9.15.9
+        run: npm install -g pnpm
 
       - run: pnpm install prettier
 
@@ -66,23 +66,3 @@ jobs:
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
           tool_name: Prettier
-
-  gamma-integration:
-    name: Gamma integration smoke test
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.WORKFLOW_NODE_VERSION }}
-      - run: npm install -g pnpm@9.15.9
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:integration
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: gamma-browser-traces
-          path: test-results/
-          retention-days: 7

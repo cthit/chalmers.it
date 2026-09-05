@@ -1,23 +1,25 @@
-const { test, expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
+import { test } from './composer';
 
 test('signs in through Gamma and reads committee members from Gamma', async ({
-  page
+  page,
+  environment
 }) => {
   await page.goto('/en/groups');
   await page.getByRole('button', { name: /log in|login|sign in/i }).click();
-  await page.waitForURL(`${process.env.GAMMA_ROOT_URL}/login**`);
+  await page.waitForURL(`${environment.gammaUrl}/login**`);
   await page.locator('[name="username"]').fill('mscott');
   await page.locator('[name="password"]').fill('password1337');
   await page.getByRole('button', { name: 'Login', exact: true }).click();
   // Gamma may request consent for a newly registered client.
   await Promise.race([
-    page.waitForURL(`${process.env.BASE_URL}/**`),
+    page.waitForURL(`${environment.websiteUrl}/**`),
     page.getByRole('button', { name: 'Authorize', exact: true }).waitFor()
   ]);
-  if (new URL(page.url()).origin === process.env.GAMMA_ROOT_URL) {
+  if (new URL(page.url()).origin === environment.gammaUrl) {
     await page.getByRole('button', { name: 'Authorize', exact: true }).click();
   }
-  await page.waitForURL(`${process.env.BASE_URL}/en/groups`);
+  await page.waitForURL(`${environment.websiteUrl}/en/groups`);
   await expect(
     page.getByRole('img', { name: 'Profile Picture', exact: true })
   ).toBeVisible();
