@@ -97,38 +97,43 @@ The following environment variables are used:
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
 
-## Gamma integration smoke test
+## Gamma browser integration test
 
 With Node.js 20+, pnpm 9.15.9 and Docker Compose v2 available, run:
 
 ```sh
 npx pnpm@9.15.9 install --frozen-lockfile
+npx pnpm@9.15.9 exec playwright install chromium
 npx pnpm@9.15.9 test:integration
 ```
 
-This runs Jest against the production `GammaService` and a real Gamma information
-API. It checks the seeded Michael Scott user's identity and nickname, and verifies
-that an invalid API token produces a 401 error. It does not cover browser sign-in,
-OAuth callbacks or the production Gamma deployment.
+One Chromium flow starts at the website's login button, redirects to real Gamma,
+signs in, returns through the OAuth callback, checks the authenticated session,
+then opens the digIT committee page and verifies its member name and role.
+Those values exist only in Gamma's fixture, not the website database. No requests,
+OAuth tokens, sessions or API responses are mocked.
 
-The runner creates a uniquely named Compose project with fresh PostgreSQL
-16.0-alpine and Redis 5.0.14-alpine services. Gamma is pinned by digest in
-`tests/integration/compose.yml` (published image retrieved September 5, 2026).
-The image is amd64; Docker needs emulation on ARM machines. When updating the
-image, verify its built-in seed user and INFO-key bootstrap log format, then rerun
-this test before committing the new digest.
+The runner creates an isolated Compose project with Gamma **2.5.1** pinned by
+registry digest, Redis 5.0.14-alpine, and separate fresh PostgreSQL 16.0-alpine
+services for Gamma and the website. The Gamma image is amd64 and needs Docker
+emulation on ARM. `IS_MOCKING=true` enables Gamma's real bootstrap code, using the
+small `tests/integration/gamma-seed.json` fixture. Test-only INFO credentials are
+read from bootstrap logs and configured to expose committee data; an official
+OAuth client is created through Gamma's UI in a separate administrator session. The website database gets only a committee mapping.
+The runner starts the actual Next.js development server; it does not test a
+production build or the deployed Gamma service.
 
-`IS_MOCKING=true` enables Gamma's built-in development seed data and generated API
-keys; HTTP requests, authorization and database reads still use the real Gamma
-implementation. The runner reads the fresh INFO credentials from that isolated
-container's bootstrap logs. No production secrets, existing `.env`, website
-database or development Compose services are required. Only Gamma is exposed,
-on a random loopback port. Startup has a bounded wait, failures print service logs,
-and the runner removes its containers, network and database volumes after success
-or failure.
-If forcibly killed, find the project's `chalmersit-gamma-test-` name with
-`docker compose ls` and remove it with
-`docker compose -p <project-name> -f tests/integration/compose.yml down --volumes`.
+No production credentials or existing development database are used. Services use
+random loopback ports. Startup and tests have timeouts; failures print service logs
+and retain Playwright traces under `test-results/`. Containers and database volumes
+are removed after success or failure. If forcibly killed, find the project's
+`chalmersit-gamma-test-` name with `docker compose ls` and remove it with:
 
-The Code validation workflow runs this same command on pull requests targeting
-`main` and pushes to `main`. The existing `pnpm test` remains independent of Docker.
+```sh
+docker compose -p <project-name> -f tests/integration/compose.yml down --volumes
+```
+
+The Code validation workflow runs this same flow on pull requests targeting `main`
+and pushes to `main`, installing Chromium and uploading traces on failure. Existing
+`pnpm test` remains independent of Docker. When updating Gamma, verify the image
+digest, fixture bootstrap and client-creation UI, then rerun this flow.

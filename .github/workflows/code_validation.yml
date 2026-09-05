@@ -70,7 +70,7 @@ jobs:
   gamma-integration:
     name: Gamma integration smoke test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -78,4 +78,11 @@ jobs:
           node-version: ${{ env.WORKFLOW_NODE_VERSION }}
       - run: npm install -g pnpm@9.15.9
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:integration
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: gamma-browser-traces
+          path: test-results/
+          retention-days: 7

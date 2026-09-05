@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@playwright/test": "1.55.1",
     "@slack/types": "2.14.0",
     "@types/node": "^20.11.16",
     "@types/node-schedule": "^2.1.6",

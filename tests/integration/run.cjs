@@ -48,20 +48,27 @@ async function main() {
     }
     if (!credentials) throw new Error('Gamma did not become ready within 180s');
 
+    const databaseAddress = compose('port', 'website-db', '5432').trim();
+    const websiteEnv = await require('./setup.cjs')(
+      url,
+      `postgresql://website_test:website_test@${databaseAddress}/website_test`,
+      credentials[1]
+    );
     const result = spawnSync(
       process.execPath,
       [
-        require.resolve('jest/bin/jest'),
+        require.resolve('@playwright/test/cli'),
+        'test',
         '--config',
-        'tests/integration/jest.config.cjs',
-        '--runInBand'
+        'tests/integration/playwright.config.cjs'
       ],
       {
         cwd: root,
         stdio: 'inherit',
-        timeout: 120000,
+        timeout: 360000,
         env: {
           ...process.env,
+          ...websiteEnv,
           GAMMA_ROOT_URL: url,
           GAMMA_API_KEY_ID: credentials[1],
           GAMMA_API_KEY_TOKEN: credentials[2]
