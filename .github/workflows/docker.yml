@@ -6,9 +6,6 @@ on:
       image:
         description: Published image reference pinned to its digest
         value: ${{ jobs.build.outputs.image }}
-  push:
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+*
 
 jobs:
   build:
@@ -37,9 +34,6 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/chalmers.it
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
             type=sha
             type=edge
             type=ref,event=pr

@@ -14,8 +14,18 @@ targeting `main` and pushes to `main`, using the same Node.js and pnpm versions.
 It calls the Docker publishing workflow, then passes the published image's immutable
 digest to the browser job through `E2E_WEBSITE_IMAGE`. The browser job checks TypeScript
 before starting that production image with Testcontainers. CI requires this image
-reference and never falls back to a development server. Release tags still publish
-through the Docker workflow without running E2E.
+reference and never falls back to a development server.
+
+After E2E passes on `main`, the workflow tags that same digest as `tested-<full commit SHA>`.
+Publishing a GitHub release promotes the tested image for its tag's commit without
+rebuilding. For `v1.2.3`, it adds both `v1.2.3` and `1.2.3`. Only GitHub's latest stable
+release also updates `1`, `1.2`, and `latest`; prereleases and older releases keep those
+rolling tags unchanged. Editing a release or promoting it from prerelease runs the
+promotion again, so changing GitHub's latest release updates the image tags too.
+
+The release commit must belong to `main` and have a tested image. If E2E has not passed
+yet, release promotion fails; rerun it after E2E passes, or run `Release image` manually
+with the existing release tag. Pushing a Git tag alone does not publish a release image.
 
 The image uses host networking on the isolated Linux runner, sharing loopback URLs
 with the browser, Gamma and the Slack receiver. It listens on port 3000 and runs its

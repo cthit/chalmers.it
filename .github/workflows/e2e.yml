@@ -52,3 +52,23 @@ jobs:
             test-results/
             playwright-report/
           retention-days: 7
+
+  tested-image:
+    name: Mark the main image as tested
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [image, browser]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: docker/setup-buildx-action@v4.3.0
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag the image that passed E2E
+        env:
+          SOURCE_IMAGE: ${{ needs.image.outputs.image }}
+          TESTED_IMAGE: ghcr.io/${{ github.repository_owner }}/chalmers.it:tested-${{ github.sha }}
+        run: docker buildx imagetools create --prefer-index=false --tag "$TESTED_IMAGE" "$SOURCE_IMAGE"
