@@ -1,21 +1,21 @@
 'use client';
 
-import { edit, post, postForGroup } from '@/actions/newsPosts';
 import { createEvent, deleteEvent, editEvent } from '@/actions/events';
-import Divider from '@/components/Divider/Divider';
+import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import Divider from '@/components/Divider/Divider';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/types/gamma';
-import { useRef, useState } from 'react';
-import DropdownList from '../DropdownList/DropdownList';
-import { marked } from 'marked';
-import style from './NewsPostForm.module.scss';
-import DatePicker from '../DatePicker/DatePicker';
-import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
+import i18nService from '@/services/i18nService';
+import { GammaGroup } from '@/types/gamma';
+import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import DatePicker from '../DatePicker/DatePicker';
+import DropdownList from '../DropdownList/DropdownList';
+import style from './NewsPostForm.module.scss';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -215,6 +215,26 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setEvents(newEvents);
   }
 
+  // Handler for date pickers to ensure endTime >= startTime
+  function handleEventDateChange(id: number, key: 'startTime' | 'endTime', value: Date) {
+    setEvents((prevEvents) => {
+      const newEvents = [...prevEvents];
+      const event = { ...newEvents[id] };
+      let newStart = event.startTime;
+      let newEnd = event.endTime;
+      if (key === 'startTime') {
+        newStart = value;
+        if (newEnd < newStart) newEnd = newStart;
+      } else if (key === 'endTime') {
+        newEnd = value < newStart ? newStart : value;
+      }
+      event.startTime = newStart;
+      event.endTime = newEnd;
+      newEvents[id] = event;
+      return newEvents;
+    });
+  }
+
   function removeEventState(i: number, id?: number) {
     const newEvents = [...events];
     newEvents.splice(i, 1);
@@ -361,13 +381,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <h3>{l.events.start}</h3>
               <DatePicker
                 value={e.startTime}
-                onChange={(d) => editEventState(i, 'startTime', d)}
+                onChange={(d) => handleEventDateChange(i, 'startTime', d)}
               />
               <h3>{l.events.end}</h3>
               <DatePicker
                 disabled={e.fullDay}
                 value={e.endTime}
-                onChange={(d) => editEventState(i, 'endTime', d)}
+                min={e.startTime ? e.startTime.toISOString().slice(0, 16) : undefined}
+                onChange={(d) => handleEventDateChange(i, 'endTime', d)}
               />
               <br />
               <label key={i} htmlFor={'fullDay' + i}>
