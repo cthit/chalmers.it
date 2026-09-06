@@ -93,10 +93,3 @@ pnpm exec playwright show-trace test-results/<test>/trace.zip
 ```
 
 The suite tests a development server, not a production build or deployed Gamma instance.
-
-## Known routing issue
-
-During validation, navigating from English news to Swedish URLs produced a redirect
-loop with the current dependency versions. The creation tests check both persisted
-language versions and render the English page; they do not cover the language toggle.
-Slack serialization is checked in both languages through the API.
