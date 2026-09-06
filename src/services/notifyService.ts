@@ -6,7 +6,6 @@ import { MessageAttachment } from '@slack/types';
 import htmlToSlack from 'html-to-slack';
 import { marked } from 'marked';
 import { baseUrl } from 'marked-base-url';
-import { cleanSlackBlocks, slackHeaderText } from '@/utils/slackBlocks';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -120,6 +119,31 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
+  private cleanSections(blocks: ReturnType<typeof htmlToSlack>) {
+    return blocks
+      .filter((block) => block.type !== undefined)
+      .map((block) => {
+        if (block.type === 'rich_text') {
+          block.elements = block.elements
+            .filter((sec) => sec.type !== undefined)
+            .map((sec) => {
+              if (sec.type === 'rich_text_section') {
+                sec.elements = sec.elements
+                  .filter((el) => el.type !== undefined)
+                  .map((el) => {
+                    if (el.type === 'text' && el.text.trim().length === 0) {
+                      el.text = '\n';
+                    }
+                    return el;
+                  });
+              }
+              return sec;
+            });
+        }
+        return block;
+      });
+  }
+
   public async serializeNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
     const nick =
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
@@ -140,7 +164,7 @@ class SlackWebhookNotifier implements Notifier {
     const cHtml = await marked.parse(
       this.language === Language.EN ? post.contentEn : post.contentSv
     );
-    const content = cleanSlackBlocks(
+    const content = this.cleanSections(
       htmlToSlack(cHtml.replaceAll('</p>', '</p><p> </p>'))
     );
 
@@ -167,7 +191,7 @@ class SlackWebhookNotifier implements Notifier {
               type: 'header',
               text: {
                 type: 'plain_text',
-                text: slackHeaderText(title)
+                text: title
               }
             },
             {
@@ -223,7 +247,7 @@ class SlackWebhookNotifier implements Notifier {
               type: 'header',
               text: {
                 type: 'plain_text',
-                text: slackHeaderText(title)
+                text: title
               }
             },
             {
