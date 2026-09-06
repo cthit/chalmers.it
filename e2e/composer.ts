@@ -65,6 +65,14 @@ export const test = base.extend<
 
   stack: [
     async ({ browser }, use, workerInfo) => {
+      const websiteImage = process.env.E2E_WEBSITE_IMAGE;
+
+      if (process.env.CI && !websiteImage) {
+        throw new Error(
+          'CI requires E2E_WEBSITE_IMAGE from the image publishing job'
+        );
+      }
+
       const network = new Network();
       let startedNetwork: Awaited<ReturnType<Network['start']>> | undefined;
       const mediaPath = await mkdtemp(
@@ -180,53 +188,89 @@ export const test = base.extend<
           browser,
           gammaUrl,
           websiteDb.getConnectionUri(),
-          credentials[1]
+          credentials[1],
+          websiteImage
         );
 
         db = new PrismaClient({
           adapter: new PrismaPg({ connectionString: env.DATABASE_URL })
         });
 
-        website = spawn(
-          process.execPath,
-          [
-            require.resolve('next/dist/bin/next'),
-            'dev',
-            '--hostname',
-            '127.0.0.1',
-            '--port',
-            env.TEST_WEBSITE_PORT
-          ],
-          {
-            cwd: root,
-            detached: true,
-            stdio: ['ignore', 'pipe', 'pipe'],
-            env: {
-              ...process.env,
-              ...env,
-              NODE_ENV: 'development',
-              MEDIA_PATH: mediaPath,
-              ACTIVE_GROUP_TYPES: 'committee',
-              ADMIN_GROUPS: 'digit',
-              PAGE_EDITOR_GROUPS: 'digit',
-              NEXT_TELEMETRY_DISABLED: '1',
-              GAMMA_API_KEY_ID: credentials[1],
-              GAMMA_API_KEY_TOKEN: credentials[2]
-            }
-          }
-        );
-
-        let startupError: Error | undefined;
-        website.on('error', (error) => {
-          startupError = error;
-        });
+        const websiteEnv = {
+          ...env,
+          ACTIVE_GROUP_TYPES: 'committee',
+          ADMIN_GROUPS: 'digit',
+          PAGE_EDITOR_GROUPS: 'digit',
+          NEXT_TELEMETRY_DISABLED: '1',
+          GAMMA_API_KEY_ID: credentials[1],
+          GAMMA_API_KEY_TOKEN: credentials[2]
+        };
 
         const collect = (chunk: Buffer) => {
           websiteLogs = (websiteLogs + chunk.toString()).slice(-100000);
         };
 
-        website.stdout?.on('data', collect);
-        website.stderr?.on('data', collect);
+        let startupError: Error | undefined;
+
+        if (websiteImage) {
+          console.log(`Starting published website image: ${websiteImage}`);
+
+          // The Linux CI runner and website share loopback addresses so OAuth
+          // redirects, Gamma requests and captured Slack webhooks use the same URLs.
+          await track(
+            new GenericContainer(websiteImage)
+              .withNetworkMode('host')
+              .withEnvironment(websiteEnv)
+              .withLogConsumer((stream) => stream.on('data', collect))
+              .withWaitStrategy(Wait.forLogMessage(/Ready in/))
+              .withStartupTimeout(180000)
+              .start()
+          );
+        } else {
+          execFileSync(
+            process.execPath,
+            [require.resolve('prisma/build/index.js'), 'db', 'push'],
+            {
+              cwd: root,
+              env: { ...process.env, DATABASE_URL: env.DATABASE_URL },
+              stdio: 'inherit'
+            }
+          );
+
+          website = spawn(
+            process.execPath,
+            [
+              require.resolve('next/dist/bin/next'),
+              'dev',
+              '--hostname',
+              '127.0.0.1',
+              '--port',
+              env.TEST_WEBSITE_PORT
+            ],
+            {
+              cwd: root,
+              detached: true,
+              stdio: ['ignore', 'pipe', 'pipe'],
+              env: {
+                ...process.env,
+                ...websiteEnv,
+                NODE_ENV: 'development',
+                MEDIA_PATH: mediaPath
+              }
+            }
+          );
+
+          website.on('error', (error) => {
+            startupError = error;
+          });
+
+          website.stdout?.on('data', collect);
+          website.stderr?.on('data', collect);
+        }
+
+        // The published image runs its migrations before Next starts. Seed only
+        // after that completes, so CI exercises the image's real entrypoint.
+        await seedWebsite(db);
 
         await expect
           .poll(
@@ -329,17 +373,20 @@ async function configureWebsite(
   browser: Browser,
   gammaUrl: string,
   databaseUrl: string,
-  apiKeyId: string
+  apiKeyId: string,
+  websiteImage?: string
 ) {
-  const port = await new Promise<number>((resolve, reject) => {
-    const server = createServer();
-    server.on('error', reject);
+  const port = websiteImage
+    ? 3000
+    : await new Promise<number>((resolve, reject) => {
+        const server = createServer();
+        server.on('error', reject);
 
-    server.listen(0, '127.0.0.1', () => {
-      const port = (server.address() as AddressInfo).port;
-      server.close(() => resolve(port));
-    });
-  });
+        server.listen(0, '127.0.0.1', () => {
+          const port = (server.address() as AddressInfo).port;
+          server.close(() => resolve(port));
+        });
+      });
 
   const websiteUrl = `http://localhost:${port}`;
 
@@ -349,35 +396,6 @@ async function configureWebsite(
     websiteUrl,
     apiKeyId
   );
-
-  execFileSync(
-    process.execPath,
-    [require.resolve('prisma/build/index.js'), 'db', 'push'],
-    {
-      env: { ...process.env, DATABASE_URL: databaseUrl },
-      stdio: 'inherit'
-    }
-  );
-
-  const prisma = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: databaseUrl })
-  });
-
-  try {
-    // Website stores only its group mapping; member name and post live exclusively in Gamma.
-    await prisma.divisionGroup.create({
-      data: {
-        gammaSuperGroupId: 'aed27030-ad90-4526-855c-1e909b1dcecb',
-        slug: 'digit',
-        prettyName: 'digIT',
-        descriptionEn: '',
-        descriptionSv: '',
-        type: { create: { nameEn: 'Committees', nameSv: 'Kommittéer' } }
-      }
-    });
-  } finally {
-    await prisma.$disconnect();
-  }
 
   return {
     DATABASE_URL: databaseUrl,
@@ -390,4 +408,18 @@ async function configureWebsite(
     TEST_WEBSITE_PORT: String(port),
     TZ: 'UTC'
   };
+}
+
+async function seedWebsite(prisma: PrismaClient) {
+  // Website stores only its group mapping; member name and post live exclusively in Gamma.
+  await prisma.divisionGroup.create({
+    data: {
+      gammaSuperGroupId: 'aed27030-ad90-4526-855c-1e909b1dcecb',
+      slug: 'digit',
+      prettyName: 'digIT',
+      descriptionEn: '',
+      descriptionSv: '',
+      type: { create: { nameEn: 'Committees', nameSv: 'Kommittéer' } }
+    }
+  });
 }

@@ -11,7 +11,17 @@ pnpm test:e2e
 `test:e2e` generates the Prisma client before starting Playwright.
 The separate `End-to-end tests` GitHub Actions workflow runs on pull requests
 targeting `main` and pushes to `main`, using the same Node.js and pnpm versions.
-It checks TypeScript before running the browser suite.
+It calls the Docker publishing workflow, then passes the published image's immutable
+digest to the browser job through `E2E_WEBSITE_IMAGE`. The browser job checks TypeScript
+before starting that production image with Testcontainers. CI requires this image
+reference and never falls back to a development server. Release tags still publish
+through the Docker workflow without running E2E.
+
+The image uses host networking on the isolated Linux runner, sharing loopback URLs
+with the browser, Gamma and the Slack receiver. It listens on port 3000 and runs its
+normal database migrations before the suite seeds the committee mapping. Uploaded
+files live in the disposable container. Local runs use the development server unless
+`E2E_WEBSITE_IMAGE` is set; image runs require Docker host networking and a free port 3000.
 
 The workspace records explicit build-script decisions for pnpm 12 so dependency
 builds run without interactive approval.
@@ -55,7 +65,7 @@ file chooser.
 
 - Gamma **2.5.1**, pinned by digest, with test-only users and committee data from its real bootstrap.
 - Redis 5.0.14-alpine and two PostgreSQL 16.0-alpine containers for Gamma and the website.
-- The real Next.js development server, on an available local port.
+- The published production image in CI, or the Next.js development server on an available local port locally.
 - A temporary directory for uploaded files and a loopback HTTP receiver for Slack webhooks.
 
 Gamma's official OAuth client is provisioned through its administrator UI. The website
@@ -90,5 +100,3 @@ JSON under `test-results/`. Startup failures write `startup-<worker>.log` there.
 pnpm exec playwright show-report
 pnpm exec playwright show-trace test-results/<test>/trace.zip
 ```
-
-The suite tests a development server, not a production build or deployed Gamma instance.
