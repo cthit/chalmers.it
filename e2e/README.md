@@ -13,9 +13,8 @@ The separate `End-to-end tests` GitHub Actions workflow runs on pull requests
 targeting `main` and pushes to `main`, using the same Node.js and pnpm versions.
 It checks TypeScript before running the browser suite.
 
-The workspace records explicit build-script decisions for pnpm 12 and narrow
-release-age exceptions for the pinned Playwright packages so fresh installations
-run without interactive approval.
+The workspace records explicit build-script decisions for pnpm 12 so dependency
+builds run without interactive approval.
 
 To select tests:
 
