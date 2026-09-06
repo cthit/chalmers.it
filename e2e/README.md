@@ -33,6 +33,23 @@ pnpm test:e2e e2e/slack.spec.ts
 | `content.spec.ts` | Create news and division pages through the English UI, verify both saved language versions and reload persistence; upload and embed an image in each, verify downloaded bytes; search title/body, follow results, handle empty results and short queries. |
 | `slack.spec.ts`   | Publish predefined Markdown through the website; capture the outgoing webhook; validate block structure and preserved text; compare with the Slack serialization API in English and Swedish; check long headers and HTTP 400 fallback.                    |
 
+## Writing tests
+
+Use blank lines to separate setup, actions, and assertions. Longer journeys use
+`test.step()` for meaningful phases that also appear in the Playwright report.
+Keep assertions in the specs and reusable browser actions in `helpers/browser.ts`.
+`fixtures/` holds the Gamma bootstrap, Markdown examples, and upload bytes;
+`helpers/gamma.ts` provisions the official OAuth client through Gamma's UI.
+
+Prefer `getByRole()` with an accessible name for interactive controls. Use a
+label or placeholder when a role cannot identify the control, and text locators
+for plain content. Authoring fields currently use headings without associated
+labels, so the helper scopes by heading before selecting the control by role.
+The website's logout anchor uses visible text because it has no `href` or
+link role. The unnamed search textbox is distinguished from date filters by
+its native input type. Uploads use the visible “Select files” button and its
+file chooser.
+
 ## Isolation
 
 `composer.ts` starts a single stack per Playwright worker using Testcontainers:
