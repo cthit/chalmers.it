@@ -1,0 +1,74 @@
+name: End-to-end tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    name: Publish website image
+    uses: ./.github/workflows/docker.yml
+    permissions:
+      contents: read
+      packages: write
+
+  browser:
+    name: Browser flows and Slack notifications
+    needs: image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      E2E_WEBSITE_IMAGE: ${{ needs.image.outputs.image }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24.x
+      - run: npm install -g pnpm@12.3.4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec prisma generate
+      - run: pnpm typecheck
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v7.0.1
+        if: failure()
+        with:
+          name: e2e-diagnostics
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  tested-image:
+    name: Mark the main image as tested
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [image, browser]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: docker/setup-buildx-action@v4.3.0
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag the image that passed E2E
+        env:
+          SOURCE_IMAGE: ${{ needs.image.outputs.image }}
+          TESTED_IMAGE: ghcr.io/${{ github.repository_owner }}/chalmers.it:tested-${{ github.sha }}
+        run: docker buildx imagetools create --prefer-index=false --tag "$TESTED_IMAGE" "$SOURCE_IMAGE"
