@@ -1,10 +1,8 @@
 import EventService from '@/services/eventService';
-import i18nService from '@/services/i18nService';
 import LargeCalendarClient from '@/components/LargeCalendar/LargeCalendarClient';
-import { EventSourceInput } from '@fullcalendar/core/index.js';
+import { EventSourceInput } from '@fullcalendar/react';
 
 const LargeCalendar = async ({ locale }: { locale: string }) => {
-  const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
   const events: EventSourceInput = await EventService.getAll().then((events) =>
