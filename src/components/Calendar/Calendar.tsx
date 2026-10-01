@@ -23,6 +23,9 @@ const Calendar = async ({ locale }: { locale: string }) => {
       >
         {l.events.subscribe}
       </ActionLink>
+      <ActionLink href="/events" >
+        {l.events.seeAll}
+      </ActionLink>
       <h1 className={styles.upcomingEventsTitle}>{l.events.comingEvents}</h1>
       <ul className={styles.eventsList}>
         {nextEvents.map((event) => {
