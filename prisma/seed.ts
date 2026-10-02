@@ -9,10 +9,10 @@ const prisma = new PrismaClient();
  * @returns A date the amount of days after.
  */
 function relativeDate(days: number = 0, hour: number = 0): Date {
-  const oneHourMs = 60 * 60 * 1000
-  const oneDayMs = 24 * oneHourMs
-  const offset = days * oneDayMs + hour * oneHourMs
-  return new Date(Math.floor(Date.now() / oneDayMs) * oneDayMs + offset)
+  const oneHourMs = 60 * 60 * 1000;
+  const oneDayMs = 24 * oneHourMs;
+  const offset = days * oneDayMs + hour * oneHourMs;
+  return new Date(Math.floor(Date.now() / oneDayMs) * oneDayMs + offset);
 }
 
 async function main() {
@@ -43,7 +43,7 @@ async function main() {
           location: 'Utanför Hubben 2.2',
           startTime: relativeDate(0, 16),
           endTime: relativeDate(0, 18),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -65,7 +65,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(1, 8),
           endTime: relativeDate(1, 12),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -87,7 +87,7 @@ async function main() {
           location: 'Kalle Glader',
           startTime: relativeDate(1, 15),
           endTime: relativeDate(1, 20),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -108,7 +108,7 @@ async function main() {
           descriptionEn: '',
           startTime: relativeDate(4),
           endTime: relativeDate(5),
-          fullDay: true,
+          fullDay: true
         }
       }
     },
@@ -120,7 +120,7 @@ async function main() {
       contentEn:
         "The CM season is rapidly progressing. Next Tuesday, TDlaget and ZIK Beach Volleyball CM are organising Beach Volleyball CM in Kviberg. IT is entering one (or more) teams, and we need your assistance.\nSign up here to compete for the IT section, and it won't cost you a thing!\n\nWhat?: Beach volleyball CM\nWhere?: Kviberg Beachcenter\nWhen?: Tuesday 10 March, 13:00-17:00\nHow?: Hit hard\n\nRemember: it will be fun, but above all, great",
       writtenByGammaUserId: 'seed-user-1',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'Lediga tjänster på Opera',
@@ -130,7 +130,7 @@ async function main() {
       contentEn:
         "We are looking for motivated people with a strong interest in web engineering, cloud infrastructure, and product strategy to join our teams.\n\nOur services support hundreds of millions of users across the globe, from the Opera GX gaming ecosystem to our browser's AI-powered features. As part of our team, you'll see what it takes to design robust infrastructure, build scalable core systems, craft engaging user interfaces, and shape product vision for a large scale user base.\n\nWe are looking forward to hearing from you!",
       writtenByGammaUserId: 'seed-user-4',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'Chalmers Rocket League-turnering',
@@ -149,7 +149,7 @@ async function main() {
           descriptionEn: '',
           startTime: relativeDate(6, 18),
           endTime: relativeDate(7, 22),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -171,7 +171,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(9, 15.5),
           endTime: relativeDate(9, 21),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -193,7 +193,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(10, 15),
           endTime: relativeDate(10, 20),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -203,7 +203,7 @@ async function main() {
       contentSv: 'Här kommer revisionsberättelsen för LP3!\n\n//Revisorerna',
       contentEn: 'Here comes the auditors report for SP3!\n\n//The Auditors',
       writtenByGammaUserId: 'seed-user-7',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'CM i Dodgeball',
@@ -223,7 +223,7 @@ async function main() {
           location: 'Rosendalshallen',
           startTime: relativeDate(10, 15),
           endTime: relativeDate(10, 20),
-          fullDay: true,
+          fullDay: true
         }
       }
     },
@@ -245,7 +245,7 @@ async function main() {
           location: 'Exercishallen',
           startTime: relativeDate(17, 15),
           endTime: relativeDate(17, 17),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -267,7 +267,7 @@ async function main() {
           location: 'Motionshallen',
           startTime: relativeDate(18, 15),
           endTime: relativeDate(18, 17),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -279,7 +279,7 @@ async function main() {
       contentEn:
         "At 17:30 Thursday 26th of February, IT's division meeting for SP3 will take place in HC4. The Slack channel that will be used is #sektionsmöte.\n\nBelow are meeting documents for the meeting.\n\nThis will mainly be addressed:\nElections for frITid, ArmIT, digIT, FlashIT, RevisIT, Date-IT\n\nDon't forget to read #motioner before the meeting to form your opinion.",
       writtenByGammaUserId: 'seed-user-9',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'Bastu',
@@ -299,7 +299,7 @@ async function main() {
           location: 'Bastun, Kårhuset',
           startTime: relativeDate(22, 13),
           endTime: relativeDate(22, 16),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -321,7 +321,7 @@ async function main() {
           location: 'SB-Multisal',
           startTime: relativeDate(23),
           endTime: relativeDate(25),
-          fullDay: true,
+          fullDay: true
         }
       }
     },
@@ -333,7 +333,7 @@ async function main() {
       contentEn:
         'Hello everyone in the section!\n\nThe student barometer is out. Do you want Chalmers to become better? Is there anything that is not working?\n\nThe union will invite the section with the highest response rate to a cake! So hurry up and fill it out.\n\nThe email comes from enkat@chalmers.se. An SMS has also been sent.',
       writtenByGammaUserId: 'seed-user-10',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'Rustdag LP3',
@@ -353,7 +353,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(30),
           endTime: relativeDate(31),
-          fullDay: true,
+          fullDay: true
         }
       }
     },
@@ -375,7 +375,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(31, 10),
           endTime: relativeDate(31, 11),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -397,7 +397,7 @@ async function main() {
           location: 'E-studion',
           startTime: relativeDate(40, 15),
           endTime: relativeDate(40, 21),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -419,7 +419,7 @@ async function main() {
           location: 'ML15',
           startTime: relativeDate(40, 13),
           endTime: relativeDate(40, 15),
-          fullDay: false,
+          fullDay: false
         }
       }
     },
@@ -431,7 +431,7 @@ async function main() {
       contentEn:
         "What's better than brunch?\n\nWhy of course, it's karaoke brunch with EqualIT! Join us for a super cozy finish to the equality week on Sunday, with a bunch of free (!) brunch and great karaoke!\n\nTL;DR\nWhat? Karaoke brunch\nWhere? Hubben\nWhen? 10:00 on the 15th of February\nWhy? Equality week!",
       writtenByGammaUserId: 'seed-user-3',
-      status: PostStatus.PUBLISHED,
+      status: PostStatus.PUBLISHED
     },
     {
       titleSv: 'Kod & Vin',
@@ -451,7 +451,7 @@ async function main() {
           location: 'Hubben 2.2',
           startTime: relativeDate(46, 16),
           endTime: relativeDate(46, 21),
-          fullDay: false,
+          fullDay: false
         }
       }
     }

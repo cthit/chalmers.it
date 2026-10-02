@@ -18,9 +18,7 @@ export default async function Page(props: {
     <main>
       <ThreePaneLayout
         middle={
-          <ContentArticle
-            title={l.events.events}
-          >
+          <ContentArticle title={l.events.events}>
             <LargeCalendar locale={locale} />
           </ContentArticle>
         }

@@ -7,11 +7,14 @@ import { ActionButtonProps } from './ActionButton';
 const ActionLink = ({
   className,
   children,
-  variant = "primary",
+  variant = 'primary',
   ...rest
 }: LinkProps & AnchorHTMLAttributes<HTMLAnchorElement> & ActionButtonProps) => {
   return (
-    <Link className={`${styles.button} ${styles[variant]} ${className}`} {...rest}>
+    <Link
+      className={`${styles.button} ${styles[variant]} ${className}`}
+      {...rest}
+    >
       {children}
     </Link>
   );
