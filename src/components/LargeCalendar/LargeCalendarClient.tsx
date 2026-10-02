@@ -8,18 +8,24 @@ import listPlugin from '@fullcalendar/react/list';
 import multiMonthPlugin from '@fullcalendar/react/multimonth';
 import { EventSourceInput } from '@fullcalendar/react';
 
+import styles from './LargeCalendar.module.scss'
+
 import '@fullcalendar/react/skeleton.css'
 import '@fullcalendar/react/themes/forma/theme.css'
-import '@fullcalendar/react/themes/forma/palettes/blue.css'
+import './LargeCalendar.scss' // Custom Forma palette
 import { useTheme } from 'next-themes';
+import { HTMLAttributes } from 'react';
+
+export type LargeCalendarClientProps = {
+  locale: string;
+  events: EventSourceInput;
+} & HTMLAttributes<HTMLDivElement>
 
 const LargeCalendarClient = ({
   locale,
-  events
-}: {
-  locale: string;
-  events: EventSourceInput;
-}) => {
+  events,
+  ...rest
+}: LargeCalendarClientProps) => {
   const { resolvedTheme, systemTheme } = useTheme();
 
   return (
@@ -31,6 +37,7 @@ const LargeCalendarClient = ({
       firstDay={1}
       initialView="timeGridWeek"
       headerToolbar={{ left: "today,prev,next,title", right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek' }}
+      {...rest}
     />
   );
 };

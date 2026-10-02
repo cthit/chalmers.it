@@ -1,8 +1,10 @@
 import EventService from '@/services/eventService';
-import LargeCalendarClient from '@/components/LargeCalendar/LargeCalendarClient';
+import LargeCalendarClient, { LargeCalendarClientProps } from '@/components/LargeCalendar/LargeCalendarClient';
 import { EventSourceInput } from '@fullcalendar/react';
 
-const LargeCalendar = async ({ locale }: { locale: string }) => {
+export type LargeCalendarProps = Omit<LargeCalendarClientProps, "events">
+
+const LargeCalendar = async ({ locale, ...rest }: LargeCalendarProps) => {
   const isEn = locale === 'en';
 
   const events: EventSourceInput = await EventService.getAll().then((events) =>
@@ -20,7 +22,7 @@ const LargeCalendar = async ({ locale }: { locale: string }) => {
     }))
   );
 
-  return <LargeCalendarClient locale={locale} events={events} />;
+  return <LargeCalendarClient locale={locale} events={events} {...rest} />;
 };
 
 export default LargeCalendar;
