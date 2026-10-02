@@ -8,8 +8,6 @@ import listPlugin from '@fullcalendar/react/list';
 import multiMonthPlugin from '@fullcalendar/react/multimonth';
 import { EventSourceInput } from '@fullcalendar/react';
 
-import styles from './LargeCalendar.module.scss'
-
 import '@fullcalendar/react/skeleton.css'
 import '@fullcalendar/react/themes/forma/theme.css'
 import './LargeCalendar.scss' // Custom Forma palette
