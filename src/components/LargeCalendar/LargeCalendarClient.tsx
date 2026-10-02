@@ -1,6 +1,6 @@
 'use client';
 
-import FullCalendar from '@fullcalendar/react';
+import FullCalendar, { EventDisplayInfo } from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma'
 import dayGridPlugin from '@fullcalendar/react/daygrid';
 import timeGridPlugin from '@fullcalendar/react/timegrid';
@@ -12,7 +12,7 @@ import '@fullcalendar/react/skeleton.css'
 import '@fullcalendar/react/themes/forma/theme.css'
 import './LargeCalendar.scss' // Custom Forma palette
 import { useTheme } from 'next-themes';
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
 export type LargeCalendarClientProps = {
   locale: string;
@@ -35,9 +35,20 @@ const LargeCalendarClient = ({
       firstDay={1}
       initialView="timeGridWeek"
       headerToolbar={{ left: "today,prev,next,title", right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek' }}
+      eventContent={renderEventContent}
       {...rest}
     />
   );
 };
 
 export default LargeCalendarClient;
+
+function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
+  return (
+    <>
+      <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
+      <b className={eventInfo.titleClass}>{eventInfo.event.title}</b>
+      {eventInfo.view.type === 'timeGridDay' && <div className={eventInfo.titleClass}>Hubben 2.2</div>}
+    </>
+  );
+}
