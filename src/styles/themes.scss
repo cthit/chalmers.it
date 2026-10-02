@@ -8,6 +8,9 @@
   --banner-bottom-opacity: 0.6;
 
   @include theme-toggle.light {
+    --secondary-color: #{colors.$lightgray-400};
+    --secondary-color-highlight: #{colors.$lightgray-300};
+
     --text-color: #{colors.$darkgray-900};
     --text-hover-color: #{colors.$turquoise-700};
     --link-color: #13aaea;
@@ -43,6 +46,9 @@
   }
 
   @include theme-toggle.dark {
+    --secondary-color: #{colors.$darkgray-500};
+    --secondary-color-highlight: #{colors.$darkgray-300};
+
     --text-color: #{colors.$lightgray-300};
     --text-hover-color: #{colors.$turquoise-300};
     --link-color: #{colors.$turquoise-600};

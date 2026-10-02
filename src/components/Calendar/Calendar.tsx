@@ -17,15 +17,17 @@ const Calendar = async ({ locale }: { locale: string }) => {
       <h1>{l.events.events}</h1>
       <Divider />
       <CalendarClient locale={locale} events={events} />
-      <ActionLink
-        target="_blank"
-        href="https://calendar.google.com/calendar/embed?src=a55ipd3o49n05cd2eebqo854qs@group.calendar.google.com"
-      >
-        {l.events.subscribe}
-      </ActionLink>
-      <ActionLink href="/events" >
-        {l.events.seeAll}
-      </ActionLink>
+      <div className={styles.actions}>
+        <ActionLink
+          target="_blank"
+          href="https://calendar.google.com/calendar/embed?src=a55ipd3o49n05cd2eebqo854qs@group.calendar.google.com"
+        >
+          {l.events.subscribe}
+        </ActionLink>
+        <ActionLink href="/events" variant="secondary">
+          {l.events.seeAll}
+        </ActionLink>
+      </div>
       <h1 className={styles.upcomingEventsTitle}>{l.events.comingEvents}</h1>
       <ul className={styles.eventsList}>
         {nextEvents.map((event) => {

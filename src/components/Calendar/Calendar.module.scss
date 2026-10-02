@@ -31,3 +31,9 @@
 .upcomingEventDetails {
   font-size: var(--text-small);
 }
+
+.actions {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+}
