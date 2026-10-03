@@ -1,6 +1,6 @@
-import { Prisma, PostStatus, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import 'dotenv/config';
+import { Prisma, PostStatus } from '@prisma/client';
+import prisma from '../src/prisma';
 
 /**
  * Create a date relative to the current time.

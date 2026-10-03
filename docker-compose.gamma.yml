@@ -13,12 +13,12 @@ services:
     image: ghcr.io/cthit/gamma:latest
     environment:
       ADMIN_SETUP: true
-      COOKIE_DOMAIN: localhost:9090
+      COOKIE_DOMAIN: localhost
       BASE_URL: http://localhost:9090
       DB_HOST: gamma-db
       DB_NAME: auth
       DB_PASSWORD: auth-password
-      DB_USER: auth
+      DB_USER: user
       REDIS_HOST: gamma-redis
       ROOT_DEBUG_LEVEL: INFO
       SERVER_PORT: 9090

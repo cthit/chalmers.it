@@ -32,7 +32,6 @@ const ViewToggle = ({
       onViewChange(initialView);
     }
     setMounted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToggle = (view: 'list' | 'grid') => {

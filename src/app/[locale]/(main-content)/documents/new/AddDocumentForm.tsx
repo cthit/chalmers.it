@@ -1,11 +1,12 @@
 'use client';
+
+import { documentTypeKey } from '@/utils/documentType';
 import React, { useState } from 'react';
 import { addDocument } from '@/actions/documents';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import { GammaGroup } from '@/types/gamma';
 import TextArea from '@/components/TextArea/TextArea';
 import { DocumentType } from '@prisma/client';
-import DivisionDocumentService from '@/services/divisionDocumentService';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import FileService, { MediaType } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
@@ -82,11 +83,7 @@ const AddDocumentForm = ({
         <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
-              {
-                l.docTypes[
-                  DivisionDocumentService.documentTypeKey(type as DocumentType)
-                ]
-              }
+              {l.docTypes[documentTypeKey(type as DocumentType)]}
             </option>
           ))}
         </DropdownList>

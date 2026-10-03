@@ -55,7 +55,7 @@ export default async function RootLayout(props: {
 
   const invalidLocale = !i18nConfig.locales.includes(locale);
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body
         style={{ display: 'unset' }}
         className={poppins.variable + ' ' + bitter.variable}
