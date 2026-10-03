@@ -55,13 +55,13 @@ const CalendarSubscribeButtons = ({
 
   return (
     <ul className={styles.list} {...rest}>
-      {options.map((option) => {
+      {options.map((option, i) => {
         const isExternal =
           !option.href.startsWith(httpBaseUrl) &&
           !option.href.startsWith(webcalBaseUrl);
 
         return (
-          <li className={styles.listItem}>
+          <li className={styles.listItem} key={i}>
             <ActionLink className={styles.link} href={option.href}>
               {option.name} {isExternal && <>&#8599;</>}
             </ActionLink>
