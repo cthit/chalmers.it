@@ -27,7 +27,7 @@ In order to run the project in development mode, a few steps are required:
 2. Start services by running `docker compose up -d`
 3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
 4. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
-5. Run `pnpm run dev` to start the development server at http://localhost:3000
+5. Run `pnpm run dev` to start the development server
 
 If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
 
