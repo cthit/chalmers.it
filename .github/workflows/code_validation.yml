@@ -31,7 +31,7 @@ jobs:
       - run: pnpm test
 
   run-linters:
-    name: Execute linters
+    name: Linting
     runs-on: ubuntu-latest
 
     steps:
@@ -46,21 +46,25 @@ jobs:
         run: npm install -g pnpm@12.3.4
 
       - run: pnpm install --frozen-lockfile
+        id: install_dependencies 
 
       - name: ESLint
         uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
+          reporter: github-pr-annotations
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
+          fail_level: warning
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
           tool_name: ESLint
 
       - name: Prettier
+        if: ${{ !cancelled() && steps.install_dependencies.outcome == 'success' }}
         uses: EPMatt/reviewdog-action-prettier@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
+          reporter: github-pr-annotations
           filter_mode: ${{ (github.event_name == 'pull_request') && 'file' || 'nofilter' }}
+          fail_level: warning
           level: ${{ (github.event_name == 'pull_request') && 'error' || 'warning' }}
           tool_name: Prettier
