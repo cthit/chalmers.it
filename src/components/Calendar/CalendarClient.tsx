@@ -7,6 +7,8 @@ import React, { useCallback } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
 import EventService from '@/services/eventService';
+import ActionButton from '../ActionButton/ActionButton';
+import CalendarSubscribeButtons from '../CalendarSubscribeButtons/CalendarSubscribeButtons';
 
 type DateTileArgs = {
   date: Date;
@@ -31,6 +33,8 @@ const CalendarClient = ({
   events: { [key: number]: any[] };
 }) => {
   const [value, onChange] = React.useState<Value>(new Date());
+  const [subscribeDrawerOpen, setSubscribeDrawerOpen] =
+    React.useState<boolean>(false);
 
   const loc = locale === 'sv' ? 'sv-SE' : 'en-US';
   const l = i18nService.getLocale(locale);
@@ -89,17 +93,32 @@ const CalendarClient = ({
   );
 
   return (
-    <ReactCalendar
-      locale={loc}
-      maxDetail="month"
-      minDetail="decade"
-      onChange={onChange}
-      value={value}
-      className="event-calendar"
-      tileClassName={mapTileClass}
-      calendarType="iso8601"
-      tileContent={mapTileContent}
-    />
+    <>
+      <ReactCalendar
+        locale={loc}
+        maxDetail="month"
+        minDetail="decade"
+        onChange={onChange}
+        value={value}
+        className="event-calendar"
+        tileClassName={mapTileClass}
+        calendarType="iso8601"
+        tileContent={mapTileContent}
+      />
+      <ActionButton
+        onClick={() => setSubscribeDrawerOpen(!subscribeDrawerOpen)}
+      >
+        {l.events.subscribe}{' '}
+        <span className={styles.drawerArrow}>
+          &nbsp;{subscribeDrawerOpen ? <>&#9660;</> : <>&#9654;</>}
+        </span>
+      </ActionButton>
+      {subscribeDrawerOpen && (
+        <div className={styles.subscribeButtons + ' ' + styles.centered}>
+          <CalendarSubscribeButtons locale={locale} />
+        </div>
+      )}
+    </>
   );
 };
 

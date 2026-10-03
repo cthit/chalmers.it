@@ -115,7 +115,14 @@
     "ongoing": "Pågående",
     "created": "Skapad",
     "readMore": "Läs mer",
-    "relatedEvents": "Relaterade tillfällen"
+    "relatedEvents": "Relaterade tillfällen",
+    "copyLink": "Kopiera länk",
+    "linkCopied": "Länk kopierad!",
+    "services": {
+      "googleCalendar": "Google Kalender",
+      "appleCalendar": "Apple Kalender",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Nuvarande medlemmar",

@@ -49,3 +49,20 @@
 .date-tile {
   @extend .dateTile;
 }
+
+// Subscribe buttons
+.centered {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerArrow {
+  min-width: 1.5em;
+}
+
+.subscribeButtons {
+  display: flex;
+  padding-inline: 1.5rem;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}

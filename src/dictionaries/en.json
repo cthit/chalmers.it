@@ -115,7 +115,14 @@
     "ongoing": "Ongoing",
     "created": "Created",
     "readMore": "Read more",
-    "relatedEvents": "Related events"
+    "relatedEvents": "Related events",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!",
+    "services": {
+      "googleCalendar": "Google Calendar",
+      "appleCalendar": "Apple Calendar",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Current members",
