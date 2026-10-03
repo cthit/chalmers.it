@@ -38,6 +38,6 @@ services:
   gamma-db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: auth
       POSTGRES_DB: auth
       POSTGRES_PASSWORD: auth-password
