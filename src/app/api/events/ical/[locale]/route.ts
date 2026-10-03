@@ -12,6 +12,7 @@ import GammaService from '@/services/gammaService';
 import i18nConfig from '@/i18nConfig';
 import i18nService from '@/services/i18nService';
 import ApiService from '@/services/apiService';
+import { Event, NewsPost } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,9 +81,11 @@ export async function GET(
   });
 }
 
+type ExtendedNewsPost = Awaited<ReturnType<typeof NewsService.get>>;
+
 async function createDescription(
-  event: Awaited<ReturnType<typeof EventService.getAll>>[number],
-  post: Awaited<ReturnType<typeof NewsService.get>>,
+  event: Event,
+  post: ExtendedNewsPost,
   locale: string
 ): Promise<string> {
   const l = i18nService.getLocale(locale);
@@ -93,7 +96,7 @@ async function createDescription(
     return (isEn ? event.descriptionEn : event.descriptionSv).trim();
   }
 
-  const content = (
+  const content = removeImageLinks(
     isEn
       ? event.descriptionEn || post.contentEn
       : event.descriptionSv || post.contentSv
@@ -125,4 +128,13 @@ async function createDescription(
 ${content}
 
 ${l.events.readMore}: ${baseUrl}/post/${post.id}${relatedEventsPart}`;
+}
+
+/**
+ * Remove markdown image links such as ![Text](/api/media/xxxx).
+ * @param text The text to remove links from.
+ * @returns The same text with links removed. No whitespace around the link is trimmed.
+ */
+function removeImageLinks(text: string): string {
+  return text.replaceAll(/!\[.*?\]\(.+?\)/gi, '');
 }
