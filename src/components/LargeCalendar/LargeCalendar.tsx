@@ -15,9 +15,10 @@ const LargeCalendar = async ({ locale, ...rest }: LargeCalendarProps) => {
         ({
           title: isEn ? event.titleEn : event.titleSv,
           allDay: event.fullDay,
-          url: event.newsPostId
-            ? `/${locale}/post/${event.newsPostId}`
-            : undefined,
+          url:
+            event.newsPostId !== null
+              ? `/${locale}/post/${event.newsPostId}`
+              : undefined,
           ...(event.fullDay
             ? {
                 date: event.startTime

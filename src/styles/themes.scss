@@ -43,6 +43,7 @@
     --calendar-neighboring-color: #{colors.$lightgray-300};
     --calendar-event-color: #{colors.$turquoise-600};
     --calendar-event-today-color: #{colors.$turquoise-600};
+    --calendar-event-secondary-color: #{colors.$lightgray-800};
   }
 
   @include theme-toggle.dark {
@@ -81,5 +82,6 @@
     --calendar-neighboring-color: #{colors.$darkgray-600};
     --calendar-event-color: #{colors.$turquoise-700};
     --calendar-event-today-color: #{colors.$turquoise-600};
+    --calendar-event-secondary-color: #{colors.$lightgray-600};
   }
 }

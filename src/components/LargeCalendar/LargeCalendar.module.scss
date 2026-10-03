@@ -1,0 +1,17 @@
+@use '../../styles/colors.scss';
+@use '../../styles/theme-toggle.scss';
+
+// Style today indicator
+.dayCellTopInner {
+  --fc-forma-primary: var(--calendar-current-date-background-color);
+}
+
+// Add underline when hovering over event
+.event:hover .eventHoverUnderline {
+  text-decoration: underline;
+}
+
+// Non-interactive event color
+.eventNonInteractive {
+  --fc-forma-event: var(--calendar-event-secondary-color);
+}

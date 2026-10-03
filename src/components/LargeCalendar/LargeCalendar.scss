@@ -2,13 +2,13 @@
 
 :root {
   /* primary */
-  --fc-forma-primary: #{colors.$turquoise-800};
+  --fc-forma-primary: #{colors.$turquoise-600};
   --fc-forma-primary-over: #{colors.$turquoise-800};
   --fc-forma-primary-down: #{colors.$turquoise-900};
   --fc-forma-primary-foreground: #ffffff;
 
   /* calendar content */
-  --fc-forma-event: #{colors.$turquoise-600};
+  --fc-forma-event: var(--calendar-event-color);
   --fc-forma-event-contrast: #ffffff;
   --fc-forma-background-event: var(--fc-forma-primary);
   --fc-forma-highlight: #0f6cbd59;
@@ -28,7 +28,7 @@
 
   /* neutral borders */
   --fc-forma-border: var(--content-border-color);
-  --fc-forma-strong-border: #a6a6a6;
+  --fc-forma-strong-border: #{colors.$lightgray-700};
 }
 
 @media not print {

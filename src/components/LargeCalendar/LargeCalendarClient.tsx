@@ -14,6 +14,8 @@ import './LargeCalendar.scss'; // Custom Forma palette
 import { useTheme } from 'next-themes';
 import { HTMLAttributes, ReactNode } from 'react';
 
+import styles from './LargeCalendar.module.scss';
+
 export type LargeCalendarClientProps = {
   locale: string;
   events: EventSourceInput;
@@ -44,7 +46,23 @@ const LargeCalendarClient = ({
         left: 'today,prev,next,title',
         right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
       }}
+      views={{
+        listWeek: {
+          titleFormat: {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          }
+        }
+      }}
+      nowIndicator={true}
       eventContent={renderEventContent}
+      dayCellTopInnerClass={styles.dayCellTopInner}
+      eventClass={(eventInfo: EventDisplayInfo) =>
+        styles.event +
+        ' ' +
+        (eventInfo.isInteractive ? '' : styles.eventNonInteractive)
+      }
       {...rest}
     />
   );
@@ -56,7 +74,15 @@ function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
   return (
     <>
       <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
-      <b className={eventInfo.titleClass}>{eventInfo.event.title}</b>
+      <b
+        className={
+          eventInfo.titleClass +
+          ' ' +
+          (eventInfo.isInteractive ? styles.eventHoverUnderline : '')
+        }
+      >
+        {eventInfo.event.title}
+      </b>
       {eventInfo.view.type === 'timeGridDay' && (
         <div className={eventInfo.titleClass}>Hubben 2.2</div>
       )}
