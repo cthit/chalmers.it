@@ -25,7 +25,7 @@ const CalendarSubscribeButtons = ({
     relativeUrl = `/api/events/ical/${locale}`;
   }
   if (calendarName === undefined) {
-    calendarName = 'Placeholder';
+    calendarName = l.events.calendarName;
   }
 
   const clientBaseUrl =

@@ -113,6 +113,8 @@
     "subscribe": "Subscribe",
     "comingEvents": "Coming Events",
     "ongoing": "Ongoing",
+    "calendarName": "Events at IT, the Software Engineering Student Division",
+    "calendarDescription": "Find events at the Software Engineering Student Division (IT) at Chalmers",
     "created": "Created",
     "readMore": "Read more",
     "relatedEvents": "Related events",

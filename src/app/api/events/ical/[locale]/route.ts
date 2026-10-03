@@ -27,10 +27,15 @@ export async function GET(
     return ApiService.jsonError('Invalid locale');
   }
 
+  const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
   const events = await EventService.getAll();
-  const calendar = new Calendar('cthit');
+  const calendar = new Calendar(
+    `-//cthit//NONSGML chalmers.it//${locale.toUpperCase()}`
+  )
+    .setCalendarName(l.events.calendarName)
+    .setCalendarDescription(l.events.calendarDescription);
 
   const oneDay = new CalendarDuration('P1D');
   for (const event of events) {

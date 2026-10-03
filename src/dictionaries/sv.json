@@ -113,6 +113,8 @@
     "subscribe": "Prenumerera",
     "comingEvents": "Kommande evenemang",
     "ongoing": "Pågående",
+    "calendarName": "IT:s eventkalender",
+    "calendarDescription": "Hitta evenemang från IT-sektionen på Chalmers",
     "created": "Skapad",
     "readMore": "Läs mer",
     "relatedEvents": "Relaterade tillfällen",
