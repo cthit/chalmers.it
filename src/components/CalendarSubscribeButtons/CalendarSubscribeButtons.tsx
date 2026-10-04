@@ -2,7 +2,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import React from 'react';
 import styles from './CalendarSubscribeButtons.module.scss';
-import CopyButton from './CopyButton/CopyButton';
+import CopyButton from '../CopyButton/CopyButton';
 
 type SubscribeOption = {
   name: string;
@@ -68,7 +68,7 @@ const CalendarSubscribeButtons = ({
           </li>
         );
       })}
-      <CopyButton locale={locale} href={httpUrl} />
+      <CopyButton locale={locale} copyContent={httpUrl} />
     </ul>
   );
 };

@@ -10,7 +10,7 @@ import {
   CalendarDuration,
   CalendarEvent
 } from 'iamcal';
-import NewsService from '@/services/newsService';
+import NewsService, { imgMatcher } from '@/services/newsService';
 import { Event } from '@prisma/client';
 import GammaService from '@/services/gammaService';
 
@@ -176,5 +176,5 @@ ${l.events.readMore}: ${baseUrl}/post/${post.id}${relatedEventsPart}`;
  * @returns The same text with links removed. No whitespace around the link is trimmed.
  */
 function removeImageLinks(text: string): string {
-  return text.replaceAll(/!\[.*?\]\(.+?\)/gi, '');
+  return text.replaceAll(new RegExp(imgMatcher, 'g'), '');
 }
