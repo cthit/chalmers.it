@@ -2,7 +2,6 @@
 
 import MediaService from '@/services/mediaService';
 import DivisionDocumentService from '@/services/divisionDocumentService';
-import { redirect } from 'next/navigation';
 import { DocumentType } from '@prisma/client';
 import { MediaType } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
@@ -38,7 +37,6 @@ export async function addDocument(
       type
     );
   }
-  redirect('/documents');
 }
 
 export async function deleteDocument(documentId: number) {
