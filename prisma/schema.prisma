@@ -22,6 +22,8 @@ model NewsPost {
   updatedAt            DateTime       @updatedAt
   divisionGroupId      Int?
   mediaSha256          String?
+  slackTsSv            String?
+  slackTsEn            String?
 }
 
 model DivisionGroup {
@@ -118,13 +120,6 @@ model Media {
   DivisionDocument DivisionDocument[]
 }
 
-model EventNotifiers {
-  id       Int          @id @default(autoincrement())
-  type     NotifierType
-  url      String
-  language Language
-}
-
 enum DocumentType {
   PROTOCOL
   BUDGET
@@ -132,11 +127,6 @@ enum DocumentType {
   FINANCIAL_REPORT
   BUSINESS_REPORT
   MISC
-}
-
-enum NotifierType {
-  DISCORD
-  SLACK
 }
 
 enum Language {

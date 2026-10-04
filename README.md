@@ -96,3 +96,10 @@ The following environment variables are used:
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
+| SLACK_BOT_TOKEN           | Slack bot token used to post, edit and delete news notifications                             | `xoxb-numbers-and-letters`                                             |
+| SLACK_CHANNEL_SV          | Slack channel that receives Swedish news notifications (unset = disabled)                    | `C0123456789`                                                          |
+| SLACK_CHANNEL_EN          | Slack channel that receives English news notifications (unset = disabled)                    | `C0123456789`                                                          |
+
+### Slack notifications
+
+News posts are announced in Slack through a bot account. The bot needs the `chat:write` scope and must be invited to each configured channel (or the app can use `chat:write.public` to post in any public channel). When a published post is edited or deleted, the corresponding Slack messages are updated or removed, so the message ID (`ts`) of every notification is stored on the news post.
