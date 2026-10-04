@@ -192,6 +192,9 @@
     "image": "Bild"
   },
   "search": {
+    "newsPlaceholder": "Sök nyhetsinlägg...",
+    "newsHeading": "Sök nyhetsinlägg",
+    "newsResults": "Sökresultat för nyhetsinlägg",
     "search": "Sök",
     "empty": "Inga sökresultat",
     "loading": "Söker...",

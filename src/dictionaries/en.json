@@ -192,6 +192,9 @@
     "image": "Image"
   },
   "search": {
+    "newsPlaceholder": "Search news posts...",
+    "newsHeading": "Search news posts",
+    "newsResults": "News search results",
     "search": "Search",
     "empty": "No search results",
     "loading": "Searching...",
