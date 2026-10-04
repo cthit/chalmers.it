@@ -10,45 +10,31 @@
 }
 
 .navPane {
-  background-color: color-mix(
-    in srgb,
-    var(--content-background-color) 80%,
-    white
-  );
+  background-color: var(--md-surface-container-low);
 }
 
 .navLink {
   display: block;
   padding: 1rem;
-  background-color: color-mix(
-    in srgb,
-    var(--content-background-color) 65%,
-    white
-  );
+  background-color: var(--md-surface-container);
 }
 
 .navLink:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--content-background-color) 55%,
-    white
-  );
+  background-color: var(--md-surface-container-highest);
 }
 
 .currentLink {
-  background-color: color-mix(
-    in srgb,
-    var(--content-background-color) 45%,
-    white
-  );
+  background-color: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
 }
 
 .currentLink:hover {
   background-color: color-mix(
     in srgb,
-    var(--content-background-color) 35%,
-    white
+    var(--md-secondary-container) 88%,
+    var(--md-on-secondary-container)
   );
+  color: var(--md-on-secondary-container);
 }
 
 .settingsContent {

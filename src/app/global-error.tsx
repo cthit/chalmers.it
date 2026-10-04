@@ -2,6 +2,9 @@
 
 import Error from '@/components/ErrorPages/500/500';
 import { Poppins } from 'next/font/google';
+import '@/styles/dimensions.scss';
+import '@/styles/themes.scss';
+import '@/styles/globals.scss';
 
 const poppins = Poppins({
   weight: ['400'],

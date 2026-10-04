@@ -1,7 +1,7 @@
 .icon {
   font-size: 1.5rem;
   line-height: 1.2rem;
-  color: var(--text-color);
+  color: var(--md-on-surface);
 }
 
 .loading {
@@ -10,5 +10,5 @@
 
 .toggle:hover {
   cursor: pointer;
-  color: var(--text-hover-color);
+  color: var(--md-link);
 }

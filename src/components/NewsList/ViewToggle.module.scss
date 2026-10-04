@@ -1,8 +1,8 @@
 .toggle {
   display: flex;
   gap: 0.25rem;
-  background: var(--background-secondary);
-  border: 1px solid var(--border-color);
+  background: var(--md-surface-container);
+  border: 1px solid var(--md-outline);
   border-radius: 6px;
   padding: 0.25rem;
 }
@@ -15,19 +15,19 @@
   height: 32px;
   border: none;
   background: transparent;
-  color: var(--news-view-toggle-color);
+  color: var(--md-on-surface-variant);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--news-view-toggle-hovered-background-color);
-    color: var(--news-view-toggle-hovered-color);
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
   }
 
   &.active {
-    background: var(--news-view-toggle-selected-background-color);
-    color: var(--news-view-toggle-selected-color);
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
   }
 
   svg {

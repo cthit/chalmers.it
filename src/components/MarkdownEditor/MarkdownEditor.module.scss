@@ -4,16 +4,16 @@
   margin-right: 0.25rem;
   button {
     font-weight: bold;
-    background: var(--content-background-color);
+    background: var(--md-surface-container);
     border: none;
     cursor: pointer;
-    color: var(--text-color);
+    color: var(--md-on-surface);
     aspect-ratio: 1 / 1;
     height: 2rem;
     font-size: 1.3rem;
     padding: 0.3rem;
     &:hover {
-      color: var(--link-color);
+      color: var(--md-link);
     }
   }
 
@@ -29,10 +29,10 @@
 }
 
 .toolbarButton {
-  background: var(--content-background-color);
+  background: var(--md-surface-container);
   border: none;
   cursor: pointer;
-  color: var(--text-color);
+  color: var(--md-on-surface);
   font-weight: bold;
   aspect-ratio: 1 / 1;
   height: 2rem;
@@ -42,20 +42,20 @@
   margin: 0 0.25rem;
   vertical-align: middle;
   &:hover {
-    color: var(--link-color);
+    color: var(--md-link);
   }
 }
 
 .selectedButton {
-  background: var(--primary-color) !important;
-  color: var(--header-color);
+  background: var(--md-primary-container) !important;
+  color: var(--md-on-primary-container);
   &:hover {
-    color: var(--header-color);
+    color: var(--md-on-primary-container);
   }
 }
 
 .toolbarDropdown {
-  background: var(--content-background-color) !important;
+  background: var(--md-surface-container) !important;
   margin: 0 0.25rem;
 }
 
@@ -66,8 +66,8 @@
     overflow-y: scroll;
     padding: 0.5rem;
     min-height: 200px;
-    color: var(--text-color);
-    background-color: var(--header-color);
+    color: var(--md-on-surface);
+    background-color: var(--md-surface-container-high);
     resize: vertical;
     width: 100%;
     box-sizing: border-box;
@@ -98,7 +98,7 @@
   }
 
   :global(.md-link-as-span) {
-    color: var(--link-color);
+    color: var(--md-link);
 
     &:focus {
       outline: none;
@@ -106,8 +106,8 @@
   }
 
   :global(.milkdown-link-preview) {
-    background-color: var(--header-color);
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    background-color: var(--md-surface-container-high);
+    box-shadow: 0 1px 3px 0 var(--md-shadow);
     overflow: hidden;
     border-radius: 0.25rem;
     position: absolute;
@@ -118,14 +118,15 @@
     }
 
     :global(.link-display) {
-      color: var(--link-color);
+      color: var(--md-link);
       margin: 0 0.5rem;
     }
 
     :global(.link-edit-button),
     :global(.link-remove-button) {
       cursor: pointer;
-      background: var(--primary-color);
+      background: var(--md-primary);
+      color: var(--md-on-primary);
       padding: 0.25rem;
       margin: 0 0.25rem;
       border-radius: 0.5rem;
@@ -136,14 +137,14 @@
       text-align: center;
 
       &:hover {
-        background-color: var(--primary-color-highlight);
+        background-color: var(--md-primary-hover);
       }
     }
   }
 
   :global(.milkdown-link-edit) {
-    background-color: var(--header-color);
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    background-color: var(--md-surface-container-high);
+    box-shadow: 0 1px 3px 0 var(--md-shadow);
     overflow: hidden;
     border-radius: 0.25rem;
     position: absolute;
@@ -162,12 +163,13 @@
 
     :global(.confirm) {
       cursor: pointer;
-      background: var(--primary-color);
+      background: var(--md-primary);
+      color: var(--md-on-primary);
       margin: 0.25rem 0;
       padding: 0.25rem 0.75rem;
       border-radius: 0.5rem;
       &:hover {
-        background-color: var(--primary-color-highlight);
+        background-color: var(--md-primary-hover);
       }
     }
 
@@ -188,7 +190,8 @@
     display: inline-flex;
     justify-content: center;
     cursor: pointer;
-    background-color: var(--primary-color);
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
     border-radius: 0.5rem;
     padding: 0.25rem;
     height: 2rem;
@@ -211,7 +214,7 @@
   :global(.milkdown-image-block > .caption-input) {
     display: block;
     width: 100%;
-    background-color: var(--content-background-color);
+    background-color: var(--md-surface-container);
     padding: 0.25rem;
     border-radius: 0.2rem;
   }
@@ -260,12 +263,12 @@
     align-items: center;
     padding: 16px 24px;
     gap: 16px;
-    background: var(--content-background-color);
+    background: var(--md-surface-container);
     height: 56px;
   }
 
   :global(.milkdown-image-block > .image-edit .image-icon) {
-    color: darkgray;
+    color: var(--md-on-surface-variant);
   }
 
   :global(.milkdown-image-block > .image-edit .image-icon svg) {
@@ -274,7 +277,7 @@
   }
 
   :global(.milkdown-image-block > .image-edit .link-importer .placeholder) {
-    color: darkgray;
+    color: var(--md-on-surface-variant);
   }
 
   :global(.milkdown-image-block > .image-edit .link-importer .link-input-area) {
@@ -286,7 +289,7 @@
     .milkdown-image-block > .image-edit .link-importer .placeholder .uploader
   ) {
     gap: 8px;
-    color: var(--link-color);
+    color: var(--md-link);
     justify-content: center;
     transition: color 0.2s;
   }
@@ -308,7 +311,7 @@
       .placeholder
       .uploader:hover
   ) {
-    color: var(--link-color);
+    color: var(--md-link);
   }
 
   :global(
@@ -318,7 +321,8 @@
   }
 
   :global(.milkdown-image-block > .image-edit .confirm) {
-    background: var(--primary-color);
+    background: var(--md-primary);
+    color: var(--md-on-primary);
     line-height: 40px;
     padding: 0 24px;
     border-radius: 100px;
@@ -326,7 +330,7 @@
   }
 
   :global(.milkdown-image-block.selected > .image-edit) {
-    outline: 2px solid var(--link-color);
+    outline: 2px solid var(--md-focus-ring);
 
     :global(.image-icon) {
       size: 24px;
@@ -340,8 +344,8 @@
   }
 
   :global(.milkdown-image-block.selected input::selection) {
-    background: Highlight !important;
-    color: HighlightText !important;
+    background: var(--md-primary-container) !important;
+    color: var(--md-on-primary-container) !important;
   }
 }
 
@@ -351,8 +355,8 @@
   overflow-y: scroll;
   padding: 0.5rem;
   min-height: 200px;
-  color: var(--text-color);
-  background-color: var(--header-color);
+  color: var(--md-on-surface);
+  background-color: var(--md-surface-container-high);
   resize: vertical;
   width: 100%;
   box-sizing: border-box;
@@ -368,8 +372,8 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   font-size: var(--text-normal);
-  color: var(--text-color);
-  background-color: var(--header-color);
+  color: var(--md-on-surface);
+  background-color: var(--md-surface-container-high);
   margin-bottom: 0.3rem;
   display: flex;
   justify-content: space-between;

@@ -1,11 +1,11 @@
 .table {
   thead > tr {
     text-align: left;
-    border-bottom: var(--content-border-color) 1px solid;
+    border-bottom: var(--md-outline-variant) 1px solid;
   }
 
   tbody > tr {
-    border-top: var(--content-border-color) 1px solid;
+    border-top: var(--md-outline-variant) 1px solid;
   }
 
   th,

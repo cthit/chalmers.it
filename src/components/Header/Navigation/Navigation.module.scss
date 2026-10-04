@@ -17,13 +17,13 @@
 
 .navLink {
   font-size: 18px;
-  color: var(--text-color);
+  color: var(--md-on-surface);
   font-family: var(--font-poppins), sans-serif;
   font-weight: 500;
 }
 
 .navLink:hover {
-  color: var(--text-hover-color);
+  color: var(--md-link);
 }
 
 .desktopDropdown {

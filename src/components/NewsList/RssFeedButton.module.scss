@@ -36,13 +36,13 @@
   top: 50%;
   left: calc(100% + 8px);
   transform: translateY(-50%);
-  background: var(--background-color, #24292f);
-  color: var(--news-view-toggle-selected-color, #fff);
+  background: var(--md-inverse-surface);
+  color: var(--md-inverse-on-surface);
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px var(--md-shadow-strong);
   opacity: 0;
   pointer-events: none;
   user-select: none;

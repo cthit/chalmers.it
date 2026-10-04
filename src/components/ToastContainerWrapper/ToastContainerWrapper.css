@@ -1,41 +1,41 @@
 :root {
-  --toastify-color-light: var(--content-border-color);
-  --toastify-color-dark: var(--content-border-color);
+  --toastify-color-light: var(--md-surface-container);
+  --toastify-color-dark: var(--md-surface-container);
 
-  --toastify-color-info: #3498db;
-  --toastify-color-success: #07bc0c;
-  --toastify-color-warning: #f1c40f;
-  --toastify-color-error: #e74c3c;
-  --toastify-color-transparent: rgba(255, 255, 255, 0.7);
+  --toastify-color-info: var(--md-info);
+  --toastify-color-success: var(--md-success);
+  --toastify-color-warning: var(--md-warning);
+  --toastify-color-error: var(--md-error);
+  --toastify-color-transparent: var(--md-scrim);
 
-  --toastify-icon-color-info: var(--toastify-color-info);
-  --toastify-icon-color-success: var(--toastify-color-success);
-  --toastify-icon-color-warning: var(--toastify-color-warning);
-  --toastify-icon-color-error: var(--toastify-color-error);
+  --toastify-icon-color-info: var(--md-info);
+  --toastify-icon-color-success: var(--md-success);
+  --toastify-icon-color-warning: var(--md-warning);
+  --toastify-icon-color-error: var(--md-error);
 
   --toastify-toast-width: 320px;
-  --toastify-toast-background: var(--content-border-color);
+  --toastify-toast-background: var(--md-surface-container);
   --toastify-toast-min-height: 64px;
   --toastify-toast-max-height: 800px;
-  --toastify-font-family: sans-serif;
+  --toastify-font-family: var(--font-poppins), sans-serif;
   --toastify-z-index: 9999;
 
-  --toastify-text-color-light: var(--text-color);
-  --toastify-text-color-dark: var(--text-color);
+  --toastify-text-color-light: var(--md-on-surface);
+  --toastify-text-color-dark: var(--md-on-surface);
 
-  --toastify-text-color-info: #fff;
-  --toastify-text-color-success: #fff;
-  --toastify-text-color-warning: #fff;
-  --toastify-text-color-error: #fff;
+  --toastify-text-color-info: var(--md-on-info);
+  --toastify-text-color-success: var(--md-on-success);
+  --toastify-text-color-warning: var(--md-on-warning);
+  --toastify-text-color-error: var(--md-on-error);
 
-  --toastify-spinner-color: var(--primary-color-highlight);
-  --toastify-spinner-color-empty-area: #e0e0e0;
+  --toastify-spinner-color: var(--md-primary);
+  --toastify-spinner-color-empty-area: var(--md-outline-variant);
 
-  --toastify-color-progress-light: var(--text-hover-color);
-  --toastify-color-progress-dark: var(--text-hover-color);
+  --toastify-color-progress-light: var(--md-primary);
+  --toastify-color-progress-dark: var(--md-primary);
 
-  --toastify-color-progress-info: var(--toastify-color-info);
-  --toastify-color-progress-success: var(--toastify-color-success);
-  --toastify-color-progress-warning: var(--toastify-color-warning);
-  --toastify-color-progress-error: var(--toastify-color-error);
+  --toastify-color-progress-info: var(--md-info);
+  --toastify-color-progress-success: var(--md-success);
+  --toastify-color-progress-warning: var(--md-warning);
+  --toastify-color-progress-error: var(--md-error);
 }

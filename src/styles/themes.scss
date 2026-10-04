@@ -1,79 +1,177 @@
 @use 'colors.scss';
 @use 'theme-toggle.scss';
 
-:root {
-  --primary-color: #{colors.$turquoise-800};
-  --primary-color-highlight: #{colors.$turquoise-600};
+// Material-style semantic role tokens.
+//
+// Components consume ONLY the `--md-*` roles below -- never the raw
+// `--$hue-$tone` palette in `colors.scss`. The palette exists so that roles can
+// be remapped without hunting through component styles.
+//
+// Every foreground role has a matching `-on-*` role that is guaranteed to meet
+// contrast requirements against it, per the Material 3 pairing convention.
+//
+// Light theme anchors content roles on tone 40/10 and dark theme on tone 80/90,
+// so the same cyan family produces a readable deep teal on light backgrounds and
+// the brand color `#09CDDA` on dark ones.
 
-  --banner-bottom-opacity: 0.6;
+:root {
+  // Theme-independent roles.
+  --md-on-media: #{colors.$neutral-100};
+  --md-scrim: #{colors.$scrim};
+  --md-shadow: #{colors.$shadow};
+  --md-shadow-strong: #{colors.$shadow-strong};
+  --md-state-hover: #{rgba(colors.$neutral-0, 0.08)};
+  --md-state-pressed: #{rgba(colors.$neutral-0, 0.12)};
 
   @include theme-toggle.light {
-    --text-color: #{colors.$darkgray-900};
-    --text-hover-color: #{colors.$turquoise-700};
-    --link-color: #13aaea;
-    --header-color: #f0f8ff;
-    --dropdown-hover-color: #{colors.$turquoise-200};
-    --background-color: #f5f5f5;
-    --content-background-color: #fffafa;
-    --content-border-color: #{colors.$lightgray-400};
-    --border-color: #{colors.$lightgray-600};
-    --card-border-color: #{colors.$lightgray-600};
+    // Surfaces, from least to most elevated. Deliberately neutral: chrome,
+    // inputs and calendar tiles all draw from this stack, and tinting it
+    // turquoise made every one of them read as "selected".
+    --md-surface: #{colors.$neutral-98};
+    --md-surface-container-lowest: #{colors.$neutral-100};
+    --md-surface-container-low: #{colors.$neutral-99};
+    --md-surface-container: #{colors.$neutral-100};
+    --md-surface-container-high: #{colors.$neutral-95};
+    --md-surface-container-highest: #{colors.$neutral-95};
+    --md-surface-header: #{colors.$neutral-100};
 
-    --divider-color: #{colors.$turquoise-600};
-    --banner-top-opacity: 0;
+    // Text.
+    --md-on-surface: #{colors.$neutral-10};
+    --md-on-surface-variant: #{colors.$neutral-30};
 
-    --news-view-toggle-color: #{colors.$turquoise-800};
-    --news-view-toggle-selected-color: #{colors.$lightgray-100};
-    --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
-    --news-view-toggle-hovered-color: #{colors.$lightgray-100};
-    --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
-    --load-more-button: #{colors.$turquoise-700};
-    --load-more-button-hover-bg: #{colors.$turquoise-700};
-    --load-more-button-hover-text: #{colors.$lightgray-100};
+    // Outlines.
+    --md-outline: #{colors.$neutral-95};
+    --md-outline-variant: #{colors.$neutral-80};
 
-    --lunch-text-color: #{colors.$darkgray-900};
-    --lunch-divider-color: #{colors.$lightgray-600};
+    // Primary (brand) family. Swapped relative to the dark theme: the brand
+    // tone 80 is the *light* theme's fill, so on-primary flips to a dark tone.
+    --md-primary: #{colors.$cyan-80};
+    --md-primary-hover: #{colors.$cyan-70};
+    --md-on-primary: #{colors.$cyan-15};
+    --md-primary-container: #{colors.$cyan-90};
+    --md-on-primary-container: #{colors.$cyan-20};
+    // Text drawn on a surface keeps tone 40 so it stays readable on white.
+    --md-link: #{colors.$cyan-40};
 
-    --calendar-current-color: #{colors.$lightgray-400};
-    --calendar-current-date-background-color: #{colors.$turquoise-800};
-    --calendar-current-date-color: #{colors.$lightgray-200};
-    --calendar-neighboring-color: #{colors.$lightgray-300};
-    --calendar-event-color: #{colors.$turquoise-600};
-    --calendar-event-today-color: #{colors.$turquoise-600};
+    // Secondary family.
+    --md-secondary: #{colors.$teal-40};
+    --md-on-secondary: #{colors.$neutral-100};
+    --md-secondary-container: #{colors.$teal-90};
+    --md-on-secondary-container: #{colors.$teal-20};
+
+    // Tertiary family.
+    --md-tertiary: #{colors.$blue-40};
+    --md-on-tertiary: #{colors.$neutral-100};
+    --md-tertiary-container: #{colors.$blue-90};
+    --md-on-tertiary-container: #{colors.$blue-20};
+
+    // Semantic statuses.
+    --md-error: #{colors.$red-40};
+    --md-on-error: #{colors.$neutral-100};
+    --md-error-container: #{colors.$red-90};
+    --md-on-error-container: #{colors.$red-20};
+
+    --md-success: #{colors.$green-40};
+    --md-on-success: #{colors.$neutral-100};
+    --md-success-container: #{colors.$green-90};
+    --md-on-success-container: #{colors.$green-20};
+
+    --md-warning: #{colors.$amber-40};
+    --md-on-warning: #{colors.$neutral-100};
+    --md-warning-container: #{colors.$amber-90};
+    --md-on-warning-container: #{colors.$amber-20};
+
+    --md-info: #{colors.$blue-40};
+    --md-on-info: #{colors.$neutral-100};
+    --md-info-container: #{colors.$blue-90};
+    --md-on-info-container: #{colors.$blue-20};
+
+    // Inverted surfaces, for tooltips and snackbars.
+    --md-inverse-surface: #{colors.$neutral-20};
+    --md-inverse-on-surface: #{colors.$neutral-95};
+    --md-inverse-primary: #{colors.$cyan-70};
+
+    // Utility.
+    --md-focus-ring: #{colors.$cyan-40};
+    --md-divider: #{colors.$cyan-70};
+
+    // Scrims over full-bleed imagery.
+    --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0)};
+    --md-banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 
   @include theme-toggle.dark {
-    --text-color: #{colors.$lightgray-300};
-    --text-hover-color: #{colors.$turquoise-300};
-    --link-color: #{colors.$turquoise-600};
-    --header-color: #{colors.$darkgray-800};
-    --dropdown-hover-color: #{colors.$turquoise-900};
-    --background-color: #{colors.$darkgray-900};
-    --content-background-color: #{colors.$darkgray-700};
-    --content-border-color: #{colors.$darkgray-500};
-    --border-color: #{colors.$darkgray-400};
-    --card-border-color: #{colors.$turquoise-800};
+    // Surfaces, from least to most elevated. Neutral, as in the light theme.
+    --md-surface: #{colors.$neutral-2};
+    --md-surface-container-lowest: #{colors.$neutral-3};
+    --md-surface-container-low: #{colors.$neutral-4};
+    --md-surface-container: #{colors.$neutral-5};
+    --md-surface-container-high: #{colors.$neutral-20};
+    --md-surface-container-highest: #{colors.$neutral-30};
+    --md-surface-header: #{colors.$neutral-5};
 
-    --divider-color: #{colors.$turquoise-800};
-    --banner-top-opacity: 0.6;
+    // Text.
+    --md-on-surface: #{colors.$neutral-90};
+    --md-on-surface-variant: #{colors.$neutral-80}; // unchanged, but ensure readable.
 
-    --news-view-toggle-color: #{colors.$lightgray-400};
-    --news-view-toggle-selected-color: #{colors.$lightgray-100};
-    --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
-    --news-view-toggle-hovered-color: #{colors.$lightgray-100};
-    --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
-    --load-more-button: #{colors.$turquoise-800};
-    --load-more-button-hover-bg: #{colors.$turquoise-800};
-    --load-more-button-hover-text: #{colors.$lightgray-100};
+    // Outlines.
+    --md-outline: #{colors.$neutral-10};
+    --md-outline-variant: #{colors.$neutral-30};
 
-    --lunch-text-color: #{colors.$lightgray-200};
-    --lunch-divider-color: #{colors.$lightgray-700};
+    // Primary (brand) family. Swapped relative to the light theme: tone 40 is
+    // the *dark* theme's fill, so on-primary flips to a light tone.
+    --md-primary: #{colors.$cyan-40};
+    --md-primary-hover: #{colors.$cyan-30};
+    --md-on-primary: #{colors.$neutral-100};
+    --md-primary-container: #{colors.$cyan-30};
+    --md-on-primary-container: #{colors.$cyan-90};
+    // Text drawn on a surface keeps tone 80 so it stays readable on near-black.
+    --md-link: #{colors.$cyan-80};
 
-    --calendar-current-color: #{colors.$darkgray-500};
-    --calendar-current-date-background-color: #{colors.$turquoise-800};
-    --calendar-current-date-color: #{colors.$lightgray-200};
-    --calendar-neighboring-color: #{colors.$darkgray-600};
-    --calendar-event-color: #{colors.$turquoise-700};
-    --calendar-event-today-color: #{colors.$turquoise-600};
+    // Secondary family.
+    --md-secondary: #{colors.$teal-80};
+    --md-on-secondary: #{colors.$neutral-10};
+    --md-secondary-container: #{colors.$teal-30};
+    --md-on-secondary-container: #{colors.$teal-90};
+
+    // Tertiary family.
+    --md-tertiary: #{colors.$blue-80};
+    --md-on-tertiary: #{colors.$neutral-10};
+    --md-tertiary-container: #{colors.$blue-30};
+    --md-on-tertiary-container: #{colors.$blue-90};
+
+    // Semantic statuses.
+    --md-error: #{colors.$red-80};
+    --md-on-error: #{colors.$neutral-10};
+    --md-error-container: #{colors.$red-30};
+    --md-on-error-container: #{colors.$red-90};
+
+    --md-success: #{colors.$green-80};
+    --md-on-success: #{colors.$neutral-10};
+    --md-success-container: #{colors.$green-30};
+    --md-on-success-container: #{colors.$green-90};
+
+    --md-warning: #{colors.$amber-80};
+    --md-on-warning: #{colors.$neutral-10};
+    --md-warning-container: #{colors.$amber-30};
+    --md-on-warning-container: #{colors.$amber-90};
+
+    --md-info: #{colors.$blue-80};
+    --md-on-info: #{colors.$neutral-10};
+    --md-info-container: #{colors.$blue-30};
+    --md-on-info-container: #{colors.$blue-90};
+
+    // Inverted surfaces, for tooltips and snackbars.
+    --md-inverse-surface: #{colors.$neutral-90};
+    --md-inverse-on-surface: #{colors.$neutral-10};
+    --md-inverse-primary: #{colors.$cyan-60};
+
+    // Utility.
+    --md-focus-ring: #{colors.$cyan-70};
+    --md-divider: #{colors.$cyan-60};
+
+    // Scrims over full-bleed imagery.
+    --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0.6)};
+    --md-banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 }

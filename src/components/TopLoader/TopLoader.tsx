@@ -3,7 +3,7 @@
 import { AppProgressBar } from 'next-nprogress-bar';
 
 const TopLoader = () => {
-  return <AppProgressBar color="#09CDDA" height="2px" delay={300} />;
+  return <AppProgressBar color="var(--md-primary)" height="2px" delay={300} />;
 };
 
 export default TopLoader;
