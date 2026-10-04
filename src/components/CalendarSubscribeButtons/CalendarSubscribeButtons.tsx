@@ -22,7 +22,7 @@ const CalendarSubscribeButtons = ({
   const l = i18nService.getLocale(locale);
 
   if (relativeUrl === undefined) {
-    relativeUrl = `/api/events/ical/${locale}`;
+    relativeUrl = `/api/events?format=ical&locale=${locale}`;
   }
   if (calendarName === undefined) {
     calendarName = l.events.calendarName;

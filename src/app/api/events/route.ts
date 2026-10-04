@@ -1,4 +1,7 @@
+import i18nConfig from '@/i18nConfig';
+import ApiService from '@/services/apiService';
 import EventService from '@/services/eventService';
+import i18nService from '@/services/i18nService';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   Calendar,
@@ -8,21 +11,54 @@ import {
   CalendarEvent
 } from 'iamcal';
 import NewsService from '@/services/newsService';
+import { Event } from '@prisma/client';
 import GammaService from '@/services/gammaService';
-import i18nConfig from '@/i18nConfig';
-import i18nService from '@/services/i18nService';
-import ApiService from '@/services/apiService';
-import { Event, NewsPost } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(
-  _request: NextRequest,
-  ctx: { params: Promise<{ locale: string }> }
-) {
-  const params = await ctx.params;
-  const { locale } = params;
+const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
 
+export async function GET(
+  request: NextRequest,
+  _ctx: { params: Promise<any> }
+) {
+  const search = request.nextUrl.searchParams;
+
+  const responseFormat = search.get('format');
+  if (responseFormat === 'ical') {
+    // iCalendar response
+    const locale = search.get('locale') ?? 'sv';
+
+    return await createCalendarResponse(locale);
+  } else {
+    // JSON response is default
+    const page: number = parseInt(search.get('page') ?? '1');
+    const pageSize: number = parseInt(search.get('pageSize') ?? '10');
+
+    return await createJsonResponse(page, pageSize);
+  }
+}
+
+async function createJsonResponse(
+  page: number,
+  pageSize: number
+): Promise<NextResponse> {
+  if (isNaN(page)) return ApiService.jsonError('Invalid page number');
+  if (isNaN(pageSize)) return ApiService.jsonError('Invalid page size');
+
+  if (page < 1)
+    return ApiService.jsonError('Invalid page number, must be at least 1');
+
+  if (pageSize < 1 || pageSize > maxPageSize)
+    return ApiService.jsonError(
+      'Invalid page size, must be between 1 and ' + maxPageSize
+    );
+
+  const events = await EventService.getPage(page, pageSize);
+  return NextResponse.json(events);
+}
+
+async function createCalendarResponse(locale: string): Promise<NextResponse> {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   if (invalidLocale) {
     return ApiService.jsonError('Invalid locale');
@@ -63,7 +99,11 @@ export async function GET(
       calEvent.setLocation(event.location);
     }
 
-    const description = await createDescription(event, post, locale);
+    const description = await createCalendarEventDescription(
+      event,
+      post,
+      locale
+    );
     if (description) {
       calEvent.setDescription(description);
     }
@@ -83,7 +123,7 @@ export async function GET(
 
 type ExtendedNewsPost = Awaited<ReturnType<typeof NewsService.get>>;
 
-async function createDescription(
+async function createCalendarEventDescription(
   event: Event,
   post: ExtendedNewsPost,
   locale: string
