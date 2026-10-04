@@ -112,7 +112,17 @@
     "empty": "Inga evenemang kopplade",
     "subscribe": "Prenumerera",
     "comingEvents": "Kommande evenemang",
-    "ongoing": "Pågående"
+    "ongoing": "Pågående",
+    "calendarName": "IT:s eventkalender",
+    "calendarDescription": "Hitta evenemang från IT-sektionen på Chalmers",
+    "created": "Skapad",
+    "readMore": "Läs mer",
+    "relatedEvents": "Relaterade tillfällen",
+    "services": {
+      "googleCalendar": "Google Kalender",
+      "appleCalendar": "Apple Kalender",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Nuvarande medlemmar",

@@ -17,6 +17,7 @@
     "@milkdown/utils": "7.22.1",
     "@prisma/client": "7.10.0",
     "html-to-slack": "0.3.7",
+    "iamcal": "^4.1.1",
     "marked": "18.0.11",
     "marked-base-url": "1.1.10",
     "next": "16.3.4",
