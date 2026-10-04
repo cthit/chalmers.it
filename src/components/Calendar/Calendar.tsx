@@ -11,11 +11,13 @@ const Calendar = async ({ locale }: { locale: string }) => {
   const events = await getAllEvents();
   const nextEvents = await EventService.getUpcoming(3);
 
+  const baseUrl = process.env.BASE_URL || 'https://chalmers.it';
+
   return (
     <ContentPane className={styles.centered}>
       <h1>{l.events.events}</h1>
       <Divider />
-      <CalendarClient locale={locale} events={events} />
+      <CalendarClient locale={locale} events={events} httpBaseUrl={baseUrl} />
       <h1 className={styles.upcomingEventsTitle}>{l.events.comingEvents}</h1>
       <ul className={styles.eventsList}>
         {nextEvents.map((event) => {

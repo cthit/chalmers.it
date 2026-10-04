@@ -28,10 +28,12 @@ function DateTile({ date }: DateTileArgs) {
 
 const CalendarClient = ({
   locale,
-  events
+  events,
+  httpBaseUrl
 }: {
   locale: string;
   events: { [key: number]: any[] };
+  httpBaseUrl: string;
 }) => {
   const [value, onChange] = React.useState<Value>(new Date());
   const [subscribeDrawerOpen, setSubscribeDrawerOpen] =
@@ -116,7 +118,7 @@ const CalendarClient = ({
       </ActionButton>
       {subscribeDrawerOpen && (
         <div className={styles.subscribeButtons}>
-          <CalendarSubscribeButtons locale={locale} />
+          <CalendarSubscribeButtons locale={locale} httpBaseUrl={httpBaseUrl} />
         </div>
       )}
     </>

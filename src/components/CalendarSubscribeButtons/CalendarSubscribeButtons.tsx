@@ -11,11 +11,13 @@ type SubscribeOption = {
 
 const CalendarSubscribeButtons = ({
   locale,
+  httpBaseUrl,
   relativeUrl,
   calendarName,
   ...rest
 }: {
   locale: string;
+  httpBaseUrl: string;
   relativeUrl?: string;
   calendarName?: string;
 } & React.ComponentProps<'ul'>) => {
@@ -28,12 +30,6 @@ const CalendarSubscribeButtons = ({
     calendarName = l.events.calendarName;
   }
 
-  const clientBaseUrl =
-    typeof document !== 'undefined'
-      ? document.location.protocol + '//' + document.location.host
-      : undefined;
-  const httpBaseUrl =
-    process.env.BASE_URL || clientBaseUrl || 'https://chalmers.it';
   const httpUrl = new URL(relativeUrl, httpBaseUrl).href;
   const webcalBaseUrl = httpUrl.replace(/^https?/, 'webcal');
   const webcalUrl = httpUrl.replace(/^https?/, 'webcal');
