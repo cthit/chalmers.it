@@ -7,6 +7,7 @@
 }
 
 .card {
+  position: relative;
   cursor: pointer;
   background: var(--background-secondary);
   border: 2px solid var(--border-color);
@@ -27,6 +28,24 @@
   &:hover {
     border-color: var(--primary-color);
   }
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+}
+
+.textColumn :global(a):not(.titleLink),
+.metaLine a {
+  position: relative;
+  z-index: 2;
 }
 
 // When card container is narrow, stack image below text

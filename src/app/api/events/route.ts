@@ -1,4 +1,7 @@
+import i18nConfig from '@/i18nConfig';
+import ApiService from '@/services/apiService';
 import EventService from '@/services/eventService';
+import i18nService from '@/services/i18nService';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   Calendar,
@@ -8,29 +11,69 @@ import {
   CalendarEvent
 } from 'iamcal';
 import NewsService from '@/services/newsService';
+import { Event } from '@prisma/client';
 import GammaService from '@/services/gammaService';
-import i18nConfig from '@/i18nConfig';
-import i18nService from '@/services/i18nService';
-import ApiService from '@/services/apiService';
+import { imgMatcher } from '@/utils/mediaLink';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(
-  _request: NextRequest,
-  ctx: { params: Promise<{ locale: string }> }
-) {
-  const params = await ctx.params;
-  const { locale } = params;
+const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
 
+export async function GET(
+  request: NextRequest,
+  _ctx: { params: Promise<any> }
+) {
+  const search = request.nextUrl.searchParams;
+
+  const responseFormat = search.get('format');
+  if (responseFormat === 'ical') {
+    // iCalendar response
+    const locale = search.get('locale') ?? 'sv';
+
+    return await createCalendarResponse(locale);
+  } else {
+    // JSON response is default
+    const page: number = parseInt(search.get('page') ?? '1');
+    const pageSize: number = parseInt(search.get('pageSize') ?? '10');
+
+    return await createJsonResponse(page, pageSize);
+  }
+}
+
+async function createJsonResponse(
+  page: number,
+  pageSize: number
+): Promise<NextResponse> {
+  if (isNaN(page)) return ApiService.jsonError('Invalid page number');
+  if (isNaN(pageSize)) return ApiService.jsonError('Invalid page size');
+
+  if (page < 1)
+    return ApiService.jsonError('Invalid page number, must be at least 1');
+
+  if (pageSize < 1 || pageSize > maxPageSize)
+    return ApiService.jsonError(
+      'Invalid page size, must be between 1 and ' + maxPageSize
+    );
+
+  const events = await EventService.getPage(page, pageSize);
+  return NextResponse.json(events);
+}
+
+async function createCalendarResponse(locale: string): Promise<NextResponse> {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   if (invalidLocale) {
     return ApiService.jsonError('Invalid locale');
   }
 
+  const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
   const events = await EventService.getAll();
-  const calendar = new Calendar('cthit');
+  const calendar = new Calendar(
+    `-//cthit//NONSGML chalmers.it//${locale.toUpperCase()}`
+  )
+    .setCalendarName(l.events.calendarName)
+    .setCalendarDescription(l.events.calendarDescription);
 
   const oneDay = new CalendarDuration('P1D');
   for (const event of events) {
@@ -57,7 +100,11 @@ export async function GET(
       calEvent.setLocation(event.location);
     }
 
-    const description = await createDescription(event, post, locale);
+    const description = await createCalendarEventDescription(
+      event,
+      post,
+      locale
+    );
     if (description) {
       calEvent.setDescription(description);
     }
@@ -75,9 +122,11 @@ export async function GET(
   });
 }
 
-async function createDescription(
-  event: Awaited<ReturnType<typeof EventService.getAll>>[number],
-  post: Awaited<ReturnType<typeof NewsService.get>>,
+type ExtendedNewsPost = Awaited<ReturnType<typeof NewsService.get>>;
+
+async function createCalendarEventDescription(
+  event: Event,
+  post: ExtendedNewsPost,
   locale: string
 ): Promise<string> {
   const l = i18nService.getLocale(locale);
@@ -88,7 +137,7 @@ async function createDescription(
     return (isEn ? event.descriptionEn : event.descriptionSv).trim();
   }
 
-  const content = (
+  const content = removeImageLinks(
     isEn
       ? event.descriptionEn || post.contentEn
       : event.descriptionSv || post.contentSv
@@ -120,4 +169,13 @@ async function createDescription(
 ${content}
 
 ${l.events.readMore}: ${baseUrl}/post/${post.id}${relatedEventsPart}`;
+}
+
+/**
+ * Remove markdown image links such as ![Text](/api/media/xxxx).
+ * @param text The text to remove links from.
+ * @returns The same text with links removed. No whitespace around the link is trimmed.
+ */
+function removeImageLinks(text: string): string {
+  return text.replaceAll(new RegExp(imgMatcher, 'g'), '');
 }

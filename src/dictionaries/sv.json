@@ -114,9 +114,16 @@
     "comingEvents": "Kommande evenemang",
     "seeAll": "Se alla evenemang",
     "ongoing": "Pågående",
+    "calendarName": "IT:s eventkalender",
+    "calendarDescription": "Hitta evenemang från IT-sektionen på Chalmers",
     "created": "Skapad",
     "readMore": "Läs mer",
-    "relatedEvents": "Relaterade tillfällen"
+    "relatedEvents": "Relaterade tillfällen",
+    "services": {
+      "googleCalendar": "Google Kalender",
+      "appleCalendar": "Apple Kalender",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Nuvarande medlemmar",
@@ -186,6 +193,9 @@
     "image": "Bild"
   },
   "search": {
+    "newsPlaceholder": "Sök nyhetsinlägg...",
+    "newsHeading": "Sök nyhetsinlägg",
+    "newsResults": "Sökresultat för nyhetsinlägg",
     "search": "Sök",
     "empty": "Inga sökresultat",
     "loading": "Söker...",

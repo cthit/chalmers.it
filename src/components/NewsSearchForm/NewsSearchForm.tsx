@@ -81,7 +81,7 @@ const NewsSearchForm = ({
     <>
       <ContentPane>
         <form onSubmit={onSearch}>
-          <h1>{l.search.search}</h1>
+          <h1>{l.search.newsHeading}</h1>
           <Divider />
           <div>
             <label>{l.search.query}</label>
@@ -122,7 +122,7 @@ const NewsSearchForm = ({
       </ContentPane>
       <br />
       <ContentPane>
-        <h1>{l.search.results}</h1>
+        <h1>{l.search.newsResults}</h1>
         <Divider />
         {results === undefined && <p>{l.search.loading}</p>}
         {results === null && <p>{l.search.short}</p>}

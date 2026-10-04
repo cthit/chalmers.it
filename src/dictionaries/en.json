@@ -114,9 +114,16 @@
     "comingEvents": "Coming Events",
     "seeAll": "See all events",
     "ongoing": "Ongoing",
+    "calendarName": "Events at IT, the Software Engineering Student Division",
+    "calendarDescription": "Find events at the Software Engineering Student Division (IT) at Chalmers",
     "created": "Created",
     "readMore": "Read more",
-    "relatedEvents": "Related events"
+    "relatedEvents": "Related events",
+    "services": {
+      "googleCalendar": "Google Calendar",
+      "appleCalendar": "Apple Calendar",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Current members",
@@ -186,6 +193,9 @@
     "image": "Image"
   },
   "search": {
+    "newsPlaceholder": "Search news posts...",
+    "newsHeading": "Search news posts",
+    "newsResults": "News search results",
     "search": "Search",
     "empty": "No search results",
     "loading": "Searching...",

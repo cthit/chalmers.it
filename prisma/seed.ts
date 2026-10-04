@@ -1,6 +1,6 @@
-import { Prisma, PostStatus, PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import 'dotenv/config';
+import { Prisma, PostStatus } from '@prisma/client';
+import prisma from '../src/prisma';
 
 /**
  * Create a date relative to the current time.
@@ -268,6 +268,42 @@ async function main() {
           startTime: relativeDate(18, 15),
           endTime: relativeDate(18, 17),
           fullDay: false
+        }
+      }
+    },
+    {
+      titleSv: 'DrawIT brädspelskvällar LP1',
+      titleEn: "DrawIT's boardgame night LP1",
+      contentSv:
+        'Se hit alla spelentusiaster!\n\nNu på onsdag börjar Drawit med sina veckovisa brädspelskvällar på onsdagar. Vi är chalmers största brädspelsförening med omkring 200 spel. Det kommer finnas utöver brädspel, billiga snacks och dryck samt hemlagad vegetarisk mat.\n\n<br />\n\nNär? Onsdagar (start 9/9 till 14/10), kl. 17.01-sent\n\nVart? Hubben 2.2\n\nHur? Med glädje!\n\nLåt tärningarna vara med er!\n\nDrawIT’26\n',
+      contentEn:
+        'Look here all game enthusiasts!\n\nNow on wednesday begins Drawits weekly boardgame night on wednesdays. We are Chalmers biggest boardgame association with about 200 games. There will be beyond boardgames, cheap snacks and soda as well as homecocked vegetarian food.\n\n<br />\n\nWhen? Wednesday (start 9/9 to 14/10), from 17.01-late\n\nWhere? Hubben 2.2\n\nHow? With joy!\n\n<br />\n\nLet the dice be with you!\n\nDrawIT’26\n',
+      writtenByGammaUserId: 'seed-user-5',
+      status: PostStatus.PUBLISHED,
+      connectedEvents: {
+        createMany: {
+          data: [
+            {
+              titleSv: 'DrawIT brädspelskvällar LP1',
+              titleEn: "DrawIT's boardgame night LP1",
+              descriptionSv: '',
+              descriptionEn: '',
+              location: 'Hubben 2.2',
+              startTime: relativeDate(20, 16),
+              endTime: relativeDate(20, 22),
+              fullDay: false
+            },
+            {
+              titleSv: 'DrawIT brädspelskvällar LP1',
+              titleEn: "DrawIT's boardgame night LP1",
+              descriptionSv: '',
+              descriptionEn: '',
+              location: 'Hubben 2.2',
+              startTime: relativeDate(27, 16),
+              endTime: relativeDate(27, 22),
+              fullDay: false
+            }
+          ]
         }
       }
     },

@@ -1,5 +1,7 @@
 'use client';
 
+import { checkValidMoveTargets } from '@/utils/pageMoveTargets';
+
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -7,13 +9,13 @@ import TextArea from '@/components/TextArea/TextArea';
 import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
-import DivisionPageService, {
-  DivisionPage
-} from '@/services/divisionPageService';
+import type { DivisionPage } from '@/services/divisionPageService';
 import { create, edit } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
+import CopyButton from '../CopyButton/CopyButton';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -71,14 +73,6 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     setUploadQueue(newQueue);
   };
 
-  const copyFile = (sha256: string, file: File) => {
-    const embed = FileService.isMimeEmbeddable(file.type);
-    navigator.clipboard.writeText(
-      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
-    );
-    toast(l.editor.linkCopied, { type: 'success' });
-  };
-
   async function apply() {
     const formData = new FormData();
     for (const file of Object.values(uploadQueue)) {
@@ -134,7 +128,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   }
 
   const maxDepth = divisionPost.divisionGroupId !== undefined ? 1 : 2;
-  const validPages = DivisionPageService.checkValidMoveTargets(
+  const validPages = checkValidMoveTargets(
     divisionPost.pages,
     maxDepth,
     divisionPost.editedId
@@ -205,9 +199,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         {Object.entries(uploadQueue).map(([sha256, file]) => (
           <li className={styles.fileActions} key={sha256}>
             <p>{file.name}</p>{' '}
-            <ActionButton type="button" onClick={() => copyFile(sha256, file)}>
-              {l.editor.copyLink}
-            </ActionButton>{' '}
+            <CopyButton
+              locale={divisionPost.locale}
+              copyContent={createMarkdownLinkToMedia(sha256, file)}
+            />
             <ActionButton
               onClick={() => {
                 delFile(sha256);

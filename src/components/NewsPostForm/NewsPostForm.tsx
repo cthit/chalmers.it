@@ -1,23 +1,27 @@
 'use client';
 
-import { edit, post, postForGroup } from '@/actions/newsPosts';
 import { createEvent, deleteEvent, editEvent } from '@/actions/events';
-import Divider from '@/components/Divider/Divider';
+import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import Divider from '@/components/Divider/Divider';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/types/gamma';
-import { useRef, useState } from 'react';
-import DropdownList from '../DropdownList/DropdownList';
-import { marked } from 'marked';
-import style from './NewsPostForm.module.scss';
-import DatePicker from '../DatePicker/DatePicker';
-import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
+import i18nService from '@/services/i18nService';
+import { GammaGroup } from '@/types/gamma';
+import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import CopyButton from '../CopyButton/CopyButton';
+import DatePicker from '../DatePicker/DatePicker';
+import DropdownList from '../DropdownList/DropdownList';
+import style from './NewsPostForm.module.scss';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
 const validUploadTypes = Object.values(MediaType);
+
+const LOCAL_DRAFT_KEY = 'LocalDraftKey';
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -43,6 +47,13 @@ interface Event {
   id?: number;
 }
 
+interface EventDraft {
+  titleEn: string;
+  titleSv: string;
+  contentEn: string;
+  contentSv: string;
+}
+
 const emptyEvent: Event = {
   titleEn: '',
   titleSv: '',
@@ -63,9 +74,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
+  const draft = loadDraft();
+
   const [group, setGroup] = useState(newsPost.group ?? '');
-  const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
+  const [titleEn, setTitleEn] = useState(
+    draft?.titleEn ?? newsPost.titleEn ?? ''
+  );
+  const [titleSv, setTitleSv] = useState(
+    draft?.titleSv ?? newsPost.titleSv ?? ''
+  );
+  const [contentEn, setContentEn] = useState(
+    draft?.contentEn ?? newsPost.contentEn ?? ''
+  );
+  const [contentSv, setContentSv] = useState(
+    draft?.contentSv ?? newsPost.contentSv ?? ''
+  );
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
@@ -82,6 +105,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        const contentEn = contentEnRef.current!.getMarkdown() ?? '';
+        const contentSv = contentSvRef.current!.getMarkdown() ?? '';
+
+        localStorage.setItem(
+          LOCAL_DRAFT_KEY,
+          JSON.stringify({ titleEn, titleSv, contentEn, contentSv })
+        );
+      } catch {}
+    };
+  }, [titleEn, titleSv, contentEn, contentSv]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -105,14 +142,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     const newQueue = { ...uploadQueue };
     delete newQueue[sha256];
     setUploadQueue(newQueue);
-  };
-
-  const copyFile = (sha256: string, file: File) => {
-    const embed = FileService.isMimeEmbeddable(file.type);
-    navigator.clipboard.writeText(
-      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
-    );
-    toast(l.editor.linkCopied, { type: 'success' });
   };
 
   async function send(e: React.FormEvent) {
@@ -203,6 +232,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         await deleteEvent(id);
       }
 
+      clearDraft();
       router.push('/');
     } catch {
       console.log('Failed to post news article');
@@ -215,6 +245,26 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setEvents(newEvents);
   }
 
+  // Handler for date pickers to ensure endTime >= startTime
+  function handleEventDateChange(id: number, key: 'startTime' | 'endTime', value: Date) {
+    setEvents((prevEvents) => {
+      const newEvents = [...prevEvents];
+      const event = { ...newEvents[id] };
+      let newStart = event.startTime;
+      let newEnd = event.endTime;
+      if (key === 'startTime') {
+        newStart = value;
+        if (newEnd < newStart) newEnd = newStart;
+      } else if (key === 'endTime') {
+        newEnd = value < newStart ? newStart : value;
+      }
+      event.startTime = newStart;
+      event.endTime = newEnd;
+      newEvents[id] = event;
+      return newEvents;
+    });
+  }
+
   function removeEventState(i: number, id?: number) {
     const newEvents = [...events];
     newEvents.splice(i, 1);
@@ -223,6 +273,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     if (id !== undefined) {
       setRemoveQueue([...removeQueue, id]);
     }
+  }
+
+  function loadDraft(): EventDraft | null {
+    try {
+      const loaded = localStorage.getItem(LOCAL_DRAFT_KEY);
+      return loaded ? JSON.parse(loaded) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function clearDraft() {
+    try {
+      localStorage.removeItem(LOCAL_DRAFT_KEY);
+    } catch {}
   }
 
   return (
@@ -256,9 +321,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentEn}
+          defaultMd={draft?.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
+          onChange={(contents) => {
+            setContentEn(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -266,14 +334,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <h2>{l.editor.title} (Sv)</h2>
         <TextArea
           value={titleSv}
-          onChange={(e) => setTitleSv(e.target.value)}
+          onChange={(e) => {
+            setTitleSv(e.target.value);
+            console.log('settitlesv');
+          }}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentSv}
+          defaultMd={draft?.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
+          onChange={(contents) => {
+            setContentSv(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -284,12 +358,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           {Object.entries(uploadQueue).map(([sha256, file]) => (
             <li className={style.fileActions} key={sha256}>
               <p>{file.name}</p>{' '}
-              <ActionButton
-                type="button"
-                onClick={() => copyFile(sha256, file)}
-              >
-                {l.editor.copyLink}
-              </ActionButton>{' '}
+              <CopyButton
+                locale={newsPost.locale}
+                copyContent={createMarkdownLinkToMedia(sha256, file)}
+              />
               <ActionButton
                 type="button"
                 onClick={() => {
@@ -361,13 +433,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <h3>{l.events.start}</h3>
               <DatePicker
                 value={e.startTime}
-                onChange={(d) => editEventState(i, 'startTime', d)}
+                onChange={(d) => handleEventDateChange(i, 'startTime', d)}
               />
               <h3>{l.events.end}</h3>
               <DatePicker
                 disabled={e.fullDay}
                 value={e.endTime}
-                onChange={(d) => editEventState(i, 'endTime', d)}
+                min={e.startTime ? e.startTime.toISOString().slice(0, 16) : undefined}
+                onChange={(d) => handleEventDateChange(i, 'endTime', d)}
               />
               <br />
               <label key={i} htmlFor={'fullDay' + i}>
