@@ -12,7 +12,7 @@ import '@fullcalendar/react/skeleton.css';
 import '@fullcalendar/react/themes/forma/theme.css';
 import './LargeCalendar.scss'; // Custom Forma palette
 import { useTheme } from 'next-themes';
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 
 import styles from './LargeCalendar.module.scss';
 
@@ -26,7 +26,16 @@ const LargeCalendarClient = ({
   events,
   ...rest
 }: LargeCalendarClientProps) => {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme, systemTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  });
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <FullCalendar
