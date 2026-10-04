@@ -115,7 +115,7 @@ const CalendarClient = ({
         </span>
       </ActionButton>
       {subscribeDrawerOpen && (
-        <div className={styles.subscribeButtons + ' ' + styles.centered}>
+        <div className={styles.subscribeButtons}>
           <CalendarSubscribeButtons locale={locale} />
         </div>
       )}
