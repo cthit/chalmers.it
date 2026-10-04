@@ -96,3 +96,22 @@ The following environment variables are used:
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |
 | CORPORATE_RELATIONS_GROUP | Group that is considered the corporate relations group                                       | `armit`                                                                |
 | MAX_PAGE_SIZE             | Max page size of paginated API endpoints                                                     | `50`                                                                   |
+
+## End-to-end tests
+
+The Playwright suite lives in [`e2e/`](e2e/README.md). It covers real Gamma
+login/logout and committee data, news and page creation with both language versions,
+file uploads, news search, and Slack Markdown conversion and webhook fallback.
+
+With Node.js 24, pnpm 12.3.4 and Docker running:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+Testcontainers starts Gamma, Redis and two fresh PostgreSQL databases. Tests use
+a temporary media directory and a local Slack webhook receiver. No real Slack
+credentials are needed. See [the E2E guide](e2e/README.md) for isolation, diagnostics
+and the limits of local Slack validation. `pnpm test` runs Jest independently.

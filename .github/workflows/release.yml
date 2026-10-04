@@ -1,0 +1,81 @@
+name: Release image
+
+on:
+  release:
+    types: [published, released, edited]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing published release tag to promote
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: release-image
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Promote the tested image
+    if: github.event_name == 'workflow_dispatch' || !github.event.release.draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: docker/setup-buildx-action@v4.3.0
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Retag the image that passed E2E on main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          IMAGE: ghcr.io/${{ github.repository_owner }}/chalmers.it
+        run: |
+          if [[ ! "$RELEASE_TAG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Expected a release tag such as v1.2.3 or v1.2.3-rc.1"
+            exit 1
+          fi
+
+          release=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG")
+          if ! jq -e '.draft == false' <<< "$release" > /dev/null; then
+            echo "::error::The release must be published before its image can be promoted"
+            exit 1
+          fi
+
+          commit=$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")
+          if ! git merge-base --is-ancestor "$commit" origin/main; then
+            echo "::error::The release commit must belong to main"
+            exit 1
+          fi
+
+          # This tag is created only after the main build passes E2E.
+          if ! digest=$(docker buildx imagetools inspect "$IMAGE:tested-$commit" --format '{{json .Manifest}}' | jq -er '.digest'); then
+            echo "::error::No tested image exists for $commit. Let main's E2E workflow pass, then rerun this workflow."
+            exit 1
+          fi
+
+          version=${RELEASE_TAG#v}
+          tags=(--tag "$IMAGE:$RELEASE_TAG")
+          if [[ "$version" != "$RELEASE_TAG" ]]; then
+            tags+=(--tag "$IMAGE:$version")
+          fi
+
+          # Only GitHub's latest stable release moves the rolling image tags.
+          if [[ "$version" != *-* ]] && jq -e '.prerelease == false' <<< "$release" > /dev/null; then
+            latest_id=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq '.id')
+            if [[ "$latest_id" == "$(jq -r '.id' <<< "$release")" ]]; then
+              IFS=. read -r major minor _ <<< "$version"
+              tags+=(--tag "$IMAGE:$major" --tag "$IMAGE:$major.$minor" --tag "$IMAGE:latest")
+            fi
+          fi
+
+          docker buildx imagetools create --prefer-index=false "${tags[@]}" "$IMAGE@$digest"
+          echo "Promoted $IMAGE@$digest to ${tags[*]}" >> "$GITHUB_STEP_SUMMARY"
