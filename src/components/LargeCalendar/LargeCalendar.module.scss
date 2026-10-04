@@ -15,3 +15,13 @@
 .eventNonInteractive {
   --fc-forma-event: var(--calendar-event-secondary-color);
 }
+
+// Event location
+.titleWithLocation {
+  flex-grow: 0 !important;
+}
+
+.location {
+  font-weight: normal;
+  padding-top: 0;
+}

@@ -19,6 +19,9 @@ const LargeCalendar = async ({ locale, ...rest }: LargeCalendarProps) => {
             event.newsPostId !== null
               ? `/${locale}/post/${event.newsPostId}`
               : undefined,
+          extendedProps: {
+            location: event.location
+          },
           ...(event.fullDay
             ? {
                 date: event.startTime

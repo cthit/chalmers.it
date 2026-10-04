@@ -80,6 +80,10 @@ const LargeCalendarClient = ({
 export default LargeCalendarClient;
 
 function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
+  const rawLocation: unknown = eventInfo.event.extendedProps['location'];
+  const location: string | null =
+    typeof rawLocation === 'string' ? rawLocation : null;
+
   return (
     <>
       <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
@@ -87,13 +91,17 @@ function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
         className={
           eventInfo.titleClass +
           ' ' +
-          (eventInfo.isInteractive ? styles.eventHoverUnderline : '')
+          (eventInfo.isInteractive ? styles.eventHoverUnderline : '') +
+          ' ' +
+          (location ? styles.titleWithLocation : '')
         }
       >
         {eventInfo.event.title}
       </b>
-      {eventInfo.view.type === 'timeGridDay' && (
-        <div className={eventInfo.titleClass}>Hubben 2.2</div>
+      {location && (
+        <div className={eventInfo.titleClass + ' ' + styles.location}>
+          {location}
+        </div>
       )}
     </>
   );
