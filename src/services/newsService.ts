@@ -1,6 +1,6 @@
 import prisma from '@/prisma';
 import { PostStatus } from '@prisma/client';
-import NotifyService, { SlackNotifier } from './notifyService';
+import NotifyService, { serializeNewsPost } from './notifyService';
 import { Language } from '@prisma/client';
 
 export default class NewsService {
@@ -367,9 +367,6 @@ export default class NewsService {
     });
     if (!post) return null;
 
-    const notifier = new SlackNotifier(language);
-    const postData = await notifier.serializeNewsPost(post);
-
-    return postData;
+    return await serializeNewsPost(post, language);
   }
 }
