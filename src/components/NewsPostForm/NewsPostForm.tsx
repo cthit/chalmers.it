@@ -13,11 +13,11 @@ import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import MediaService from '@/services/mediaService';
 import CopyButton from '../CopyButton/CopyButton';
 import DatePicker from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -360,7 +360,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <p>{file.name}</p>{' '}
               <CopyButton
                 locale={newsPost.locale}
-                copyContent={MediaService.createMarkdownLink(sha256, file)}
+                copyContent={createMarkdownLinkToMedia(sha256, file)}
               />
               <ActionButton
                 type="button"

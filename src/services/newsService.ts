@@ -3,8 +3,6 @@ import { PostStatus } from '@prisma/client';
 import NotifyService, { SlackWebhookNotifier } from './notifyService';
 import { Language } from '@prisma/client';
 
-export const imgMatcher = /!\[.*?\]\((.*?)\)/;
-
 export default class NewsService {
   static async getAll() {
     return await prisma.newsPost.findMany();

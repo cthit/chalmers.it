@@ -11,7 +11,7 @@ import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
 import { toast } from 'react-toastify';
 import CopyButton from '../CopyButton/CopyButton';
-import MediaService from '@/services/mediaService';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -119,7 +119,7 @@ const PageForm = (description: NewPostFormProps) => {
             <p>{file.name}</p>{' '}
             <CopyButton
               locale={description.locale}
-              copyContent={MediaService.createMarkdownLink(sha256, file)}
+              copyContent={createMarkdownLinkToMedia(sha256, file)}
             />
             <ActionButton
               onClick={() => {

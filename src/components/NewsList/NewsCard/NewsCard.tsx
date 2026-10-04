@@ -4,7 +4,7 @@ import { PostStatus } from '@prisma/client';
 import styles from './NewsCard.module.scss';
 import Link from 'next/link';
 import MarkdownView from '@/components/MarkdownView/MarkdownView';
-import { imgMatcher } from '@/services/newsService';
+import { imgMatcher } from '@/utils/mediaLink';
 
 interface NewsCardProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;

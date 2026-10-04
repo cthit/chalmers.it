@@ -10,9 +10,10 @@ import {
   CalendarDuration,
   CalendarEvent
 } from 'iamcal';
-import NewsService, { imgMatcher } from '@/services/newsService';
+import NewsService from '@/services/newsService';
 import { Event } from '@prisma/client';
 import GammaService from '@/services/gammaService';
+import { imgMatcher } from '@/utils/mediaLink';
 
 export const dynamic = 'force-dynamic';
 
