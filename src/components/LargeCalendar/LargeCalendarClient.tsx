@@ -1,29 +1,39 @@
 'use client';
 
-import FullCalendar, { EventDisplayInfo } from '@fullcalendar/react';
+import FullCalendar, {
+  CalendarOptions,
+  EventDisplayInfo
+} from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma';
 import dayGridPlugin from '@fullcalendar/react/daygrid';
 import timeGridPlugin from '@fullcalendar/react/timegrid';
 import listPlugin from '@fullcalendar/react/list';
 import multiMonthPlugin from '@fullcalendar/react/multimonth';
-import { EventSourceInput } from '@fullcalendar/react';
 
 import '@fullcalendar/react/skeleton.css';
 import '@fullcalendar/react/themes/forma/theme.css';
 import './LargeCalendar.scss'; // Custom Forma palette
 import { useTheme } from 'next-themes';
-import { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import styles from './LargeCalendar.module.scss';
 
-export type LargeCalendarClientProps = {
-  locale: string;
-  events: EventSourceInput;
-} & HTMLAttributes<HTMLDivElement>;
+export type LargeCalendarClientProps = Omit<
+  CalendarOptions,
+  | 'colorScheme'
+  | 'plugins'
+  | 'views'
+  | 'eventContent'
+  | 'dayCellTopInnerClass'
+  | 'eventClass'
+>;
 
 const LargeCalendarClient = ({
-  locale,
-  events,
+  initialView = 'timeGridWeek',
+  headerToolbar = {
+    left: 'today,prev,next,title',
+    right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
+  },
   ...rest
 }: LargeCalendarClientProps) => {
   const [mounted, setMounted] = useState(false);
@@ -46,15 +56,10 @@ const LargeCalendarClient = ({
         listPlugin,
         multiMonthPlugin
       ]}
-      events={events}
-      locale={locale}
       colorScheme={resolvedTheme ?? systemTheme}
+      initialView={initialView}
       firstDay={1}
-      initialView="timeGridWeek"
-      headerToolbar={{
-        left: 'today,prev,next,title',
-        right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
-      }}
+      headerToolbar={headerToolbar}
       views={{
         listWeek: {
           titleFormat: {

@@ -1,0 +1,9 @@
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 2rem;
+}
+
+.calendar {
+  max-height: 20em;
+}

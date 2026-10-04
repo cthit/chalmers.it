@@ -49,7 +49,8 @@
     "loadEmpty": "Inga fler inlägg att visa",
     "loadMore": "Ladda fler",
     "listView": "Listvy",
-    "cardView": "Kortvy"
+    "cardView": "Kortvy",
+    "connectedEvents": "Kopplade evenemang"
   },
   "editor": {
     "createAs": "Skapa som",
