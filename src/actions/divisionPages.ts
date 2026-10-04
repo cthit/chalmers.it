@@ -62,7 +62,6 @@ export async function deletePage(id: number) {
   }
 
   await DivisionPageService.delete(id);
-  redirect('/groups');
 }
 
 export async function edit(

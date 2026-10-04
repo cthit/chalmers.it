@@ -43,5 +43,4 @@ export async function addDocument(
 
 export async function deleteDocument(documentId: number) {
   await DivisionDocumentService.remove(documentId);
-  redirect('/documents');
 }
