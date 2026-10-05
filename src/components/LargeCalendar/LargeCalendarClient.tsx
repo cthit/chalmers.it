@@ -56,6 +56,7 @@ const LargeCalendarClient = ({
         listPlugin,
         multiMonthPlugin
       ]}
+      editable={false}
       colorScheme={resolvedTheme ?? systemTheme}
       initialView={initialView}
       firstDay={1}
