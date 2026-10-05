@@ -90,25 +90,34 @@ function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
   const location: string | null =
     typeof rawLocation === 'string' ? rawLocation : null;
 
+  const blockViews = ['dayGridMonth'];
+  const rowViews = ['listWeek', 'listMonth', 'listYear'];
+
   return (
     <>
       <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
-      <b
+      <div
         className={
           eventInfo.titleClass +
           ' ' +
-          (eventInfo.isInteractive ? styles.eventHoverUnderline : '') +
-          ' ' +
-          (location ? styles.titleWithLocation : '')
+          (blockViews.includes(eventInfo.view.type)
+            ? styles.block
+            : rowViews.includes(eventInfo.view.type)
+              ? styles.row
+              : '')
         }
       >
-        {eventInfo.event.title}
-      </b>
-      {location && (
-        <div className={eventInfo.titleClass + ' ' + styles.location}>
-          {location}
-        </div>
-      )}
+        <b
+          className={eventInfo.isInteractive ? styles.eventHoverUnderline : ''}
+        >
+          {eventInfo.event.title}
+        </b>
+        {location && (
+          <div className={eventInfo.titleClass + ' ' + styles.location}>
+            {location}
+          </div>
+        )}
+      </div>
     </>
   );
 }

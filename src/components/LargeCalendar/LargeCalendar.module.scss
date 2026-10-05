@@ -23,5 +23,27 @@
 
 .location {
   font-weight: normal;
+  padding-top: 2px;
+}
+
+.block {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.2em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.5em;
+}
+
+.block > .location {
+  padding-top: 0;
+}
+
+.row > .location {
   padding-top: 0;
 }
