@@ -6,7 +6,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
-import SpokenLanguageIcon from '@/components/SpokenLanguageIcon/SpokenLanguageIcon';
+import SpokenLanguageIndicator from '@/components/SpokenLanguageIndicator/SpokenLanguageIndicator';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -28,13 +28,6 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
           ) : (
             <Link href={`/post/${post.id}`}>{post.title}</Link>
           )}
-          {spokenLanguage && (
-            <SpokenLanguageIcon
-              locale={locale}
-              language={spokenLanguage}
-              className={style.spokenLanguage}
-            />
-          )}
         </h2>
       </div>
       <div className={style.footerArea}>
@@ -55,6 +48,13 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
         </div>
       </div>
       <MarkdownView content={post.content} />
+      {spokenLanguage && (
+        <SpokenLanguageIndicator
+          locale={locale}
+          language={spokenLanguage}
+          className={style.spokenLanguage}
+        />
+      )}
     </>
   );
 };

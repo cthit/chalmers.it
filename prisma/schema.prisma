@@ -80,7 +80,7 @@ model Event {
   updatedAt      DateTime  @updatedAt
   NewsPost       NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
   newsPostId     Int?
-  spokenLanguage Language?
+  spokenLanguage SpokenLanguage?
 }
 
 model Sponsor {
@@ -143,6 +143,13 @@ enum NotifierType {
 enum Language {
   SV
   EN
+}
+
+enum SpokenLanguage {
+  SV
+  EN
+  SV_EN
+  OTHER
 }
 
 enum PostStatus {

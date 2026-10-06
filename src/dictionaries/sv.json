@@ -107,6 +107,8 @@
     "end": "Slut",
     "fullDay": "Heldag",
     "location": "Plats",
+    "spokenLanguage": "Talat språk",
+    "selectSpokenLanguage": "Välj språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
@@ -123,9 +125,13 @@
       "appleCalendar": "Apple Kalender",
       "outlook": "Outlook"
     },
-    "swedish": "Svenska",
-    "english": "Engelska",
-    "spokenLanguage": "kommer talas på evenemanget"
+    "spokenLanguages": {
+      "suffix": "kommer talas på evenemanget",
+      "sv": "Svenska",
+      "en": "Engelska",
+      "sv_en": "Svenska och engelska",
+      "other": "Annat språk"
+    }
   },
   "groups": {
     "members": "Nuvarande medlemmar",

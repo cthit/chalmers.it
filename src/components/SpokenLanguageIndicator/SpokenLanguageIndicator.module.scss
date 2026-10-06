@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.container > p {
+  font-size: var(--text-small);
+}
+
+.flag {
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.flag > img {
+  width: 1.5rem;
+  height: 1.5rem;
+}

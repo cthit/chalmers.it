@@ -4,7 +4,7 @@ import { authConfig } from '@/auth/auth';
 import GammaService from '@/services/gammaService';
 import NewsService from '@/services/newsService';
 import SessionService from '@/services/sessionService';
-import { Language, PostStatus } from '@prisma/client';
+import { PostStatus, SpokenLanguage } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
 
 export const getData = async (
@@ -24,7 +24,7 @@ export const getData = async (
       prettyName: string;
     } | null;
     connectedEvents: {
-      spokenLanguage: Language | null;
+      spokenLanguage: SpokenLanguage | null;
     }[];
   },
   locale: string
