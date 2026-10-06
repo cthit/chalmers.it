@@ -23,11 +23,12 @@ A few things are required to run the project:
 
 In order to run the project in development mode, a few steps are required:
 
-1. Install packages with `pnpm install`
-2. Start services by running `docker compose up -d`
-3. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
-4. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
-5. Run `pnpm run dev` to start the development server
+1. Copy `.env.example` to `.env` and install packages with `pnpm install`
+2. Start the database and local Gamma by running `docker compose up -d`
+3. Configure the Gamma credentials in `.env`
+4. Set up the database by running `pnpm prisma generate` and `pnpm prisma db push`
+5. Seed the database with `pnpm prisma db seed` (adds sample news posts and navbar items)
+6. Run `pnpm run dev` to start the development server
 
 If you wish to modify anything in the database, the recommended way to go is to use Prisma Studio, which can be started by running `pnpm prisma studio`.
 
@@ -35,6 +36,21 @@ If you wish to modify anything in the database, the recommended way to go is to 
 > The seed script (`prisma/seed.ts`) clears existing navbar and news data before inserting, so you can re-run it to reset to a clean state.
 
 If you want to add images to the news posts, you need to create a folder in the root folder called "media" (otherwise an error will pop up), or whatever is defined in the MEDIA_PATH env variable. You also need to copy the image link and add it somewhere in the news post.
+
+### Local Gamma
+
+`docker compose up -d` starts Gamma at http://localhost:9090 with sample users and groups.
+To configure chalmers.it to use local Gamma:
+
+1. Log into local Gamma as **`admin` / `password1337`**.
+2. Create an official OAuth client with callback URL `http://localhost:3000/api/auth/callback/gamma`.
+3. Copy the generated client ID and secret into this worktree's `.env` as `GAMMA_CLIENT_ID` and `GAMMA_CLIENT_SECRET`.
+4. Read Gamma's automatically generated INFO API key from its startup logs (`docker compose logs auth`), configure its permitted group types (`committee`, `society`, and `board`), and save it to `.env` as `GAMMA_API_KEY_ID` and `GAMMA_API_KEY_TOKEN`.
+
+This setup is performed manually through Gamma's HTTP endpoints; it isn't automated by the repository or compose file.
+
+For site admin features, sign in as **`jhalpert` / `password1337`**
+and add `board` to `ACTIVE_GROUP_TYPES` in `.env`.
 
 ### Seeding Development Data (Navigation bar etc)
 
@@ -53,8 +69,9 @@ Note: Groups without a `divisionGroupTypeId` automatically appear under "Övrigt
 
 ## Production Use
 
-The easiest to run the project in production mode is to use the docker-compose file in the root of the project.
-This will start all the services needed, and expose the web server on port 3000.
+To run the project in production mode, use `docker compose -f docker-compose.prod.yml up -d --build`.
+This starts the web server and its database, and exposes the web server on port 3000.
+Configure the deployed Gamma credentials separately; the default `docker-compose.yml` is for development.
 
 The project can also be compiled into a minimized file structure, which can be run with just Node.
 This is done by running `pnpm run build`, which will build the project to `.next/standalone`.
