@@ -67,19 +67,20 @@ model DivisionPage {
 }
 
 model Event {
-  id            Int       @id @default(autoincrement())
-  titleSv       String
-  titleEn       String
-  descriptionEn String
-  descriptionSv String
-  fullDay       Boolean
-  startTime     DateTime
-  endTime       DateTime
-  location      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  NewsPost      NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
-  newsPostId    Int?
+  id             Int       @id @default(autoincrement())
+  titleSv        String
+  titleEn        String
+  descriptionEn  String
+  descriptionSv  String
+  fullDay        Boolean
+  startTime      DateTime
+  endTime        DateTime
+  location       String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  NewsPost       NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
+  newsPostId     Int?
+  spokenLanguage Language?
 }
 
 model Sponsor {

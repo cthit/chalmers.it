@@ -6,6 +6,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
+import SpokenLanguageIcon from '@/components/SpokenLanguageIcon/SpokenLanguageIcon';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -16,6 +17,8 @@ interface NewsPostProps {
 const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
 
+  const spokenLanguage = post.connectedEvents[0]?.spokenLanguage ?? null;
+
   return (
     <>
       <div className={style.titleArea}>
@@ -24,6 +27,13 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
             post.title
           ) : (
             <Link href={`/post/${post.id}`}>{post.title}</Link>
+          )}
+          {spokenLanguage && (
+            <SpokenLanguageIcon
+              locale={locale}
+              language={spokenLanguage}
+              className={style.spokenLanguage}
+            />
           )}
         </h2>
       </div>

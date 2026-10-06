@@ -4,7 +4,7 @@ import { authConfig } from '@/auth/auth';
 import GammaService from '@/services/gammaService';
 import NewsService from '@/services/newsService';
 import SessionService from '@/services/sessionService';
-import { PostStatus } from '@prisma/client';
+import { Language, PostStatus } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
 
 export const getData = async (
@@ -23,6 +23,9 @@ export const getData = async (
       gammaSuperGroupId: string;
       prettyName: string;
     } | null;
+    connectedEvents: {
+      spokenLanguage: Language | null;
+    }[];
   },
   locale: string
 ) => {
@@ -61,7 +64,10 @@ export const getData = async (
     editable: ownsPost,
     deletable,
     writtenByGammaUserId: post.writtenByGammaUserId,
-    writtenForGammaSuperGroupId: post.writtenFor?.gammaSuperGroupId
+    writtenForGammaSuperGroupId: post.writtenFor?.gammaSuperGroupId,
+    connectedEvents: post.connectedEvents.map((event) => ({
+      spokenLanguage: event.spokenLanguage
+    }))
   };
 };
 

@@ -246,7 +246,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   // Handler for date pickers to ensure endTime >= startTime
-  function handleEventDateChange(id: number, key: 'startTime' | 'endTime', value: Date) {
+  function handleEventDateChange(
+    id: number,
+    key: 'startTime' | 'endTime',
+    value: Date
+  ) {
     setEvents((prevEvents) => {
       const newEvents = [...prevEvents];
       const event = { ...newEvents[id] };
@@ -439,7 +443,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <DatePicker
                 disabled={e.fullDay}
                 value={e.endTime}
-                min={e.startTime ? e.startTime.toISOString().slice(0, 16) : undefined}
+                min={
+                  e.startTime
+                    ? e.startTime.toISOString().slice(0, 16)
+                    : undefined
+                }
                 onChange={(d) => handleEventDateChange(i, 'endTime', d)}
               />
               <br />

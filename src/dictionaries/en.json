@@ -122,7 +122,10 @@
       "googleCalendar": "Google Calendar",
       "appleCalendar": "Apple Calendar",
       "outlook": "Outlook"
-    }
+    },
+    "swedish": "Swedish",
+    "english": "English",
+    "spokenLanguage": "will be the language spoken at the event"
   },
   "groups": {
     "members": "Current members",

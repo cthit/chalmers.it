@@ -1,4 +1,6 @@
 .title {
+  display: flex;
+  align-items: center;
   font-size: 2rem;
   flex-grow: 1;
   overflow-wrap: anywhere;
@@ -27,4 +29,9 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.spokenLanguage {
+  margin-inline: auto 0;
+  font-size: 1.2em;
 }

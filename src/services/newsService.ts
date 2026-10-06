@@ -38,7 +38,8 @@ export default class NewsService {
             startTime: true,
             endTime: true,
             fullDay: true,
-            location: true
+            location: true,
+            spokenLanguage: true
           }
         }
       }
@@ -105,7 +106,8 @@ export default class NewsService {
             endTime: true,
             location: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            spokenLanguage: true
           }
         }
       },
@@ -246,6 +248,11 @@ export default class NewsService {
           select: {
             gammaSuperGroupId: true,
             prettyName: true
+          }
+        },
+        connectedEvents: {
+          select: {
+            spokenLanguage: true
           }
         }
       },
