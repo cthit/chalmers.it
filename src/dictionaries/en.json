@@ -213,8 +213,10 @@
     "query": "Query",
     "short": "Search query must be at least 3 characters long",
     "group": "Group",
+    "spokenLanguage": "Spoken language",
     "allTypes": "All types",
     "allGroups": "All groups",
+    "allLanguages": "All languages",
     "name": "Name",
     "filter": "Filter",
     "filterAction": "Filter"

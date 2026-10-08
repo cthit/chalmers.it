@@ -1,7 +1,8 @@
 import prisma from '@/prisma';
-import { PostStatus } from '@prisma/client';
+import { PostStatus, SpokenLanguage } from '@prisma/client';
 import NotifyService, { SlackWebhookNotifier } from './notifyService';
 import { Language } from '@prisma/client';
+import { getNewsPostSpokenLanguage } from '@/utils/spokenLanguage';
 
 export default class NewsService {
   static async getAll() {
@@ -227,9 +228,10 @@ export default class NewsService {
     userId?: string,
     groupIds?: string[],
     writtenByGammaUserId?: string,
-    writtenFor?: string
+    writtenFor?: string,
+    spokenLanguage?: SpokenLanguage
   ) {
-    return await prisma.newsPost.findMany({
+    const results = await prisma.newsPost.findMany({
       orderBy: {
         createdAt: 'desc'
       },
@@ -321,6 +323,12 @@ export default class NewsService {
           lte: before
         }
       }
+    });
+    return results.filter((post) => {
+      return (
+        spokenLanguage == undefined ||
+        getNewsPostSpokenLanguage(post) === spokenLanguage
+      );
     });
   }
 

@@ -89,7 +89,8 @@ export async function search(
   before?: Date,
   after?: Date,
   userId?: string,
-  groupId?: string
+  groupId?: string,
+  spokenLanguage?: SpokenLanguage
 ) {
   const user = await SessionService.getUser();
   const groups = await SessionService.getActiveGroups();
@@ -101,7 +102,8 @@ export async function search(
     user?.id,
     groups.map((g) => g.superGroup.id),
     userId,
-    groupId
+    groupId,
+    spokenLanguage
   );
   return Promise.all(posts.map((post) => getData(post, locale)));
 }
