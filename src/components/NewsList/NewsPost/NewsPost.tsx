@@ -7,6 +7,7 @@ import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
 import SpokenLanguageIndicator from '@/components/SpokenLanguageIndicator/SpokenLanguageIndicator';
+import { getNewsPostSpokenLanguage } from '@/utils/spokenLanguage';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -17,7 +18,7 @@ interface NewsPostProps {
 const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
 
-  const spokenLanguage = post.connectedEvents[0]?.spokenLanguage ?? null;
+  const spokenLanguage = getNewsPostSpokenLanguage(post);
 
   return (
     <>
