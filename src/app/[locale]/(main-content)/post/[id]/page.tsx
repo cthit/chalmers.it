@@ -10,6 +10,7 @@ import styles from './page.module.scss';
 import Divider from '@/components/Divider/Divider';
 import LargeCalendar from '@/components/LargeCalendar/LargeCalendar';
 import { EventInput, EventSourceInput } from '@fullcalendar/react';
+import ActionLink from '@/components/ActionButton/ActionLink';
 
 export default async function Page(props: {
   params: Promise<{ id: string; locale: string }>;
@@ -64,6 +65,14 @@ export default async function Page(props: {
                   initialView="listYear"
                   headerToolbar={false}
                 />
+                <div>
+                  <ActionLink
+                    className={styles.seeAllEventsButton}
+                    href="/events"
+                  >
+                    {l.events.seeAll}
+                  </ActionLink>
+                </div>
               </ContentPane>
             )}
           </div>
