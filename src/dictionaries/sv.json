@@ -120,6 +120,11 @@
     "created": "Skapad",
     "readMore": "Läs mer",
     "relatedEvents": "Relaterade tillfällen",
+    "today": "Idag",
+    "day": "Dag",
+    "week": "Vecka",
+    "month": "Månad",
+    "list": "Lista",
     "services": {
       "googleCalendar": "Google Kalender",
       "appleCalendar": "Apple Kalender",

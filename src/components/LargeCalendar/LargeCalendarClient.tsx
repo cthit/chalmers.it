@@ -2,7 +2,8 @@
 
 import FullCalendar, {
   CalendarOptions,
-  EventDisplayInfo
+  EventDisplayInfo,
+  useCalendarController
 } from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma';
 import dayGridPlugin from '@fullcalendar/react/daygrid';
@@ -17,27 +18,35 @@ import { useTheme } from 'next-themes';
 import { ReactNode, useEffect, useState } from 'react';
 
 import styles from './LargeCalendar.module.scss';
+import i18nService from '@/services/i18nService';
 
 export type LargeCalendarClientProps = Omit<
   CalendarOptions,
   | 'colorScheme'
   | 'plugins'
+  | 'controller'
   | 'views'
   | 'eventContent'
   | 'dayCellTopInnerClass'
   | 'eventClass'
->;
+  | 'buttons'
+  | 'todayText'
+> & { locale: string };
 
 const LargeCalendarClient = ({
   initialView = 'timeGridWeek',
   headerToolbar = {
     left: 'today,prev,next,title',
-    right: 'timeGridDay,timeGridWeek,dayGridMonth,listWeek'
+    right: 'day,week,month,list'
   },
+  locale,
   ...rest
 }: LargeCalendarClientProps) => {
   const [mounted, setMounted] = useState(false);
+  const controller = useCalendarController();
   const { resolvedTheme, systemTheme } = useTheme();
+
+  const l = i18nService.getLocale(locale);
 
   useEffect(() => {
     setMounted(true);
@@ -56,11 +65,32 @@ const LargeCalendarClient = ({
         listPlugin,
         multiMonthPlugin
       ]}
+      controller={controller}
       editable={false}
+      locale={locale}
       colorScheme={resolvedTheme ?? systemTheme}
       initialView={initialView}
       firstDay={1}
+      buttons={{
+        day: {
+          text: l.events.day,
+          click: () => controller.changeView('timeGridDay')
+        },
+        week: {
+          text: l.events.week,
+          click: () => controller.changeView('timeGridWeek')
+        },
+        month: {
+          text: l.events.month,
+          click: () => controller.changeView('dayGridMonth')
+        },
+        list: {
+          text: l.events.list,
+          click: () => controller.changeView('listWeek')
+        }
+      }}
       headerToolbar={headerToolbar}
+      todayText={l.events.today}
       views={{
         listWeek: {
           titleFormat: {

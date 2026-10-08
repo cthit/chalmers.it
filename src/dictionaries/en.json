@@ -120,6 +120,11 @@
     "created": "Created",
     "readMore": "Read more",
     "relatedEvents": "Related events",
+    "today": "Today",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "list": "List",
     "services": {
       "googleCalendar": "Google Calendar",
       "appleCalendar": "Apple Calendar",
