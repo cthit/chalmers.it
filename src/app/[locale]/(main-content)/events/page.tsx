@@ -4,7 +4,7 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import LargeCalendar from '@/components/LargeCalendar/LargeCalendar';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
-import CalendarSubscribeDropdown from '@/components/CalendarSubscribeDropdown/CalendarSubscribeDropdown';
+import CalendarSubscribeButtons from '@/components/CalendarSubscribeButtons/CalendarSubscribeButtons';
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
@@ -20,14 +20,14 @@ export default async function Page(props: {
   return (
     <main>
       <ThreePaneLayout
+        left={
+          <ContentArticle title={l.events.subscribe}>
+            <CalendarSubscribeButtons locale={locale} httpBaseUrl={baseUrl} />
+          </ContentArticle>
+        }
         middle={
           <ContentArticle title={l.events.events}>
             <LargeCalendar locale={locale} />
-            <CalendarSubscribeDropdown
-              locale={locale}
-              httpBaseUrl={baseUrl}
-              className={styles.subscribeButton}
-            />
           </ContentArticle>
         }
         right={<ContactCard locale={locale} />}
