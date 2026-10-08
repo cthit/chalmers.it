@@ -73,7 +73,6 @@ const SvgSpokenEn = (props: React.SVGAttributes<SVGElement>) => (
         clipRule: 'evenodd',
         display: 'inline',
         fillRule: 'evenodd',
-        imageRendering: 'optimizeQuality',
         shapeRendering: 'geometricPrecision',
         textRendering: 'geometricPrecision'
       }}

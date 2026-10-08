@@ -75,7 +75,6 @@ const SvgSpokenSv = (props: React.SVGAttributes<SVGElement>) => (
         clipRule: 'evenodd',
         fillRule: 'nonzero',
         strokeWidth: 0.140467,
-        imageRendering: 'optimizeQuality',
         shapeRendering: 'geometricPrecision',
         textRendering: 'geometricPrecision'
       }}
@@ -89,7 +88,6 @@ const SvgSpokenSv = (props: React.SVGAttributes<SVGElement>) => (
         display: 'inline',
         fillRule: 'nonzero',
         strokeWidth: 0.140467,
-        imageRendering: 'optimizeQuality',
         shapeRendering: 'geometricPrecision',
         textRendering: 'geometricPrecision'
       }}
