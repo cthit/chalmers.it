@@ -61,7 +61,6 @@
 
 .editor {
   :global(.editor) {
-    border: none;
     border-radius: 0.5rem;
     overflow-y: scroll;
     padding: 0.5rem;
@@ -73,7 +72,7 @@
     box-sizing: border-box;
     margin-bottom: 1rem;
     &:focus {
-      outline: none;
+      outline: 2px solid var(--md-focus-ring);
     }
 
     p,

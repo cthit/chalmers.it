@@ -1,19 +1,6 @@
 @use 'colors.scss';
 @use 'theme-toggle.scss';
 
-// Material-style semantic role tokens.
-//
-// Components consume ONLY the `--md-*` roles below -- never the raw
-// `--$hue-$tone` palette in `colors.scss`. The palette exists so that roles can
-// be remapped without hunting through component styles.
-//
-// Every foreground role has a matching `-on-*` role that is guaranteed to meet
-// contrast requirements against it, per the Material 3 pairing convention.
-//
-// Light theme anchors content roles on tone 40/10 and dark theme on tone 80/90,
-// so the same cyan family produces a readable deep teal on light backgrounds and
-// the brand color `#09CDDA` on dark ones.
-
 :root {
   // Theme-independent roles.
   --md-on-media: #{colors.$neutral-100};
@@ -43,14 +30,14 @@
     --md-outline: #{colors.$neutral-95};
     --md-outline-variant: #{colors.$neutral-80};
 
-    // Primary (brand) family. Swapped relative to the dark theme: the brand
-    // tone 80 is the *light* theme's fill, so on-primary flips to a dark tone.
+    // Primary (brand) family.
     --md-primary: #{colors.$cyan-80};
     --md-primary-hover: #{colors.$cyan-70};
     --md-on-primary: #{colors.$cyan-15};
+    --md-primary-container-low: #{colors.$cyan-95};
     --md-primary-container: #{colors.$cyan-90};
+    --md-primary-container-high: #{colors.$cyan-90};
     --md-on-primary-container: #{colors.$cyan-20};
-    // Text drawn on a surface keeps tone 40 so it stays readable on white.
     --md-link: #{colors.$cyan-40};
 
     // Secondary family.
@@ -112,21 +99,21 @@
     --md-surface-header: #{colors.$neutral-5};
 
     // Text.
-    --md-on-surface: #{colors.$neutral-90};
-    --md-on-surface-variant: #{colors.$neutral-80}; // unchanged, but ensure readable.
+    --md-on-surface: #{colors.$neutral-95};
+    --md-on-surface-variant: #{colors.$neutral-80};
 
     // Outlines.
     --md-outline: #{colors.$neutral-10};
     --md-outline-variant: #{colors.$neutral-30};
 
-    // Primary (brand) family. Swapped relative to the light theme: tone 40 is
-    // the *dark* theme's fill, so on-primary flips to a light tone.
+    // Primary (brand) family.
     --md-primary: #{colors.$cyan-40};
     --md-primary-hover: #{colors.$cyan-30};
-    --md-on-primary: #{colors.$neutral-100};
+    --md-on-primary: #{colors.$cyan-98};
+    --md-primary-container-low: #{colors.$cyan-20};
     --md-primary-container: #{colors.$cyan-30};
+    --md-primary-container-high: #{colors.$cyan-50};
     --md-on-primary-container: #{colors.$cyan-90};
-    // Text drawn on a surface keeps tone 80 so it stays readable on near-black.
     --md-link: #{colors.$cyan-80};
 
     // Secondary family.
