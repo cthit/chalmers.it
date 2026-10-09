@@ -5,6 +5,7 @@ import i18nService from '@/services/i18nService';
 import { getAllEvents } from '@/actions/events';
 import styles from './Calendar.module.scss';
 import EventService from '@/services/eventService';
+import ActionLink from '../ActionButton/ActionLink';
 
 const Calendar = async ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
@@ -18,6 +19,13 @@ const Calendar = async ({ locale }: { locale: string }) => {
       <h1>{l.events.events}</h1>
       <Divider />
       <CalendarClient locale={locale} events={events} httpBaseUrl={baseUrl} />
+      <ActionLink
+        className={styles.seeAllButton}
+        href="/events"
+        variant="secondary"
+      >
+        {l.events.seeAll}
+      </ActionLink>
       <h1 className={styles.upcomingEventsTitle}>{l.events.comingEvents}</h1>
       <ul className={styles.eventsList}>
         {nextEvents.map((event) => {
