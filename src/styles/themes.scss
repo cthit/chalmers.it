@@ -94,6 +94,7 @@
     // Utility.
     --md-focus-ring: #{colors.$cyan-40};
     --md-divider: #{colors.$cyan-70};
+    --md-divider-variant: #{colors.$neutral-90};
 
     // Scrims over full-bleed imagery.
     --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0)};
@@ -169,6 +170,7 @@
     // Utility.
     --md-focus-ring: #{colors.$cyan-70};
     --md-divider: #{colors.$cyan-60};
+    --md-divider-variant: #{colors.$neutral-30};
 
     // Scrims over full-bleed imagery.
     --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0.6)};
