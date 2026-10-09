@@ -1,0 +1,46 @@
+// Style today indicator
+.dayCellTopInner {
+  --fc-forma-primary: var(--primary);
+}
+
+// Add underline when hovering over event
+.event:hover .eventHoverUnderline {
+  text-decoration: underline;
+}
+
+// Non-interactive event color
+.eventNonInteractive {
+  --fc-forma-event: var(--on-surface-variant);
+}
+
+// Event location
+.titleWithLocation {
+  flex-grow: 0 !important;
+}
+
+.location {
+  font-weight: normal;
+  padding-top: 2px;
+}
+
+.block {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.2em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.5em;
+}
+
+.block > .location {
+  padding-top: 0;
+}
+
+.row > .location {
+  padding-top: 0;
+}

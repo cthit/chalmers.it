@@ -1,12 +1,10 @@
 .button {
   display: inline-flex;
   text-wrap: nowrap;
-  background-color: var(--primary);
   font-size: 16px;
   border: none;
   padding: 0.5rem 0.6rem;
   border-radius: 0.4rem;
-  color: var(--on-primary);
   cursor: pointer;
   max-width: 100%;
   place-content: center;
@@ -15,6 +13,20 @@
   font-weight: 500;
 }
 
-.button:hover {
+.primary {
+  color: var(--on-primary);
+  background-color: var(--primary);
+}
+
+.primary:hover {
   background-color: var(--primary-hover);
+}
+
+.secondary {
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
+}
+
+.secondary:hover {
+  background-color: var(--surface-container-highest);
 }

@@ -1,0 +1,50 @@
+@use '../../styles/colors.scss';
+
+:root {
+  /* primary */
+  --fc-forma-primary: var(--primary);
+  --fc-forma-primary-over: var(--primary-hover);
+  --fc-forma-primary-down: color-mix(in srgb, var(--primary) 80%, black);
+  --fc-forma-primary-foreground: var(--on-primary);
+
+  /* calendar content */
+  --fc-forma-event: var(--primary);
+  --fc-forma-event-contrast: var(--on-primary);
+  --fc-forma-background-event: var(--fc-forma-primary);
+  --fc-forma-highlight: #{rgba(colors.$turquoise-60, 0.35)};
+
+  /* neutral backgrounds */
+  --fc-forma-background: var(--surface-container-lowest);
+  --fc-forma-faint: #{rgba(colors.$neutral-0, 0.03)};
+  --fc-forma-muted: #{rgba(colors.$neutral-0, 0.07)};
+  --fc-forma-strong: #{rgba(colors.$neutral-0, 0.12)};
+  --fc-forma-stronger: #{rgba(colors.$neutral-0, 0.16)};
+  --fc-forma-strongest: #{rgba(colors.$neutral-0, 0.2)};
+
+  /* neutral foregrounds */
+  --fc-forma-foreground: var(--on-surface);
+  --fc-forma-faint-foreground: #{colors.$neutral-60};
+  --fc-forma-muted-foreground: #{colors.$neutral-50};
+
+  /* neutral borders */
+  --fc-forma-border: var(--outline-variant);
+  --fc-forma-strong-border: var(--outline);
+}
+
+@media not print {
+  [data-color-scheme='dark'] {
+    /* neutral backgrounds */
+    --fc-forma-background: var(--surface-container);
+    --fc-forma-faint: #{rgba(colors.$neutral-100, 0.04)};
+    --fc-forma-muted: #{rgba(colors.$neutral-100, 0.08)};
+    --fc-forma-strong: #{rgba(colors.$neutral-100, 0.12)};
+    --fc-forma-stronger: #{rgba(colors.$neutral-100, 0.16)};
+    --fc-forma-strongest: #{rgba(colors.$neutral-100, 0.2)};
+
+    /* neutral foregrounds */
+    --fc-forma-faint-foreground: #{colors.$neutral-40};
+
+    /* neutral borders */
+    --fc-forma-strong-border: var(--outline);
+  }
+}
