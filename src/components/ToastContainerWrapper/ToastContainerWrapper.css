@@ -1,4 +1,4 @@
-:root {
+:root:root {
   --toastify-color-light: var(--surface-container);
   --toastify-color-dark: var(--surface-container);
 
@@ -17,7 +17,6 @@
   --toastify-toast-background: var(--surface-container);
   --toastify-toast-min-height: 64px;
   --toastify-toast-max-height: 800px;
-  --toastify-font-family: var(--font-poppins), sans-serif;
   --toastify-z-index: 9999;
 
   --toastify-text-color-light: var(--on-surface);
@@ -38,4 +37,17 @@
   --toastify-color-progress-success: var(--success);
   --toastify-color-progress-warning: var(--warning);
   --toastify-color-progress-error: var(--error);
+}
+
+body {
+  --toastify-font-family: var(--font-poppins), sans-serif;
+}
+
+.Toastify.Toastify__toast-container {
+  color: var(--on-surface);
+}
+
+.Toastify__close-button.Toastify__close-button--light {
+  color: var(--on-surface);
+  opacity: 0.5;
 }
