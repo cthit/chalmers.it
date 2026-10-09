@@ -28,7 +28,7 @@ export default async function Page(props: {
       ({
         title: l.en ? event.titleEn : event.titleSv,
         allDay: event.fullDay,
-        color: 'var(--calendar-event-color)',
+        color: 'var(--primary)',
         extendedProps: {
           location: event.location
         },

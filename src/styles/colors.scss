@@ -1,39 +1,153 @@
-$turquoise-100: #e7fdfe;
-$turquoise-200: #c7f5f5;
-$turquoise-300: #a7ebeb;
-$turquoise-400: #0ae5f5;
-$turquoise-500: #09cdda;
-$turquoise-600: #08b7c4;
-$turquoise-700: #1298a1;
-$turquoise-800: #0e7f7f;
-$turquoise-900: #0c6b6b;
+// ---------------------------------------------------------------------------
+// Brand family
+// ---------------------------------------------------------------------------
 
-$lightgray-100: #f8f8f8;
-$lightgray-200: #f2f2f2;
-$lightgray-300: #ebebeb;
-$lightgray-400: #d8d8d8;
-$lightgray-500: #c8c8c8;
-$lightgray-600: #b8b8b8;
-$lightgray-700: #a8a8a8;
-$lightgray-800: #979797;
-$lightgray-900: #878787;
+$turquoise-0: #000000;
+$turquoise-5: #071314;
+$turquoise-10: #002123;
+$turquoise-15: #00383c;
+$turquoise-20: #00383c;
+$turquoise-30: #005157;
+$turquoise-40: #006c73;
+$turquoise-50: #008790;
+$turquoise-60: #00a4af;
+$turquoise-70: #00bac6;
+$turquoise-80: #09cdda; // brand color
+$turquoise-90: #96e0e6;
+$turquoise-95: #cef4f7;
+$turquoise-98: #e6fafc;
+$turquoise-99: #f4fdfe;
+$turquoise-100: #ffffff;
 
-$darkgray-100: #7a7a7a;
-$darkgray-200: #6e6e6e;
-$darkgray-300: #616161;
-$darkgray-400: #545454;
-$darkgray-500: #474747;
-$darkgray-600: #3b3b3b;
-$darkgray-700: #2e2e2e;
-$darkgray-800: #212121;
-$darkgray-900: #141414;
+// ---------------------------------------------------------------------------
+// Supporting families
+// ---------------------------------------------------------------------------
 
-$lightorange-100: #fffaf4;
-$lightorange-200: #fff5ea;
-$lightorange-300: #ffefde;
-$lightorange-400: #ffe9d1;
-$lightorange-500: #ffe3c5;
-$lightorange-600: #ffddb8;
-$lightorange-700: #ffd7ac;
-$lightorange-800: #ffd19f;
-$lightorange-900: #ffcb93;
+$teal-0: #000000;
+$teal-5: #0a1312;
+$teal-10: #0a201e;
+$teal-20: #013936;
+$teal-30: #00524f;
+$teal-40: #006d69;
+$teal-50: #218883;
+$teal-60: #3da39d;
+$teal-70: #51b8b2;
+$teal-80: #68c8c2;
+$teal-90: #abdcd8;
+$teal-95: #d7f1ef;
+$teal-98: #ebf9f8;
+$teal-99: #f7fdfc;
+$teal-100: #ffffff;
+
+$blue-0: #000000;
+$blue-5: #0b1218;
+$blue-10: #0d1d2c;
+$blue-20: #0e3253;
+$blue-30: #12497a;
+$blue-40: #21619c;
+$blue-50: #377bbc;
+$blue-60: #4e95db;
+$blue-70: #61aaf2;
+$blue-80: #77bbff;
+$blue-90: #afd5fe;
+$blue-95: #ddedff;
+$blue-98: #eff7ff;
+$blue-99: #f8fbff;
+$blue-100: #ffffff;
+
+$green-0: #000000;
+$green-5: #0b130c;
+$green-10: #0c2111;
+$green-20: #063b19;
+$green-30: #005624;
+$green-40: #107135;
+$green-50: #2b8c4a;
+$green-60: #45a861;
+$green-70: #59bd73;
+$green-80: #6ece85;
+$green-90: #aee0b7;
+$green-95: #d9f4dd;
+$green-98: #ecfaee;
+$green-99: #f7fdf8;
+$green-100: #ffffff;
+
+$amber-0: #000000;
+$amber-5: #151007;
+$amber-10: #261903;
+$amber-20: #412c00;
+$amber-30: #5e4100;
+$amber-40: #7c5700;
+$amber-50: #9b6e00;
+$amber-60: #bc8600;
+$amber-70: #d3991b;
+$amber-80: #e3aa3e;
+$amber-90: #eccc98;
+$amber-95: #fae9cd;
+$amber-98: #fef5e6;
+$amber-99: #fffbf4;
+$amber-100: #ffffff;
+
+$red-0: #000000;
+$red-5: #190e0d;
+$red-10: #2c1312;
+$red-20: #521d1b;
+$red-30: #772927;
+$red-40: #993b38;
+$red-50: #b9524d;
+$red-60: #d96a64;
+$red-70: #f17e76;
+$red-80: #ff928a;
+$red-90: #ffbeb8;
+$red-95: #ffe4e1;
+$red-98: #fff2f1;
+$red-99: #fffaf9;
+$red-100: #ffffff;
+
+// ---------------------------------------------------------------------------
+// Neutrals
+// ---------------------------------------------------------------------------
+
+$neutral-0: #000000;
+$neutral-2: #050505;
+$neutral-3: #0a0a0a;
+$neutral-4: #0f0f0f;
+$neutral-5: #111111;
+$neutral-10: #1b1c1c;
+$neutral-20: #2f3132;
+$neutral-30: #454749;
+$neutral-40: #5c5f61;
+$neutral-50: #74777a;
+$neutral-60: #8e9194;
+$neutral-70: #a1a5a8;
+$neutral-80: #b2b6b9;
+$neutral-90: #cfd1d3;
+$neutral-95: #eaebec;
+$neutral-98: #f5f6f6;
+$neutral-99: #fbfbfb;
+$neutral-100: #ffffff;
+
+$neutral-variant-0: #000000;
+$neutral-variant-5: #0f1112;
+$neutral-variant-10: #171d1d;
+$neutral-variant-20: #283334;
+$neutral-variant-30: #3a4a4c;
+$neutral-variant-40: #4f6364;
+$neutral-variant-50: #667c7e;
+$neutral-variant-60: #7e9698;
+$neutral-variant-70: #92aaac;
+$neutral-variant-80: #a3babd;
+$neutral-variant-90: #c7d4d5;
+$neutral-variant-95: #e5eded;
+$neutral-variant-98: #f3f7f7;
+$neutral-variant-99: #fafbfc;
+$neutral-variant-100: #ffffff;
+
+// ---------------------------------------------------------------------------
+// Derived values
+// ---------------------------------------------------------------------------
+
+// Translucent scrim/shadow variants, derived so they follow the neutral ramp
+// instead of being free-floating literals.
+$scrim: rgba($neutral-0, 0.5);
+$shadow: rgba($neutral-0, 0.12);
+$shadow-strong: rgba($neutral-0, 0.24);

@@ -2,86 +2,165 @@
 @use 'theme-toggle.scss';
 
 :root {
-  --primary-color: #{colors.$turquoise-800};
-  --primary-color-highlight: #{colors.$turquoise-600};
-
-  --banner-bottom-opacity: 0.6;
+  // Theme-independent roles.
+  --on-media: #{colors.$neutral-100};
+  --scrim: #{colors.$scrim};
+  --shadow: #{colors.$shadow};
+  --shadow-strong: #{colors.$shadow-strong};
+  --state-hover: #{rgba(colors.$neutral-0, 0.08)};
+  --state-pressed: #{rgba(colors.$neutral-0, 0.12)};
 
   @include theme-toggle.light {
-    --secondary-color: #{colors.$lightgray-400};
-    --secondary-color-highlight: #{colors.$lightgray-300};
+    // Surfaces, from least to most elevated. Deliberately neutral: chrome,
+    // inputs and calendar tiles all draw from this stack, and tinting it
+    // turquoise made every one of them read as "selected".
+    --surface: #{colors.$neutral-98};
+    --surface-container-lowest: #{colors.$neutral-100};
+    --surface-container-low: #{colors.$neutral-99};
+    --surface-container: #{colors.$neutral-100};
+    --surface-container-high: #{colors.$neutral-95};
+    --surface-container-highest: #{colors.$neutral-95};
+    --surface-header: #{colors.$neutral-100};
 
-    --text-color: #{colors.$darkgray-900};
-    --text-hover-color: #{colors.$turquoise-700};
-    --link-color: #13aaea;
-    --header-color: #f0f8ff;
-    --dropdown-hover-color: #{colors.$turquoise-200};
-    --background-color: #f5f5f5;
-    --content-background-color: #fffafa;
-    --content-border-color: #{colors.$lightgray-400};
-    --border-color: #{colors.$lightgray-600};
-    --card-border-color: #{colors.$lightgray-600};
+    // Text.
+    --on-surface: #{colors.$neutral-10};
+    --on-surface-variant: #{colors.$neutral-30};
 
-    --divider-color: #{colors.$turquoise-600};
-    --banner-top-opacity: 0;
+    // Outlines.
+    --outline: #{colors.$neutral-95};
+    --outline-variant: #{colors.$neutral-80};
 
-    --news-view-toggle-color: #{colors.$turquoise-800};
-    --news-view-toggle-selected-color: #{colors.$lightgray-100};
-    --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
-    --news-view-toggle-hovered-color: #{colors.$lightgray-100};
-    --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
-    --load-more-button: #{colors.$turquoise-700};
-    --load-more-button-hover-bg: #{colors.$turquoise-700};
-    --load-more-button-hover-text: #{colors.$lightgray-100};
+    // Primary (brand) family.
+    --primary: #{colors.$turquoise-80};
+    --primary-hover: #{colors.$turquoise-70};
+    --on-primary: #{colors.$turquoise-15};
+    --primary-container-low: #{colors.$turquoise-95};
+    --primary-container: #{colors.$turquoise-90};
+    --primary-container-high: #{colors.$turquoise-90};
+    --on-primary-container: #{colors.$turquoise-20};
+    --link: #{colors.$turquoise-40};
 
-    --lunch-text-color: #{colors.$darkgray-900};
-    --lunch-divider-color: #{colors.$lightgray-600};
+    // Secondary family.
+    --secondary: #{colors.$teal-40};
+    --on-secondary: #{colors.$neutral-100};
+    --secondary-container: #{colors.$teal-90};
+    --on-secondary-container: #{colors.$teal-20};
 
-    --calendar-current-color: #{colors.$lightgray-400};
-    --calendar-current-date-background-color: #{colors.$turquoise-800};
-    --calendar-current-date-color: #{colors.$lightgray-200};
-    --calendar-neighboring-color: #{colors.$lightgray-300};
-    --calendar-event-color: #{colors.$turquoise-600};
-    --calendar-event-today-color: #{colors.$turquoise-600};
-    --calendar-event-secondary-color: #{colors.$lightgray-800};
+    // Tertiary family.
+    --tertiary: #{colors.$blue-40};
+    --on-tertiary: #{colors.$neutral-100};
+    --tertiary-container: #{colors.$blue-90};
+    --on-tertiary-container: #{colors.$blue-20};
+
+    // Semantic statuses.
+    --error: #{colors.$red-40};
+    --on-error: #{colors.$neutral-100};
+    --error-container: #{colors.$red-90};
+    --on-error-container: #{colors.$red-20};
+
+    --success: #{colors.$green-40};
+    --on-success: #{colors.$neutral-100};
+    --success-container: #{colors.$green-90};
+    --on-success-container: #{colors.$green-20};
+
+    --warning: #{colors.$amber-40};
+    --on-warning: #{colors.$neutral-100};
+    --warning-container: #{colors.$amber-90};
+    --on-warning-container: #{colors.$amber-20};
+
+    --info: #{colors.$blue-40};
+    --on-info: #{colors.$neutral-100};
+    --info-container: #{colors.$blue-90};
+    --on-info-container: #{colors.$blue-20};
+
+    // Inverted surfaces, for tooltips and snackbars.
+    --inverse-surface: #{colors.$neutral-20};
+    --inverse-on-surface: #{colors.$neutral-95};
+    --inverse-primary: #{colors.$turquoise-70};
+
+    // Utility.
+    --focus-ring: #{colors.$turquoise-40};
+    --divider: #{colors.$turquoise-70};
+    --divider-variant: #{colors.$neutral-90};
+
+    // Scrims over full-bleed imagery.
+    --banner-scrim-top: #{rgba(colors.$neutral-0, 0)};
+    --banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 
   @include theme-toggle.dark {
-    --secondary-color: #{colors.$darkgray-500};
-    --secondary-color-highlight: #{colors.$darkgray-300};
+    // Surfaces, from least to most elevated. Neutral, as in the light theme.
+    --surface: #{colors.$neutral-2};
+    --surface-container-lowest: #{colors.$neutral-3};
+    --surface-container-low: #{colors.$neutral-4};
+    --surface-container: #{colors.$neutral-5};
+    --surface-container-high: #{colors.$neutral-20};
+    --surface-container-highest: #{colors.$neutral-30};
+    --surface-header: #{colors.$neutral-5};
 
-    --text-color: #{colors.$lightgray-300};
-    --text-hover-color: #{colors.$turquoise-300};
-    --link-color: #{colors.$turquoise-600};
-    --header-color: #{colors.$darkgray-800};
-    --dropdown-hover-color: #{colors.$turquoise-900};
-    --background-color: #{colors.$darkgray-900};
-    --content-background-color: #{colors.$darkgray-700};
-    --content-border-color: #{colors.$darkgray-500};
-    --border-color: #{colors.$darkgray-400};
-    --card-border-color: #{colors.$turquoise-800};
+    // Text.
+    --on-surface: #{colors.$neutral-95};
+    --on-surface-variant: #{colors.$neutral-80};
 
-    --divider-color: #{colors.$turquoise-800};
-    --banner-top-opacity: 0.6;
+    // Outlines.
+    --outline: #{colors.$neutral-10};
+    --outline-variant: #{colors.$neutral-30};
 
-    --news-view-toggle-color: #{colors.$lightgray-400};
-    --news-view-toggle-selected-color: #{colors.$lightgray-100};
-    --news-view-toggle-selected-background-color: #{colors.$turquoise-800};
-    --news-view-toggle-hovered-color: #{colors.$lightgray-100};
-    --news-view-toggle-hovered-background-color: #{colors.$turquoise-800};
-    --load-more-button: #{colors.$turquoise-800};
-    --load-more-button-hover-bg: #{colors.$turquoise-800};
-    --load-more-button-hover-text: #{colors.$lightgray-100};
+    // Primary (brand) family.
+    --primary: #{colors.$turquoise-40};
+    --primary-hover: #{colors.$turquoise-30};
+    --on-primary: #{colors.$turquoise-98};
+    --primary-container-low: #{colors.$turquoise-20};
+    --primary-container: #{colors.$turquoise-30};
+    --primary-container-high: #{colors.$turquoise-50};
+    --on-primary-container: #{colors.$turquoise-90};
+    --link: #{colors.$turquoise-70};
 
-    --lunch-text-color: #{colors.$lightgray-200};
-    --lunch-divider-color: #{colors.$lightgray-700};
+    // Secondary family.
+    --secondary: #{colors.$teal-80};
+    --on-secondary: #{colors.$neutral-10};
+    --secondary-container: #{colors.$teal-30};
+    --on-secondary-container: #{colors.$teal-90};
 
-    --calendar-current-color: #{colors.$darkgray-500};
-    --calendar-current-date-background-color: #{colors.$turquoise-800};
-    --calendar-current-date-color: #{colors.$lightgray-200};
-    --calendar-neighboring-color: #{colors.$darkgray-600};
-    --calendar-event-color: #{colors.$turquoise-700};
-    --calendar-event-today-color: #{colors.$turquoise-600};
-    --calendar-event-secondary-color: #{colors.$lightgray-600};
+    // Tertiary family.
+    --tertiary: #{colors.$blue-80};
+    --on-tertiary: #{colors.$neutral-10};
+    --tertiary-container: #{colors.$blue-30};
+    --on-tertiary-container: #{colors.$blue-90};
+
+    // Semantic statuses.
+    --error: #{colors.$red-80};
+    --on-error: #{colors.$neutral-10};
+    --error-container: #{colors.$red-30};
+    --on-error-container: #{colors.$red-90};
+
+    --success: #{colors.$green-80};
+    --on-success: #{colors.$neutral-10};
+    --success-container: #{colors.$green-30};
+    --on-success-container: #{colors.$green-90};
+
+    --warning: #{colors.$amber-80};
+    --on-warning: #{colors.$neutral-10};
+    --warning-container: #{colors.$amber-30};
+    --on-warning-container: #{colors.$amber-90};
+
+    --info: #{colors.$blue-80};
+    --on-info: #{colors.$neutral-10};
+    --info-container: #{colors.$blue-30};
+    --on-info-container: #{colors.$blue-90};
+
+    // Inverted surfaces, for tooltips and snackbars.
+    --inverse-surface: #{colors.$neutral-90};
+    --inverse-on-surface: #{colors.$neutral-10};
+    --inverse-primary: #{colors.$turquoise-60};
+
+    // Utility.
+    --focus-ring: #{colors.$turquoise-70};
+    --divider: #{colors.$turquoise-60};
+    --divider-variant: #{colors.$neutral-30};
+
+    // Scrims over full-bleed imagery.
+    --banner-scrim-top: #{rgba(colors.$neutral-0, 0.6)};
+    --banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 }

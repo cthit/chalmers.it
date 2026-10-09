@@ -12,27 +12,27 @@
   border-radius: 0.1rem;
   width: 100%;
   height: 100%;
-  background-color: var(--calendar-current-color);
+  background-color: var(--surface-container-high);
 }
 
 .tileEvent .dateTile {
-  border-top: solid var(--tile-event-border-height) var(--calendar-event-color);
+  border-top: solid var(--tile-event-border-height) var(--primary);
   border-bottom: solid var(--tile-event-border-height) transparent;
 }
 
 .today .dateTile {
-  background-color: var(--calendar-current-date-background-color);
-  color: var(--calendar-current-date-color);
+  background-color: var(--primary);
+  color: var(--on-primary);
 }
 
 .today.tileEvent .dateTile {
-  border-top-color: var(--calendar-event-today-color);
+  border-top-color: var(--primary-container-high);
 }
 
 .dropdown {
   width: 100%;
   height: 100%;
-  background-color: var(--content-background-color);
+  background-color: var(--surface-container);
 }
 
 .date {

@@ -1,7 +1,7 @@
 .content {
-  background-color: var(--content-background-color);
+  background-color: var(--surface-container);
   padding: 1rem;
   border-radius: 0.5rem;
-  border: 2px solid var(--content-border-color);
+  border: 2px solid var(--outline);
   overflow: clip;
 }

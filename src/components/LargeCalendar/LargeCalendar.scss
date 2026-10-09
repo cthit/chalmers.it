@@ -2,54 +2,49 @@
 
 :root {
   /* primary */
-  --fc-forma-primary: #{colors.$turquoise-600};
-  --fc-forma-primary-over: #{colors.$turquoise-800};
-  --fc-forma-primary-down: #{colors.$turquoise-900};
-  --fc-forma-primary-foreground: #ffffff;
+  --fc-forma-primary: var(--primary);
+  --fc-forma-primary-over: var(--primary-hover);
+  --fc-forma-primary-down: color-mix(in srgb, var(--primary) 80%, black);
+  --fc-forma-primary-foreground: var(--on-primary);
 
   /* calendar content */
-  --fc-forma-event: var(--calendar-event-color);
-  --fc-forma-event-contrast: #ffffff;
+  --fc-forma-event: var(--primary);
+  --fc-forma-event-contrast: var(--on-primary);
   --fc-forma-background-event: var(--fc-forma-primary);
-  --fc-forma-highlight: #0f6cbd59;
+  --fc-forma-highlight: #{rgba(colors.$turquoise-60, 0.35)};
 
   /* neutral backgrounds */
-  --fc-forma-background: #ffffff;
-  --fc-forma-faint: #00000008;
-  --fc-forma-muted: #00000012;
-  --fc-forma-strong: #0000001f;
-  --fc-forma-stronger: #00000029;
-  --fc-forma-strongest: #00000033;
+  --fc-forma-background: var(--surface-container-lowest);
+  --fc-forma-faint: #{rgba(colors.$neutral-0, 0.03)};
+  --fc-forma-muted: #{rgba(colors.$neutral-0, 0.07)};
+  --fc-forma-strong: #{rgba(colors.$neutral-0, 0.12)};
+  --fc-forma-stronger: #{rgba(colors.$neutral-0, 0.16)};
+  --fc-forma-strongest: #{rgba(colors.$neutral-0, 0.2)};
 
   /* neutral foregrounds */
-  --fc-forma-foreground: #030712;
-  --fc-forma-faint-foreground: #9ca3af;
-  --fc-forma-muted-foreground: #6b7280;
+  --fc-forma-foreground: var(--on-surface);
+  --fc-forma-faint-foreground: #{colors.$neutral-60};
+  --fc-forma-muted-foreground: #{colors.$neutral-50};
 
   /* neutral borders */
-  --fc-forma-border: var(--content-border-color);
-  --fc-forma-strong-border: #{colors.$lightgray-700};
+  --fc-forma-border: var(--outline-variant);
+  --fc-forma-strong-border: var(--outline);
 }
 
 @media not print {
   [data-color-scheme='dark'] {
-    /* calendar content */
-    --fc-forma-highlight: #3788d859;
-
     /* neutral backgrounds */
-    --fc-forma-background: #{colors.$darkgray-800};
-    --fc-forma-faint: #ffffff0a;
-    --fc-forma-muted: #ffffff14;
-    --fc-forma-strong: #ffffff1f;
-    --fc-forma-stronger: #ffffff29;
-    --fc-forma-strongest: #ffffff33;
+    --fc-forma-background: var(--surface-container);
+    --fc-forma-faint: #{rgba(colors.$neutral-100, 0.04)};
+    --fc-forma-muted: #{rgba(colors.$neutral-100, 0.08)};
+    --fc-forma-strong: #{rgba(colors.$neutral-100, 0.12)};
+    --fc-forma-stronger: #{rgba(colors.$neutral-100, 0.16)};
+    --fc-forma-strongest: #{rgba(colors.$neutral-100, 0.2)};
 
     /* neutral foregrounds */
-    --fc-forma-foreground: #ffffff;
-    --fc-forma-faint-foreground: #4b5563;
-    --fc-forma-muted-foreground: #6b7280;
+    --fc-forma-faint-foreground: #{colors.$neutral-40};
 
     /* neutral borders */
-    --fc-forma-strong-border: #{colors.$lightgray-100};
+    --fc-forma-strong-border: var(--outline);
   }
 }
