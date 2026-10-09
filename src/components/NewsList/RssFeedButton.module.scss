@@ -36,13 +36,13 @@
   top: 50%;
   left: calc(100% + 8px);
   transform: translateY(-50%);
-  background: var(--md-inverse-surface);
-  color: var(--md-inverse-on-surface);
+  background: var(--inverse-surface);
+  color: var(--inverse-on-surface);
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 4px 16px var(--md-shadow-strong);
+  box-shadow: 0 4px 16px var(--shadow-strong);
   opacity: 0;
   pointer-events: none;
   user-select: none;

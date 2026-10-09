@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 30rem;
   margin: 0 auto;
-  background-color: var(--md-surface-container);
+  background-color: var(--surface-container);
 }
 
 .content {
@@ -36,7 +36,7 @@ input:checked ~ .button {
   background: transparent;
   cursor: pointer;
   border: none;
-  border-top: 2px solid var(--md-outline-variant);
+  border-top: 2px solid var(--outline-variant);
 
   .open {
     display: block;

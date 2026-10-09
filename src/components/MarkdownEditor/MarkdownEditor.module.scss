@@ -4,16 +4,16 @@
   margin-right: 0.25rem;
   button {
     font-weight: bold;
-    background: var(--md-surface-container);
+    background: var(--surface-container);
     border: none;
     cursor: pointer;
-    color: var(--md-on-surface);
+    color: var(--on-surface);
     aspect-ratio: 1 / 1;
     height: 2rem;
     font-size: 1.3rem;
     padding: 0.3rem;
     &:hover {
-      color: var(--md-link);
+      color: var(--link);
     }
   }
 
@@ -29,10 +29,10 @@
 }
 
 .toolbarButton {
-  background: var(--md-surface-container);
+  background: var(--surface-container);
   border: none;
   cursor: pointer;
-  color: var(--md-on-surface);
+  color: var(--on-surface);
   font-weight: bold;
   aspect-ratio: 1 / 1;
   height: 2rem;
@@ -42,20 +42,20 @@
   margin: 0 0.25rem;
   vertical-align: middle;
   &:hover {
-    color: var(--md-link);
+    color: var(--link);
   }
 }
 
 .selectedButton {
-  background: var(--md-primary-container) !important;
-  color: var(--md-on-primary-container);
+  background: var(--primary-container) !important;
+  color: var(--on-primary-container);
   &:hover {
-    color: var(--md-on-primary-container);
+    color: var(--on-primary-container);
   }
 }
 
 .toolbarDropdown {
-  background: var(--md-surface-container) !important;
+  background: var(--surface-container) !important;
   margin: 0 0.25rem;
 }
 
@@ -65,14 +65,14 @@
     overflow-y: scroll;
     padding: 0.5rem;
     min-height: 200px;
-    color: var(--md-on-surface);
-    background-color: var(--md-surface-container-high);
+    color: var(--on-surface);
+    background-color: var(--surface-container-high);
     resize: vertical;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 1rem;
     &:focus {
-      outline: 2px solid var(--md-focus-ring);
+      outline: 2px solid var(--focus-ring);
     }
 
     p,
@@ -97,7 +97,7 @@
   }
 
   :global(.md-link-as-span) {
-    color: var(--md-link);
+    color: var(--link);
 
     &:focus {
       outline: none;
@@ -105,8 +105,8 @@
   }
 
   :global(.milkdown-link-preview) {
-    background-color: var(--md-surface-container-high);
-    box-shadow: 0 1px 3px 0 var(--md-shadow);
+    background-color: var(--surface-container-high);
+    box-shadow: 0 1px 3px 0 var(--shadow);
     overflow: hidden;
     border-radius: 0.25rem;
     position: absolute;
@@ -117,15 +117,15 @@
     }
 
     :global(.link-display) {
-      color: var(--md-link);
+      color: var(--link);
       margin: 0 0.5rem;
     }
 
     :global(.link-edit-button),
     :global(.link-remove-button) {
       cursor: pointer;
-      background: var(--md-primary);
-      color: var(--md-on-primary);
+      background: var(--primary);
+      color: var(--on-primary);
       padding: 0.25rem;
       margin: 0 0.25rem;
       border-radius: 0.5rem;
@@ -136,14 +136,14 @@
       text-align: center;
 
       &:hover {
-        background-color: var(--md-primary-hover);
+        background-color: var(--primary-hover);
       }
     }
   }
 
   :global(.milkdown-link-edit) {
-    background-color: var(--md-surface-container-high);
-    box-shadow: 0 1px 3px 0 var(--md-shadow);
+    background-color: var(--surface-container-high);
+    box-shadow: 0 1px 3px 0 var(--shadow);
     overflow: hidden;
     border-radius: 0.25rem;
     position: absolute;
@@ -162,13 +162,13 @@
 
     :global(.confirm) {
       cursor: pointer;
-      background: var(--md-primary);
-      color: var(--md-on-primary);
+      background: var(--primary);
+      color: var(--on-primary);
       margin: 0.25rem 0;
       padding: 0.25rem 0.75rem;
       border-radius: 0.5rem;
       &:hover {
-        background-color: var(--md-primary-hover);
+        background-color: var(--primary-hover);
       }
     }
 
@@ -189,8 +189,8 @@
     display: inline-flex;
     justify-content: center;
     cursor: pointer;
-    background-color: var(--md-primary);
-    color: var(--md-on-primary);
+    background-color: var(--primary);
+    color: var(--on-primary);
     border-radius: 0.5rem;
     padding: 0.25rem;
     height: 2rem;
@@ -213,7 +213,7 @@
   :global(.milkdown-image-block > .caption-input) {
     display: block;
     width: 100%;
-    background-color: var(--md-surface-container);
+    background-color: var(--surface-container);
     padding: 0.25rem;
     border-radius: 0.2rem;
   }
@@ -262,12 +262,12 @@
     align-items: center;
     padding: 16px 24px;
     gap: 16px;
-    background: var(--md-surface-container);
+    background: var(--surface-container);
     height: 56px;
   }
 
   :global(.milkdown-image-block > .image-edit .image-icon) {
-    color: var(--md-on-surface-variant);
+    color: var(--on-surface-variant);
   }
 
   :global(.milkdown-image-block > .image-edit .image-icon svg) {
@@ -276,7 +276,7 @@
   }
 
   :global(.milkdown-image-block > .image-edit .link-importer .placeholder) {
-    color: var(--md-on-surface-variant);
+    color: var(--on-surface-variant);
   }
 
   :global(.milkdown-image-block > .image-edit .link-importer .link-input-area) {
@@ -288,7 +288,7 @@
     .milkdown-image-block > .image-edit .link-importer .placeholder .uploader
   ) {
     gap: 8px;
-    color: var(--md-link);
+    color: var(--link);
     justify-content: center;
     transition: color 0.2s;
   }
@@ -310,7 +310,7 @@
       .placeholder
       .uploader:hover
   ) {
-    color: var(--md-link);
+    color: var(--link);
   }
 
   :global(
@@ -320,8 +320,8 @@
   }
 
   :global(.milkdown-image-block > .image-edit .confirm) {
-    background: var(--md-primary);
-    color: var(--md-on-primary);
+    background: var(--primary);
+    color: var(--on-primary);
     line-height: 40px;
     padding: 0 24px;
     border-radius: 100px;
@@ -329,7 +329,7 @@
   }
 
   :global(.milkdown-image-block.selected > .image-edit) {
-    outline: 2px solid var(--md-focus-ring);
+    outline: 2px solid var(--focus-ring);
 
     :global(.image-icon) {
       size: 24px;
@@ -343,8 +343,8 @@
   }
 
   :global(.milkdown-image-block.selected input::selection) {
-    background: var(--md-primary-container) !important;
-    color: var(--md-on-primary-container) !important;
+    background: var(--primary-container) !important;
+    color: var(--on-primary-container) !important;
   }
 }
 
@@ -354,8 +354,8 @@
   overflow-y: scroll;
   padding: 0.5rem;
   min-height: 200px;
-  color: var(--md-on-surface);
-  background-color: var(--md-surface-container-high);
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
   resize: vertical;
   width: 100%;
   box-sizing: border-box;
@@ -371,8 +371,8 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   font-size: var(--text-normal);
-  color: var(--md-on-surface);
-  background-color: var(--md-surface-container-high);
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
   margin-bottom: 0.3rem;
   display: flex;
   justify-content: space-between;

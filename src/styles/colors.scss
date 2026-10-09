@@ -1,7 +1,7 @@
 // Material-style tonal palette.
 //
 // Tones follow the Material 3 convention: tone 0 is black, tone 100 is white.
-// The cyan family is the brand family and is pinned so that `cyan-80` is
+// The turquoise family is the brand family and is pinned so that `turquoise-80` is
 // exactly `#09CDDA` -- that is the dark theme's `primary` role.
 //
 // Runtimes are generated in OKLCH at constant hue per family, with lightness
@@ -10,28 +10,28 @@
 // increases monotonically down every ramp.
 //
 // Consumed by `themes.scss`, which is what exposes them to the DOM. Import
-// the role tokens (`--md-*`) from components -- not these variables.
+// the role tokens (`--*`) from components -- not these variables.
 
 // ---------------------------------------------------------------------------
 // Brand family
 // ---------------------------------------------------------------------------
 
-$cyan-0: #000000;
-$cyan-5: #071314;
-$cyan-10: #002123;
-$cyan-15: #00383c;
-$cyan-20: #00383c;
-$cyan-30: #005157;
-$cyan-40: #006c73;
-$cyan-50: #008790;
-$cyan-60: #00a4af;
-$cyan-70: #00bac6;
-$cyan-80: #09cdda; // brand color
-$cyan-90: #96e0e6;
-$cyan-95: #cef4f7;
-$cyan-98: #e6fafc;
-$cyan-99: #f4fdfe;
-$cyan-100: #ffffff;
+$turquoise-0: #000000;
+$turquoise-5: #071314;
+$turquoise-10: #002123;
+$turquoise-15: #00383c;
+$turquoise-20: #00383c;
+$turquoise-30: #005157;
+$turquoise-40: #006c73;
+$turquoise-50: #008790;
+$turquoise-60: #00a4af;
+$turquoise-70: #00bac6;
+$turquoise-80: #09cdda; // brand color
+$turquoise-90: #96e0e6;
+$turquoise-95: #cef4f7;
+$turquoise-98: #e6fafc;
+$turquoise-99: #f4fdfe;
+$turquoise-100: #ffffff;
 
 // ---------------------------------------------------------------------------
 // Supporting families

@@ -9,13 +9,13 @@
   gap: 0.75rem; // Increased gap for larger elements
   border: none;
   background: transparent;
-  color: var(--md-on-surface);
+  color: var(--on-surface);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    color: var(--md-link);
+    color: var(--link);
   }
 
   p {

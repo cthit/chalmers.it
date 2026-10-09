@@ -12,8 +12,8 @@ body {
 }
 
 body {
-  color: var(--md-on-surface);
-  background-color: var(--md-surface);
+  color: var(--on-surface);
+  background-color: var(--surface);
 }
 
 html:has(div.popup-content) {

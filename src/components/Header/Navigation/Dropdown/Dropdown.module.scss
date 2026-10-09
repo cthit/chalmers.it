@@ -55,16 +55,16 @@
 }
 
 .dropdownContent > a {
-  background-color: var(--md-surface-container-high);
+  background-color: var(--surface-container-high);
   display: block;
   padding: 0.5rem 0.5rem;
-  color: var(--md-on-surface);
+  color: var(--on-surface);
   font-size: 16px;
   text-wrap: balance;
 }
 
 .dropdownContent > a:hover {
-  background-color: var(--md-secondary-container);
+  background-color: var(--secondary-container);
 }
 
 .dropdownHitbox {

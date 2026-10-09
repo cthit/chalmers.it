@@ -5,10 +5,10 @@
   height: 2rem;
   resize: none;
   font-size: var(--text-normal);
-  color: var(--md-on-surface);
-  background-color: var(--md-surface-container-high);
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
   &:focus {
-    outline: 2px solid var(--md-focus-ring);
+    outline: 2px solid var(--focus-ring);
     outline-offset: -2px;
   }
 }

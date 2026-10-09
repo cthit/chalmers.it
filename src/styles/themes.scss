@@ -3,164 +3,164 @@
 
 :root {
   // Theme-independent roles.
-  --md-on-media: #{colors.$neutral-100};
-  --md-scrim: #{colors.$scrim};
-  --md-shadow: #{colors.$shadow};
-  --md-shadow-strong: #{colors.$shadow-strong};
-  --md-state-hover: #{rgba(colors.$neutral-0, 0.08)};
-  --md-state-pressed: #{rgba(colors.$neutral-0, 0.12)};
+  --on-media: #{colors.$neutral-100};
+  --scrim: #{colors.$scrim};
+  --shadow: #{colors.$shadow};
+  --shadow-strong: #{colors.$shadow-strong};
+  --state-hover: #{rgba(colors.$neutral-0, 0.08)};
+  --state-pressed: #{rgba(colors.$neutral-0, 0.12)};
 
   @include theme-toggle.light {
     // Surfaces, from least to most elevated. Deliberately neutral: chrome,
     // inputs and calendar tiles all draw from this stack, and tinting it
     // turquoise made every one of them read as "selected".
-    --md-surface: #{colors.$neutral-98};
-    --md-surface-container-lowest: #{colors.$neutral-100};
-    --md-surface-container-low: #{colors.$neutral-99};
-    --md-surface-container: #{colors.$neutral-100};
-    --md-surface-container-high: #{colors.$neutral-95};
-    --md-surface-container-highest: #{colors.$neutral-95};
-    --md-surface-header: #{colors.$neutral-100};
+    --surface: #{colors.$neutral-98};
+    --surface-container-lowest: #{colors.$neutral-100};
+    --surface-container-low: #{colors.$neutral-99};
+    --surface-container: #{colors.$neutral-100};
+    --surface-container-high: #{colors.$neutral-95};
+    --surface-container-highest: #{colors.$neutral-95};
+    --surface-header: #{colors.$neutral-100};
 
     // Text.
-    --md-on-surface: #{colors.$neutral-10};
-    --md-on-surface-variant: #{colors.$neutral-30};
+    --on-surface: #{colors.$neutral-10};
+    --on-surface-variant: #{colors.$neutral-30};
 
     // Outlines.
-    --md-outline: #{colors.$neutral-95};
-    --md-outline-variant: #{colors.$neutral-80};
+    --outline: #{colors.$neutral-95};
+    --outline-variant: #{colors.$neutral-80};
 
     // Primary (brand) family.
-    --md-primary: #{colors.$cyan-80};
-    --md-primary-hover: #{colors.$cyan-70};
-    --md-on-primary: #{colors.$cyan-15};
-    --md-primary-container-low: #{colors.$cyan-95};
-    --md-primary-container: #{colors.$cyan-90};
-    --md-primary-container-high: #{colors.$cyan-90};
-    --md-on-primary-container: #{colors.$cyan-20};
-    --md-link: #{colors.$cyan-40};
+    --primary: #{colors.$turquoise-80};
+    --primary-hover: #{colors.$turquoise-70};
+    --on-primary: #{colors.$turquoise-15};
+    --primary-container-low: #{colors.$turquoise-95};
+    --primary-container: #{colors.$turquoise-90};
+    --primary-container-high: #{colors.$turquoise-90};
+    --on-primary-container: #{colors.$turquoise-20};
+    --link: #{colors.$turquoise-40};
 
     // Secondary family.
-    --md-secondary: #{colors.$teal-40};
-    --md-on-secondary: #{colors.$neutral-100};
-    --md-secondary-container: #{colors.$teal-90};
-    --md-on-secondary-container: #{colors.$teal-20};
+    --secondary: #{colors.$teal-40};
+    --on-secondary: #{colors.$neutral-100};
+    --secondary-container: #{colors.$teal-90};
+    --on-secondary-container: #{colors.$teal-20};
 
     // Tertiary family.
-    --md-tertiary: #{colors.$blue-40};
-    --md-on-tertiary: #{colors.$neutral-100};
-    --md-tertiary-container: #{colors.$blue-90};
-    --md-on-tertiary-container: #{colors.$blue-20};
+    --tertiary: #{colors.$blue-40};
+    --on-tertiary: #{colors.$neutral-100};
+    --tertiary-container: #{colors.$blue-90};
+    --on-tertiary-container: #{colors.$blue-20};
 
     // Semantic statuses.
-    --md-error: #{colors.$red-40};
-    --md-on-error: #{colors.$neutral-100};
-    --md-error-container: #{colors.$red-90};
-    --md-on-error-container: #{colors.$red-20};
+    --error: #{colors.$red-40};
+    --on-error: #{colors.$neutral-100};
+    --error-container: #{colors.$red-90};
+    --on-error-container: #{colors.$red-20};
 
-    --md-success: #{colors.$green-40};
-    --md-on-success: #{colors.$neutral-100};
-    --md-success-container: #{colors.$green-90};
-    --md-on-success-container: #{colors.$green-20};
+    --success: #{colors.$green-40};
+    --on-success: #{colors.$neutral-100};
+    --success-container: #{colors.$green-90};
+    --on-success-container: #{colors.$green-20};
 
-    --md-warning: #{colors.$amber-40};
-    --md-on-warning: #{colors.$neutral-100};
-    --md-warning-container: #{colors.$amber-90};
-    --md-on-warning-container: #{colors.$amber-20};
+    --warning: #{colors.$amber-40};
+    --on-warning: #{colors.$neutral-100};
+    --warning-container: #{colors.$amber-90};
+    --on-warning-container: #{colors.$amber-20};
 
-    --md-info: #{colors.$blue-40};
-    --md-on-info: #{colors.$neutral-100};
-    --md-info-container: #{colors.$blue-90};
-    --md-on-info-container: #{colors.$blue-20};
+    --info: #{colors.$blue-40};
+    --on-info: #{colors.$neutral-100};
+    --info-container: #{colors.$blue-90};
+    --on-info-container: #{colors.$blue-20};
 
     // Inverted surfaces, for tooltips and snackbars.
-    --md-inverse-surface: #{colors.$neutral-20};
-    --md-inverse-on-surface: #{colors.$neutral-95};
-    --md-inverse-primary: #{colors.$cyan-70};
+    --inverse-surface: #{colors.$neutral-20};
+    --inverse-on-surface: #{colors.$neutral-95};
+    --inverse-primary: #{colors.$turquoise-70};
 
     // Utility.
-    --md-focus-ring: #{colors.$cyan-40};
-    --md-divider: #{colors.$cyan-70};
-    --md-divider-variant: #{colors.$neutral-90};
+    --focus-ring: #{colors.$turquoise-40};
+    --divider: #{colors.$turquoise-70};
+    --divider-variant: #{colors.$neutral-90};
 
     // Scrims over full-bleed imagery.
-    --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0)};
-    --md-banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
+    --banner-scrim-top: #{rgba(colors.$neutral-0, 0)};
+    --banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 
   @include theme-toggle.dark {
     // Surfaces, from least to most elevated. Neutral, as in the light theme.
-    --md-surface: #{colors.$neutral-2};
-    --md-surface-container-lowest: #{colors.$neutral-3};
-    --md-surface-container-low: #{colors.$neutral-4};
-    --md-surface-container: #{colors.$neutral-5};
-    --md-surface-container-high: #{colors.$neutral-20};
-    --md-surface-container-highest: #{colors.$neutral-30};
-    --md-surface-header: #{colors.$neutral-5};
+    --surface: #{colors.$neutral-2};
+    --surface-container-lowest: #{colors.$neutral-3};
+    --surface-container-low: #{colors.$neutral-4};
+    --surface-container: #{colors.$neutral-5};
+    --surface-container-high: #{colors.$neutral-20};
+    --surface-container-highest: #{colors.$neutral-30};
+    --surface-header: #{colors.$neutral-5};
 
     // Text.
-    --md-on-surface: #{colors.$neutral-95};
-    --md-on-surface-variant: #{colors.$neutral-80};
+    --on-surface: #{colors.$neutral-95};
+    --on-surface-variant: #{colors.$neutral-80};
 
     // Outlines.
-    --md-outline: #{colors.$neutral-10};
-    --md-outline-variant: #{colors.$neutral-30};
+    --outline: #{colors.$neutral-10};
+    --outline-variant: #{colors.$neutral-30};
 
     // Primary (brand) family.
-    --md-primary: #{colors.$cyan-40};
-    --md-primary-hover: #{colors.$cyan-30};
-    --md-on-primary: #{colors.$cyan-98};
-    --md-primary-container-low: #{colors.$cyan-20};
-    --md-primary-container: #{colors.$cyan-30};
-    --md-primary-container-high: #{colors.$cyan-50};
-    --md-on-primary-container: #{colors.$cyan-90};
-    --md-link: #{colors.$cyan-80};
+    --primary: #{colors.$turquoise-40};
+    --primary-hover: #{colors.$turquoise-30};
+    --on-primary: #{colors.$turquoise-98};
+    --primary-container-low: #{colors.$turquoise-20};
+    --primary-container: #{colors.$turquoise-30};
+    --primary-container-high: #{colors.$turquoise-50};
+    --on-primary-container: #{colors.$turquoise-90};
+    --link: #{colors.$turquoise-80};
 
     // Secondary family.
-    --md-secondary: #{colors.$teal-80};
-    --md-on-secondary: #{colors.$neutral-10};
-    --md-secondary-container: #{colors.$teal-30};
-    --md-on-secondary-container: #{colors.$teal-90};
+    --secondary: #{colors.$teal-80};
+    --on-secondary: #{colors.$neutral-10};
+    --secondary-container: #{colors.$teal-30};
+    --on-secondary-container: #{colors.$teal-90};
 
     // Tertiary family.
-    --md-tertiary: #{colors.$blue-80};
-    --md-on-tertiary: #{colors.$neutral-10};
-    --md-tertiary-container: #{colors.$blue-30};
-    --md-on-tertiary-container: #{colors.$blue-90};
+    --tertiary: #{colors.$blue-80};
+    --on-tertiary: #{colors.$neutral-10};
+    --tertiary-container: #{colors.$blue-30};
+    --on-tertiary-container: #{colors.$blue-90};
 
     // Semantic statuses.
-    --md-error: #{colors.$red-80};
-    --md-on-error: #{colors.$neutral-10};
-    --md-error-container: #{colors.$red-30};
-    --md-on-error-container: #{colors.$red-90};
+    --error: #{colors.$red-80};
+    --on-error: #{colors.$neutral-10};
+    --error-container: #{colors.$red-30};
+    --on-error-container: #{colors.$red-90};
 
-    --md-success: #{colors.$green-80};
-    --md-on-success: #{colors.$neutral-10};
-    --md-success-container: #{colors.$green-30};
-    --md-on-success-container: #{colors.$green-90};
+    --success: #{colors.$green-80};
+    --on-success: #{colors.$neutral-10};
+    --success-container: #{colors.$green-30};
+    --on-success-container: #{colors.$green-90};
 
-    --md-warning: #{colors.$amber-80};
-    --md-on-warning: #{colors.$neutral-10};
-    --md-warning-container: #{colors.$amber-30};
-    --md-on-warning-container: #{colors.$amber-90};
+    --warning: #{colors.$amber-80};
+    --on-warning: #{colors.$neutral-10};
+    --warning-container: #{colors.$amber-30};
+    --on-warning-container: #{colors.$amber-90};
 
-    --md-info: #{colors.$blue-80};
-    --md-on-info: #{colors.$neutral-10};
-    --md-info-container: #{colors.$blue-30};
-    --md-on-info-container: #{colors.$blue-90};
+    --info: #{colors.$blue-80};
+    --on-info: #{colors.$neutral-10};
+    --info-container: #{colors.$blue-30};
+    --on-info-container: #{colors.$blue-90};
 
     // Inverted surfaces, for tooltips and snackbars.
-    --md-inverse-surface: #{colors.$neutral-90};
-    --md-inverse-on-surface: #{colors.$neutral-10};
-    --md-inverse-primary: #{colors.$cyan-60};
+    --inverse-surface: #{colors.$neutral-90};
+    --inverse-on-surface: #{colors.$neutral-10};
+    --inverse-primary: #{colors.$turquoise-60};
 
     // Utility.
-    --md-focus-ring: #{colors.$cyan-70};
-    --md-divider: #{colors.$cyan-60};
-    --md-divider-variant: #{colors.$neutral-30};
+    --focus-ring: #{colors.$turquoise-70};
+    --divider: #{colors.$turquoise-60};
+    --divider-variant: #{colors.$neutral-30};
 
     // Scrims over full-bleed imagery.
-    --md-banner-scrim-top: #{rgba(colors.$neutral-0, 0.6)};
-    --md-banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
+    --banner-scrim-top: #{rgba(colors.$neutral-0, 0.6)};
+    --banner-scrim-bottom: #{rgba(colors.$neutral-0, 0.6)};
   }
 }

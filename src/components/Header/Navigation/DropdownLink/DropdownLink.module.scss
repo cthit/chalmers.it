@@ -5,7 +5,7 @@
   flex-direction: row;
   align-items: baseline;
   flex-wrap: nowrap;
-  color: var(--md-on-surface);
+  color: var(--on-surface);
 }
 
 .navLinkArrow {
@@ -13,7 +13,7 @@
 }
 
 .navLink:hover {
-  color: var(--md-link);
+  color: var(--link);
 }
 
 .navText {
