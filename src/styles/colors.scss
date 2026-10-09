@@ -1,17 +1,3 @@
-// Material-style tonal palette.
-//
-// Tones follow the Material 3 convention: tone 0 is black, tone 100 is white.
-// The turquoise family is the brand family and is pinned so that `turquoise-80` is
-// exactly `#09CDDA` -- that is the dark theme's `primary` role.
-//
-// Runtimes are generated in OKLCH at constant hue per family, with lightness
-// driven by the Material tone ramp and chroma following a peak-and-taper
-// envelope, then gamut-mapped into sRGB. Perceptual lightness therefore
-// increases monotonically down every ramp.
-//
-// Consumed by `themes.scss`, which is what exposes them to the DOM. Import
-// the role tokens (`--*`) from components -- not these variables.
-
 // ---------------------------------------------------------------------------
 // Brand family
 // ---------------------------------------------------------------------------
