@@ -108,6 +108,8 @@
     "end": "Slut",
     "fullDay": "Heldag",
     "location": "Plats",
+    "spokenLanguage": "Talat språk",
+    "selectSpokenLanguage": "Välj språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
@@ -129,6 +131,13 @@
       "googleCalendar": "Google Kalender",
       "appleCalendar": "Apple Kalender",
       "outlook": "Outlook"
+    },
+    "spokenLanguages": {
+      "suffix": "kommer talas på evenemanget",
+      "sv": "Svenska",
+      "en": "Engelska",
+      "sv_en": "Svenska och engelska",
+      "other": "Annat språk"
     }
   },
   "groups": {
@@ -211,8 +220,10 @@
     "query": "Sökfråga",
     "short": "Sökfrågan måste vara minst 3 tecken",
     "group": "Grupp",
+    "spokenLanguage": "Talat språk",
     "allTypes": "Alla typer",
     "allGroups": "Alla grupper",
+    "allLanguages": "Alla språk",
     "name": "Namn",
     "filter": "Filter",
     "filterAction": "Filtrera"
