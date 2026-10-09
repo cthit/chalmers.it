@@ -7,13 +7,16 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import Forbidden from '@/components/ErrorPages/403/403';
+import { parseIdParam } from '@/utils/params';
 
 export default async function Page(props: {
   params: Promise<{ locale: string; id: string }>;
 }) {
   const params = await props.params;
   const groups = await SessionService.getActiveAddedGroups();
-  const newsPost = await NewsService.get(Number.parseInt(params.id));
+  const id = parseIdParam(params.id);
+  if (id === null) notFound();
+  const newsPost = await NewsService.get(id);
 
   if (newsPost === null) {
     notFound();

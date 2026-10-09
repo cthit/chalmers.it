@@ -1,6 +1,7 @@
 import ApiService from '@/services/apiService';
 import NewsService from '@/services/newsService';
 import { PostStatus } from '@prisma/client';
+import { parseIdParam } from '@/utils/params';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -10,8 +11,8 @@ export async function GET(
   const search = request.nextUrl.searchParams;
   const params = await ctx.params;
 
-  const id: number = parseInt(params.id);
-  if (isNaN(id) || id < 0) return ApiService.jsonError('Invalid news id');
+  const id = parseIdParam(params.id);
+  if (id === null) return ApiService.jsonError('Invalid news id');
 
   const newsPost = await NewsService.get(id);
   if (newsPost === null || newsPost.status !== PostStatus.PUBLISHED) {
