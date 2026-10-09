@@ -131,6 +131,9 @@ importers:
       html-to-slack:
         specifier: 0.3.7
         version: 0.3.7
+      iamcal:
+        specifier: ^4.1.1
+        version: 4.1.2
       marked:
         specifier: 18.0.11
         version: 18.0.11
@@ -2710,6 +2713,9 @@ packages:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
 
+  iamcal@4.1.2:
+    resolution: {integrity: sha512-Pwb1nzTSEK/jTiegrYmRR9ZbuszqX9IvrXEGCzMQrr9HmqvAEONVi2nXHv9QHN3GEmTfz8mWmy+NyJQrQws19Q==}
+
   iconv-lite@0.7.3:
     resolution: {integrity: sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ==}
     engines: {node: '>=0.10.0'}
@@ -4095,6 +4101,9 @@ packages:
   test-exclude@7.0.2:
     resolution: {integrity: sha512-u9E6A+ZDYdp7a4WnarkXPZOx8Ilz46+kby6p1yZ8zsGTz9gYa6FIS7lj2oezzNKmtdyyJNNmmXDppga5GB7kSw==}
     engines: {node: '>=18'}
+
+  timezones-ical-library@2.3.2:
+    resolution: {integrity: sha512-AEhFhnhx6jI40kbcZ+rnpDnvb9raIvkyJGuBJvr6a1tfsbHWVM0oIqxbDZ3h8o/4m/x7lAXW9z+Abahdrlwn3Q==}
 
   tinyglobby@0.2.17:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
@@ -7395,6 +7404,10 @@ snapshots:
 
   human-signals@2.1.0: {}
 
+  iamcal@4.1.2:
+    dependencies:
+      timezones-ical-library: 2.3.2
+
   iconv-lite@0.7.3:
     dependencies:
       safer-buffer: 2.1.2
@@ -9253,6 +9266,8 @@ snapshots:
       '@istanbuljs/schema': 0.1.6
       glob: 10.5.0
       minimatch: 10.2.6
+
+  timezones-ical-library@2.3.2: {}
 
   tinyglobby@0.2.17:
     dependencies:

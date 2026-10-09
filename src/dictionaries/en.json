@@ -112,7 +112,17 @@
     "empty": "No events connected",
     "subscribe": "Subscribe",
     "comingEvents": "Coming Events",
-    "ongoing": "Ongoing"
+    "ongoing": "Ongoing",
+    "calendarName": "Events at IT, the Software Engineering Student Division",
+    "calendarDescription": "Find events at the Software Engineering Student Division (IT) at Chalmers",
+    "created": "Created",
+    "readMore": "Read more",
+    "relatedEvents": "Related events",
+    "services": {
+      "googleCalendar": "Google Calendar",
+      "appleCalendar": "Apple Calendar",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Current members",

@@ -15,6 +15,8 @@ import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
 import { useRouter } from 'next/navigation';
+import CopyButton from '../CopyButton/CopyButton';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -72,14 +74,6 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     const newQueue = { ...uploadQueue };
     delete newQueue[sha256];
     setUploadQueue(newQueue);
-  };
-
-  const copyFile = (sha256: string, file: File) => {
-    const embed = FileService.isMimeEmbeddable(file.type);
-    navigator.clipboard.writeText(
-      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
-    );
-    toast(l.editor.linkCopied, { type: 'success' });
   };
 
   async function apply() {
@@ -220,9 +214,10 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         {Object.entries(uploadQueue).map(([sha256, file]) => (
           <li className={styles.fileActions} key={sha256}>
             <p>{file.name}</p>{' '}
-            <ActionButton type="button" onClick={() => copyFile(sha256, file)}>
-              {l.editor.copyLink}
-            </ActionButton>{' '}
+            <CopyButton
+              locale={divisionPost.locale}
+              copyContent={createMarkdownLinkToMedia(sha256, file)}
+            />
             <ActionButton
               onClick={() => {
                 delFile(sha256);
