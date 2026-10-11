@@ -5,6 +5,8 @@ import NewsPost from '@/components/NewsList/NewsPost/NewsPost';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import i18nService from '@/services/i18nService';
 import NewsService from '@/services/newsService';
+import { parseIdParam } from '@/utils/params';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import styles from './page.module.scss';
 import Divider from '@/components/Divider/Divider';
@@ -12,11 +14,28 @@ import LargeCalendar from '@/components/LargeCalendar/LargeCalendar';
 import { EventInput, EventSourceInput } from '@fullcalendar/react';
 import ActionLink from '@/components/ActionButton/ActionLink';
 
+export async function generateMetadata(props: {
+  params: Promise<{ id: string; locale: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const id = parseIdParam(params.id);
+  if (id === null) notFound();
+  const post = await NewsService.get(id);
+  if (!post) notFound();
+  const isEn = params.locale === 'en';
+
+  return {
+    title: isEn ? post.titleEn : post.titleSv
+  };
+}
+
 export default async function Page(props: {
   params: Promise<{ id: string; locale: string }>;
 }) {
   const params = await props.params;
-  const post = await NewsService.get(+params.id);
+  const id = parseIdParam(params.id);
+  if (id === null) notFound();
+  const post = await NewsService.get(id);
   if (!post) notFound();
   const postData = await getData(post, params.locale);
   if (!postData) notFound();
