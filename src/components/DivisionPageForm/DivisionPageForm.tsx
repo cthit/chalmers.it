@@ -10,10 +10,11 @@ import { useRef, useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
 import type { DivisionPage } from '@/services/divisionPageService';
-import { create, edit } from '@/actions/divisionPages';
+import { createPage, editPage } from '@/actions/divisionPages';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
+import { useRouter } from 'next/navigation';
 import CopyButton from '../CopyButton/CopyButton';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
@@ -23,6 +24,7 @@ interface DivisionPostFormProps {
   pages: DivisionPage[];
   editedId?: number;
   divisionGroupId?: number;
+  divisionGroupSlug?: string;
   slug?: string;
   parentId?: number;
   titleEn?: string;
@@ -35,6 +37,7 @@ interface DivisionPostFormProps {
 
 const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const l = i18nService.getLocale(divisionPost.locale);
+  const router = useRouter();
 
   const [page, setPage] = useState(divisionPost.parentId);
   const [titleEn, setTitleEn] = useState(divisionPost.titleEn ?? '');
@@ -81,7 +84,7 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
     if (divisionPost.editedId !== undefined) {
       try {
         await toast.promise(
-          edit(
+          editPage(
             divisionPost.editedId,
             titleEn,
             titleSv,
@@ -98,13 +101,19 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             error: l.pages.saveError
           }
         );
+
+        if (divisionPost.divisionGroupSlug) {
+          router.push(`/groups/${divisionPost.divisionGroupSlug}/${slug}`);
+        } else {
+          router.push('/groups');
+        }
       } catch (e) {
         console.error(e);
       }
     } else {
       try {
         await toast.promise(
-          create(
+          createPage(
             titleEn,
             titleSv,
             contentEnRef.current!.getMarkdown(),
@@ -121,6 +130,12 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             error: l.pages.createError
           }
         );
+
+        if (divisionPost.divisionGroupSlug) {
+          router.push(`/groups/${divisionPost.divisionGroupSlug}/${slug}`);
+        } else {
+          router.push('/groups');
+        }
       } catch (e) {
         console.error(e);
       }

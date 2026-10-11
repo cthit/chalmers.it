@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fullcalendar/react": "^7.1.0",
     "@milkdown/kit": "7.22.1",
     "@milkdown/react": "7.22.1",
     "@milkdown/utils": "7.22.1",
@@ -32,6 +33,7 @@
     "react-icons": "5.7.0",
     "react-toastify": "11.1.0",
     "sanitize-html": "2.17.7",
+    "temporal-polyfill": "^1.0.5",
     "@prisma/adapter-pg": "7.10.0"
   },
   "devDependencies": {

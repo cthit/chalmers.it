@@ -1,6 +1,6 @@
 'use client';
 
-import { edit } from '@/actions/groupRootPages';
+import { editGroupRootPage } from '@/actions/groupRootPages';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -10,6 +10,7 @@ import styles from '../NewsPostForm/NewsPostForm.module.scss';
 import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import CopyButton from '../CopyButton/CopyButton';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 
@@ -25,6 +26,7 @@ interface NewPostFormProps {
 
 const PageForm = (description: NewPostFormProps) => {
   const l = i18nService.getLocale(description.locale);
+  const router = useRouter();
 
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
@@ -66,7 +68,7 @@ const PageForm = (description: NewPostFormProps) => {
         formData.append('file', file);
       }
       await toast.promise(
-        edit(
+        editGroupRootPage(
           description.id,
           contentEnRef.current!.getMarkdown(),
           contentSvRef.current!.getMarkdown(),
@@ -79,6 +81,7 @@ const PageForm = (description: NewPostFormProps) => {
           error: l.editor.saveError
         }
       );
+      router.push(`/groups/${slug}`);
     } catch {
       console.log('Failed to edit group description');
     }
