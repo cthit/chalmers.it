@@ -8,8 +8,7 @@ import { Calendar as ReactCalendar, TileArgs } from 'react-calendar';
 import React, { useCallback } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
-import ActionButton from '../ActionButton/ActionButton';
-import CalendarSubscribeButtons from '../CalendarSubscribeButtons/CalendarSubscribeButtons';
+import CalendarSubscribeDropdown from '../CalendarSubscribeDropdown/CalendarSubscribeDropdown';
 
 type DateTileArgs = {
   date: Date;
@@ -36,8 +35,6 @@ const CalendarClient = ({
   httpBaseUrl: string;
 }) => {
   const [value, onChange] = React.useState<Value>(new Date());
-  const [subscribeDrawerOpen, setSubscribeDrawerOpen] =
-    React.useState<boolean>(false);
 
   const loc = locale === 'sv' ? 'sv-SE' : 'en-US';
   const l = i18nService.getLocale(locale);
@@ -108,19 +105,7 @@ const CalendarClient = ({
         calendarType="iso8601"
         tileContent={mapTileContent}
       />
-      <ActionButton
-        onClick={() => setSubscribeDrawerOpen(!subscribeDrawerOpen)}
-      >
-        {l.events.subscribe}{' '}
-        <span className={styles.drawerArrow}>
-          &nbsp;{subscribeDrawerOpen ? <>&#9660;</> : <>&#9654;</>}
-        </span>
-      </ActionButton>
-      {subscribeDrawerOpen && (
-        <div className={styles.subscribeButtons}>
-          <CalendarSubscribeButtons locale={locale} httpBaseUrl={httpBaseUrl} />
-        </div>
-      )}
+      <CalendarSubscribeDropdown locale={locale} httpBaseUrl={httpBaseUrl} />
     </>
   );
 };
