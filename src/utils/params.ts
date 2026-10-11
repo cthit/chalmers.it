@@ -1,4 +1,8 @@
 export function parseIdParam(value: string): number | null {
-  const id = Number.parseInt(value, 10);
-  return isNaN(id) || id < 0 ? null : id;
+  if (value.trim() !== value || value === '') return null;
+
+  const id = Number(value);
+  if (Number.isInteger(id) && id >= 0) return id;
+
+  return null;
 }
