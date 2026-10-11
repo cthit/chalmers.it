@@ -17,7 +17,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; id: string }>;
-}) {
+}): Promise<Metadata> {
   const params = await props.params;
 
   const { locale, id } = params;
@@ -29,7 +29,7 @@ export async function generateMetadata(props: {
   return {
     title: group !== null ? group.prettyName : undefined,
     description: l.site.siteDescription
-  } as Metadata;
+  };
 }
 
 export default async function Page(props: {

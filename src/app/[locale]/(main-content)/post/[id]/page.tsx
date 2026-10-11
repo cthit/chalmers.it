@@ -5,11 +5,12 @@ import NewsPost from '@/components/NewsList/NewsPost/NewsPost';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import NewsService from '@/services/newsService';
 import { parseIdParam } from '@/utils/params';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string; locale: string }>;
-}) {
+}): Promise<Metadata> {
   const params = await props.params;
   const id = parseIdParam(params.id);
   if (id === null) notFound();

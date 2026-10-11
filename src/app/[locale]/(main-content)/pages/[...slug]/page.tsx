@@ -4,10 +4,11 @@ import DivisionPage from '@/components/DivisionPage/DivisionPage';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import DivisionPageService from '@/services/divisionPageService';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string[] }>;
-}) {
+}): Promise<Metadata> {
   const { locale, slug } = await props.params;
 
   const page = await DivisionPageService.getBySlug(slug);

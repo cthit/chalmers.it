@@ -4,10 +4,11 @@ import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPage from '@/components/DivisionPage/DivisionPage';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import DivisionPageService from '@/services/divisionPageService';
+import { Metadata } from 'next';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; id: string; slug: string[] }>;
-}) {
+}): Promise<Metadata> {
   const params = await props.params;
 
   const { id, slug } = params;
