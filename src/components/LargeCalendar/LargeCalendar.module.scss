@@ -1,7 +1,7 @@
 @use '../../styles/colors.scss';
 @use '../../styles/theme-toggle.scss';
 
-// Style today indicator
+// Today indicator
 .dayCellTopInner {
   --fc-forma-primary: var(--calendar-current-date-background-color);
 }
@@ -24,6 +24,7 @@
 .location {
   font-weight: normal;
   padding-top: 2px;
+  padding-inline: 0;
 }
 
 .block {
@@ -33,10 +34,9 @@
   gap: 0.2em;
 }
 
-.row {
+.list {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
   gap: 0.5em;
 }
 
@@ -44,6 +44,12 @@
   padding-top: 0;
 }
 
-.row > .location {
+.list > .location {
   padding-top: 0;
+}
+
+// Spoken language
+.spokenLanguage {
+  padding-inline: 2px;
+  font-size: 0.75rem;
 }

@@ -30,7 +30,8 @@ export default async function Page(props: {
         allDay: event.fullDay,
         color: 'var(--calendar-event-color)',
         extendedProps: {
-          location: event.location
+          location: event.location,
+          spokenLanguage: event.spokenLanguage
         },
         ...(event.fullDay
           ? {
@@ -50,7 +51,12 @@ export default async function Page(props: {
           <div className={styles.column}>
             <ContentPane>
               {post && (
-                <NewsPost standalone locale={params.locale} post={postData} />
+                <NewsPost
+                  standalone
+                  locale={params.locale}
+                  post={postData}
+                  hideSpokenLanguage
+                />
               )}
             </ContentPane>
             {events.length > 0 && (

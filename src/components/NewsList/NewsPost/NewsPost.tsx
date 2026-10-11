@@ -13,9 +13,15 @@ interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
   locale: string;
   standalone?: boolean;
+  hideSpokenLanguage?: boolean;
 }
 
-const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
+const NewsPost = ({
+  locale,
+  post,
+  standalone: noNav,
+  hideSpokenLanguage
+}: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
 
   const spokenLanguage = getNewsPostSpokenLanguage(post);
@@ -49,7 +55,7 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
         </div>
       </div>
       <MarkdownView content={post.content} />
-      {spokenLanguage && (
+      {!hideSpokenLanguage && spokenLanguage && (
         <SpokenLanguageIndicator
           locale={locale}
           language={spokenLanguage}

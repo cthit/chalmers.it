@@ -6,11 +6,13 @@ import SpokenLanguageIcon from './SpokenLanguageIcon/SpokenLanguageIcon';
 const SpokenLanguageIndicator = ({
   locale,
   language,
-  className
+  className,
+  iconOnly
 }: {
   locale: string;
   language: SpokenLanguage;
   className?: string;
+  iconOnly?: boolean;
 }) => {
   const l = i18nService.getLocale(locale);
 
@@ -28,7 +30,7 @@ const SpokenLanguageIndicator = ({
   return (
     <div className={styles.container + ' ' + (className ?? '')}>
       <SpokenLanguageIcon language={language} tooltip={altText} />
-      <p>{altText}</p>
+      {!iconOnly && <p>{altText}</p>}
     </div>
   );
 };
