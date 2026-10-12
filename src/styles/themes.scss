@@ -39,6 +39,9 @@
     --primary-container-high: #{colors.$turquoise-90};
     --on-primary-container: #{colors.$turquoise-20};
     --link: #{colors.$turquoise-40};
+    // Emphasized non-link text (page highlights, descriptions). Softer than
+    // --link, which is tuned for contrast on body-sized link text.
+    --emphasis: #{colors.$turquoise-40};
 
     // Secondary family.
     --secondary: #{colors.$teal-40};
@@ -115,6 +118,9 @@
     --primary-container-high: #{colors.$turquoise-50};
     --on-primary-container: #{colors.$turquoise-90};
     --link: #{colors.$turquoise-70};
+    // Emphasized non-link text (page highlights, descriptions). Calmer than
+    // --link so it does not vibrate against dark surfaces.
+    --emphasis: #{colors.$turquoise-90};
 
     // Secondary family.
     --secondary: #{colors.$teal-80};
