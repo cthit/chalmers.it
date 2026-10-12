@@ -98,10 +98,13 @@ const LargeCalendarClient = ({
             month: 'short',
             year: 'numeric'
           }
+        },
+        dayGridMonth: {
+          showNonCurrentDates: false
         }
       }}
       nowIndicator={true}
-      eventContent={renderEventContent}
+      eventContent={renderEventContent(locale)}
       dayCellTopInnerClass={styles.dayCellTopInner}
       eventClass={(eventInfo: EventDisplayInfo) =>
         styles.event +
@@ -115,39 +118,46 @@ const LargeCalendarClient = ({
 
 export default LargeCalendarClient;
 
-function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
-  const rawLocation: unknown = eventInfo.event.extendedProps['location'];
-  const location: string | null =
-    typeof rawLocation === 'string' ? rawLocation : null;
+function renderEventContent(locale: string) {
+  return (eventInfo: EventDisplayInfo): ReactNode | null => {
+    const rawLocation: unknown = eventInfo.event.extendedProps['location'];
+    const location: string | null =
+      typeof rawLocation === 'string' ? rawLocation : null;
 
-  const blockViews = ['dayGridMonth'];
-  const rowViews = ['listWeek', 'listMonth', 'listYear'];
+    const isBlockView = ['dayGridMonth'].includes(eventInfo.view.type);
+    const isListView = eventInfo.view.type.includes('list');
 
-  return (
-    <>
-      <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
-      <div
-        className={
-          eventInfo.titleClass +
-          ' ' +
-          (blockViews.includes(eventInfo.view.type)
-            ? styles.block
-            : rowViews.includes(eventInfo.view.type)
-              ? styles.row
-              : '')
-        }
-      >
-        <b
-          className={eventInfo.isInteractive ? styles.eventHoverUnderline : ''}
+    return (
+      <>
+        <div className={styles.time + ' ' + eventInfo.timeClass}>
+          {eventInfo.timeText}
+        </div>
+        <div
+          className={
+            eventInfo.titleClass +
+            ' ' +
+            (isBlockView ? styles.block : isListView ? styles.list : '')
+          }
         >
-          {eventInfo.event.title}
-        </b>
-        {location && (
-          <div className={eventInfo.titleClass + ' ' + styles.location}>
-            {location}
-          </div>
-        )}
-      </div>
-    </>
-  );
+          <b
+            className={
+              styles.title +
+              ' ' +
+              (eventInfo.isInteractive ? styles.eventHoverUnderline : '')
+            }
+          >
+            {eventInfo.event.title}
+          </b>
+          {location && (
+            <div
+              lang={locale}
+              className={eventInfo.titleClass + ' ' + styles.location}
+            >
+              {location}
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
 }

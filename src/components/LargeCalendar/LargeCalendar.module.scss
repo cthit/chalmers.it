@@ -1,49 +1,74 @@
 @use '../../styles/colors.scss';
 @use '../../styles/theme-toggle.scss';
 
-// Style today indicator
+// Today indicator
 .dayCellTopInner {
   --fc-forma-primary: var(--calendar-current-date-background-color);
 }
+
+// Event
 
 // Add underline when hovering over event
 .event:hover .eventHoverUnderline {
   text-decoration: underline;
 }
 
-// Non-interactive event color
+// Set color for non-interactive
 .eventNonInteractive {
   --fc-forma-event: var(--calendar-event-secondary-color);
 }
 
-// Event location
-.titleWithLocation {
-  flex-grow: 0 !important;
+.list > .time {
+  max-width: 6rem;
+}
+
+.title {
+  word-break: break-word;
+  text-wrap: wrap;
+  hyphens: auto;
 }
 
 .location {
+  word-break: break-word;
+  text-wrap: wrap;
+  hyphens: auto;
   font-weight: normal;
   padding-top: 2px;
+  padding-inline: 0;
+}
+
+.event:has(.block) {
+  align-items: start;
+}
+
+div:has(> .block) {
+  align-items: start;
 }
 
 .block {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0.2em;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 0.5em;
 }
 
 .block > .location {
   padding-top: 0;
 }
 
-.row > .location {
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.list > .title {
+  min-width: 6rem;
+}
+
+.list > .location {
+  min-width: 4rem;
   padding-top: 0;
+  padding-inline: 2px;
 }
