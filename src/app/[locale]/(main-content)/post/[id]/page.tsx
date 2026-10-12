@@ -62,6 +62,18 @@ export default async function Page(props: {
       }) satisfies EventInput
   );
 
+  // Find start of earliest event
+  const eventsStart =
+    events.length === 0
+      ? undefined
+      : events.reduce(
+          (prev, curr) =>
+            new Date(curr.start!.toString()) < new Date(prev!.toString())
+              ? curr.start!
+              : prev,
+          events[0].start!
+        );
+
   return (
     <main>
       <ThreePaneLayout
@@ -80,9 +92,12 @@ export default async function Page(props: {
                   className={styles.calendar}
                   locale={params.locale}
                   events={events}
-                  initialDate={post.connectedEvents[0].startTime}
-                  initialView="listYear"
                   headerToolbar={false}
+                  initialView="list"
+                  initialDate={eventsStart}
+                  duration={{
+                    years: 1000
+                  }}
                 />
                 <div>
                   <ActionLink

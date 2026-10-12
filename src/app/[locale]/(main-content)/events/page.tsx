@@ -26,8 +26,17 @@ export default async function Page(props: {
           </ContentArticle>
         }
         middle={
-          <ContentArticle title={l.events.events}>
-            <LargeCalendar locale={locale} className={styles.mainCalendar}/>
+          <ContentArticle
+            title={l.events.events}
+            className={styles.calendarCard}
+          >
+            <div className={styles.calendarContainer}>
+              <LargeCalendar
+                locale={locale}
+                height="80vh"
+                className={styles.calendar}
+              />
+            </div>
           </ContentArticle>
         }
         right={<ContactCard locale={locale} />}

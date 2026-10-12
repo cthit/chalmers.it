@@ -1,8 +1,10 @@
 'use client';
 
 import FullCalendar, {
+  ButtonInput,
   CalendarOptions,
   EventDisplayInfo,
+  SlotHeaderInfo,
   useCalendarController
 } from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma';
@@ -25,7 +27,6 @@ export type LargeCalendarClientProps = Omit<
   | 'colorScheme'
   | 'plugins'
   | 'controller'
-  | 'views'
   | 'eventContent'
   | 'dayCellTopInnerClass'
   | 'eventClass'
@@ -33,15 +34,21 @@ export type LargeCalendarClientProps = Omit<
   | 'todayText'
   | 'allDayText'
   | 'noEventsText'
+  | 'weekNumberFormat'
+  | 'weekNumberHeaderContent'
+  | 'inlineWeekNumberContent'
 > & { locale: string };
 
 const LargeCalendarClient = ({
   initialView = 'timeGridWeek',
   headerToolbar = {
-    left: 'today,prev,next,title',
-    right: 'day,week,month,list'
+    left: 'today prev,next title',
+    right: 'day,week,month,listWeek'
   },
   locale,
+  className,
+  borderless = true,
+  weekNumbers = true,
   ...rest
 }: LargeCalendarClientProps) => {
   const [mounted, setMounted] = useState(false);
@@ -57,6 +64,16 @@ const LargeCalendarClient = ({
   if (!mounted) {
     return null;
   }
+
+  const createButton = (view: string, text: string): ButtonInput => {
+    const isSelected = controller.view?.type === view;
+
+    return {
+      text,
+      click: () => controller.changeView(view),
+      className: isSelected ? styles.selectedButton : null
+    };
+  };
 
   return (
     <FullCalendar
@@ -74,46 +91,72 @@ const LargeCalendarClient = ({
       initialView={initialView}
       firstDay={1}
       buttons={{
-        day: {
-          text: l.events.day,
-          click: () => controller.changeView('timeGridDay')
-        },
-        week: {
-          text: l.events.week,
-          click: () => controller.changeView('timeGridWeek')
-        },
-        month: {
-          text: l.events.month,
-          click: () => controller.changeView('dayGridMonth')
-        },
-        list: {
-          text: l.events.list,
-          click: () => controller.changeView('listWeek')
-        }
+        day: createButton('timeGridDay', l.events.day),
+        week: createButton('timeGridWeek', l.events.week),
+        month: createButton('dayGridMonth', l.events.month),
+        listWeek: createButton('listWeek', l.events.list)
       }}
       headerToolbar={headerToolbar}
       todayText={l.events.today}
       allDayText={l.events.fullDay}
       noEventsText={l.events.noEvents}
+      weekNumbers={weekNumbers}
+      weekNumberFormat={{
+        week: 'narrow'
+      }}
+      weekNumberHeaderContent={(info) =>
+        l.en ? info.text : info.text.replace('W', 'v')
+      }
+      inlineWeekNumberContent={(info) =>
+        l.en ? info.text : info.text.replace('W', 'v')
+      }
+      titleFormat={{
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      }}
       views={{
-        listWeek: {
-          titleFormat: {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
-          }
-        },
         dayGridMonth: {
-          showNonCurrentDates: false
+          showNonCurrentDates: false,
+          listItemEventBeforeClass: styles.eventDot
         }
       }}
       nowIndicator={true}
+      className={styles.calendar + ' ' + className}
       eventContent={renderEventContent(locale)}
       dayCellTopInnerClass={styles.dayCellTopInner}
+      allDayHeaderClass={styles.sidebar + ' ' + styles.allDayHeader}
+      weekNumberHeaderClass={styles.sidebar}
+      slotHeaderClass={styles.sidebar}
+      timedText=".sidebar"
+      slotHeaderContent={(info: SlotHeaderInfo) => {
+        const parts = info.text.split(/(?=[pa]m)/i, 2);
+        if (parts.length <= 1) {
+          return parts[0];
+        }
+        return (
+          <>
+            {parts[0]}
+            <wbr />
+            {parts[1]}
+          </>
+        );
+      }}
+      rowEventAfterClass={styles.eventAfterArrow}
+      rowEventBeforeClass={styles.eventBeforeArrow}
+      borderless={borderless}
       eventClass={(eventInfo: EventDisplayInfo) =>
         styles.event +
         ' ' +
-        (eventInfo.isInteractive ? '' : styles.eventNonInteractive)
+        (eventInfo.isInteractive ? '' : styles.eventNonInteractive) +
+        ' ' +
+        (eventInfo.isNarrow ? styles.narrow : '') +
+        ' ' +
+        (eventInfo.event.allDay ? styles.allDay : '') +
+        ' ' +
+        (eventInfo.isStart ? styles.eventStart : '') +
+        ' ' +
+        (eventInfo.isEnd ? styles.eventEnd : '')
       }
       {...rest}
     />
