@@ -31,6 +31,8 @@ export type LargeCalendarClientProps = Omit<
   | 'eventClass'
   | 'buttons'
   | 'todayText'
+  | 'allDayText'
+  | 'noEventsText'
 > & { locale: string };
 
 const LargeCalendarClient = ({
@@ -91,6 +93,8 @@ const LargeCalendarClient = ({
       }}
       headerToolbar={headerToolbar}
       todayText={l.events.today}
+      allDayText={l.events.fullDay}
+      noEventsText={l.events.noEvents}
       views={{
         listWeek: {
           titleFormat: {
