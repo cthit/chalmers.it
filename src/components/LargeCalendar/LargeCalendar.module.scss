@@ -134,6 +134,10 @@
   margin-left: 0.5rem;
 }
 
+.rowEvent {
+  margin-inline: 1px;
+}
+
 // Event
 .listEvent .eventTime {
   white-space: wrap;
@@ -157,11 +161,8 @@
   padding-inline: 0;
 }
 
-.blockEvent {
-  align-items: start;
-}
-
-.blockEvent div:has(> .eventDot) {
+.blockEvent,
+.blockEvent div:has(> .eventInfo) {
   align-items: start;
 }
 
@@ -170,7 +171,7 @@
 }
 
 .event.narrow .eventDot {
-  font-size: 11px;
+  display: none;
 }
 
 .eventInfo,
@@ -220,17 +221,17 @@
 }
 
 // Slim calendars
+.event.narrow {
+  border-width: 0px;
+  padding-left: 1px;
+}
+
+.event.narrow .eventAfterArrow,
+.event.narrow .eventBeforeArrow {
+  display: none;
+}
+
 @container largecalendar (width < 45rem) {
-  .event:not(.listEvent) {
-    border-width: 0px;
-    padding-left: 1px;
-  }
-
-  .eventAfterArrow,
-  .eventBeforeArrow {
-    display: none;
-  }
-
   .sidebar > div {
     max-width: 100%;
   }

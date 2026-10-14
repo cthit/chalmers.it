@@ -134,17 +134,28 @@ const LargeCalendarClient = ({
         },
         dayGridMonth: {
           showNonCurrentDates: false,
-          listItemEventBeforeClass: styles.eventDot
+          listItemEventBeforeClass: styles.eventDot,
+          eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            omitZeroMinute: true
+          }
         }
       }}
       nowIndicator={true}
-      className={styles.calendar + ' ' + (controller.view?.type.includes('list') ? styles.listView : '') + ' ' + className}
+      className={
+        styles.calendar +
+        ' ' +
+        (controller.view?.type.includes('list') ? styles.listView : '') +
+        ' ' +
+        className
+      }
       eventContent={renderEventContent(locale)}
       eventTimeFormat={{
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false,
-        omitZeroMinute: true
+        hour12: false
       }}
       dayHeaderClass={styles.dayHeader}
       dayCellTopInnerClass={styles.dayCellTopInner}
@@ -165,6 +176,7 @@ const LargeCalendarClient = ({
           </>
         );
       }}
+      rowEventClass={styles.rowEvent}
       rowEventAfterClass={styles.eventAfterArrow}
       rowEventBeforeClass={styles.eventBeforeArrow}
       borderless={borderless}
@@ -243,7 +255,7 @@ type DayInfo = Pick<
 function renderDayContent(controller: CalendarController) {
   return (info: DayInfo) => {
     if (info.dayNumberText === '' && info.view.type === 'dayGridMonth') {
-      return info.text.substring(0, 3)
+      return info.text.substring(0, 3);
     }
 
     const clickHandler = () => {
