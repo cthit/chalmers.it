@@ -1,8 +1,15 @@
 'use client';
 
 import FullCalendar, {
+  ButtonInput,
+  CalendarController,
   CalendarOptions,
+  DayCellInfo,
+  DayHeaderInfo,
   EventDisplayInfo,
+  InlineWeekNumberInfo,
+  ListDayHeaderInnerInfo,
+  SlotHeaderInfo,
   useCalendarController
 } from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma';
@@ -25,21 +32,28 @@ export type LargeCalendarClientProps = Omit<
   | 'colorScheme'
   | 'plugins'
   | 'controller'
-  | 'views'
   | 'eventContent'
   | 'dayCellTopInnerClass'
   | 'eventClass'
   | 'buttons'
   | 'todayText'
+  | 'allDayText'
+  | 'noEventsText'
+  | 'weekNumberFormat'
+  | 'weekNumberHeaderContent'
+  | 'inlineWeekNumberContent'
 > & { locale: string };
 
 const LargeCalendarClient = ({
   initialView = 'timeGridWeek',
   headerToolbar = {
-    left: 'today,prev,next,title',
-    right: 'day,week,month,list'
+    left: 'today prev,next title',
+    right: 'day,week,month,listWeek'
   },
   locale,
+  className,
+  borderless = true,
+  weekNumbers = true,
   ...rest
 }: LargeCalendarClientProps) => {
   const [mounted, setMounted] = useState(false);
@@ -47,6 +61,7 @@ const LargeCalendarClient = ({
   const { resolvedTheme, systemTheme } = useTheme();
 
   const l = i18nService.getLocale(locale);
+  const isEn = locale === 'en';
 
   useEffect(() => {
     setMounted(true);
@@ -55,6 +70,16 @@ const LargeCalendarClient = ({
   if (!mounted) {
     return null;
   }
+
+  const createButton = (view: string, text: string): ButtonInput => {
+    const isSelected = controller.view?.type === view;
+
+    return {
+      text,
+      click: () => controller.changeView(view),
+      className: isSelected ? styles.selectedButton : null
+    };
+  };
 
   return (
     <FullCalendar
@@ -72,42 +97,108 @@ const LargeCalendarClient = ({
       initialView={initialView}
       firstDay={1}
       buttons={{
-        day: {
-          text: l.events.day,
-          click: () => controller.changeView('timeGridDay')
-        },
-        week: {
-          text: l.events.week,
-          click: () => controller.changeView('timeGridWeek')
-        },
-        month: {
-          text: l.events.month,
-          click: () => controller.changeView('dayGridMonth')
-        },
-        list: {
-          text: l.events.list,
-          click: () => controller.changeView('listWeek')
-        }
+        day: createButton('timeGridDay', l.events.day),
+        week: createButton('timeGridWeek', l.events.week),
+        month: createButton('dayGridMonth', l.events.month),
+        listWeek: createButton('listWeek', l.events.list)
       }}
       headerToolbar={headerToolbar}
       todayText={l.events.today}
+      allDayText={l.events.fullDay}
+      noEventsText={l.events.noEvents}
+      weekNumbers={weekNumbers}
+      weekNumberFormat={{
+        week: 'narrow'
+      }}
+      weekNumberHeaderContent={(info) =>
+        isEn ? (
+          info.text
+        ) : (
+          <span>
+            v<wbr />
+            {info.text.replace('W', '')}
+          </span>
+        )
+      }
+      inlineWeekNumberClass={styles.inlineWeekNumber}
+      inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
+      titleFormat={renderTitle(controller.view?.type)}
+      listDayClass={styles.listDay}
+      listDayHeaderClass={styles.listDayHeader}
+      listDayHeaderContent={renderListDayHeaderContent(locale)}
+      viewClass={styles.viewBody}
       views={{
-        listWeek: {
-          titleFormat: {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
+        timeGridDay: {
+          dayHeaderRowClass: styles.hide,
+          dayHeaderDividerClass: styles.hide
+        },
+        dayGridMonth: {
+          showNonCurrentDates: false,
+          listItemEventBeforeClass: styles.eventDot,
+          eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            omitZeroMinute: true
           }
         }
       }}
       nowIndicator={true}
-      eventContent={renderEventContent}
+      className={
+        styles.calendar +
+        ' ' +
+        (controller.view?.type.includes('list') ? styles.listView : '') +
+        ' ' +
+        className
+      }
+      eventContent={renderEventContent(locale)}
+      eventTimeFormat={{
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }}
+      dayHeaderClass={styles.dayHeader}
       dayCellTopInnerClass={styles.dayCellTopInner}
-      eventClass={(eventInfo: EventDisplayInfo) =>
+      allDayHeaderClass={styles.sidebar + ' ' + styles.allDayHeader}
+      weekNumberHeaderClass={styles.sidebar}
+      slotHeaderClass={styles.sidebar}
+      timedText=".sidebar"
+      slotHeaderContent={(info: SlotHeaderInfo) => {
+        const parts = info.text.split(/(?=[pa]m)/i, 2);
+        if (parts.length <= 1) {
+          return parts[0];
+        }
+        return (
+          <>
+            {parts[0]}
+            <wbr />
+            {parts[1]}
+          </>
+        );
+      }}
+      rowEventClass={styles.rowEvent}
+      rowEventAfterClass={styles.eventAfterArrow}
+      rowEventBeforeClass={styles.eventBeforeArrow}
+      borderless={borderless}
+      eventClass={(info: EventDisplayInfo) =>
         styles.event +
         ' ' +
-        (eventInfo.isInteractive ? '' : styles.eventNonInteractive)
+        (info.isInteractive ? styles.eventInteractive : '') +
+        ' ' +
+        (info.isNarrow ? styles.narrow : '') +
+        ' ' +
+        (info.event.allDay ? styles.allDay : '') +
+        ' ' +
+        (info.isStart ? styles.eventStart : '') +
+        ' ' +
+        (info.isEnd ? styles.eventEnd : '') +
+        ' ' +
+        (info.view.type === 'dayGridMonth' ? styles.blockEvent : '') +
+        ' ' +
+        (info.view.type.includes('list') ? styles.listEvent : '')
       }
+      dayHeaderContent={renderDayContent(controller)}
+      dayCellTopContent={renderDayContent(controller)}
       {...rest}
     />
   );
@@ -115,39 +206,161 @@ const LargeCalendarClient = ({
 
 export default LargeCalendarClient;
 
-function renderEventContent(eventInfo: EventDisplayInfo): ReactNode | null {
-  const rawLocation: unknown = eventInfo.event.extendedProps['location'];
-  const location: string | null =
-    typeof rawLocation === 'string' ? rawLocation : null;
+function renderEventContent(locale: string) {
+  return (info: EventDisplayInfo): ReactNode | null => {
+    const rawLocation: unknown = info.event.extendedProps['location'];
+    const location: string | null =
+      typeof rawLocation === 'string' ? rawLocation : null;
 
-  const blockViews = ['dayGridMonth'];
-  const rowViews = ['listWeek', 'listMonth', 'listYear'];
+    const timeContent = info.isNarrow
+      ? info.timeText.replaceAll(/:00/g, '')
+      : info.timeText;
 
-  return (
-    <>
-      <div className={eventInfo.timeClass}>{eventInfo.timeText}</div>
-      <div
-        className={
-          eventInfo.titleClass +
-          ' ' +
-          (blockViews.includes(eventInfo.view.type)
-            ? styles.block
-            : rowViews.includes(eventInfo.view.type)
-              ? styles.row
-              : '')
-        }
-      >
-        <b
-          className={eventInfo.isInteractive ? styles.eventHoverUnderline : ''}
-        >
-          {eventInfo.event.title}
-        </b>
-        {location && (
-          <div className={eventInfo.titleClass + ' ' + styles.location}>
-            {location}
-          </div>
+    return (
+      <>
+        <div className={info.timeClass + ' ' + styles.eventTime}>
+          {timeContent}
+        </div>
+        <div className={info.titleClass + ' ' + styles.eventInfo}>
+          <b
+            className={
+              styles.eventTitle +
+              ' ' +
+              (info.isInteractive ? styles.eventHoverUnderline : '')
+            }
+          >
+            {info.event.title}
+          </b>
+          {location && (
+            <div
+              lang={locale}
+              className={info.titleClass + ' ' + styles.eventLocation}
+            >
+              {location}
+            </div>
+          )}
+        </div>
+      </>
+    );
+  };
+}
+
+type DayInfo = Pick<
+  DayHeaderInfo & DayCellInfo,
+  | 'date'
+  | 'dayNumberText'
+  | 'weekdayText'
+  | 'text'
+  | 'isNarrow'
+  | 'isToday'
+  | 'view'
+>;
+
+function renderDayContent(controller: CalendarController) {
+  return (info: DayInfo) => {
+    if (info.dayNumberText === '' && info.view.type === 'dayGridMonth') {
+      return info.text.substring(0, 3);
+    }
+
+    const clickHandler = () => {
+      controller.changeView('timeGridDay');
+      controller.gotoDate(info.date);
+    };
+
+    return (
+      <div className={styles.day}>
+        {info.weekdayText && (
+          <div className={styles.weekday}>{info.weekdayText}</div>
         )}
+        <div
+          className={
+            styles.innerDay +
+            ' ' +
+            (info.isNarrow ? styles.narrow : '') +
+            ' ' +
+            (info.isToday ? styles.today : '')
+          }
+          onClick={clickHandler}
+        >
+          {info.dayNumberText}
+        </div>
       </div>
-    </>
-  );
+    );
+  };
+}
+
+function renderInlineWeekNumberContent(
+  controller: CalendarController,
+  isEn: boolean
+) {
+  return (info: InlineWeekNumberInfo) => {
+    const clickHandler = () => {
+      controller.changeView('timeGridWeek');
+      controller.gotoDate(info.date);
+    };
+    return (
+      <div onClick={clickHandler}>
+        {isEn ? info.text : info.text.replace('W', 'v')}
+      </div>
+    );
+  };
+}
+
+function renderListDayHeaderContent(locale: string) {
+  return (info: ListDayHeaderInnerInfo) => {
+    if (info.weekdayText !== '') {
+      return info.weekdayText;
+    }
+
+    const now = new Date();
+    const isThisYear = info.date.getFullYear() === now.getFullYear();
+
+    return new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'long',
+      ...(isThisYear
+        ? {}
+        : {
+            year: 'numeric'
+          })
+    }).format(info.date);
+  };
+}
+
+function renderTitle(viewType?: string): CalendarOptions['titleFormat'] {
+  return (info) => {
+    if (viewType === 'dayGridMonth') {
+      return new Intl.DateTimeFormat(info.localeCodes[0], {
+        month: 'long',
+        year: 'numeric'
+      }).format(info.start.instantMs);
+    }
+
+    const now = new Date();
+    const isThisYear =
+      info.start.year === now.getFullYear() &&
+      (info.end == undefined || info.end.year === now.getFullYear());
+
+    if (info.end && viewType !== 'timeGridDay') {
+      return new Intl.DateTimeFormat(info.localeCodes[0], {
+        day: 'numeric',
+        month: 'short',
+        ...(isThisYear
+          ? {}
+          : {
+              year: 'numeric'
+            })
+      }).formatRange(info.start.instantMs, info.end.instantMs);
+    }
+
+    return new Intl.DateTimeFormat(info.localeCodes[0], {
+      day: 'numeric',
+      month: 'long',
+      ...(isThisYear
+        ? {}
+        : {
+            year: 'numeric'
+          })
+    }).format(info.start.instantMs);
+  };
 }
