@@ -105,7 +105,14 @@ const LargeCalendarClient = ({
         week: 'narrow'
       }}
       weekNumberHeaderContent={(info) =>
-        l.en ? info.text : info.text.replace('W', 'v')
+        l.en ? (
+          info.text
+        ) : (
+          <span>
+            v<wbr />
+            {info.text.replace('W', '')}
+          </span>
+        )
       }
       inlineWeekNumberContent={(info) =>
         l.en ? info.text : info.text.replace('W', 'v')

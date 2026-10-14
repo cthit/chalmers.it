@@ -17,6 +17,10 @@
   background-color: var(--secondary-color-highlight);
 }
 
+.sidebar {
+  text-align: end;
+}
+
 // All day events
 .eventStart .eventBeforeArrow {
   display: none;
@@ -156,7 +160,7 @@ div:has(> .block) {
     word-break: break-word;
   }
 
-  // An actual class would be preferred but to my knowledge FullCalendar will not let you do this
+  // An actual class would be preferred but FullCalendar does not have an option for setting the className for this element
   .calendar div[aria-label='.sidebar'] {
     width: 1.75rem !important;
   }
