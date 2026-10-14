@@ -1,6 +1,10 @@
 @use '../../styles/colors.scss';
 @use '../../styles/theme-toggle.scss';
 
+.hide {
+  display: none !important;
+}
+
 .calendar {
   container-type: inline-size;
   container-name: largecalendar;
@@ -19,6 +23,72 @@
 
 .sidebar {
   text-align: end;
+}
+
+// Day indicator
+.dayCellTopInner {
+  background: none;
+  margin-inline: auto;
+}
+
+.dayHeader {
+  flex-direction: row !important;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.weekday {
+  font-size: 0.8em;
+}
+
+.innerDay {
+  aspect-ratio: 1/1;
+  height: 24px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.innerDay.narrow {
+  height: 20px;
+}
+
+.innerDay.today {
+  background-color: var(--primary-color);
+}
+
+.innerDay:hover {
+  background-color: var(--secondary-color-highlight);
+}
+
+.innerDay.today:hover {
+  background-color: var(--primary-color-highlight);
+}
+
+// Week number
+.inlineWeekNumber {
+  padding: 0;
+  height: fit-content;
+  line-height: unset;
+}
+
+.inlineWeekNumber > div {
+  line-height: 1.09091;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.inlineWeekNumber:hover {
+  background-color: var(--secondary-color-highlight);
 }
 
 // All day events
@@ -45,11 +115,6 @@
 
 .eventBeforeArrow {
   margin-left: 0.5rem;
-}
-
-// Today indicator
-.dayCellTopInner {
-  --fc-forma-primary: var(--calendar-current-date-background-color);
 }
 
 // Event
@@ -145,9 +210,6 @@ div:has(> .block) {
     max-width: 100%;
     margin-inline: 2px;
     hyphens: manual;
-    // width: 100%;
-    // min-width: 0;
-    // overflow-wrap: anywhere;
   }
 
   div:has(> .sidebar):not([role='row']) {

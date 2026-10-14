@@ -2,8 +2,12 @@
 
 import FullCalendar, {
   ButtonInput,
+  CalendarController,
   CalendarOptions,
+  DayCellInfo,
+  DayHeaderInfo,
   EventDisplayInfo,
+  InlineWeekNumberInfo,
   SlotHeaderInfo,
   useCalendarController
 } from '@fullcalendar/react';
@@ -56,6 +60,7 @@ const LargeCalendarClient = ({
   const { resolvedTheme, systemTheme } = useTheme();
 
   const l = i18nService.getLocale(locale);
+  const isEn = locale === 'en';
 
   useEffect(() => {
     setMounted(true);
@@ -105,7 +110,7 @@ const LargeCalendarClient = ({
         week: 'narrow'
       }}
       weekNumberHeaderContent={(info) =>
-        l.en ? (
+        isEn ? (
           info.text
         ) : (
           <span>
@@ -114,15 +119,14 @@ const LargeCalendarClient = ({
           </span>
         )
       }
-      inlineWeekNumberContent={(info) =>
-        l.en ? info.text : info.text.replace('W', 'v')
-      }
-      titleFormat={{
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      }}
+      inlineWeekNumberClass={styles.inlineWeekNumber}
+      inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
+      titleFormat={renderTitle(controller.view?.type)}
       views={{
+        timeGridDay: {
+          dayHeaderRowClass: styles.hide,
+          dayHeaderDividerClass: styles.hide
+        },
         dayGridMonth: {
           showNonCurrentDates: false,
           listItemEventBeforeClass: styles.eventDot
@@ -131,6 +135,7 @@ const LargeCalendarClient = ({
       nowIndicator={true}
       className={styles.calendar + ' ' + className}
       eventContent={renderEventContent(locale)}
+      dayHeaderClass={styles.dayHeader}
       dayCellTopInnerClass={styles.dayCellTopInner}
       allDayHeaderClass={styles.sidebar + ' ' + styles.allDayHeader}
       weekNumberHeaderClass={styles.sidebar}
@@ -165,6 +170,8 @@ const LargeCalendarClient = ({
         ' ' +
         (eventInfo.isEnd ? styles.eventEnd : '')
       }
+      dayHeaderContent={renderDayContent(controller)}
+      dayCellTopContent={renderDayContent(controller)}
       {...rest}
     />
   );
@@ -213,5 +220,104 @@ function renderEventContent(locale: string) {
         </div>
       </>
     );
+  };
+}
+
+type DayInfo = Pick<
+  DayHeaderInfo & DayCellInfo,
+  | 'date'
+  | 'dayNumberText'
+  | 'weekdayText'
+  | 'text'
+  | 'isNarrow'
+  | 'isToday'
+  | 'view'
+>;
+
+function renderDayContent(controller: CalendarController) {
+  return (info: DayInfo) => {
+    if (info.dayNumberText === '' || info.view.type === 'timeGridDay') {
+      return info.text;
+    }
+
+    const clickHandler = () => {
+      controller.changeView('timeGridDay');
+      controller.gotoDate(info.date);
+    };
+
+    return (
+      <div className={styles.day}>
+        {info.weekdayText && (
+          <div className={styles.weekday}>{info.weekdayText}</div>
+        )}
+        <div
+          className={
+            styles.innerDay +
+            ' ' +
+            (info.isNarrow ? styles.narrow : '') +
+            ' ' +
+            (info.isToday ? styles.today : '')
+          }
+          onClick={clickHandler}
+        >
+          {info.dayNumberText}
+        </div>
+      </div>
+    );
+  };
+}
+
+function renderInlineWeekNumberContent(
+  controller: CalendarController,
+  isEn: boolean
+) {
+  return (info: InlineWeekNumberInfo) => {
+    const clickHandler = () => {
+      controller.changeView('timeGridWeek');
+      controller.gotoDate(info.date);
+    };
+    return (
+      <div onClick={clickHandler}>
+        {isEn ? info.text : info.text.replace('W', 'v')}
+      </div>
+    );
+  };
+}
+
+function renderTitle(viewType?: string): CalendarOptions['titleFormat'] {
+  return (info) => {
+    if (viewType === 'dayGridMonth') {
+      return new Intl.DateTimeFormat(info.localeCodes[0], {
+        month: 'long',
+        year: 'numeric'
+      }).format(info.start.instantMs);
+    }
+
+    const now = new Date();
+    const isThisYear =
+      info.start.year === now.getFullYear() &&
+      (info.end == undefined || info.end.year === now.getFullYear());
+
+    if (info.end && viewType !== 'timeGridDay') {
+      return new Intl.DateTimeFormat(info.localeCodes[0], {
+        day: 'numeric',
+        month: 'short',
+        ...(isThisYear
+          ? {}
+          : {
+              year: 'numeric'
+            })
+      }).formatRange(info.start.instantMs, info.end.instantMs);
+    }
+
+    return new Intl.DateTimeFormat(info.localeCodes[0], {
+      day: 'numeric',
+      month: 'long',
+      ...(isThisYear
+        ? {}
+        : {
+            year: 'numeric'
+          })
+    }).format(info.start.instantMs);
   };
 }
