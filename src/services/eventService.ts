@@ -1,5 +1,6 @@
 import { stripTime } from '@/utils/eventDate';
 import prisma from '@/prisma';
+import { SpokenLanguage } from '@prisma/client';
 
 export default class EventService {
   static stripTime = stripTime;
@@ -48,6 +49,7 @@ export default class EventService {
         startTime: true,
         endTime: true,
         location: true,
+        spokenLanguage: true,
         createdAt: true,
         updatedAt: true,
         newsPostId: true
@@ -65,6 +67,7 @@ export default class EventService {
     endTime: Date;
     newsPostId?: number;
     location?: string;
+    spokenLanguage?: SpokenLanguage;
   }) {
     return await prisma.event.create({
       data: {
@@ -76,7 +79,8 @@ export default class EventService {
         startTime: event.startTime,
         endTime: event.endTime,
         newsPostId: event.newsPostId,
-        location: event.location
+        location: event.location,
+        spokenLanguage: event.spokenLanguage
       }
     });
   }
@@ -91,6 +95,7 @@ export default class EventService {
       fullDay: boolean;
       startTime: Date;
       endTime: Date;
+      spokenLanguage?: SpokenLanguage | null;
       newsPostId?: number;
     }
   ) {
@@ -106,6 +111,7 @@ export default class EventService {
         fullDay: event.fullDay,
         startTime: event.startTime,
         endTime: event.endTime,
+        spokenLanguage: event.spokenLanguage,
         newsPostId: event.newsPostId
       }
     });
