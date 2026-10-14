@@ -8,6 +8,7 @@ import FullCalendar, {
   DayHeaderInfo,
   EventDisplayInfo,
   InlineWeekNumberInfo,
+  ListDayHeaderInnerInfo,
   SlotHeaderInfo,
   useCalendarController
 } from '@fullcalendar/react';
@@ -122,6 +123,7 @@ const LargeCalendarClient = ({
       inlineWeekNumberClass={styles.inlineWeekNumber}
       inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
       titleFormat={renderTitle(controller.view?.type)}
+      listDayHeaderContent={renderListDayHeaderContent(locale)}
       views={{
         timeGridDay: {
           dayHeaderRowClass: styles.hide,
@@ -281,6 +283,27 @@ function renderInlineWeekNumberContent(
         {isEn ? info.text : info.text.replace('W', 'v')}
       </div>
     );
+  };
+}
+
+function renderListDayHeaderContent(locale: string) {
+  return (info: ListDayHeaderInnerInfo) => {
+    if (info.weekdayText !== '') {
+      return info.weekdayText;
+    }
+
+    const now = new Date();
+    const isThisYear = info.date.getFullYear() === now.getFullYear();
+
+    return new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'long',
+      ...(isThisYear
+        ? {}
+        : {
+            year: 'numeric'
+          })
+    }).format(info.date);
   };
 }
 
