@@ -123,7 +123,10 @@ const LargeCalendarClient = ({
       inlineWeekNumberClass={styles.inlineWeekNumber}
       inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
       titleFormat={renderTitle(controller.view?.type)}
+      listDayClass={styles.listDay}
+      listDayHeaderClass={styles.listDayHeader}
       listDayHeaderContent={renderListDayHeaderContent(locale)}
+      viewClass={styles.viewBody}
       views={{
         timeGridDay: {
           dayHeaderRowClass: styles.hide,
@@ -135,8 +138,14 @@ const LargeCalendarClient = ({
         }
       }}
       nowIndicator={true}
-      className={styles.calendar + ' ' + className}
+      className={styles.calendar + ' ' + (controller.view?.type.includes('list') ? styles.listView : '') + ' ' + className}
       eventContent={renderEventContent(locale)}
+      eventTimeFormat={{
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        omitZeroMinute: true
+      }}
       dayHeaderClass={styles.dayHeader}
       dayCellTopInnerClass={styles.dayCellTopInner}
       allDayHeaderClass={styles.sidebar + ' ' + styles.allDayHeader}
@@ -159,18 +168,22 @@ const LargeCalendarClient = ({
       rowEventAfterClass={styles.eventAfterArrow}
       rowEventBeforeClass={styles.eventBeforeArrow}
       borderless={borderless}
-      eventClass={(eventInfo: EventDisplayInfo) =>
+      eventClass={(info: EventDisplayInfo) =>
         styles.event +
         ' ' +
-        (eventInfo.isInteractive ? '' : styles.eventNonInteractive) +
+        (info.isInteractive ? styles.eventInteractive : '') +
         ' ' +
-        (eventInfo.isNarrow ? styles.narrow : '') +
+        (info.isNarrow ? styles.narrow : '') +
         ' ' +
-        (eventInfo.event.allDay ? styles.allDay : '') +
+        (info.event.allDay ? styles.allDay : '') +
         ' ' +
-        (eventInfo.isStart ? styles.eventStart : '') +
+        (info.isStart ? styles.eventStart : '') +
         ' ' +
-        (eventInfo.isEnd ? styles.eventEnd : '')
+        (info.isEnd ? styles.eventEnd : '') +
+        ' ' +
+        (info.view.type === 'dayGridMonth' ? styles.blockEvent : '') +
+        ' ' +
+        (info.view.type.includes('list') ? styles.listEvent : '')
       }
       dayHeaderContent={renderDayContent(controller)}
       dayCellTopContent={renderDayContent(controller)}
@@ -182,39 +195,30 @@ const LargeCalendarClient = ({
 export default LargeCalendarClient;
 
 function renderEventContent(locale: string) {
-  return (eventInfo: EventDisplayInfo): ReactNode | null => {
-    const rawLocation: unknown = eventInfo.event.extendedProps['location'];
+  return (info: EventDisplayInfo): ReactNode | null => {
+    const rawLocation: unknown = info.event.extendedProps['location'];
     const location: string | null =
       typeof rawLocation === 'string' ? rawLocation : null;
 
-    const isBlockView = ['dayGridMonth'].includes(eventInfo.view.type);
-    const isListView = eventInfo.view.type.includes('list');
-
     return (
       <>
-        <div className={styles.time + ' ' + eventInfo.timeClass}>
-          {eventInfo.timeText}
+        <div className={info.timeClass + ' ' + styles.eventTime}>
+          {info.timeText}
         </div>
-        <div
-          className={
-            eventInfo.titleClass +
-            ' ' +
-            (isBlockView ? styles.block : isListView ? styles.list : '')
-          }
-        >
+        <div className={info.titleClass + ' ' + styles.eventInfo}>
           <b
             className={
-              styles.title +
+              styles.eventTitle +
               ' ' +
-              (eventInfo.isInteractive ? styles.eventHoverUnderline : '')
+              (info.isInteractive ? styles.eventHoverUnderline : '')
             }
           >
-            {eventInfo.event.title}
+            {info.event.title}
           </b>
           {location && (
             <div
               lang={locale}
-              className={eventInfo.titleClass + ' ' + styles.location}
+              className={info.titleClass + ' ' + styles.eventLocation}
             >
               {location}
             </div>
@@ -238,8 +242,8 @@ type DayInfo = Pick<
 
 function renderDayContent(controller: CalendarController) {
   return (info: DayInfo) => {
-    if (info.dayNumberText === '' || info.view.type === 'timeGridDay') {
-      return info.text;
+    if (info.dayNumberText === '' && info.view.type === 'dayGridMonth') {
+      return info.text.substring(0, 3)
     }
 
     const clickHandler = () => {
