@@ -212,10 +212,14 @@ function renderEventContent(locale: string) {
     const location: string | null =
       typeof rawLocation === 'string' ? rawLocation : null;
 
+    const timeContent = info.isNarrow
+      ? info.timeText.replaceAll(/:00/g, '')
+      : info.timeText;
+
     return (
       <>
         <div className={info.timeClass + ' ' + styles.eventTime}>
-          {info.timeText}
+          {timeContent}
         </div>
         <div className={info.titleClass + ' ' + styles.eventInfo}>
           <b
