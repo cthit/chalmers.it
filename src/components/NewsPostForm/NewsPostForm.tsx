@@ -74,8 +74,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
-  // Drafts are stored per post so that a draft of a new post is never
-  // restored when editing an existing one (and vice versa)
   const draftKey =
     newsPost.id !== undefined
       ? `${LOCAL_DRAFT_KEY_PREFIX}:edit:${newsPost.id}`
@@ -114,7 +112,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
 
   useEffect(() => {
-    // Don't recreate the draft after it has been cleared on submit
     if (submitted.current) return;
 
     const unchanged =
