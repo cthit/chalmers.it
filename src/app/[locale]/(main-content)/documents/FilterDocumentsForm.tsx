@@ -47,14 +47,19 @@ const FilterDocumentsForm = ({
       <Divider />
       <form onSubmit={submitSearch}>
         <div>
-          <label>{l.search.query}</label>
+          <label htmlFor="document-query">{l.search.query}</label>
           <br />
-          <TextArea value={query} onChange={(e) => setQuery(e.target.value)} />
+          <TextArea
+            id="document-query"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
         <div>
-          <label>{l.docs.type}</label>
+          <label htmlFor="document-filter-type">{l.docs.type}</label>
           <br />
           <DropdownList
+            id="document-filter-type"
             value={type}
             onChange={(e) =>
               setType(e.target.value !== '' ? e.target.value : undefined)
@@ -69,9 +74,10 @@ const FilterDocumentsForm = ({
           </DropdownList>
         </div>
         <div>
-          <label>{l.search.group}</label>
+          <label htmlFor="document-filter-group">{l.search.group}</label>
           <br />
           <DropdownList
+            id="document-filter-group"
             onChange={(e) =>
               setGroupId(e.target.value !== '' ? e.target.value : undefined)
             }
