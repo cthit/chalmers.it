@@ -1,0 +1,11 @@
+.flag {
+  display: flex;
+  width: 2em;
+  height: 2em;
+}
+
+.flag > svg {
+  width: 2em;
+  height: 2em;
+  color: var(--text-color);
+}
