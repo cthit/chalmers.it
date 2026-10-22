@@ -203,6 +203,14 @@ const MilkdownEditor = React.forwardRef<
         configureLinkTooltip(ctx);
         setLocalImageViewer(ctx, localFiles);
         setCustomLinkRenderer(ctx);
+        ctx.update(editorViewOptionsCtx, (prev) => ({
+          ...prev,
+          attributes: {
+            role: 'textbox',
+            'aria-multiline': 'true',
+            ...(labelledBy && { 'aria-labelledby': labelledBy })
+          }
+        }));
 
         ctx.update(uploadConfig.key, (prev) => ({
           ...prev,

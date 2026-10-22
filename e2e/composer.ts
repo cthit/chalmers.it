@@ -95,6 +95,8 @@ export const test = base.extend<
         return container;
       };
 
+      let startupFailed = false;
+
       try {
         startedNetwork = await network.start();
         webhook = await startWebhookReceiver();
@@ -314,6 +316,7 @@ ${websiteLogs}`
         console.error(`E2E environment failed. Logs: ${logPath}
 ${websiteLogs.slice(-8000)}`);
 
+        startupFailed = true;
         throw error;
       } finally {
         // Always attempt every cleanup, including when a startup step failed.
@@ -337,7 +340,12 @@ ${websiteLogs.slice(-8000)}`);
         );
 
         if (failure?.status === 'rejected') {
-          throw failure.reason;
+          // Don't let a cleanup error hide the original startup failure.
+          if (!startupFailed) {
+            throw failure.reason;
+          }
+
+          console.error('E2E environment cleanup failed:', failure.reason);
         }
       }
     },
