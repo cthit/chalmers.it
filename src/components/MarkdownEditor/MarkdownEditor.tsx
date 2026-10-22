@@ -145,12 +145,13 @@ interface MilkdownEditorProps {
     [key: string]: File;
   };
   locale: string;
+  labelledBy?: string;
 }
 
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
->(({ defaultMd, onUpload, onChange, locale, localFiles }, ref) => {
+>(({ defaultMd, onUpload, onChange, locale, localFiles, labelledBy }, ref) => {
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
@@ -359,7 +360,7 @@ const MilkdownEditor = React.forwardRef<
   }));
 
   return (
-    <div>
+    <div role="group" aria-labelledby={labelledBy}>
       <div className={styles.toolbar}>
         <div>
           {viewMode === 'wysiwyg' && (
@@ -455,6 +456,7 @@ const MilkdownEditor = React.forwardRef<
         <Milkdown />
       </div>
       <textarea
+        aria-labelledby={labelledBy}
         value={markdown}
         onChange={(e) => {
           setMarkdown(e.target.value);
@@ -493,8 +495,9 @@ export const MarkdownEditor = React.forwardRef<
     localFiles?: {
       [key: string]: File;
     };
+    labelledBy?: string;
   }
->(({ defaultMd, onUpload, onChange, locale, localFiles }, ref) => {
+>(({ defaultMd, onUpload, onChange, locale, localFiles, labelledBy }, ref) => {
   return (
     <MilkdownProvider>
       <MilkdownEditor
@@ -504,6 +507,7 @@ export const MarkdownEditor = React.forwardRef<
         ref={ref}
         locale={locale}
         localFiles={localFiles ?? {}}
+        labelledBy={labelledBy}
       />
     </MilkdownProvider>
   );

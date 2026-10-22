@@ -70,8 +70,11 @@ const AddDocumentForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>{l.editor.createAs} </label>
-        <DropdownList onChange={(e) => setGroupId(e.target.value)}>
+        <label htmlFor="document-group">{l.editor.createAs} </label>
+        <DropdownList
+          id="document-group"
+          onChange={(e) => setGroupId(e.target.value)}
+        >
           <option value={undefined} hidden>
             Select a group
           </option>
@@ -83,8 +86,12 @@ const AddDocumentForm = ({
         </DropdownList>
       </div>
       <div>
-        <label>{l.docs.type} </label>
-        <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
+        <label htmlFor="document-type">{l.docs.type} </label>
+        <DropdownList
+          id="document-type"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
               {l.docTypes[documentTypeKey(type as DocumentType)]}
@@ -92,17 +99,31 @@ const AddDocumentForm = ({
           ))}
         </DropdownList>
       </div>
-      <label>{l.editor.title} (sv)</label>
-      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <label>{l.editor.title} (en)</label>
-      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <label>{l.editor.description} (sv)</label>
+      <label htmlFor="document-title-sv">{l.editor.title} (sv)</label>
       <TextArea
+        id="document-title-sv"
+        value={titleSv}
+        onChange={(e) => setTitleSv(e.target.value)}
+      />
+      <label htmlFor="document-title-en">{l.editor.title} (en)</label>
+      <TextArea
+        id="document-title-en"
+        value={titleEn}
+        onChange={(e) => setTitleEn(e.target.value)}
+      />
+      <label htmlFor="document-description-sv">
+        {l.editor.description} (sv)
+      </label>
+      <TextArea
+        id="document-description-sv"
         value={descriptionSv}
         onChange={(e) => setDescriptionSv(e.target.value)}
       />
-      <label>{l.editor.description} (en)</label>
+      <label htmlFor="document-description-en">
+        {l.editor.description} (en)
+      </label>
       <TextArea
+        id="document-description-en"
         value={descriptionEn}
         onChange={(e) => setDescriptionEn(e.target.value)}
       />

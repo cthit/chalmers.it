@@ -84,24 +84,30 @@ const NewsSearchForm = ({
           <h1>{l.search.newsHeading}</h1>
           <Divider />
           <div>
-            <label>{l.search.query}</label>
+            <label htmlFor="search-query">{l.search.query}</label>
             <TextArea
+              id="search-query"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
           <div>
-            <label>{l.search.before}</label>
+            <label htmlFor="search-before">{l.search.before}</label>
             <br />
-            <DatePicker value={before} onChange={setBefore} />
+            <DatePicker
+              id="search-before"
+              value={before}
+              onChange={setBefore}
+            />
           </div>
-          <label>{l.search.after}</label>
+          <label htmlFor="search-after">{l.search.after}</label>
           <br />
-          <DatePicker value={after} onChange={setAfter} />
+          <DatePicker id="search-after" value={after} onChange={setAfter} />
           <div>
-            <label>{l.search.group}</label>
+            <label htmlFor="search-group">{l.search.group}</label>
             <br />
             <DropdownList
+              id="search-group"
               onChange={(e) =>
                 setGroupId(e.target.value !== '' ? e.target.value : undefined)
               }

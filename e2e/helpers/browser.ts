@@ -35,24 +35,15 @@ export async function signIn(page: Page, environment: Environment) {
   ).toBeVisible();
 }
 
-// Authoring controls use adjacent headings without label associations.
-// Use the heading to scope the field, then select the control by its role.
-function fieldAfterHeading(page: Page, heading: string) {
-  return page
-    .getByRole('heading', { name: heading, exact: true })
-    .locator('xpath=following-sibling::*[1]');
-}
-
-function textboxAfterHeading(page: Page, heading: string) {
-  return page.getByRole('textbox').and(fieldAfterHeading(page, heading));
-}
-
 export async function fillContent(
   page: Page,
   language: 'Eng' | 'Sv',
   markdown: string
 ) {
-  const editor = fieldAfterHeading(page, `Content (${language})`);
+  const editor = page.getByRole('group', {
+    name: `Content (${language})`,
+    exact: true
+  });
 
   await editor.getByRole('button', { name: 'Markdown', exact: true }).click();
   await editor.getByRole('textbox').fill(markdown);
@@ -65,13 +56,11 @@ export async function fillNews(page: Page, title: string, markdown: string) {
     page.getByRole('heading', { name: 'Create Post', exact: true })
   ).toBeVisible();
 
-  const committee = page
-    .getByRole('combobox')
-    .and(fieldAfterHeading(page, 'Create as'));
-
-  await committee.selectOption({ label: 'digIT' });
-  await textboxAfterHeading(page, 'Title (Eng)').fill(title);
-  await textboxAfterHeading(page, 'Title (Sv)').fill(`${title} svenska`);
+  await page
+    .getByLabel('Create as', { exact: true })
+    .selectOption({ label: 'digIT' });
+  await page.getByLabel('Title (Eng)', { exact: true }).fill(title);
+  await page.getByLabel('Title (Sv)', { exact: true }).fill(`${title} svenska`);
 
   await fillContent(page, 'Eng', markdown);
   await fillContent(page, 'Sv', `Svensk text: ${markdown}`);
@@ -113,9 +102,9 @@ export async function fillPage(
     page.getByRole('heading', { name: 'Create page', exact: true })
   ).toBeVisible();
 
-  await textboxAfterHeading(page, 'URL-slug').fill(slug);
-  await textboxAfterHeading(page, 'Title (Eng)').fill(title);
-  await textboxAfterHeading(page, 'Title (Sv)').fill(`${title} svenska`);
+  await page.getByLabel('URL-slug', { exact: true }).fill(slug);
+  await page.getByLabel('Title (Eng)', { exact: true }).fill(title);
+  await page.getByLabel('Title (Sv)', { exact: true }).fill(`${title} svenska`);
 
   await fillContent(page, 'Eng', markdown);
   await fillContent(page, 'Sv', `Svensk text: ${markdown}`);

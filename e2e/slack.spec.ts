@@ -166,3 +166,59 @@ test('keeps Slack headers valid for long news titles and Markdown headings', asy
     expect(slackText(notification.payload)).toContain('Announcement body.');
   });
 });
+
+test('publishes a scheduled post and notifies Slack when it goes live', async ({
+  page,
+  environment
+}) => {
+  // The scheduler runs at the start of every minute.
+  test.setTimeout(240000);
+
+  const title = 'Scheduled announcement';
+
+  await test.step('Schedule an announcement a minute or two ahead', async () => {
+    await fillNews(page, title, 'Published by the scheduler.');
+
+    // At least 30 seconds before the scheduler can pick it up.
+    const publishAt = new Date(Date.now() + 90000);
+    const local = new Date(
+      publishAt.getTime() - publishAt.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, 16);
+
+    await page
+      .getByLabel('Publish at', { exact: true })
+      .selectOption({ label: 'Scheduled' });
+    await page.getByLabel('Scheduled', { exact: true }).fill(local);
+    await page.getByRole('button', { name: 'Create', exact: true }).click();
+
+    await expect
+      .poll(() => environment.db.newsPost.count({ where: { titleEn: title } }))
+      .toBe(1);
+
+    const stored = await environment.db.newsPost.findFirstOrThrow({
+      where: { titleEn: title }
+    });
+
+    expect(stored.status).toBe('SCHEDULED');
+    expect(environment.webhook.requests).toHaveLength(0);
+  });
+
+  await test.step('Publish it and send the Slack notification', async () => {
+    await expect
+      .poll(() => environment.webhook.requests.length, { timeout: 180000 })
+      .toBe(1);
+
+    const [notification] = environment.webhook.requests;
+
+    expect(notification.errors).toEqual([]);
+    expect(slackText(notification.payload)).toContain(title);
+
+    const stored = await environment.db.newsPost.findFirstOrThrow({
+      where: { titleEn: title }
+    });
+
+    expect(stored.status).toBe('PUBLISHED');
+  });
+});

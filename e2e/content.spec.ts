@@ -205,11 +205,7 @@ test('searches published news by title and body and handles no results', async (
 }) => {
   const title = 'Orion committee update';
 
-  // Search and date filters have no accessible names. Narrow the textbox
-  // role to the text input, excluding the datetime-local filters.
-  const query = page
-    .getByRole('textbox')
-    .and(page.locator('input[type="text"]'));
+  const query = page.getByLabel('Query', { exact: true });
   const search = page.getByRole('button', { name: 'Search', exact: true });
   const result = page.getByRole('link', { name: title, exact: true });
 
@@ -267,5 +263,90 @@ test('searches published news by title and body and handles no results', async (
         exact: true
       })
     ).toBeVisible();
+  });
+});
+
+test('edits and deletes a news post', async ({ page, environment }) => {
+  const id = await test.step('Publish an announcement', async () => {
+    await fillNews(page, 'Draft wording', 'First version.');
+
+    return publishNews(page, 'Draft wording');
+  });
+
+  await test.step('Edit the title and content', async () => {
+    await page.getByRole('link', { name: 'Edit', exact: true }).click();
+    await expect(
+      page.getByRole('heading', { name: 'Edit Post', exact: true })
+    ).toBeVisible();
+
+    await page.getByLabel('Title (Eng)', { exact: true }).fill('Final wording');
+    await fillContent(page, 'Eng', 'Second version.');
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+
+    await expect
+      .poll(async () => {
+        const stored = await environment.db.newsPost.findUnique({
+          where: { id }
+        });
+
+        return stored?.titleEn;
+      })
+      .toBe('Final wording');
+
+    await page.goto(`/en/post/${id}`);
+    await expect(
+      page.getByRole('heading', { name: 'Final wording', exact: true })
+    ).toBeVisible();
+    await expect(page.getByText('Second version.')).toBeVisible();
+  });
+
+  await test.step('Delete the announcement', async () => {
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.getByRole('button', { name: 'Delete', exact: true }).click();
+
+    await expect
+      .poll(() => environment.db.newsPost.count({ where: { id } }))
+      .toBe(0);
+  });
+});
+
+test('publishes an event with a news post and lists it in the calendar feed', async ({
+  page
+}) => {
+  const title = 'Committee pub night';
+  const event = 'Pub night at Hubben';
+
+  await test.step('Attach an event to a new announcement', async () => {
+    await fillNews(page, title, 'Join us for the pub night.');
+    await page.getByRole('button', { name: 'Add event', exact: true }).click();
+
+    const fields = page
+      .getByRole('listitem')
+      .filter({ has: page.getByRole('button', { name: 'Remove event' }) });
+
+    await fields.getByLabel('Title (Eng)', { exact: true }).fill(event);
+    await fields.getByLabel('Title (Sv)', { exact: true }).fill(event);
+    await fields.getByLabel('Start', { exact: true }).fill('2030-05-17T18:00');
+    await fields.getByLabel('End', { exact: true }).fill('2030-05-17T23:00');
+    await fields.getByLabel('Location', { exact: true }).fill('Hubben 2.1');
+
+    await publishNews(page, title);
+  });
+
+  await test.step('Show the event on the announcement', async () => {
+    await expect(page.getByText(event, { exact: true })).toBeVisible();
+  });
+
+  await test.step('Include the event in the iCalendar subscription', async () => {
+    const response = await page.request.get(
+      '/api/events?format=ical&locale=en'
+    );
+
+    expect(response.headers()['content-type']).toContain('text/calendar');
+
+    const ical = await response.text();
+
+    expect(ical).toContain(`SUMMARY:${event}`);
+    expect(ical).toContain('LOCATION:Hubben 2.1');
   });
 });

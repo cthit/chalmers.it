@@ -46,11 +46,11 @@ pnpm test:e2e e2e/slack.spec.ts
 
 ## Coverage
 
-| File              | Flows and assertions                                                                                                                                                                                                                                      |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `gamma.spec.ts`   | Website login → real Gamma → OAuth callback → authenticated session; committee member and role from Gamma; logout clears the session and authoring access.                                                                                                |
-| `content.spec.ts` | Create news and division pages through the English UI, verify both saved language versions and reload persistence; upload and embed an image in each, verify downloaded bytes; search title/body, follow results, handle empty results and short queries. |
-| `slack.spec.ts`   | Publish predefined Markdown through the website; capture the outgoing webhook; validate block structure and preserved text; compare with the Slack serialization API in English and Swedish; check long headers and HTTP 400 fallback.                    |
+| File              | Flows and assertions                                                                                                                                                                                                                                                                                                               |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gamma.spec.ts`   | Website login → real Gamma → OAuth callback → authenticated session; committee member and role from Gamma; logout clears the session and authoring access.                                                                                                                                                                         |
+| `content.spec.ts` | Create news and division pages through the English UI, verify both saved language versions and reload persistence; upload and embed an image in each, verify downloaded bytes; search title/body, follow results, handle empty results and short queries; edit and delete a post; publish an event and read it from the iCal feed. |
+| `slack.spec.ts`   | Publish predefined Markdown through the website; capture the outgoing webhook; validate block structure and preserved text; compare with the Slack serialization API in English and Swedish; check long headers and HTTP 400 fallback; a scheduled post notifies Slack when it goes live.                                          |
 
 ## Writing tests
 
@@ -62,12 +62,11 @@ Keep assertions in the specs and reusable browser actions in `helpers/browser.ts
 
 Prefer `getByRole()` with an accessible name for interactive controls. Use a
 label or placeholder when a role cannot identify the control, and text locators
-for plain content. Authoring fields currently use headings without associated
-labels, so the helper scopes by heading before selecting the control by role.
-The website's logout anchor uses visible text because it has no `href` or
-link role. The unnamed search textbox is distinguished from date filters by
-its native input type. Uploads use the visible “Select files” button and its
-file chooser.
+for plain content. Form fields have associated labels, so select them with
+`getByLabel()`; each Markdown editor is a `group` named by its heading. If a
+control can't be found by role or label, fix its accessibility in the app
+rather than working around it in the test. Uploads use the visible “Select
+files” button and its file chooser.
 
 ## Isolation
 

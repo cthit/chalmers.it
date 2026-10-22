@@ -45,10 +45,9 @@ test('logs out and removes access to authoring', async ({
       .getByRole('img', { name: 'Profile Picture', exact: true })
       .click();
 
-    // LogoutLink renders an anchor without href, so it has no link role.
     // The header contains separate desktop and mobile copies.
     await page
-      .getByText('Log out', { exact: true })
+      .getByRole('link', { name: 'Log out', exact: true })
       .filter({ visible: true })
       .click();
 
