@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './SearchBar.module.scss';
 import { useRouter } from 'next/navigation';
+import i18nService from '@/services/i18nService';
 
-const SearchBar = () => {
+const SearchBar = ({ locale }: { locale: string }) => {
+  const l = i18nService.getLocale(locale);
   const router = useRouter();
   const [term, setTerm] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +24,8 @@ const SearchBar = () => {
       <input
         className={styles.expandedSearchBar}
         type="text"
-        placeholder="Search..."
+        placeholder={l.search.newsPlaceholder}
+        aria-label={l.search.newsPlaceholder}
         ref={inputRef}
         value={term}
         onChange={(e) => setTerm(e.target.value)}

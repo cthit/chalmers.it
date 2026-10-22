@@ -11,6 +11,7 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import FileService, { MediaType } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const validMimes = FileService.getValidMimes([MediaType.Document]);
 
@@ -21,6 +22,8 @@ const AddDocumentForm = ({
   groups: GammaGroup[];
   locale: string;
 }) => {
+  const router = useRouter();
+
   const [groupId, setGroupId] = useState<string | undefined>(undefined);
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [type, setType] = useState<string>(DocumentType.MISC);
@@ -61,6 +64,7 @@ const AddDocumentForm = ({
         error: l.docs.uploadError
       }
     );
+    router.push('/documents');
   };
 
   return (

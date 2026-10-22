@@ -8,6 +8,7 @@ import { Calendar as ReactCalendar, TileArgs } from 'react-calendar';
 import React, { useCallback } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
+import CalendarSubscribeDropdown from '../CalendarSubscribeDropdown/CalendarSubscribeDropdown';
 
 type DateTileArgs = {
   date: Date;
@@ -26,10 +27,12 @@ function DateTile({ date }: DateTileArgs) {
 
 const CalendarClient = ({
   locale,
-  events
+  events,
+  httpBaseUrl
 }: {
   locale: string;
   events: { [key: number]: any[] };
+  httpBaseUrl: string;
 }) => {
   const [value, onChange] = React.useState<Value>(new Date());
 
@@ -90,17 +93,20 @@ const CalendarClient = ({
   );
 
   return (
-    <ReactCalendar
-      locale={loc}
-      maxDetail="month"
-      minDetail="decade"
-      onChange={onChange}
-      value={value}
-      className="event-calendar"
-      tileClassName={mapTileClass}
-      calendarType="iso8601"
-      tileContent={mapTileContent}
-    />
+    <>
+      <ReactCalendar
+        locale={loc}
+        maxDetail="month"
+        minDetail="decade"
+        onChange={onChange}
+        value={value}
+        className="event-calendar"
+        tileClassName={mapTileClass}
+        calendarType="iso8601"
+        tileContent={mapTileContent}
+      />
+      <CalendarSubscribeDropdown locale={locale} httpBaseUrl={httpBaseUrl} />
+    </>
   );
 };
 

@@ -1,7 +1,15 @@
 import { GammaSuperGroupBlob, GammaUserInfo, GammaGroup } from '@/types/gamma';
 
-const apiKey =
-  process.env.GAMMA_API_KEY_ID + ':' + process.env.GAMMA_API_KEY_TOKEN;
+const apiKeyId = process.env.GAMMA_API_KEY_ID;
+const apiKeyToken = process.env.GAMMA_API_KEY_TOKEN;
+const apiKey = `${apiKeyId}:${apiKeyToken}`;
+const hasInfoApiCredentials = Boolean(
+  process.env.GAMMA_ROOT_URL &&
+    apiKeyId &&
+    apiKeyToken &&
+    apiKeyId !== 'api-key-id-uuid-here' &&
+    apiKeyToken !== 'token'
+);
 const activeGroupTypes = (
   process.env.ACTIVE_GROUP_TYPES || 'committee,society'
 ).split(',');
@@ -46,6 +54,9 @@ export default class GammaService {
   }
 
   static async getAllSuperGroups() {
+    // Public pages can use their local content without Gamma enrichment.
+    if (!hasInfoApiCredentials) return [];
+
     return (
       (await gammaGetRequest<GammaSuperGroupBlob>('/info/v1/blob')).flatMap(
         (sg) => sg.superGroups
@@ -61,6 +72,10 @@ export default class GammaService {
 }
 
 const gammaGetRequest = async <T>(path: string): Promise<T> => {
+  if (!hasInfoApiCredentials) {
+    throw new Error('Gamma info API credentials are not configured');
+  }
+
   const response = await fetch(GammaService.gammaUrl + '/api' + path, {
     headers: {
       Authorization: 'pre-shared ' + apiKey

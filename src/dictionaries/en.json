@@ -49,7 +49,8 @@
     "loadEmpty": "No more posts to show",
     "loadMore": "Load more",
     "listView": "List View",
-    "cardView": "Card View"
+    "cardView": "Card View",
+    "connectedEvents": "Connected Events"
   },
   "editor": {
     "createAs": "Create as",
@@ -112,7 +113,23 @@
     "empty": "No events connected",
     "subscribe": "Subscribe",
     "comingEvents": "Coming Events",
-    "ongoing": "Ongoing"
+    "seeAll": "See all events",
+    "ongoing": "Ongoing",
+    "calendarName": "Events at IT, the Software Engineering Student Division",
+    "calendarDescription": "Find events at the Software Engineering Student Division (IT) at Chalmers",
+    "created": "Created",
+    "readMore": "Read more",
+    "relatedEvents": "Related events",
+    "today": "Today",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "list": "List",
+    "services": {
+      "googleCalendar": "Google Calendar",
+      "appleCalendar": "Apple Calendar",
+      "outlook": "Outlook"
+    }
   },
   "groups": {
     "members": "Current members",
@@ -182,6 +199,9 @@
     "image": "Image"
   },
   "search": {
+    "newsPlaceholder": "Search news posts...",
+    "newsHeading": "Search news posts",
+    "newsResults": "News search results",
     "search": "Search",
     "empty": "No search results",
     "loading": "Searching...",
