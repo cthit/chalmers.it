@@ -14,10 +14,10 @@
   padding: 1rem;
   box-sizing: border-box;
   border: solid;
-  border-color: var(--border-color);
+  border-color: var(--outline);
   border-radius: 1rem;
   width: 100%;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--surface);
+  color: var(--on-surface);
   outline: none;
 }
