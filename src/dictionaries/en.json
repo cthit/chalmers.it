@@ -135,6 +135,8 @@
     "members": "Current members",
     "membersError": "Could not fetch members",
     "membersEmpty": "No members",
+    "memberPosts": "Posts",
+    "memberProfile": "Profile",
     "createSubpage": "Create subpage"
   },
   "lunch": {
