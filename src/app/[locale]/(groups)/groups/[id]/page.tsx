@@ -100,12 +100,7 @@ const mainContent = async (locale: string, id: string) => {
         <ul className={style.memberList}>
           {gammaGroup.members.map((member) => (
             <li key={member.user.id}>
-              <GroupMember
-                pfp={GammaService.getUserAvatarURL(member.user.id)}
-                name={member.user.nick}
-                post={en ? member.post.enName : member.post.svName}
-                postStyled={member.unofficialPostName}
-              />
+              <GroupMember member={member} locale={locale} />
             </li>
           ))}
         </ul>
