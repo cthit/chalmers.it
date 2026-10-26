@@ -25,7 +25,7 @@ const GroupMember = ({
         <FallbackImage
           src={pfp}
           className={styles.picture}
-          alt={'Profile picture for ' + member.user.nick}
+          alt={`${l.groups.memberPfpAlt} ${member.user.nick}`}
         />
         <div>
           <h3>{member.user.nick}</h3>
