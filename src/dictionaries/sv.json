@@ -135,6 +135,9 @@
     "members": "Nuvarande medlemmar",
     "membersError": "Kunde inte hämta medlemmar",
     "membersEmpty": "Inga medlemmar",
+    "memberPosts": "Inlägg",
+    "memberProfile": "Profil",
+    "memberPfpAlt": "Profilbild av",
     "createSubpage": "Skapa undersida"
   },
   "lunch": {
