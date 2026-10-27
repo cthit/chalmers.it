@@ -212,21 +212,15 @@ export default class NewsService {
   }
 
   static async remove(id: number) {
-    const post = await prisma.newsPost.findUnique({
-      where: {
-        id
-      }
-    });
-
+    // The deleted row carries the Slack ids that existed at delete time, so
+    // messages stored by an in-flight notification are not missed.
     const res = await prisma.newsPost.delete({
       where: {
         id
       }
     });
 
-    if (post && (post.slackTsSv || post.slackTsEn)) {
-      NotifyService.deleteNewsPostMessages(post);
-    }
+    NotifyService.deleteNewsPostMessages(res);
 
     return res;
   }

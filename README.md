@@ -102,4 +102,4 @@ The following environment variables are used:
 
 ### Slack notifications
 
-News posts are announced in Slack through a bot account. The bot needs the `chat:write` scope and must be invited to each configured channel (or the app can use `chat:write.public` to post in any public channel). When a published post is edited or deleted, the corresponding Slack messages are updated or removed, so the message ID (`ts`) of every notification is stored on the news post.
+News posts are announced in Slack through a bot account. The bot needs the `chat:write` scope and must be invited to each configured channel (or the app can use `chat:write.public` to post in any public channel). When a published post is edited or deleted, the corresponding Slack messages are updated or removed, so both the message ID (`ts`) and the channel the message was posted to are stored on the news post.

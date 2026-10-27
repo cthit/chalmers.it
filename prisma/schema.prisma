@@ -24,6 +24,8 @@ model NewsPost {
   mediaSha256          String?
   slackTsSv            String?
   slackTsEn            String?
+  slackChannelSv       String?
+  slackChannelEn       String?
 }
 
 model DivisionGroup {

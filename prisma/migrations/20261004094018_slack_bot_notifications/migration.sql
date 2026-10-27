@@ -6,7 +6,9 @@
 */
 -- AlterTable
 ALTER TABLE "NewsPost" ADD COLUMN     "slackTsEn" TEXT,
-ADD COLUMN     "slackTsSv" TEXT;
+ADD COLUMN     "slackTsSv" TEXT,
+ADD COLUMN     "slackChannelEn" TEXT,
+ADD COLUMN     "slackChannelSv" TEXT;
 
 -- DropTable
 DROP TABLE "EventNotifiers";
