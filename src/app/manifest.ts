@@ -20,6 +20,7 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     theme_color: '#ffffff',
     background_color: '#ffffff',
+    start_url: '/',
     display: 'standalone'
   };
 }
