@@ -34,7 +34,10 @@ export async function generateMetadata(props: {
       template: '%s | ' + l.site.siteTitle,
       default: l.site.siteTitle
     },
-    description: l.site.siteDescription
+    description: l.site.siteDescription,
+    appleWebApp: {
+      title: 'Chalmers IT'
+    }
   };
 }
 
@@ -59,9 +62,6 @@ export default async function RootLayout(props: {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        <meta name="apple-mobile-web-app-title" content="Chalmers IT" />
-      </head>
       <body
         style={{ display: 'unset' }}
         className={poppins.variable + ' ' + bitter.variable}
