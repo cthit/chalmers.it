@@ -7,25 +7,13 @@ import SessionService from '@/services/sessionService';
 
 const pages: {
   path: string;
-  lPath:
-    | 'general'
-    | 'notifiers'
-    | 'groups'
-    | 'groupTypes'
-    | 'sponsors'
-    | 'media'
-    | 'navbar';
+  lPath: 'general' | 'groups' | 'groupTypes' | 'sponsors' | 'media' | 'navbar';
   authFunc: () => Promise<boolean>;
 }[] = [
   {
     path: '/settings',
     lPath: 'general',
     authFunc: async () => true
-  },
-  {
-    path: '/settings/notifiers',
-    lPath: 'notifiers',
-    authFunc: SessionService.isAdmin
   },
   {
     path: '/settings/groups',
