@@ -1,7 +1,6 @@
 'use server';
 
 import DivisionPageService from '@/services/divisionPageService';
-import { redirect } from 'next/navigation';
 import SessionService from '@/services/sessionService';
 import MediaService from '@/services/mediaService';
 import { MediaType } from '@/services/fileService';
@@ -18,7 +17,7 @@ async function checkAuthorization(divisionGroupId?: number | null) {
   }
 }
 
-export async function create(
+export async function createPage(
   titleEn: string,
   titleSv: string,
   contentEn: string,
@@ -35,21 +34,16 @@ export async function create(
     await MediaService.save(file, Object.values(MediaType));
   }
 
-  try {
-    await DivisionPageService.post(
-      titleEn,
-      titleSv,
-      contentEn,
-      contentSv,
-      slug,
-      isNaN(sortPrio) ? 0 : sortPrio,
-      divisionGroupId,
-      parentId
-    );
-  } catch (e) {
-    console.error(e);
-  }
-  redirect('/groups');
+  await DivisionPageService.post(
+    titleEn,
+    titleSv,
+    contentEn,
+    contentSv,
+    slug,
+    isNaN(sortPrio) ? 0 : sortPrio,
+    divisionGroupId,
+    parentId
+  );
 }
 
 export async function deletePage(id: number) {
@@ -62,10 +56,9 @@ export async function deletePage(id: number) {
   }
 
   await DivisionPageService.delete(id);
-  redirect('/groups');
 }
 
-export async function edit(
+export async function editPage(
   id: number,
   titleEn: string,
   titleSv: string,
@@ -97,5 +90,4 @@ export async function edit(
     isNaN(sortPrio) ? 0 : sortPrio,
     parentId
   );
-  redirect('/groups');
 }

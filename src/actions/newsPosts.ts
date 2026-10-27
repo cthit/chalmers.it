@@ -3,7 +3,6 @@
 import NewsService from '@/services/newsService';
 import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
-import { redirect } from 'next/navigation';
 import { PostStatus } from '@prisma/client';
 import MediaService from '@/services/mediaService';
 import { MediaType } from '@/services/fileService';
@@ -106,5 +105,4 @@ export async function deletePost(id: number) {
   }
 
   await NewsService.remove(id);
-  redirect('.');
 }
