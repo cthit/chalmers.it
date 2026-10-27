@@ -72,6 +72,7 @@ async function slackApi(
 ): Promise<SlackApiResponse | null> {
   const token = process.env.SLACK_BOT_TOKEN;
   if (!token) {
+    console.warn('Skipping Slack API call due to missing SLACK_BOT_TOKEN');
     return null;
   }
 
@@ -179,10 +180,10 @@ export async function serializeNewsPost(
       ? await DivisionGroupService.getInfo(post.divisionGroupId)
       : null;
   const title = english ? post.titleEn : post.titleSv;
-  const escapedTitle = escapeSlackMrkdwn(title);
   const msg = english
-    ? `News published: *${escapedTitle}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
-    : `Nyhet publicerad: *${escapedTitle}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+    ? `News published: *${title}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+    : `Nyhet publicerad: *${title}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+  const escapedMsg = escapeSlackMrkdwn(msg);
 
   let content = [] as ReturnType<typeof htmlToSlack>;
   if (includeContent) {
@@ -202,7 +203,7 @@ export async function serializeNewsPost(
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: msg
+          text: escapedMsg
         }
       }
     ],
