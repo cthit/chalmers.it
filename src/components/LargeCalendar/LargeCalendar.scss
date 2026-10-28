@@ -30,5 +30,9 @@
 
   /* neutral borders */
   --fc-forma-border: var(--outline);
-  --fc-forma-strong-border: var(--outline);
+  --fc-forma-strong-border: color-mix(
+    in srgb,
+    var(--outline) 50%,
+    var(--on-surface-variant)
+  );
 }

@@ -27,21 +27,20 @@
     --on-surface-variant: #{colors.$neutral-30};
 
     // Outlines.
-    --outline: #{colors.$neutral-80};
+    --outline: #{colors.$neutral-60};
     --outline-variant: #{colors.$neutral-95};
 
     // Primary (brand) family.
     --primary: #{colors.$turquoise-80};
     --primary-hover: #{colors.$turquoise-70};
     --on-primary: #{colors.$turquoise-15};
+    --on-primary-accent: #{colors.$turquoise-50};
     --primary-container-low: #{colors.$turquoise-95};
     --primary-container: #{colors.$turquoise-90};
     --primary-container-high: #{colors.$turquoise-90};
     --on-primary-container: #{colors.$turquoise-15};
     --link: #{colors.$turquoise-40};
-    // Emphasized non-link text (page highlights, descriptions). Softer than
-    // --link, which is tuned for contrast on body-sized link text.
-    --emphasis: #{colors.$turquoise-40};
+    --emphasis: #{colors.$teal-40};
 
     // Secondary family.
     --secondary: #{colors.$teal-40};
@@ -106,13 +105,14 @@
     --on-surface-variant: #{colors.$neutral-80};
 
     // Outlines.
-    --outline: #{colors.$neutral-30};
+    --outline: #{colors.$neutral-40};
     --outline-variant: #{colors.$neutral-10};
 
     // Primary (brand) family.
     --primary: #{colors.$turquoise-40};
     --primary-hover: #{colors.$turquoise-30};
     --on-primary: #{colors.$turquoise-98};
+    --on-primary-accent: #{colors.$turquoise-70};
     --primary-container-low: #{colors.$turquoise-15};
     --primary-container: #{colors.$turquoise-30};
     --primary-container-high: #{colors.$turquoise-50};
