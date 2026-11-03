@@ -9,13 +9,13 @@
   margin-top: 1rem;
   display: none;
   background-color: transparent;
-  border: 2px solid var(--load-more-button);
-  color: var(--text-color);
+  border: 2px solid var(--primary);
+  color: var(--on-surface);
 
   &:hover {
-    background-color: var(--load-more-button-hover-bg);
-    color: var(--load-more-button-hover-text);
-    border-color: var(--load-more-button-hover-bg);
+    background-color: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
   }
 }
 
