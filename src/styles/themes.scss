@@ -27,7 +27,7 @@
     --on-surface-variant: #{colors.$neutral-30};
 
     // Outlines.
-    --outline: #{colors.$neutral-60};
+    --outline: #{colors.$neutral-90};
     --outline-variant: #{colors.$neutral-95};
 
     // Primary (brand) family.
@@ -96,16 +96,16 @@
     --surface-container-lowest: #{colors.$neutral-3};
     --surface-container-low: #{colors.$neutral-4};
     --surface-container: #{colors.$neutral-5};
-    --surface-container-high: #{colors.$neutral-20};
-    --surface-container-highest: #{colors.$neutral-30};
+    --surface-container-high: #{colors.$neutral-15};
+    --surface-container-highest: #{colors.$neutral-20};
     --surface-header: #{colors.$neutral-5};
 
     // Text.
-    --on-surface: #{colors.$neutral-95};
+    --on-surface: #{colors.$neutral-93};
     --on-surface-variant: #{colors.$neutral-80};
 
     // Outlines.
-    --outline: #{colors.$neutral-40};
+    --outline: #{colors.$neutral-30};
     --outline-variant: #{colors.$neutral-10};
 
     // Primary (brand) family.

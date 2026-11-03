@@ -6,7 +6,8 @@
   resize: none;
   font-size: var(--text-normal);
   color: var(--on-surface);
-  background-color: var(--surface-container-high);
+  border: 1px solid var(--outline);
+  background-color: var(--surface-container-highest);
   &:focus {
     outline: 2px solid var(--focus-ring);
     outline-offset: -2px;

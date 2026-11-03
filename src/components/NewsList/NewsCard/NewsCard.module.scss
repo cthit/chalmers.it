@@ -10,7 +10,7 @@
   position: relative;
   cursor: pointer;
   background: var(--surface-container);
-  border: 1px solid var(--outline);
+  border: 0.1rem solid var(--outline);
   border-radius: 0.5rem;
   padding: 1.5rem;
   display: grid;
@@ -187,7 +187,6 @@
   color: var(--on-surface-variant);
 
   a {
-    color: var(--link);
     text-decoration: none;
     font-weight: 500;
 
