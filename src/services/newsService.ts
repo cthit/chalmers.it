@@ -1,6 +1,6 @@
 import prisma from '@/prisma';
 import { PostStatus } from '@prisma/client';
-import NotifyService, { SlackWebhookNotifier } from './notifyService';
+import NotifyService, { serializeNewsPost } from './notifyService';
 import { Language } from '@prisma/client';
 
 export default class NewsService {
@@ -205,16 +205,24 @@ export default class NewsService {
     });
 
     if (publish) NotifyService.notifyNewsPost(updatedPost);
+    else if (post?.status === PostStatus.PUBLISHED)
+      NotifyService.updateNewsPost(updatedPost);
 
     return updatedPost;
   }
 
   static async remove(id: number) {
-    return await prisma.newsPost.delete({
+    // The deleted row carries the Slack ids that existed at delete time, so
+    // messages stored by an in-flight notification are not missed.
+    const res = await prisma.newsPost.delete({
       where: {
         id
       }
     });
+
+    NotifyService.deleteNewsPostMessages(res);
+
+    return res;
   }
 
   static async search(
@@ -353,9 +361,6 @@ export default class NewsService {
     });
     if (!post) return null;
 
-    const notifier = new SlackWebhookNotifier('', language);
-    const postData = await notifier.serializeNewsPost(post);
-
-    return postData;
+    return await serializeNewsPost(post, language);
   }
 }
