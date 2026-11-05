@@ -28,8 +28,11 @@ const SpokenLanguageIndicator = ({
 
   return (
     <div className={styles.container + ' ' + (className ?? '')}>
-      <SpokenLanguageIcon language={language} tooltip={altText} />
-      {!iconOnly && <p>{altText}</p>}
+      <SpokenLanguageIcon
+        language={language}
+        tooltip={iconOnly ? altText : undefined}
+      />
+      <p className={iconOnly ? styles.screenReaderOnly : ''}>{altText}</p>
     </div>
   );
 };

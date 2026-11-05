@@ -8,9 +8,9 @@ export function isValidQuery(input: {
 }) {
   const { query, groupId, userId, spokenLanguage } = input;
   return (
-    (query !== undefined && (query?.length ?? -1 >= 3)) ||
-    groupId !== undefined ||
-    userId !== undefined ||
-    spokenLanguage !== undefined
+    (query != undefined && query.length >= 3) ||
+    groupId != undefined ||
+    userId != undefined ||
+    spokenLanguage != undefined
   );
 }
