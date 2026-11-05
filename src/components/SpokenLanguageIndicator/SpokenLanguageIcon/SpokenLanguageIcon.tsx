@@ -14,15 +14,15 @@ const SpokenLanguageIcon = ({
   tooltip?: string;
 }) => {
   const images: Record<SpokenLanguage, ReactNode> = {
-    SV: <SpokenSv />,
-    EN: <SpokenEn />,
-    SV_EN: <SpokenSvEn />,
-    OTHER: <SpokenOther />
+    SV: <SpokenSv aria-hidden={true} />,
+    EN: <SpokenEn aria-hidden={true} />,
+    SV_EN: <SpokenSvEn aria-hidden={true} />,
+    OTHER: <SpokenOther aria-hidden={true} />
   };
   return (
-    <picture aria-label={tooltip} title={tooltip} className={styles.flag}>
+    <div title={tooltip} className={styles.flag}>
       {images[language]}
-    </picture>
+    </div>
   );
 };
 

@@ -506,7 +506,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                   }
                   required
                 >
-                  <option disabled hidden={group !== ''} value="">
+                  <option disabled hidden={e.spokenLanguage !== null} value="">
                     {l.events.selectSpokenLanguage}
                   </option>
                   <option value="SV">{l.events.spokenLanguages.sv}</option>
@@ -518,11 +518,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                     {l.events.spokenLanguages.other}
                   </option>
                 </DropdownList>
-                <DatePicker
-                  hidden={publish === 'now'}
-                  value={scheduledFor}
-                  onChange={(e) => setScheduledFor(e)}
-                />
               </div>
 
               <br />

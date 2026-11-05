@@ -10,10 +10,11 @@ export function getNewsPostSpokenLanguage(
   const spokenLanguages = new Set(
     post.connectedEvents.map((e) => e.spokenLanguage).filter((e) => e != null)
   );
+
   return spokenLanguages.size === 0
     ? null
     : spokenLanguages.size === 1
-      ? spokenLanguages.values().toArray()[0]
+      ? spokenLanguages.values().next().value!
       : spokenLanguages.has(SpokenLanguage.OTHER)
         ? SpokenLanguage.OTHER
         : SpokenLanguage.SV_EN;

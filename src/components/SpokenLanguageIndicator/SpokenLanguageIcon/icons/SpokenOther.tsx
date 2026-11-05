@@ -7,6 +7,7 @@ const SvgSpokenOther = (props: React.SVGAttributes<SVGElement>) => (
     width="128pt"
     height="128pt"
     viewBox="0 0 128 128"
+    role="img"
     {...props}
   >
     <g transform="translate(12.83 .416)">

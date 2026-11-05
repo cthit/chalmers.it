@@ -12,6 +12,7 @@ import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 import DropdownList from '../DropdownList/DropdownList';
 import { SpokenLanguage } from '@prisma/client';
+import { isValidQuery } from '@/utils/query';
 
 type ResultsType = Awaited<ReturnType<typeof search>> | undefined;
 
@@ -52,10 +53,15 @@ const NewsSearchForm = ({
       e.preventDefault();
       setResults(undefined);
 
-      const isValidQuery =
-        query.length >= 3 || groupId !== undefined || initialUser !== undefined;
+      const validQuery = isValidQuery({
+        query,
+        groupId,
+        userId: initialUser,
+        spokenLanguage
+      });
+
       setResults(
-        isValidQuery
+        validQuery
           ? await search(
               locale,
               query,
