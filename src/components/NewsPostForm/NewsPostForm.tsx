@@ -22,7 +22,7 @@ import { SpokenLanguage } from '@prisma/client';
 
 const validUploadTypes = Object.values(MediaType);
 
-const LOCAL_DRAFT_KEY = 'LocalDraftKey';
+const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -77,7 +77,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
-  const draft = loadDraft();
+  const draftKey =
+    newsPost.id !== undefined
+      ? `${LOCAL_DRAFT_KEY_PREFIX}:edit:${newsPost.id}`
+      : `${LOCAL_DRAFT_KEY_PREFIX}:new`;
+  const [draft] = useState(loadDraft);
+  const submitted = useRef(false);
 
   const [group, setGroup] = useState(newsPost.group ?? '');
   const [titleEn, setTitleEn] = useState(
@@ -110,18 +115,35 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
 
   useEffect(() => {
-    return () => {
-      try {
-        const contentEn = contentEnRef.current!.getMarkdown() ?? '';
-        const contentSv = contentSvRef.current!.getMarkdown() ?? '';
+    if (submitted.current) return;
 
+    const unchanged =
+      titleEn === (newsPost.titleEn ?? '') &&
+      titleSv === (newsPost.titleSv ?? '') &&
+      contentEn === (newsPost.contentEn ?? '') &&
+      contentSv === (newsPost.contentSv ?? '');
+
+    try {
+      if (unchanged) {
+        localStorage.removeItem(draftKey);
+      } else {
         localStorage.setItem(
-          LOCAL_DRAFT_KEY,
+          draftKey,
           JSON.stringify({ titleEn, titleSv, contentEn, contentSv })
         );
-      } catch {}
-    };
-  }, [titleEn, titleSv, contentEn, contentSv]);
+      }
+    } catch {}
+  }, [
+    draftKey,
+    titleEn,
+    titleSv,
+    contentEn,
+    contentSv,
+    newsPost.titleEn,
+    newsPost.titleSv,
+    newsPost.contentEn,
+    newsPost.contentSv
+  ]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -236,6 +258,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         await deleteEvent(id);
       }
 
+      submitted.current = true;
       clearDraft();
       router.push('/');
     } catch {
@@ -285,7 +308,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   function loadDraft(): EventDraft | null {
     try {
-      const loaded = localStorage.getItem(LOCAL_DRAFT_KEY);
+      const loaded = localStorage.getItem(draftKey);
       return loaded ? JSON.parse(loaded) : null;
     } catch {
       return null;
@@ -294,7 +317,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   function clearDraft() {
     try {
-      localStorage.removeItem(LOCAL_DRAFT_KEY);
+      localStorage.removeItem(draftKey);
     } catch {}
   }
 
@@ -329,7 +352,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          defaultMd={draft?.contentEn}
+          defaultMd={draft?.contentEn ?? newsPost.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
           onChange={(contents) => {
@@ -344,13 +367,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           value={titleSv}
           onChange={(e) => {
             setTitleSv(e.target.value);
-            console.log('settitlesv');
           }}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          defaultMd={draft?.contentSv}
+          defaultMd={draft?.contentSv ?? newsPost.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
           onChange={(contents) => {
