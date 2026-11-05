@@ -40,4 +40,7 @@ package-lock.json
 .idea/
 /db
 
+/test-results/
 /gamma-images/
+
+/playwright-report/
