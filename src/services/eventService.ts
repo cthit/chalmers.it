@@ -67,7 +67,7 @@ export default class EventService {
     endTime: Date;
     newsPostId?: number;
     location?: string;
-    spokenLanguage?: SpokenLanguage;
+    spokenLanguage?: SpokenLanguage | null;
   }) {
     return await prisma.event.create({
       data: {

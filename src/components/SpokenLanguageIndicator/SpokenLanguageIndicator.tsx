@@ -20,12 +20,11 @@ const SpokenLanguageIndicator = ({
     {
       SV: l.events.spokenLanguages.sv,
       EN: l.events.spokenLanguages.en,
-      SV_EN: l.events.spokenLanguages.sv_en,
-      OTHER: l.events.spokenLanguages.other
+      SV_EN: l.events.spokenLanguages.sv_en
     } satisfies Record<SpokenLanguage, string>
   )[language];
 
-  const altText = languageName + ' ' + l.events.spokenLanguages.suffix;
+  const altText = l.events.spokenLanguages.prefix + ' ' + languageName;
 
   return (
     <div className={styles.container + ' ' + (className ?? '')}>

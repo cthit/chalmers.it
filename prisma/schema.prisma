@@ -149,7 +149,6 @@ enum SpokenLanguage {
   SV
   EN
   SV_EN
-  OTHER
 }
 
 enum PostStatus {

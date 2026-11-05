@@ -18,6 +18,7 @@ import DatePicker from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
+import { capitalize } from '@/utils/strings';
 import { SpokenLanguage } from '@prisma/client';
 
 const validUploadTypes = Object.values(MediaType);
@@ -241,7 +242,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           startTime: event.startTime,
           endTime: event.endTime,
           location: event.location,
-          spokenLanguage: event.spokenLanguage ?? undefined,
+          spokenLanguage: event.spokenLanguage,
           descriptionEn: '',
           descriptionSv: '',
           newsPostId: postId
@@ -501,21 +502,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                     editEventState(
                       i,
                       'spokenLanguage',
-                      SpokenLanguage[e.target.value as SpokenLanguage]
+                      e.target.value === ''
+                        ? null
+                        : SpokenLanguage[e.target.value as SpokenLanguage]
                     )
                   }
-                  required
                 >
-                  <option disabled hidden={e.spokenLanguage !== null} value="">
-                    {l.events.selectSpokenLanguage}
+                  <option value="">{l.general.notApplicable}</option>
+                  <option value="SV">
+                    {capitalize(l.events.spokenLanguages.sv)}
                   </option>
-                  <option value="SV">{l.events.spokenLanguages.sv}</option>
-                  <option value="EN">{l.events.spokenLanguages.en}</option>
+                  <option value="EN">
+                    {capitalize(l.events.spokenLanguages.en)}
+                  </option>
                   <option value="SV_EN">
-                    {l.events.spokenLanguages.sv_en}
-                  </option>
-                  <option value="OTHER">
-                    {l.events.spokenLanguages.other}
+                    {capitalize(l.events.spokenLanguages.sv_en)}
                   </option>
                 </DropdownList>
               </div>

@@ -20,7 +20,7 @@ export async function editEvent(
     fullDay: boolean;
     startTime: Date;
     endTime: Date;
-    spokenLanguage?: SpokenLanguage;
+    spokenLanguage: SpokenLanguage | null;
     newsPostId?: number | undefined;
   }
 ) {
@@ -37,7 +37,7 @@ export async function createEvent(data: {
   fullDay: boolean;
   startTime: Date;
   endTime: Date;
-  spokenLanguage?: SpokenLanguage;
+  spokenLanguage?: SpokenLanguage | null;
   newsPostId?: number | undefined;
 }) {
   await throwIfUnauthorized();

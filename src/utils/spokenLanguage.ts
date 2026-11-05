@@ -7,15 +7,15 @@ type NewsPostConnectedEvents = {
 export function getNewsPostSpokenLanguage(
   post: NewsPostConnectedEvents
 ): SpokenLanguage | null {
-  const spokenLanguages = new Set(
+  const spokenLanguages: Set<SpokenLanguage> = new Set(
     post.connectedEvents.map((e) => e.spokenLanguage).filter((e) => e != null)
   );
 
-  return spokenLanguages.size === 0
-    ? null
-    : spokenLanguages.size === 1
-      ? spokenLanguages.values().next().value!
-      : spokenLanguages.has(SpokenLanguage.OTHER)
-        ? SpokenLanguage.OTHER
-        : SpokenLanguage.SV_EN;
+  if (spokenLanguages.size === 0) {
+    return null;
+  } else if (spokenLanguages.size === 1) {
+    return spokenLanguages.values().next().value!;
+  } else {
+    return SpokenLanguage.SV_EN;
+  }
 }

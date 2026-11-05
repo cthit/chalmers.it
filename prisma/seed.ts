@@ -231,7 +231,7 @@ async function main() {
           startTime: relativeDate(10, 15),
           endTime: relativeDate(10, 20),
           fullDay: true,
-          spokenLanguage: SpokenLanguage.OTHER
+          spokenLanguage: SpokenLanguage.SV
         }
       }
     },
@@ -371,7 +371,7 @@ async function main() {
           startTime: relativeDate(23),
           endTime: relativeDate(25),
           fullDay: true,
-          spokenLanguage: SpokenLanguage.OTHER
+          spokenLanguage: SpokenLanguage.SV
         }
       }
     },

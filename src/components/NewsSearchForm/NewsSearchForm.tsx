@@ -13,6 +13,7 @@ import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 import DropdownList from '../DropdownList/DropdownList';
 import { SpokenLanguage } from '@prisma/client';
 import { isValidQuery } from '@/utils/query';
+import { capitalize } from '@/utils/strings';
 
 type ResultsType = Awaited<ReturnType<typeof search>> | undefined;
 
@@ -151,10 +152,15 @@ const NewsSearchForm = ({
               value={spokenLanguage ?? ''}
             >
               <option value={''}>{l.search.allLanguages}</option>
-              <option value="SV">{l.events.spokenLanguages.sv}</option>
-              <option value="EN">{l.events.spokenLanguages.en}</option>
-              <option value="SV_EN">{l.events.spokenLanguages.sv_en}</option>
-              <option value="OTHER">{l.events.spokenLanguages.other}</option>
+              <option value="SV">
+                {capitalize(l.events.spokenLanguages.sv)}
+              </option>
+              <option value="EN">
+                {capitalize(l.events.spokenLanguages.en)}
+              </option>
+              <option value="SV_EN">
+                {capitalize(l.events.spokenLanguages.sv_en)}
+              </option>
             </DropdownList>
           </div>
           <ActionButton className={styles.submit} type="submit">

@@ -10,7 +10,8 @@
     "close": "Close",
     "save": "Save",
     "manage": "Manage",
-    "add": "Add"
+    "add": "Add",
+    "notApplicable": "Not applicable"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -109,7 +110,6 @@
     "fullDay": "Full day",
     "location": "Location",
     "spokenLanguage": "Spoken language",
-    "selectSpokenLanguage": "Select language",
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
@@ -133,11 +133,10 @@
       "outlook": "Outlook"
     },
     "spokenLanguages": {
-      "suffix": "will be spoken at the event",
+      "prefix": "The event will be held in",
       "sv": "Swedish",
       "en": "English",
-      "sv_en": "Swedish and English",
-      "other": "Another language"
+      "sv_en": "Swedish and English"
     }
   },
   "groups": {

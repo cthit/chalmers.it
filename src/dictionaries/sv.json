@@ -10,7 +10,8 @@
     "close": "Stäng",
     "save": "Spara",
     "manage": "Hantera",
-    "add": "Lägg till"
+    "add": "Lägg till",
+    "notApplicable": "Inte applicerbart"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -109,7 +110,6 @@
     "fullDay": "Heldag",
     "location": "Plats",
     "spokenLanguage": "Talat språk",
-    "selectSpokenLanguage": "Välj språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
@@ -133,11 +133,10 @@
       "outlook": "Outlook"
     },
     "spokenLanguages": {
-      "suffix": "kommer talas på evenemanget",
-      "sv": "Svenska",
-      "en": "Engelska",
-      "sv_en": "Svenska och engelska",
-      "other": "Annat språk"
+      "prefix": "Evenemanget kommer hållas på",
+      "sv": "svenska",
+      "en": "engelska",
+      "sv_en": "svenska och engelska"
     }
   },
   "groups": {
