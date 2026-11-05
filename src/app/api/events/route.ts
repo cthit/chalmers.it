@@ -11,7 +11,7 @@ import {
   CalendarEvent
 } from 'iamcal';
 import NewsService from '@/services/newsService';
-import { Event } from '@prisma/client';
+import { Event, SpokenLanguage } from '@prisma/client';
 import GammaService from '@/services/gammaService';
 import { imgMatcher } from '@/utils/mediaLink';
 
@@ -148,6 +148,19 @@ async function createCalendarEventDescription(
     ? ` ${l.news.for} ${post.writtenFor.prettyName}`
     : '';
 
+  const spokenLanguageName = event.spokenLanguage
+    ? (
+        {
+          SV: l.events.spokenLanguages.sv,
+          EN: l.events.spokenLanguages.en,
+          SV_EN: l.events.spokenLanguages.sv_en
+        } satisfies Record<SpokenLanguage, string>
+      )[event.spokenLanguage]
+    : null;
+  const spokenLanguagePart = spokenLanguageName
+    ? `\n\n<b>${l.events.spokenLanguage}:</b> ${l.events.spokenLanguages.prefix} ${spokenLanguageName}`
+    : '';
+
   const relatedEvents = post.connectedEvents
     .filter((connectedEvent) => connectedEvent.id !== event.id)
     .map((connectedEvent) => {
@@ -168,7 +181,7 @@ async function createCalendarEventDescription(
 
 ${content}
 
-${l.events.readMore}: ${baseUrl}/post/${post.id}${relatedEventsPart}`;
+${l.events.readMore}: ${baseUrl}/post/${post.id}${spokenLanguagePart}${relatedEventsPart}`;
 }
 
 /**
