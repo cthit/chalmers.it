@@ -103,7 +103,13 @@ const LargeCalendarClient = ({
         listWeek: createButton('listWeek', l.events.list)
       }}
       headerToolbar={headerToolbar}
+      headerToolbarClass={styles.headerToolbar}
       todayText={l.events.today}
+      todayHint={(info) =>
+        l.events.todayHint[
+          info.toLowerCase() as keyof typeof l.events.todayHint
+        ]
+      }
       allDayText={l.events.fullDay}
       noEventsText={l.events.noEvents}
       weekNumbers={weekNumbers}

@@ -10,16 +10,17 @@
   overflow: hidden;
 }
 
-.selectedButton {
-  background-color: var(--surface-container-high);
-}
-
-.selectedButton:hover {
-  background-color: var(--surface-container-highest);
-}
-
 .sidebar {
   text-align: end;
+}
+
+// Selected header buttons and today button
+.selectedButton,
+.headerToolbar > div:nth-child(1) > button:nth-child(1)[disabled] {
+  background-color: var(--primary-container);
+  border-color: var(--primary-container-high);
+  cursor: default !important;
+  pointer-events: none;
 }
 
 // Day indicator

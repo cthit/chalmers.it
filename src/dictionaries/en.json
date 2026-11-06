@@ -121,6 +121,11 @@
     "readMore": "Read more",
     "relatedEvents": "Related events",
     "today": "Today",
+    "todayHint": {
+      "day": "Today",
+      "week": "This week",
+      "month": "This month"
+    },
     "day": "Day",
     "week": "Week",
     "month": "Month",
