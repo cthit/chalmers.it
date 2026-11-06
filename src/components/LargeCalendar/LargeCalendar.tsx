@@ -29,14 +29,8 @@ const LargeCalendar = async ({
             extendedProps: {
               location: event.location
             },
-            ...(event.fullDay
-              ? {
-                  date: event.startTime
-                }
-              : {
-                  start: event.startTime,
-                  end: event.endTime
-                })
+            start: event.startTime,
+            end: event.endTime
           }) satisfies EventInput
       )
     );

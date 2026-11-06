@@ -1,47 +1,266 @@
-// Style today indicator
+.hide {
+  display: none !important;
+}
+
+.calendar {
+  container-type: inline-size;
+  container-name: largecalendar;
+
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.sidebar {
+  text-align: end;
+}
+
+// Selected header buttons and today button
+.selectedButton,
+.headerToolbar > div:nth-child(1) > button:nth-child(1)[disabled] {
+  background-color: var(--primary-container);
+  border-color: var(--primary-container-high);
+  cursor: default !important;
+  pointer-events: none;
+}
+
+// Day indicator
 .dayCellTopInner {
+  background: none;
+  margin-inline: auto;
   --fc-forma-primary: var(--primary);
 }
 
-// Add underline when hovering over event
-.event:hover .eventHoverUnderline {
-  text-decoration: underline;
+.dayHeader {
+  flex-direction: row !important;
 }
 
-// Non-interactive event color
-.eventNonInteractive {
-  --fc-forma-event: var(--on-surface-variant);
-  --fc-forma-event-contrast: var(--surface);
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
 }
 
-// Event location
-.titleWithLocation {
-  flex-grow: 0 !important;
+.weekday {
+  font-size: 0.8em;
 }
 
-.location {
+.innerDay {
+  aspect-ratio: 1/1;
+  height: 24px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.innerDay.narrow {
+  height: 20px;
+}
+
+.innerDay.today {
+  background-color: var(--primary);
+}
+
+.innerDay:hover {
+  background-color: var(--surface-container-highest);
+}
+
+.innerDay.today:hover {
+  background-color: var(--primary-hover);
+}
+
+// List view
+.listView .viewBody > div > div {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+}
+
+.listDay {
+  display: grid;
+  grid-column: 1 / 3;
+  grid-template-columns: subgrid;
+  grid-template-rows: 1fr;
+}
+
+.listDayHeader {
+  width: fit-content;
+}
+
+// Week number
+.inlineWeekNumber {
+  padding: 0;
+  height: fit-content;
+  line-height: unset;
+}
+
+.inlineWeekNumber > div {
+  line-height: 1.09091;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.inlineWeekNumber:hover {
+  background-color: var(--surface-container-highest);
+}
+
+// All day events
+.eventStart .eventBeforeArrow {
+  display: none;
+}
+
+.eventEnd .eventAfterArrow {
+  display: none;
+}
+
+.event.allDay:not(.listEvent) .eventTime {
+  display: none;
+}
+
+.eventAfterArrow,
+.eventBeforeArrow {
+  align-self: center;
+}
+
+.eventAfterArrow {
+  margin-right: 0.5rem;
+}
+
+.eventBeforeArrow {
+  margin-left: 0.5rem;
+}
+
+.rowEvent {
+  margin-inline: 1px;
+}
+
+// Event
+.listEvent .eventTime {
+  white-space: wrap;
+  width: 6rem;
+  min-width: min-content;
+  text-overflow: clip;
+}
+
+.eventTitle {
+  word-break: break-word;
+  text-wrap: wrap;
+  hyphens: auto;
+}
+
+.eventLocation {
+  word-break: break-word;
+  text-wrap: wrap;
+  hyphens: auto;
   font-weight: normal;
   padding-top: 2px;
+  padding-inline: 0;
 }
 
-.block {
+.blockEvent,
+.blockEvent div:has(> .eventInfo) {
+  align-items: start;
+}
+
+.eventDot {
+  margin-block-start: calc(0.5em - 2px);
+}
+
+.event.narrow .eventDot {
+  display: none;
+}
+
+.eventInfo,
+.eventLocation {
+  text-decoration-line: none !important;
+}
+
+.blockEvent .eventInfo {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0.2em;
 }
 
-.row {
+.blockEvent .eventLocation {
+  padding-top: 0;
+}
+
+.listEvent .eventInfo {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 0.5em;
+  flex-wrap: wrap;
+  gap: 0.2em;
 }
 
-.block > .location {
+.listEvent .eventTitle {
+  margin-right: 1em;
+}
+
+.listEvent .eventLocation {
+  min-width: 4rem;
   padding-top: 0;
 }
 
-.row > .location {
-  padding-top: 0;
+.listEvent > div {
+  gap: 1rem;
+}
+
+// Add underline when hovering over event
+.eventInteractive:hover .eventTitle {
+  text-decoration: underline;
+}
+
+// Set color for non-interactive
+.event:not(.eventInteractive) {
+  --fc-forma-event: var(--tertiary-container);
+}
+
+// Slim calendars
+.event.narrow {
+  border-width: 0px;
+  padding-left: 1px;
+}
+
+.event.narrow .eventAfterArrow,
+.event.narrow .eventBeforeArrow {
+  display: none;
+}
+
+@container largecalendar (width < 45rem) {
+  .sidebar > div {
+    max-width: 100%;
+  }
+
+  .sidebar > div > div {
+    text-wrap: wrap;
+    word-break: break-word;
+    max-width: 100%;
+    margin-inline: 2px;
+    hyphens: manual;
+  }
+
+  div:has(> .sidebar):not([role='row']) {
+    width: 1.75rem !important;
+  }
+
+  .sidebar {
+    width: 1.75rem !important;
+    text-wrap: wrap;
+    word-break: break-word;
+  }
+
+  // An actual class would be preferred but FullCalendar does not have an option for setting the className for this element
+  .calendar div[aria-label='.sidebar'] {
+    width: 1.75rem !important;
+  }
+}
+
+@container largecalendar (width < 30rem) {
+  .listEvent .eventTime {
+    width: 2rem;
+  }
 }
