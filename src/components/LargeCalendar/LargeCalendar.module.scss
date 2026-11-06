@@ -1,6 +1,3 @@
-@use '../../styles/colors.scss';
-@use '../../styles/theme-toggle.scss';
-
 .hide {
   display: none !important;
 }
@@ -14,11 +11,11 @@
 }
 
 .selectedButton {
-  background-color: var(--secondary-color);
+  background-color: var(--surface-container-high);
 }
 
 .selectedButton:hover {
-  background-color: var(--secondary-color-highlight);
+  background-color: var(--surface-container-highest);
 }
 
 .sidebar {
@@ -29,6 +26,7 @@
 .dayCellTopInner {
   background: none;
   margin-inline: auto;
+  --fc-forma-primary: var(--primary);
 }
 
 .dayHeader {
@@ -63,15 +61,15 @@
 }
 
 .innerDay.today {
-  background-color: var(--primary-color);
+  background-color: var(--primary);
 }
 
 .innerDay:hover {
-  background-color: var(--secondary-color-highlight);
+  background-color: var(--surface-container-highest);
 }
 
 .innerDay.today:hover {
-  background-color: var(--primary-color-highlight);
+  background-color: var(--primary-hover);
 }
 
 // List view
@@ -105,7 +103,7 @@
 }
 
 .inlineWeekNumber:hover {
-  background-color: var(--secondary-color-highlight);
+  background-color: var(--surface-container-highest);
 }
 
 // All day events
@@ -217,7 +215,7 @@
 
 // Set color for non-interactive
 .event:not(.eventInteractive) {
-  --fc-forma-event: var(--calendar-event-secondary-color);
+  --fc-forma-event: var(--tertiary-container);
 }
 
 // Slim calendars

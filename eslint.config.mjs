@@ -30,7 +30,7 @@ export default [
       '@typescript-eslint': typescriptEslint
     },
     settings: {
-      react: { version: 'detect' }
+      react: { version: '19.3' }
     },
     rules: {
       'react/react-in-jsx-scope': 'off',
