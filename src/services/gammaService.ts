@@ -29,6 +29,10 @@ export default class GammaService {
     return `${this.gammaUrl}/images/user/avatar/${uuid}`;
   }
 
+  static getUserURL(uuid: string) {
+    return `${this.gammaUrl}/users/${uuid}`;
+  }
+
   static getGroupAvatarURL(gid: string) {
     return `${this.gammaUrl}/images/group/avatar/${gid}`;
   }
