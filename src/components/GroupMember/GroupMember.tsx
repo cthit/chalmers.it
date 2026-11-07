@@ -6,6 +6,7 @@ import { GammaGroupMember } from '@/types/gamma';
 import { FaNewspaper, FaUser } from 'react-icons/fa6';
 import ActionLink from '../ActionButton/ActionLink';
 import i18nService from '@/services/i18nService';
+import Card from '../Card/Card';
 
 const GroupMember = ({
   member,
@@ -20,7 +21,7 @@ const GroupMember = ({
   const url = GammaService.getUserURL(member.user.id);
   const postName = locale === 'en' ? member.post.enName : member.post.svName;
   return (
-    <ContentPane>
+    <Card>
       <div className={styles.groupMember}>
         <FallbackImage
           src={pfp}
@@ -53,7 +54,7 @@ const GroupMember = ({
           <FaUser /> {l.groups.memberProfile}
         </ActionLink>
       </div>
-    </ContentPane>
+    </Card>
   );
 };
 
