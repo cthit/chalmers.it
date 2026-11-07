@@ -32,7 +32,7 @@ const GroupMember = ({
           <p>
             {member.unofficialPostName ? member.unofficialPostName : postName}
           </p>
-          {member.unofficialPostName !== undefined && (
+          {member.unofficialPostName && (
             <p className={styles.secondaryPost}>{postName}</p>
           )}
         </div>
