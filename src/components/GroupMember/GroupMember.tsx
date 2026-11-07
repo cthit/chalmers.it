@@ -1,4 +1,3 @@
-import ContentPane from '../ContentPane/ContentPane';
 import FallbackImage from '../FallbackImage/FallbackImage';
 import styles from './GroupMember.module.scss';
 import GammaService from '@/services/gammaService';
