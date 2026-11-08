@@ -1,11 +1,16 @@
-.flag {
+.container {
   display: flex;
   width: 2em;
   height: 2em;
 }
 
-.flag > svg {
+.container > svg {
   width: 2em;
   height: 2em;
-  color: var(--text-color);
+  color: var(--on-surface);
+}
+
+.icon {
+  fill: var(--on-surface);
+  stroke: var(--on-surface);
 }

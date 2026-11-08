@@ -1,9 +1,5 @@
 import { SpokenLanguage } from '@prisma/client';
 import styles from './SpokenLanguageIcon.module.scss';
-import { ReactNode } from 'react';
-import SpokenEn from './icons/SpokenEn';
-import SpokenSvEn from './icons/SpokenSvEn';
-import SpokenSv from './icons/SpokenSv';
 
 const SpokenLanguageIcon = ({
   language,
@@ -12,14 +8,27 @@ const SpokenLanguageIcon = ({
   language: SpokenLanguage;
   tooltip?: string;
 }) => {
-  const images: Record<SpokenLanguage, ReactNode> = {
-    SV: <SpokenSv aria-hidden={true} />,
-    EN: <SpokenEn aria-hidden={true} />,
-    SV_EN: <SpokenSvEn aria-hidden={true} />
+  const svgPath = '/spoken-language.svg';
+  const spriteIds: Record<SpokenLanguage, string> = {
+    SV: 'sv',
+    EN: 'en',
+    SV_EN: 'sv_en'
   };
   return (
-    <div title={tooltip} className={styles.flag}>
-      {images[language]}
+    <div title={tooltip} className={styles.container}>
+      <svg>
+        <use
+          href={svgPath + '#main'}
+          width="100%"
+          height="100%"
+          className={styles.icon}
+        ></use>
+        <use
+          href={svgPath + '#' + spriteIds[language]}
+          width="100%"
+          height="100%"
+        ></use>
+      </svg>
     </div>
   );
 };
