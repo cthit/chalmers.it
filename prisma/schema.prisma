@@ -67,20 +67,20 @@ model DivisionPage {
 }
 
 model Event {
-  id             Int       @id @default(autoincrement())
-  titleSv        String
-  titleEn        String
-  descriptionEn  String
-  descriptionSv  String
-  fullDay        Boolean
-  startTime      DateTime
-  endTime        DateTime
-  location       String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  NewsPost       NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
-  newsPostId     Int?
-  spokenLanguage SpokenLanguage?
+  id            Int       @id @default(autoincrement())
+  titleSv       String
+  titleEn       String
+  descriptionEn String
+  descriptionSv String
+  fullDay       Boolean
+  startTime     DateTime
+  endTime       DateTime
+  location      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  NewsPost      NewsPost? @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
+  newsPostId    Int?
+  language      EventLanguage?
 }
 
 model Sponsor {
@@ -145,7 +145,7 @@ enum Language {
   EN
 }
 
-enum SpokenLanguage {
+enum EventLanguage {
   SV
   EN
   SV_EN

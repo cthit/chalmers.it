@@ -11,7 +11,7 @@ import {
   CalendarEvent
 } from 'iamcal';
 import NewsService from '@/services/newsService';
-import { Event, SpokenLanguage } from '@prisma/client';
+import { Event, EventLanguage } from '@prisma/client';
 import GammaService from '@/services/gammaService';
 import { imgMatcher } from '@/utils/mediaLink';
 
@@ -148,17 +148,17 @@ async function createCalendarEventDescription(
     ? ` ${l.news.for} ${post.writtenFor.prettyName}`
     : '';
 
-  const spokenLanguageName = event.spokenLanguage
+  const eventLanguageName = event.language
     ? (
         {
-          SV: l.events.spokenLanguages.sv,
-          EN: l.events.spokenLanguages.en,
-          SV_EN: l.events.spokenLanguages.sv_en
-        } satisfies Record<SpokenLanguage, string>
-      )[event.spokenLanguage]
+          SV: l.events.languages.sv,
+          EN: l.events.languages.en,
+          SV_EN: l.events.languages.sv_en
+        } satisfies Record<EventLanguage, string>
+      )[event.language]
     : null;
-  const spokenLanguagePart = spokenLanguageName
-    ? `\n\n<b>${l.events.spokenLanguage}:</b> ${l.events.spokenLanguages.prefix} ${spokenLanguageName}`
+  const eventLanguagePart = eventLanguageName
+    ? `\n\n<b>${l.events.language}:</b> ${l.events.heldInLanguage} ${eventLanguageName}`
     : '';
 
   const relatedEvents = post.connectedEvents
@@ -181,7 +181,7 @@ async function createCalendarEventDescription(
 
 ${content}
 
-${l.events.readMore}: ${baseUrl}/post/${post.id}${spokenLanguagePart}${relatedEventsPart}`;
+${l.events.readMore}: ${baseUrl}/post/${post.id}${eventLanguagePart}${relatedEventsPart}`;
 }
 
 /**

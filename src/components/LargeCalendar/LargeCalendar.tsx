@@ -28,7 +28,7 @@ const LargeCalendar = async ({
                 : undefined,
             extendedProps: {
               location: event.location,
-              spokenLanguage: event.spokenLanguage
+              language: event.language
             },
             ...(event.fullDay
               ? {

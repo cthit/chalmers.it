@@ -6,25 +6,25 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
-import SpokenLanguageIndicator from '@/components/SpokenLanguageIndicator/SpokenLanguageIndicator';
-import { getNewsPostSpokenLanguage } from '@/utils/spokenLanguage';
+import EventLanguageIndicator from '@/components/EventLanguageIndicator/EventLanguageIndicator';
+import { getNewsPostEventLanguage } from '@/utils/eventLanguage';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
   locale: string;
   standalone?: boolean;
-  hideSpokenLanguage?: boolean;
+  hideEventLanguage?: boolean;
 }
 
 const NewsPost = ({
   locale,
   post,
   standalone: noNav,
-  hideSpokenLanguage
+  hideEventLanguage
 }: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
 
-  const spokenLanguage = getNewsPostSpokenLanguage(post);
+  const eventLanguage = getNewsPostEventLanguage(post);
 
   return (
     <>
@@ -55,11 +55,11 @@ const NewsPost = ({
         </div>
       </div>
       <MarkdownView content={post.content} />
-      {!hideSpokenLanguage && spokenLanguage && (
-        <SpokenLanguageIndicator
+      {!hideEventLanguage && eventLanguage && (
+        <EventLanguageIndicator
           locale={locale}
-          language={spokenLanguage}
-          className={style.spokenLanguage}
+          language={eventLanguage}
+          className={style.eventLanguageIndicator}
         />
       )}
     </>

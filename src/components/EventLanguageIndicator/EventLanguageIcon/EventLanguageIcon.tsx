@@ -1,15 +1,15 @@
-import { SpokenLanguage } from '@prisma/client';
-import styles from './SpokenLanguageIcon.module.scss';
+import { EventLanguage } from '@prisma/client';
+import styles from './EventLanguageIcon.module.scss';
 
-const SpokenLanguageIcon = ({
+const EventLanguageIcon = ({
   language,
   tooltip
 }: {
-  language: SpokenLanguage;
+  language: EventLanguage;
   tooltip?: string;
 }) => {
-  const svgPath = '/spoken-language.svg';
-  const spriteIds: Record<SpokenLanguage, string> = {
+  const svgPath = '/language-speech-bubble.svg';
+  const spriteIds: Record<EventLanguage, string> = {
     SV: 'sv',
     EN: 'en',
     SV_EN: 'sv_en'
@@ -33,4 +33,4 @@ const SpokenLanguageIcon = ({
   );
 };
 
-export default SpokenLanguageIcon;
+export default EventLanguageIcon;

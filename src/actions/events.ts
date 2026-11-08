@@ -2,7 +2,7 @@
 
 import EventService from '@/services/eventService';
 import SessionService from '@/services/sessionService';
-import { SpokenLanguage } from '@prisma/client';
+import { EventLanguage } from '@prisma/client';
 
 async function throwIfUnauthorized() {
   if (!(await SessionService.isAdmin()) && !(await SessionService.isActive())) {
@@ -20,7 +20,7 @@ export async function editEvent(
     fullDay: boolean;
     startTime: Date;
     endTime: Date;
-    spokenLanguage: SpokenLanguage | null;
+    language: EventLanguage | null;
     newsPostId?: number | undefined;
   }
 ) {
@@ -37,7 +37,7 @@ export async function createEvent(data: {
   fullDay: boolean;
   startTime: Date;
   endTime: Date;
-  spokenLanguage?: SpokenLanguage | null;
+  language?: EventLanguage | null;
   newsPostId?: number | undefined;
 }) {
   await throwIfUnauthorized();

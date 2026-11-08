@@ -109,7 +109,7 @@
     "end": "Slut",
     "fullDay": "Heldag",
     "location": "Plats",
-    "spokenLanguage": "Talat språk",
+    "language": "Språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
@@ -132,8 +132,8 @@
       "appleCalendar": "Apple Kalender",
       "outlook": "Outlook"
     },
-    "spokenLanguages": {
-      "prefix": "Evenemanget kommer hållas på",
+    "heldInLanguage": "Evenemanget kommer hållas på",
+    "languages": {
       "sv": "svenska",
       "en": "engelska",
       "sv_en": "svenska och engelska"
@@ -219,7 +219,7 @@
     "query": "Sökfråga",
     "short": "Sökfrågan måste vara minst 3 tecken",
     "group": "Grupp",
-    "spokenLanguage": "Talat språk",
+    "eventLanguage": "Språk på evenemang",
     "allTypes": "Alla typer",
     "allGroups": "Alla grupper",
     "allLanguages": "Alla språk",

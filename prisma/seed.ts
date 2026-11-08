@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Prisma, PostStatus, SpokenLanguage } from '@prisma/client';
+import { Prisma, PostStatus, EventLanguage } from '@prisma/client';
 import prisma from '../src/prisma';
 
 /**
@@ -44,7 +44,7 @@ async function main() {
           startTime: relativeDate(0, 16),
           endTime: relativeDate(0, 18),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV_EN
+          language: EventLanguage.SV_EN
         }
       }
     },
@@ -67,7 +67,7 @@ async function main() {
           startTime: relativeDate(1, 8),
           endTime: relativeDate(1, 12),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.EN
+          language: EventLanguage.EN
         }
       }
     },
@@ -90,7 +90,7 @@ async function main() {
           startTime: relativeDate(1, 15),
           endTime: relativeDate(1, 20),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -112,7 +112,7 @@ async function main() {
           startTime: relativeDate(4),
           endTime: relativeDate(5),
           fullDay: true,
-          spokenLanguage: null
+          language: null
         }
       }
     },
@@ -154,7 +154,7 @@ async function main() {
           startTime: relativeDate(6, 18),
           endTime: relativeDate(7, 22),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.EN
+          language: EventLanguage.EN
         }
       }
     },
@@ -177,7 +177,7 @@ async function main() {
           startTime: relativeDate(9, 15.5),
           endTime: relativeDate(9, 21),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -200,7 +200,7 @@ async function main() {
           startTime: relativeDate(10, 15),
           endTime: relativeDate(10, 20),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -231,7 +231,7 @@ async function main() {
           startTime: relativeDate(10, 15),
           endTime: relativeDate(10, 20),
           fullDay: true,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -254,7 +254,7 @@ async function main() {
           startTime: relativeDate(17, 15),
           endTime: relativeDate(17, 17),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -277,7 +277,7 @@ async function main() {
           startTime: relativeDate(18, 15),
           endTime: relativeDate(18, 17),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.EN
+          language: EventLanguage.EN
         }
       }
     },
@@ -302,7 +302,7 @@ async function main() {
               startTime: relativeDate(20, 16),
               endTime: relativeDate(20, 22),
               fullDay: false,
-              spokenLanguage: SpokenLanguage.SV_EN
+              language: EventLanguage.SV_EN
             },
             {
               titleSv: 'DrawIT brädspelskvällar LP1',
@@ -313,7 +313,7 @@ async function main() {
               startTime: relativeDate(27, 16),
               endTime: relativeDate(27, 22),
               fullDay: false,
-              spokenLanguage: SpokenLanguage.SV_EN
+              language: EventLanguage.SV_EN
             }
           ]
         }
@@ -348,7 +348,7 @@ async function main() {
           startTime: relativeDate(22, 13),
           endTime: relativeDate(22, 16),
           fullDay: false,
-          spokenLanguage: null
+          language: null
         }
       }
     },
@@ -371,7 +371,7 @@ async function main() {
           startTime: relativeDate(23),
           endTime: relativeDate(25),
           fullDay: true,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -404,7 +404,7 @@ async function main() {
           startTime: relativeDate(30),
           endTime: relativeDate(31),
           fullDay: true,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -427,7 +427,7 @@ async function main() {
           startTime: relativeDate(31, 10),
           endTime: relativeDate(31, 11),
           fullDay: false,
-          spokenLanguage: null
+          language: null
         }
       }
     },
@@ -450,7 +450,7 @@ async function main() {
           startTime: relativeDate(40, 15),
           endTime: relativeDate(40, 21),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV_EN
+          language: EventLanguage.SV_EN
         }
       }
     },
@@ -473,7 +473,7 @@ async function main() {
           startTime: relativeDate(40, 13),
           endTime: relativeDate(40, 15),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     },
@@ -506,7 +506,7 @@ async function main() {
           startTime: relativeDate(46, 16),
           endTime: relativeDate(46, 21),
           fullDay: false,
-          spokenLanguage: SpokenLanguage.SV
+          language: EventLanguage.SV
         }
       }
     }

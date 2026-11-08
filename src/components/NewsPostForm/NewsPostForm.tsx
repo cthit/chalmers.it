@@ -19,7 +19,7 @@ import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 import { capitalize } from '@/utils/strings';
-import { SpokenLanguage } from '@prisma/client';
+import { EventLanguage } from '@prisma/client';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -46,7 +46,7 @@ interface Event {
   endTime: Date;
   fullDay: boolean;
   location: string | null;
-  spokenLanguage: SpokenLanguage | null;
+  language: EventLanguage | null;
   id?: number;
 }
 
@@ -64,7 +64,7 @@ const emptyEvent: Event = {
   endTime: new Date(),
   fullDay: false,
   location: '',
-  spokenLanguage: null,
+  language: null,
   id: undefined
 };
 
@@ -242,7 +242,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           startTime: event.startTime,
           endTime: event.endTime,
           location: event.location,
-          spokenLanguage: event.spokenLanguage,
+          language: event.language,
           descriptionEn: '',
           descriptionSv: '',
           newsPostId: postId
@@ -494,29 +494,29 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                 onChange={(e) => editEventState(i, 'location', e.target.value)}
               />
 
-              <h3>{l.events.spokenLanguage}</h3>
+              <h3>{l.events.language}</h3>
               <div className={style.actions}>
                 <DropdownList
-                  value={e.spokenLanguage?.toString() ?? ''}
+                  value={e.language?.toString() ?? ''}
                   onChange={(e) =>
                     editEventState(
                       i,
-                      'spokenLanguage',
+                      'language',
                       e.target.value === ''
                         ? null
-                        : SpokenLanguage[e.target.value as SpokenLanguage]
+                        : EventLanguage[e.target.value as EventLanguage]
                     )
                   }
                 >
                   <option value="">{l.general.notApplicable}</option>
                   <option value="SV">
-                    {capitalize(l.events.spokenLanguages.sv)}
+                    {capitalize(l.events.languages.sv)}
                   </option>
                   <option value="EN">
-                    {capitalize(l.events.spokenLanguages.en)}
+                    {capitalize(l.events.languages.en)}
                   </option>
                   <option value="SV_EN">
-                    {capitalize(l.events.spokenLanguages.sv_en)}
+                    {capitalize(l.events.languages.sv_en)}
                   </option>
                 </DropdownList>
               </div>

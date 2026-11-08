@@ -50,7 +50,7 @@ export default async function Page(props: {
         color: 'var(--primary)',
         extendedProps: {
           location: event.location,
-          spokenLanguage: event.spokenLanguage
+          language: event.language
         },
         ...(event.fullDay
           ? {
@@ -74,7 +74,7 @@ export default async function Page(props: {
                   standalone
                   locale={params.locale}
                   post={postData}
-                  hideSpokenLanguage
+                  hideEventLanguage
                 />
               )}
             </ContentPane>

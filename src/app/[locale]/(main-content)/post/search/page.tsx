@@ -4,7 +4,7 @@ import NewsSearchForm from '@/components/NewsSearchForm/NewsSearchForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 import { isValidQuery } from '@/utils/query';
-import { SpokenLanguage } from '@prisma/client';
+import { EventLanguage } from '@prisma/client';
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
@@ -27,13 +27,13 @@ export default async function Page(props: {
 
   const verifiedBefore = !isNaN(+before) ? new Date(+before) : undefined;
   const verifiedAfter = !isNaN(+after) ? new Date(+after) : undefined;
-  const verifiedSpokenLanguage: SpokenLanguage | undefined =
-    SpokenLanguage[lang?.toUpperCase() as SpokenLanguage];
+  const verifiedEventLanguage: EventLanguage | undefined =
+    EventLanguage[lang?.toUpperCase() as EventLanguage];
   const validQuery = isValidQuery({
     query: q,
     groupId: gid,
     userId: uid,
-    spokenLanguage: verifiedSpokenLanguage
+    eventLanguage: verifiedEventLanguage
   });
 
   const res = validQuery
@@ -44,7 +44,7 @@ export default async function Page(props: {
         verifiedAfter,
         uid,
         gid,
-        verifiedSpokenLanguage
+        verifiedEventLanguage
       )
     : [];
 
@@ -66,7 +66,7 @@ export default async function Page(props: {
             initialUser={uid}
             initialBefore={verifiedBefore}
             initialAfter={verifiedAfter}
-            initialSpokenLanguage={verifiedSpokenLanguage}
+            initialEventLanguage={verifiedEventLanguage}
           />
         }
         right={<ContactCard locale={locale} />}

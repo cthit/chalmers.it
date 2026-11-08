@@ -11,7 +11,7 @@ import { search } from '@/actions/newsList';
 import i18nService from '@/services/i18nService';
 import NewsSearchResult from './NewsSearchResult/NewsSearchResult';
 import DropdownList from '../DropdownList/DropdownList';
-import { SpokenLanguage } from '@prisma/client';
+import { EventLanguage } from '@prisma/client';
 import { isValidQuery } from '@/utils/query';
 import { capitalize } from '@/utils/strings';
 
@@ -25,7 +25,7 @@ const NewsSearchForm = ({
   initialAfter,
   initialResults,
   initialGroup,
-  initialSpokenLanguage,
+  initialEventLanguage,
   initialUser
 }: {
   locale: string;
@@ -34,7 +34,7 @@ const NewsSearchForm = ({
   initialBefore?: Date;
   initialAfter?: Date;
   initialGroup?: string;
-  initialSpokenLanguage?: SpokenLanguage;
+  initialEventLanguage?: EventLanguage;
   initialUser?: string;
   initialResults?: ResultsType;
 }) => {
@@ -45,9 +45,9 @@ const NewsSearchForm = ({
   const [before, setBefore] = useState<Date | undefined>(initialBefore);
   const [after, setAfter] = useState<Date | undefined>(initialAfter);
   const [groupId, setGroupId] = useState<string | undefined>(initialGroup);
-  const [spokenLanguage, setSpokenLanguage] = useState<
-    SpokenLanguage | undefined
-  >(initialSpokenLanguage);
+  const [eventLanguage, setEventLanguage] = useState<EventLanguage | undefined>(
+    initialEventLanguage
+  );
 
   const onSearch = useCallback(
     async (e: FormEvent) => {
@@ -58,7 +58,7 @@ const NewsSearchForm = ({
         query,
         groupId,
         userId: initialUser,
-        spokenLanguage
+        eventLanguage
       });
 
       setResults(
@@ -70,7 +70,7 @@ const NewsSearchForm = ({
               after,
               initialUser,
               groupId,
-              spokenLanguage
+              eventLanguage
             )
           : null
       );
@@ -82,8 +82,8 @@ const NewsSearchForm = ({
       if (after && !isNaN(after.getTime()))
         searchParams.append('after', after.getTime().toString());
       if (groupId) searchParams.append('gid', groupId);
-      if (spokenLanguage)
-        searchParams.append('lang', spokenLanguage.valueOf().toLowerCase());
+      if (eventLanguage)
+        searchParams.append('lang', eventLanguage.valueOf().toLowerCase());
       if (initialUser) searchParams.append('uid', initialUser);
 
       window.history.pushState(
@@ -92,7 +92,7 @@ const NewsSearchForm = ({
         '/post/search?' + searchParams.toString()
       );
     },
-    [query, locale, before, after, initialUser, groupId, spokenLanguage]
+    [query, locale, before, after, initialUser, groupId, eventLanguage]
   );
 
   useEffect(() => {
@@ -139,27 +139,23 @@ const NewsSearchForm = ({
             </DropdownList>
           </div>
           <div>
-            <label>{l.search.spokenLanguage}</label>
+            <label>{l.search.eventLanguage}</label>
             <br />
             <DropdownList
               onChange={(e) =>
-                setSpokenLanguage(
+                setEventLanguage(
                   e.target.value !== ''
-                    ? SpokenLanguage[e.target.value as SpokenLanguage]
+                    ? EventLanguage[e.target.value as EventLanguage]
                     : undefined
                 )
               }
-              value={spokenLanguage ?? ''}
+              value={eventLanguage ?? ''}
             >
               <option value={''}>{l.search.allLanguages}</option>
-              <option value="SV">
-                {capitalize(l.events.spokenLanguages.sv)}
-              </option>
-              <option value="EN">
-                {capitalize(l.events.spokenLanguages.en)}
-              </option>
+              <option value="SV">{capitalize(l.events.languages.sv)}</option>
+              <option value="EN">{capitalize(l.events.languages.en)}</option>
               <option value="SV_EN">
-                {capitalize(l.events.spokenLanguages.sv_en)}
+                {capitalize(l.events.languages.sv_en)}
               </option>
             </DropdownList>
           </div>

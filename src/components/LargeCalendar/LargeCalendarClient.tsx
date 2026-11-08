@@ -19,8 +19,8 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import styles from './LargeCalendar.module.scss';
 import i18nService from '@/services/i18nService';
-import { SpokenLanguage } from '@prisma/client';
-import SpokenLanguageIndicator from '../SpokenLanguageIndicator/SpokenLanguageIndicator';
+import { EventLanguage } from '@prisma/client';
+import EventLanguageIndicator from '../EventLanguageIndicator/EventLanguageIndicator';
 
 export type LargeCalendarClientProps = Omit<
   CalendarOptions,
@@ -122,11 +122,10 @@ function renderEventContent(locale: string) {
     const rawLocation: unknown = eventInfo.event.extendedProps['location'];
     const location: string | null =
       typeof rawLocation === 'string' ? rawLocation : null;
-    const rawSpokenLanguage: unknown =
-      eventInfo.event.extendedProps['spokenLanguage'];
-    const spokenLanguage: SpokenLanguage | null =
-      typeof rawSpokenLanguage === 'string'
-        ? (SpokenLanguage[rawSpokenLanguage as SpokenLanguage] ?? null)
+    const rawEventLanguage: unknown = eventInfo.event.extendedProps['language'];
+    const language: EventLanguage | null =
+      typeof rawEventLanguage === 'string'
+        ? (EventLanguage[rawEventLanguage as EventLanguage] ?? null)
         : null;
 
     const isBlockView = ['dayGridMonth'].includes(eventInfo.view.type);
@@ -154,12 +153,12 @@ function renderEventContent(locale: string) {
               {location}
             </div>
           )}
-          {!isBlockView && spokenLanguage && (
-            <SpokenLanguageIndicator
+          {!isBlockView && language && (
+            <EventLanguageIndicator
               locale={locale}
-              language={spokenLanguage}
+              language={language}
               iconOnly
-              className={styles.spokenLanguage}
+              className={styles.eventLanguageIndicator}
             />
           )}
         </div>

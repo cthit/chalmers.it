@@ -109,7 +109,7 @@
     "end": "End",
     "fullDay": "Full day",
     "location": "Location",
-    "spokenLanguage": "Spoken language",
+    "language": "Language",
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
@@ -132,8 +132,8 @@
       "appleCalendar": "Apple Calendar",
       "outlook": "Outlook"
     },
-    "spokenLanguages": {
-      "prefix": "The event will be held in",
+    "heldInLanguage": "The event will be held in",
+    "languages": {
       "sv": "Swedish",
       "en": "English",
       "sv_en": "Swedish and English"
@@ -219,7 +219,7 @@
     "query": "Query",
     "short": "Search query must be at least 3 characters long",
     "group": "Group",
-    "spokenLanguage": "Spoken language",
+    "eventLanguage": "Language at event",
     "allTypes": "All types",
     "allGroups": "All groups",
     "allLanguages": "All languages",
