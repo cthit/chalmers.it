@@ -59,7 +59,10 @@ async function createJsonResponse(
   return NextResponse.json(events);
 }
 
-async function createCalendarResponse(locale: string): Promise<NextResponse> {
+async function createCalendarResponse(
+  locale: string,
+  surroundingWeeks: number = 9
+): Promise<NextResponse> {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   if (invalidLocale) {
     return ApiService.jsonError('Invalid locale');
@@ -68,7 +71,12 @@ async function createCalendarResponse(locale: string): Promise<NextResponse> {
   const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
-  const events = await EventService.getAll();
+  const ONE_WEEK_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const after = new Date(now - surroundingWeeks * ONE_WEEK_MILLISECONDS);
+  const before = new Date(now + surroundingWeeks * ONE_WEEK_MILLISECONDS);
+
+  const events = await EventService.getRange(after, before);
   const calendar = new Calendar(
     `-//cthit//NONSGML chalmers.it//${locale.toUpperCase()}`
   )
