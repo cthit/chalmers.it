@@ -316,13 +316,15 @@ export default class NewsService {
               gammaSuperGroupId: writtenFor
             }
           },
-          {
-            connectedEvents: {
-              some: {
-                language: eventLanguage
+          eventLanguage != undefined
+            ? {
+                connectedEvents: {
+                  some: {
+                    language: eventLanguage
+                  }
+                }
               }
-            }
-          }
+            : {}
         ],
         createdAt: {
           gte: after,
