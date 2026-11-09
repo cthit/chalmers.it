@@ -236,8 +236,8 @@ function renderEventContent(locale: string) {
           )}
         </div>
       </>
-    )
-  }
+    );
+  };
 }
 
 type DayInfo = Pick<

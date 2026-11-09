@@ -139,11 +139,8 @@
 }
 
 // Event
-.listEvent .eventTime {
-  white-space: wrap;
-  width: 6rem;
-  min-width: min-content;
-  text-overflow: clip;
+.eventInfo {
+  text-decoration-line: none !important;
 }
 
 .eventTitle {
@@ -155,15 +152,16 @@
 .eventLocation {
   word-break: break-word;
   text-wrap: wrap;
+  text-decoration-line: none !important;
   hyphens: auto;
   font-weight: normal;
-  padding-top: 2px;
-  padding-inline: 0;
+  padding: 2px 0 0;
 }
 
 .eventLanguageIndicator {
+  margin-top: 4px;
   padding-inline: 2px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
 }
 
 .blockEvent,
@@ -179,11 +177,6 @@
   display: none;
 }
 
-.eventInfo,
-.eventLocation {
-  text-decoration-line: none !important;
-}
-
 .blockEvent .eventInfo {
   display: flex;
   flex-direction: row;
@@ -195,24 +188,44 @@
   padding-top: 0;
 }
 
+.blockEvent .eventLanguageIndicator {
+  display: none;
+}
+
+.listEvent .eventTime {
+  white-space: wrap;
+  width: 6rem;
+  min-width: min-content;
+  text-overflow: clip;
+}
+
 .listEvent .eventInfo {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.2em;
+  align-items: center;
+  gap: 1em;
 }
 
-.listEvent .eventTitle {
-  margin-right: 1em;
+.listEvent .eventInfo > * {
+  margin-inline: 0.2em;
 }
 
 .listEvent .eventLocation {
   min-width: 4rem;
   padding-top: 0;
+  flex-grow: 0;
 }
 
 .listEvent > div {
   gap: 1rem;
+}
+
+.listEvent .eventLanguageIndicator {
+  margin: 0;
+  margin-left: auto;
+  padding: 0;
+  font-size: 1rem;
 }
 
 // Add underline when hovering over event
@@ -270,4 +283,3 @@
     width: 2rem;
   }
 }
-
