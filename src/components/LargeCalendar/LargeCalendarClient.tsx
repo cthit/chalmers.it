@@ -28,6 +28,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import styles from './LargeCalendar.module.scss';
 import i18nService from '@/services/i18nService';
 import clsx from 'clsx/lite';
+import { EventLanguage } from '@prisma/client';
+import EventLanguageIndicator from '../EventLanguageIndicator/EventLanguageIndicator';
 
 export type LargeCalendarClientProps = CalendarOptions & {
   locale: string;
@@ -192,6 +194,12 @@ function renderEventContent(locale: string) {
     const location: string | null =
       typeof rawLocation === 'string' ? rawLocation : null;
 
+    const rawEventLanguage: unknown = info.event.extendedProps['language'];
+    const language: EventLanguage | null =
+      typeof rawEventLanguage === 'string'
+        ? (EventLanguage[rawEventLanguage as EventLanguage] ?? null)
+        : null;
+
     const timeContent = info.isNarrow
       ? info.timeText.replaceAll(/:00/g, '')
       : info.timeText;
@@ -218,10 +226,18 @@ function renderEventContent(locale: string) {
               {location}
             </div>
           )}
+          {language && (
+            <EventLanguageIndicator
+              locale={locale}
+              language={language}
+              iconOnly
+              className={styles.eventLanguageIndicator}
+            />
+          )}
         </div>
       </>
-    );
-  };
+    )
+  }
 }
 
 type DayInfo = Pick<

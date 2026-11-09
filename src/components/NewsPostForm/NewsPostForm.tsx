@@ -18,6 +18,8 @@ import DatePicker from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
+import { capitalize } from '@/utils/strings';
+import { EventLanguage } from '@prisma/client';
 
 const validUploadTypes = Object.values(MediaType);
 
@@ -44,6 +46,7 @@ interface Event {
   endTime: Date;
   fullDay: boolean;
   location: string | null;
+  language: EventLanguage | null;
   id?: number;
 }
 
@@ -61,6 +64,7 @@ const emptyEvent: Event = {
   endTime: new Date(),
   fullDay: false,
   location: '',
+  language: null,
   id: undefined
 };
 
@@ -238,6 +242,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           startTime: event.startTime,
           endTime: event.endTime,
           location: event.location,
+          language: event.language,
           descriptionEn: '',
           descriptionSv: '',
           newsPostId: postId
@@ -269,7 +274,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   // Handler for date pickers to ensure endTime >= startTime
-  function handleEventDateChange(id: number, key: 'startTime' | 'endTime', value: Date) {
+  function handleEventDateChange(
+    id: number,
+    key: 'startTime' | 'endTime',
+    value: Date
+  ) {
     setEvents((prevEvents) => {
       const newEvents = [...prevEvents];
       const event = { ...newEvents[id] };
@@ -461,7 +470,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <DatePicker
                 disabled={e.fullDay}
                 value={e.endTime}
-                min={e.startTime ? e.startTime.toISOString().slice(0, 16) : undefined}
+                min={
+                  e.startTime
+                    ? e.startTime.toISOString().slice(0, 16)
+                    : undefined
+                }
                 onChange={(d) => handleEventDateChange(i, 'endTime', d)}
               />
               <br />
@@ -480,6 +493,33 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                 value={e.location ?? ''}
                 onChange={(e) => editEventState(i, 'location', e.target.value)}
               />
+
+              <h3>{l.events.language}</h3>
+              <div className={style.actions}>
+                <DropdownList
+                  value={e.language?.toString() ?? ''}
+                  onChange={(e) =>
+                    editEventState(
+                      i,
+                      'language',
+                      e.target.value === ''
+                        ? null
+                        : EventLanguage[e.target.value as EventLanguage]
+                    )
+                  }
+                >
+                  <option value="">{l.general.notApplicable}</option>
+                  <option value="SV">
+                    {capitalize(l.events.languages.sv)}
+                  </option>
+                  <option value="EN">
+                    {capitalize(l.events.languages.en)}
+                  </option>
+                  <option value="SV_EN">
+                    {capitalize(l.events.languages.sv_en)}
+                  </option>
+                </DropdownList>
+              </div>
 
               <br />
               <br />

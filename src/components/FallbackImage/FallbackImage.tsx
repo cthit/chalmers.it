@@ -22,18 +22,16 @@ const FallbackImage = ({ src, alt, fallback, ...rest }: FallbackImageProps) => {
   }, []);
 
   return (
-    <picture>
-      <img
-        {...rest}
-        alt={alt}
-        src={src}
-        ref={imgRef}
-        onError={({ currentTarget }) => {
-          currentTarget.onerror = null;
-          currentTarget.src = fallback ?? '/smurf.svg';
-        }}
-      />
-    </picture>
+    <img
+      {...rest}
+      alt={alt}
+      src={src}
+      ref={imgRef}
+      onError={({ currentTarget }) => {
+        currentTarget.onerror = null;
+        currentTarget.src = fallback ?? '/smurf.svg';
+      }}
+    />
   );
 };
 

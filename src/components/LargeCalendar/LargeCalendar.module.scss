@@ -161,6 +161,11 @@
   padding-inline: 0;
 }
 
+.eventLanguageIndicator {
+  padding-inline: 2px;
+  font-size: 0.75rem;
+}
+
 .blockEvent,
 .blockEvent div:has(> .eventInfo) {
   align-items: start;
@@ -265,3 +270,4 @@
     width: 2rem;
   }
 }
+
