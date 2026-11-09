@@ -6,15 +6,25 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
+import EventLanguageIndicator from '@/components/EventLanguageIndicator/EventLanguageIndicator';
+import { getNewsPostEventLanguages } from '@/utils/eventLanguage';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
   locale: string;
   standalone?: boolean;
+  hideEventLanguage?: boolean;
 }
 
-const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
+const NewsPost = ({
+  locale,
+  post,
+  standalone: noNav,
+  hideEventLanguage
+}: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
+
+  const eventLanguages = getNewsPostEventLanguages(post);
 
   return (
     <>
@@ -45,6 +55,14 @@ const NewsPost = ({ locale, post, standalone: noNav }: NewsPostProps) => {
         </div>
       </div>
       <MarkdownView content={post.content} />
+      {!hideEventLanguage && eventLanguages.total > 0 && (
+        <EventLanguageIndicator
+          locale={locale}
+          language={eventLanguages.languages.presentKeys()}
+          plural={eventLanguages.total > 1}
+          className={style.eventLanguageIndicator}
+        />
+      )}
     </>
   );
 };

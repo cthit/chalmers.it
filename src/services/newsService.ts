@@ -1,5 +1,5 @@
 import prisma from '@/prisma';
-import { PostStatus } from '@prisma/client';
+import { PostStatus, EventLanguage } from '@prisma/client';
 import NotifyService, { SlackWebhookNotifier } from './notifyService';
 import { Language } from '@prisma/client';
 
@@ -38,7 +38,8 @@ export default class NewsService {
             startTime: true,
             endTime: true,
             fullDay: true,
-            location: true
+            location: true,
+            language: true
           }
         }
       }
@@ -105,7 +106,8 @@ export default class NewsService {
             endTime: true,
             location: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            language: true
           }
         }
       },
@@ -225,9 +227,10 @@ export default class NewsService {
     userId?: string,
     groupIds?: string[],
     writtenByGammaUserId?: string,
-    writtenFor?: string
+    writtenFor?: string,
+    eventLanguage?: EventLanguage
   ) {
-    return await prisma.newsPost.findMany({
+    const results = await prisma.newsPost.findMany({
       orderBy: {
         createdAt: 'desc'
       },
@@ -246,6 +249,11 @@ export default class NewsService {
           select: {
             gammaSuperGroupId: true,
             prettyName: true
+          }
+        },
+        connectedEvents: {
+          select: {
+            language: true
           }
         }
       },
@@ -307,7 +315,16 @@ export default class NewsService {
             writtenFor: {
               gammaSuperGroupId: writtenFor
             }
-          }
+          },
+          eventLanguage != undefined
+            ? {
+                connectedEvents: {
+                  some: {
+                    language: eventLanguage
+                  }
+                }
+              }
+            : {}
         ],
         createdAt: {
           gte: after,
@@ -315,6 +332,7 @@ export default class NewsService {
         }
       }
     });
+    return results;
   }
 
   static async publishScheduled() {

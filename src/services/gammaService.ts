@@ -5,10 +5,10 @@ const apiKeyToken = process.env.GAMMA_API_KEY_TOKEN;
 const apiKey = `${apiKeyId}:${apiKeyToken}`;
 const hasInfoApiCredentials = Boolean(
   process.env.GAMMA_ROOT_URL &&
-    apiKeyId &&
-    apiKeyToken &&
-    apiKeyId !== 'api-key-id-uuid-here' &&
-    apiKeyToken !== 'token'
+  apiKeyId &&
+  apiKeyToken &&
+  apiKeyId !== 'api-key-id-uuid-here' &&
+  apiKeyToken !== 'token'
 );
 const activeGroupTypes = (
   process.env.ACTIVE_GROUP_TYPES || 'committee,society'

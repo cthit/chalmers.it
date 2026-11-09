@@ -3,6 +3,8 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import NewsSearchForm from '@/components/NewsSearchForm/NewsSearchForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
+import { isValidQuery } from '@/utils/query';
+import { EventLanguage } from '@prisma/client';
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
@@ -12,25 +14,38 @@ export default async function Page(props: {
     uid?: string;
     before: string;
     after: string;
+    lang?: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
 
-  const { q, gid, uid, before, after } = searchParams;
+  const { q, gid, uid, before, after, lang } = searchParams;
 
   const params = await props.params;
 
   const { locale } = params;
 
-  const validQuery =
-    (q !== undefined && (q?.length ?? -1 >= 3)) ||
-    gid !== undefined ||
-    uid !== undefined;
   const verifiedBefore = !isNaN(+before) ? new Date(+before) : undefined;
   const verifiedAfter = !isNaN(+after) ? new Date(+after) : undefined;
+  const verifiedEventLanguage: EventLanguage | undefined =
+    EventLanguage[lang?.toUpperCase() as EventLanguage];
+  const validQuery = isValidQuery({
+    query: q,
+    groupId: gid,
+    userId: uid,
+    eventLanguage: verifiedEventLanguage
+  });
 
   const res = validQuery
-    ? await search(locale, q, verifiedBefore, verifiedAfter, uid, gid)
+    ? await search(
+        locale,
+        q,
+        verifiedBefore,
+        verifiedAfter,
+        uid,
+        gid,
+        verifiedEventLanguage
+      )
     : [];
 
   const groups = (await DivisionGroupService.getAll()).map((g) => [
@@ -51,6 +66,7 @@ export default async function Page(props: {
             initialUser={uid}
             initialBefore={verifiedBefore}
             initialAfter={verifiedAfter}
+            initialEventLanguage={verifiedEventLanguage}
           />
         }
         right={<ContactCard locale={locale} />}

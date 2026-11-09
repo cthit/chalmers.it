@@ -10,7 +10,8 @@
     "close": "Stäng",
     "save": "Spara",
     "manage": "Hantera",
-    "add": "Lägg till"
+    "add": "Lägg till",
+    "notApplicable": "Inte applicerbart"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -108,6 +109,7 @@
     "end": "Slut",
     "fullDay": "Heldag",
     "location": "Plats",
+    "language": "Språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
@@ -129,6 +131,14 @@
       "googleCalendar": "Google Kalender",
       "appleCalendar": "Apple Kalender",
       "outlook": "Outlook"
+    },
+    "eventHeldInLanguage": "Evenemanget kommer hållas på",
+    "eventsHeldInLanguage": "Evenemangen kommer hållas på",
+    "asWellAsIn": "samt på",
+    "languages": {
+      "sv": "svenska",
+      "en": "engelska",
+      "sv_en": "svenska och engelska"
     }
   },
   "groups": {
@@ -214,8 +224,10 @@
     "query": "Sökfråga",
     "short": "Sökfrågan måste vara minst 3 tecken",
     "group": "Grupp",
+    "eventLanguage": "Språk på evenemang",
     "allTypes": "Alla typer",
     "allGroups": "Alla grupper",
+    "allLanguages": "Alla språk",
     "name": "Namn",
     "filter": "Filter",
     "filterAction": "Filtrera"
