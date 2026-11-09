@@ -11,6 +11,7 @@ export interface EventLanguageSummary {
     [Lang in EventLanguage]: number;
   } & {
     map<T>(transform: ([language, count]: [EventLanguage, number]) => T): T[];
+    presentKeys(): EventLanguage[];
   };
 }
 
@@ -33,6 +34,11 @@ export function getNewsPostEventLanguages(
         ].map((lang) => [lang, this[lang]]);
 
         return properties.map((x) => transform(x));
+      },
+      presentKeys(): EventLanguage[] {
+        return this.map(([language, count]) =>
+          count > 0 ? language : null
+        ).filter((language) => language != null);
       }
     }
   };

@@ -2,6 +2,7 @@ import i18nService from '@/services/i18nService';
 import styles from './EventLanguageIndicator.module.scss';
 import { EventLanguage } from '@prisma/client';
 import EventLanguageIcon from './EventLanguageIcon/EventLanguageIcon';
+import { joinSentence } from '@/utils/strings';
 
 const EventLanguageIndicator = ({
   locale,
@@ -11,32 +12,39 @@ const EventLanguageIndicator = ({
   plural
 }: {
   locale: string;
-  language: EventLanguage;
+  language: EventLanguage | EventLanguage[];
   className?: string;
   iconOnly?: boolean;
   plural?: boolean;
 }) => {
   const l = i18nService.getLocale(locale);
 
-  const languageName = (
-    {
-      SV: l.events.languages.sv,
-      EN: l.events.languages.en,
-      SV_EN: l.events.languages.sv_en
-    } satisfies Record<EventLanguage, string>
-  )[language];
+  const languages = Array.isArray(language) ? language : [language];
+
+  const languageName: Record<EventLanguage, string> = {
+    SV: l.events.languages.sv,
+    EN: l.events.languages.en,
+    SV_EN: l.events.languages.sv_en
+  };
 
   const altText =
-    (plural ? l.events.eventsHeldInLanguage : l.events.eventHeldInLanguage) +
+    (plural || languages.length > 1
+      ? l.events.eventsHeldInLanguage
+      : l.events.eventHeldInLanguage) +
     ' ' +
-    languageName;
+    joinSentence(
+      languages.map((lang) => languageName[lang]),
+      l.events.asWellAsIn
+    );
 
   return (
     <div className={styles.container + ' ' + (className ?? '')}>
-      <EventLanguageIcon
-        language={language}
-        tooltip={iconOnly ? altText : undefined}
-      />
+      {languages.map((lang) => (
+        <EventLanguageIcon
+          language={lang}
+          tooltip={iconOnly ? altText : undefined}
+        />
+      ))}
       <p className={iconOnly ? styles.screenReaderOnly : ''}>{altText}</p>
     </div>
   );

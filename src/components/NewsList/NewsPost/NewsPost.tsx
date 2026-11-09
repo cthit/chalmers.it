@@ -56,18 +56,12 @@ const NewsPost = ({
       </div>
       <MarkdownView content={post.content} />
       {!hideEventLanguage && eventLanguages.total > 0 && (
-        <div className={style.languageIndicators}>
-          {eventLanguages.languages.map(
-            ([language, count]) =>
-              count > 0 && (
-                <EventLanguageIndicator
-                  locale={locale}
-                  language={language}
-                  plural={count > 1}
-                />
-              )
-          )}
-        </div>
+        <EventLanguageIndicator
+          locale={locale}
+          language={eventLanguages.languages.presentKeys()}
+          plural={eventLanguages.total > 1}
+          className={style.eventLanguageIndicator}
+        />
       )}
     </>
   );
