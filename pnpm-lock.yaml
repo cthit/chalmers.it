@@ -131,6 +131,9 @@ importers:
       '@prisma/client':
         specifier: 7.10.1
         version: 7.10.1(prisma@7.10.1(@types/node@24.19.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@6.0.3))(typescript@6.0.3)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       html-to-slack:
         specifier: 0.3.7
         version: 0.3.7

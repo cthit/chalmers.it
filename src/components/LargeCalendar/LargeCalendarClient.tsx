@@ -10,7 +10,8 @@ import FullCalendar, {
   InlineWeekNumberInfo,
   ListDayHeaderInnerInfo,
   SlotHeaderInfo,
-  useCalendarController
+  useCalendarController,
+  WeekNumberHeaderInfo
 } from '@fullcalendar/react';
 import themePlugin from '@fullcalendar/react/themes/forma';
 import dayGridPlugin from '@fullcalendar/react/daygrid';
@@ -26,35 +27,17 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import styles from './LargeCalendar.module.scss';
 import i18nService from '@/services/i18nService';
+import clsx from 'clsx/lite';
 
-export type LargeCalendarClientProps = Omit<
-  CalendarOptions,
-  | 'colorScheme'
-  | 'plugins'
-  | 'controller'
-  | 'eventContent'
-  | 'dayCellTopInnerClass'
-  | 'eventClass'
-  | 'buttons'
-  | 'todayText'
-  | 'allDayText'
-  | 'noEventsText'
-  | 'weekNumberFormat'
-  | 'weekNumberHeaderContent'
-  | 'inlineWeekNumberContent'
-> & { locale: string };
+export type LargeCalendarClientProps = CalendarOptions & {
+  locale: string;
+  className: string;
+};
 
 const LargeCalendarClient = ({
-  initialView = 'timeGridWeek',
-  headerToolbar = {
-    left: 'today prev,next title',
-    right: 'day,week,month,listWeek'
-  },
   locale,
   className,
-  borderless = true,
-  weekNumbers = true,
-  ...rest
+  ...overrides
 }: LargeCalendarClientProps) => {
   const [mounted, setMounted] = useState(false);
   const controller = useCalendarController();
@@ -71,13 +54,13 @@ const LargeCalendarClient = ({
     return null;
   }
 
-  const createButton = (view: string, text: string): ButtonInput => {
+  const createViewButton = (view: string, text: string): ButtonInput => {
     const isSelected = controller.view?.type === view;
 
     return {
       text,
       click: () => controller.changeView(view),
-      className: isSelected ? styles.selectedButton : null
+      className: clsx(isSelected && styles.selectedButton)
     };
   };
 
@@ -92,55 +75,29 @@ const LargeCalendarClient = ({
       ]}
       controller={controller}
       editable={false}
+
+      // General
       locale={locale}
       colorScheme={resolvedTheme ?? systemTheme}
-      initialView={initialView}
+      className={clsx(
+        styles.calendar,
+        controller.view?.type.includes('list') && styles.listView,
+        className
+      )}
+      nowIndicator={true}
+      showNonCurrentDates={false}
+      borderless={true}
       firstDay={1}
-      buttons={{
-        day: createButton('timeGridDay', l.events.day),
-        week: createButton('timeGridWeek', l.events.week),
-        month: createButton('dayGridMonth', l.events.month),
-        listWeek: createButton('listWeek', l.events.list)
-      }}
-      headerToolbar={headerToolbar}
-      headerToolbarClass={styles.headerToolbar}
-      todayText={l.events.today}
-      todayHint={(info) =>
-        l.events.todayHint[
-          info.toLowerCase() as keyof typeof l.events.todayHint
-        ]
-      }
       allDayText={l.events.fullDay}
       noEventsText={l.events.noEvents}
-      weekNumbers={weekNumbers}
-      weekNumberFormat={{
-        week: 'narrow'
-      }}
-      weekNumberHeaderContent={(info) =>
-        isEn ? (
-          info.text
-        ) : (
-          <span>
-            v<wbr />
-            {info.text.replace('W', '')}
-          </span>
-        )
-      }
-      inlineWeekNumberClass={styles.inlineWeekNumber}
-      inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
-      titleFormat={renderTitle(controller.view?.type)}
-      listDayClass={styles.listDay}
-      listDayHeaderClass={styles.listDayHeader}
-      listDayHeaderContent={renderListDayHeaderContent(locale)}
-      viewClass={styles.viewBody}
+
+      // Views
       views={{
         timeGridDay: {
           dayHeaderRowClass: styles.hide,
           dayHeaderDividerClass: styles.hide
         },
         dayGridMonth: {
-          showNonCurrentDates: false,
-          listItemEventBeforeClass: styles.eventDot,
           eventTimeFormat: {
             hour: '2-digit',
             minute: '2-digit',
@@ -149,63 +106,80 @@ const LargeCalendarClient = ({
           }
         }
       }}
-      nowIndicator={true}
-      className={
-        styles.calendar +
-        ' ' +
-        (controller.view?.type.includes('list') ? styles.listView : '') +
-        ' ' +
-        className
+      initialView="timeGridWeek"
+      viewClass={styles.viewBody}
+
+      listItemEventBeforeClass={styles.eventDot}
+      dayCellTopInnerClass={styles.dayCellTopInner}
+
+      listDayHeaderContent={renderListDayHeaderContent(locale)}
+      listDayHeaderClass={styles.listDayHeader}
+      listDayClass={styles.listDay}
+
+      // Header
+      buttons={{
+        day: createViewButton('timeGridDay', l.events.day),
+        week: createViewButton('timeGridWeek', l.events.week),
+        month: createViewButton('dayGridMonth', l.events.month),
+        listWeek: createViewButton('listWeek', l.events.list)
+      }}
+      headerToolbar={{
+        left: 'today prev,next title',
+        right: 'day,week,month,listWeek'
+      }}
+      headerToolbarClass={styles.headerToolbar}
+      titleFormat={renderTitle(controller.view?.type)}
+      todayText={l.events.today}
+      todayHint={(info) =>
+        l.events.todayHint[
+          info.toLowerCase() as keyof typeof l.events.todayHint
+        ]
       }
+      dayHeaderContent={renderDayContent(controller)}
+      dayHeaderClass={styles.dayHeader}
+
+      // Events
       eventContent={renderEventContent(locale)}
+      eventClass={(info: EventDisplayInfo) =>
+        clsx(
+          styles.event,
+          info.isInteractive && styles.eventInteractive,
+          info.isNarrow && styles.narrow,
+          info.event.allDay && styles.allDay,
+          info.isStart && styles.eventStart,
+          info.isEnd && styles.eventEnd,
+          info.view.type === 'dayGridMonth' && styles.blockEvent,
+          info.view.type.includes('list') && styles.listEvent
+        )
+      }
       eventTimeFormat={{
         hour: '2-digit',
         minute: '2-digit',
         hour12: false
       }}
-      dayHeaderClass={styles.dayHeader}
-      dayCellTopInnerClass={styles.dayCellTopInner}
-      allDayHeaderClass={styles.sidebar + ' ' + styles.allDayHeader}
-      weekNumberHeaderClass={styles.sidebar}
-      slotHeaderClass={styles.sidebar}
-      timedText=".sidebar"
-      slotHeaderContent={(info: SlotHeaderInfo) => {
-        const parts = info.text.split(/(?=[pa]m)/i, 2);
-        if (parts.length <= 1) {
-          return parts[0];
-        }
-        return (
-          <>
-            {parts[0]}
-            <wbr />
-            {parts[1]}
-          </>
-        );
-      }}
       rowEventClass={styles.rowEvent}
       rowEventAfterClass={styles.eventAfterArrow}
       rowEventBeforeClass={styles.eventBeforeArrow}
-      borderless={borderless}
-      eventClass={(info: EventDisplayInfo) =>
-        styles.event +
-        ' ' +
-        (info.isInteractive ? styles.eventInteractive : '') +
-        ' ' +
-        (info.isNarrow ? styles.narrow : '') +
-        ' ' +
-        (info.event.allDay ? styles.allDay : '') +
-        ' ' +
-        (info.isStart ? styles.eventStart : '') +
-        ' ' +
-        (info.isEnd ? styles.eventEnd : '') +
-        ' ' +
-        (info.view.type === 'dayGridMonth' ? styles.blockEvent : '') +
-        ' ' +
-        (info.view.type.includes('list') ? styles.listEvent : '')
-      }
-      dayHeaderContent={renderDayContent(controller)}
       dayCellTopContent={renderDayContent(controller)}
-      {...rest}
+
+      // Week numbers
+      weekNumbers={true}
+      weekNumberFormat={{
+        week: 'narrow'
+      }}
+      weekNumberHeaderContent={renderWeekNumberHeaderContent(isEn)}
+      inlineWeekNumberContent={renderInlineWeekNumberContent(controller, isEn)}
+      inlineWeekNumberClass={styles.inlineWeekNumber}
+
+      // Sidebar
+      slotHeaderClass={styles.sidebar}
+      allDayHeaderClass={clsx(styles.sidebar, styles.allDayHeader)}
+      weekNumberHeaderClass={styles.sidebar}
+      timedText=".sidebar" // Workaround as there is no property to set class
+      slotHeaderContent={renderSlotHeaderContent}
+
+      // Overrides
+      {...overrides}
     />
   );
 };
@@ -224,23 +198,22 @@ function renderEventContent(locale: string) {
 
     return (
       <>
-        <div className={info.timeClass + ' ' + styles.eventTime}>
+        <div className={clsx(info.timeClass, styles.eventTime)}>
           {timeContent}
         </div>
-        <div className={info.titleClass + ' ' + styles.eventInfo}>
+        <div className={clsx(info.titleClass, styles.eventInfo)}>
           <b
-            className={
-              styles.eventTitle +
-              ' ' +
-              (info.isInteractive ? styles.eventHoverUnderline : '')
-            }
+            className={clsx(
+              styles.eventTitle,
+              info.isInteractive && styles.eventHoverUnderline
+            )}
           >
             {info.event.title}
           </b>
           {location && (
             <div
               lang={locale}
-              className={info.titleClass + ' ' + styles.eventLocation}
+              className={clsx(info.titleClass, styles.eventLocation)}
             >
               {location}
             </div>
@@ -279,13 +252,11 @@ function renderDayContent(controller: CalendarController) {
           <div className={styles.weekday}>{info.weekdayText}</div>
         )}
         <div
-          className={
-            styles.innerDay +
-            ' ' +
-            (info.isNarrow ? styles.narrow : '') +
-            ' ' +
-            (info.isToday ? styles.today : '')
-          }
+          className={clsx(
+            styles.innerDay,
+            info.isNarrow && styles.narrow,
+            info.isToday && styles.today
+          )}
           onClick={clickHandler}
         >
           {info.dayNumberText}
@@ -293,6 +264,18 @@ function renderDayContent(controller: CalendarController) {
       </div>
     );
   };
+}
+
+function renderWeekNumberHeaderContent(isEn: boolean) {
+  return (info: WeekNumberHeaderInfo) =>
+    isEn ? (
+      info.text
+    ) : (
+      <span>
+        v<wbr />
+        {info.text.replace('W', '')}
+      </span>
+    );
 }
 
 function renderInlineWeekNumberContent(
@@ -369,4 +352,18 @@ function renderTitle(viewType?: string): CalendarOptions['titleFormat'] {
           })
     }).format(info.start.instantMs);
   };
+}
+
+function renderSlotHeaderContent(info: SlotHeaderInfo) {
+  const parts = info.text.split(/(?=[pa]m)/i, 2);
+  if (parts.length <= 1) {
+    return parts[0];
+  }
+  return (
+    <>
+      {parts[0]}
+      <wbr />
+      {parts[1]}
+    </>
+  );
 }

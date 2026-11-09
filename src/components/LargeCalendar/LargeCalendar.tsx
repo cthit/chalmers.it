@@ -11,7 +11,7 @@ export type LargeCalendarProps = {
 const LargeCalendar = async ({
   locale,
   events,
-  ...rest
+  ...clientProps
 }: LargeCalendarProps) => {
   const isEn = locale === 'en';
 
@@ -40,7 +40,7 @@ const LargeCalendar = async ({
     <LargeCalendarClient
       locale={locale}
       events={events as EventSourceInput}
-      {...rest}
+      {...clientProps}
     />
   );
 };
