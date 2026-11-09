@@ -2,7 +2,6 @@ import prisma from '@/prisma';
 import { PostStatus, EventLanguage } from '@prisma/client';
 import NotifyService, { SlackWebhookNotifier } from './notifyService';
 import { Language } from '@prisma/client';
-import { getNewsPostEventLanguage } from '@/utils/eventLanguage';
 
 export default class NewsService {
   static async getAll() {
@@ -316,6 +315,13 @@ export default class NewsService {
             writtenFor: {
               gammaSuperGroupId: writtenFor
             }
+          },
+          {
+            connectedEvents: {
+              some: {
+                language: eventLanguage
+              }
+            }
           }
         ],
         createdAt: {
@@ -324,12 +330,7 @@ export default class NewsService {
         }
       }
     });
-    return results.filter((post) => {
-      return (
-        eventLanguage == undefined ||
-        getNewsPostEventLanguage(post) === eventLanguage
-      );
-    });
+    return results;
   }
 
   static async publishScheduled() {
