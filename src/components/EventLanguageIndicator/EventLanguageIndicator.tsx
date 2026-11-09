@@ -41,6 +41,7 @@ const EventLanguageIndicator = ({
     <div className={styles.container + ' ' + (className ?? '')}>
       {languages.map((lang) => (
         <EventLanguageIcon
+          key={lang}
           language={lang}
           tooltip={iconOnly ? altText : undefined}
         />
