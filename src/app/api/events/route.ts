@@ -158,7 +158,7 @@ async function createCalendarEventDescription(
       )[event.language]
     : null;
   const eventLanguagePart = eventLanguageName
-    ? `\n\n<b>${l.events.language}:</b> ${l.events.heldInLanguage} ${eventLanguageName}`
+    ? `\n\n<b>${l.events.language}:</b> ${l.events.eventHeldInLanguage} ${eventLanguageName}`
     : '';
 
   const relatedEvents = post.connectedEvents
@@ -181,7 +181,7 @@ async function createCalendarEventDescription(
 
 ${content}
 
-${l.events.readMore}: ${baseUrl}/post/${post.id}${eventLanguagePart}${relatedEventsPart}`;
+<b>${l.events.readMore}</b>: ${baseUrl}/post/${post.id}${eventLanguagePart}${relatedEventsPart}`;
 }
 
 /**
