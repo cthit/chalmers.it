@@ -31,6 +31,9 @@
   margin-bottom: 1rem;
 }
 
-.eventLanguageIndicator {
+.languageIndicators {
   margin-left: 0.25rem;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.25rem;
 }

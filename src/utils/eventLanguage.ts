@@ -4,18 +4,43 @@ type NewsPostConnectedEvents = {
   connectedEvents: Pick<Event, 'language'>[];
 };
 
-export function getNewsPostEventLanguage(
-  post: NewsPostConnectedEvents
-): EventLanguage | null {
-  const languages: Set<EventLanguage> = new Set(
-    post.connectedEvents.map((e) => e.language).filter((e) => e != null)
-  );
+/** Summary of how many events with each language there are. */
+export interface EventLanguageSummary {
+  total: number;
+  languages: {
+    [Lang in EventLanguage]: number;
+  } & {
+    map<T>(transform: ([language, count]: [EventLanguage, number]) => T): T[];
+  };
+}
 
-  if (languages.size === 0) {
-    return null;
-  } else if (languages.size === 1) {
-    return languages.values().next().value!;
-  } else {
-    return EventLanguage.SV_EN;
-  }
+export function getNewsPostEventLanguages(
+  post: NewsPostConnectedEvents
+): EventLanguageSummary {
+  const summary: EventLanguageSummary = {
+    total: 0,
+    languages: {
+      SV: 0,
+      EN: 0,
+      SV_EN: 0,
+      map<T>(
+        transform: ([language, count]: [EventLanguage, number]) => T
+      ): T[] {
+        const properties: [EventLanguage, number][] = [
+          EventLanguage.SV,
+          EventLanguage.EN,
+          EventLanguage.SV_EN
+        ].map((lang) => [lang, this[lang]]);
+
+        return properties.map((x) => transform(x));
+      }
+    }
+  };
+  post.connectedEvents.forEach((e) => {
+    if (e.language != null) {
+      summary.total++;
+      summary.languages[e.language]++;
+    }
+  });
+  return summary;
 }

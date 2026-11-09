@@ -132,7 +132,8 @@
       "appleCalendar": "Apple Calendar",
       "outlook": "Outlook"
     },
-    "heldInLanguage": "The event will be held in",
+    "eventHeldInLanguage": "Event will be held in",
+    "eventsHeldInLanguage": "Events will be held in",
     "languages": {
       "sv": "Swedish",
       "en": "English",

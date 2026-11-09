@@ -7,7 +7,7 @@ import ActionLink from '@/components/ActionButton/ActionLink';
 import NewsPostMeta from './NewsPostMeta/NewsPostMeta';
 import { getData } from '@/actions/newsList';
 import EventLanguageIndicator from '@/components/EventLanguageIndicator/EventLanguageIndicator';
-import { getNewsPostEventLanguage } from '@/utils/eventLanguage';
+import { getNewsPostEventLanguages } from '@/utils/eventLanguage';
 
 interface NewsPostProps {
   post: Exclude<Awaited<ReturnType<typeof getData>>, undefined>;
@@ -24,7 +24,7 @@ const NewsPost = ({
 }: NewsPostProps) => {
   const l = i18nService.getLocale(locale);
 
-  const eventLanguage = getNewsPostEventLanguage(post);
+  const eventLanguages = getNewsPostEventLanguages(post);
 
   return (
     <>
@@ -55,12 +55,19 @@ const NewsPost = ({
         </div>
       </div>
       <MarkdownView content={post.content} />
-      {!hideEventLanguage && eventLanguage && (
-        <EventLanguageIndicator
-          locale={locale}
-          language={eventLanguage}
-          className={style.eventLanguageIndicator}
-        />
+      {!hideEventLanguage && eventLanguages.total > 0 && (
+        <div className={style.languageIndicators}>
+          {eventLanguages.languages.map(
+            ([language, count]) =>
+              count > 0 && (
+                <EventLanguageIndicator
+                  locale={locale}
+                  language={language}
+                  plural={count > 1}
+                />
+              )
+          )}
+        </div>
       )}
     </>
   );

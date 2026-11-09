@@ -7,12 +7,14 @@ const EventLanguageIndicator = ({
   locale,
   language,
   className,
-  iconOnly
+  iconOnly,
+  plural
 }: {
   locale: string;
   language: EventLanguage;
   className?: string;
   iconOnly?: boolean;
+  plural?: boolean;
 }) => {
   const l = i18nService.getLocale(locale);
 
@@ -24,7 +26,10 @@ const EventLanguageIndicator = ({
     } satisfies Record<EventLanguage, string>
   )[language];
 
-  const altText = l.events.heldInLanguage + ' ' + languageName;
+  const altText =
+    (plural ? l.events.eventsHeldInLanguage : l.events.eventHeldInLanguage) +
+    ' ' +
+    languageName;
 
   return (
     <div className={styles.container + ' ' + (className ?? '')}>
