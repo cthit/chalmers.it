@@ -61,6 +61,7 @@ const LargeCalendarClient = ({
 
     return {
       text,
+      hint: text,
       click: () => controller.changeView(view),
       className: clsx(isSelected && styles.selectedButton)
     };
@@ -267,7 +268,7 @@ function renderDayContent(controller: CalendarController) {
         {info.weekdayText && (
           <div className={styles.weekday}>{info.weekdayText}</div>
         )}
-        <div
+        <button
           className={clsx(
             styles.innerDay,
             info.isNarrow && styles.narrow,
@@ -276,7 +277,7 @@ function renderDayContent(controller: CalendarController) {
           onClick={clickHandler}
         >
           {info.dayNumberText}
-        </div>
+        </button>
       </div>
     );
   };
@@ -304,9 +305,9 @@ function renderInlineWeekNumberContent(
       controller.gotoDate(info.date);
     };
     return (
-      <div onClick={clickHandler}>
+      <button onClick={clickHandler}>
         {isEn ? info.text : info.text.replace('W', 'v')}
-      </div>
+      </button>
     );
   };
 }

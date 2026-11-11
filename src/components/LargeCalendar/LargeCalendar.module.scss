@@ -18,7 +18,7 @@
 // Selected header buttons and today button
 .selectedButton,
 .headerToolbar > div:nth-child(1) > button:nth-child(1)[disabled] {
-  background-color: var(--primary-container);
+  background-color: var(--primary-container) !important;
   border-color: var(--primary-container-high);
   cursor: default !important;
   pointer-events: none;
@@ -47,6 +47,7 @@
 }
 
 .innerDay {
+  color: var(--fc-forma-foreground);
   aspect-ratio: 1/1;
   height: 24px;
   border-radius: 50%;
@@ -56,6 +57,12 @@
   align-items: center;
 
   cursor: pointer;
+
+  // Hide button styles
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-weight: normal;
 }
 
 .innerDay.narrow {
@@ -66,11 +73,13 @@
   background-color: var(--primary);
 }
 
-.innerDay:hover {
+.innerDay:hover,
+.innerDay:focus {
   background-color: var(--surface-container-highest);
 }
 
-.innerDay.today:hover {
+.innerDay.today:hover,
+.innerDay.today:focus {
   background-color: var(--primary-hover);
 }
 
@@ -96,15 +105,23 @@
   padding: 0;
   height: fit-content;
   line-height: unset;
+  inset-inline: 0 auto;
 }
 
-.inlineWeekNumber > div {
+.inlineWeekNumber > button {
   line-height: 1.09091;
   padding: 2px;
   cursor: pointer;
+
+  // Hide button styles
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-weight: normal;
 }
 
-.inlineWeekNumber:hover {
+.inlineWeekNumber:hover,
+.inlineWeekNumber:focus {
   background-color: var(--surface-container-highest);
 }
 
@@ -229,7 +246,8 @@
 }
 
 // Add underline when hovering over event
-.eventInteractive:hover .eventTitle {
+.eventInteractive:hover .eventTitle,
+.eventInteractive:focus .eventTitle {
   text-decoration: underline;
 }
 
