@@ -20,13 +20,14 @@ export async function editEvent(
     fullDay: boolean;
     startTime: Date;
     endTime: Date;
+    location: string | null;
     language: EventLanguage | null;
     newsPostId?: number | undefined;
   }
 ) {
   await throwIfUnauthorized();
 
-  await EventService.update(id, data);
+  return await EventService.update(id, data);
 }
 
 export async function createEvent(data: {
@@ -37,12 +38,13 @@ export async function createEvent(data: {
   fullDay: boolean;
   startTime: Date;
   endTime: Date;
+  location?: string | null;
   language?: EventLanguage | null;
   newsPostId?: number | undefined;
 }) {
   await throwIfUnauthorized();
 
-  await EventService.create(data);
+  return await EventService.create(data);
 }
 
 export async function deleteEvent(id: number) {

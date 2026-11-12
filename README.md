@@ -91,6 +91,8 @@ The following environment variables are used:
 | NEXTAUTH_SECRET           | Secret used for signing cookies                                                              | `secret`                                                               |
 | NEXTAUTH_URL              | URL to the NextAuth API                                                                      | `http://localhost:3000/api/auth`                                       |
 | MEDIA_PATH                | Path to store media                                                                          | `./media`                                                              |
+| MAX_MEDIA_SIZE            | Maximum size per uploaded file, in bytes (100 MiB default)                                   | `104857600`                                                            |
+| MAX_UPLOAD_SIZE           | Maximum total upload size per request, in bytes (500 MiB default)                            | `524288000`                                                            |
 | ACTIVE_GROUP_TYPES        | Comma-separated list of group types that are considered active                               | `committee,society`                                                    |
 | ADMIN_GROUPS              | Comma-separated list of groups that are considered admin groups                              | `styrit,digit`                                                         |
 | PAGE_EDITOR_GROUPS        | Comma-separated list of groups that are allowed to edit division pages in addition to admins | `snit,motespresidit`                                                   |

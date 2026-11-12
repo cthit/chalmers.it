@@ -2,10 +2,11 @@ import ApiService from '@/services/apiService';
 import NewsService from '@/services/newsService';
 import RssFeedService from '@/services/rssService';
 import { NextRequest, NextResponse } from 'next/server';
+import { parsePositiveIntEnv } from '@/utils/env';
 
 export const dynamic = 'force-dynamic';
 
-const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
+const maxPageSize = parsePositiveIntEnv(process.env.MAX_PAGE_SIZE, 50);
 
 export async function GET(
   request: NextRequest,

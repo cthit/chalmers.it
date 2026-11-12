@@ -8,6 +8,7 @@ import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatShe
 import ContactCard from '@/components/ContactCard/ContactCard';
 import Forbidden from '@/components/ErrorPages/403/403';
 import { parseIdParam } from '@/utils/params';
+import FileService from '@/services/fileService';
 
 export default async function Page(props: {
   params: Promise<{ locale: string; id: string }>;
@@ -48,6 +49,8 @@ export default async function Page(props: {
               connectedEvents={newsPost!.connectedEvents}
               group={group?.superGroup.id ?? 'self'}
               scheduledPublish={newsPost!.scheduledPublish}
+              maxFileSizeBytes={FileService.maxMediaSizeBytes}
+              maxUploadSizeBytes={FileService.maxUploadSizeBytes}
             />
           </ContentPane>
         }

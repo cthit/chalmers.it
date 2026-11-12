@@ -14,7 +14,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import CopyButton from '../CopyButton/CopyButton';
-import DatePicker from '../DatePicker/DatePicker';
+import DatePicker, {
+  convertToDateTimeLocalString
+} from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
@@ -24,6 +26,9 @@ import { EventLanguage } from '@prisma/client';
 const validUploadTypes = Object.values(MediaType);
 
 const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
+
+const LARGE_IMAGE_WARNING_BYTES = 2 * 1024 * 1024;
+const VERY_LARGE_FILE_WARNING_BYTES = 10 * 1024 * 1024;
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -37,11 +42,15 @@ interface NewPostFormProps {
   locale: string;
   scheduledPublish?: Date | null;
   connectedEvents?: Event[];
+  maxFileSizeBytes?: number;
+  maxUploadSizeBytes?: number;
 }
 
 interface Event {
   titleEn: string;
   titleSv: string;
+  descriptionEn: string;
+  descriptionSv: string;
   startTime: Date;
   endTime: Date;
   fullDay: boolean;
@@ -60,6 +69,8 @@ interface EventDraft {
 const emptyEvent: Event = {
   titleEn: '',
   titleSv: '',
+  descriptionEn: '',
+  descriptionSv: '',
   startTime: new Date(),
   endTime: new Date(),
   fullDay: false,
@@ -77,6 +88,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
+  const maxFileSizeBytes =
+    newsPost.maxFileSizeBytes ?? FileService.maxMediaSizeBytes;
+  const maxUploadSizeBytes =
+    newsPost.maxUploadSizeBytes ?? FileService.maxUploadSizeBytes;
 
   const draftKey =
     newsPost.id !== undefined
@@ -111,6 +126,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [uploadQueue, setUploadQueue] = useState<{
     [key: string]: File;
   }>({});
+  const uploadQueueRef = useRef<{ [key: string]: File }>(uploadQueue);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const createdPostIdRef = useRef<number | undefined>(undefined);
 
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
@@ -146,18 +166,83 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     newsPost.contentSv
   ]);
 
-  const dropFiles = async (f: FileList) => {
-    const newQueue = { ...uploadQueue };
+  const dropFiles = async (f: FileList | File[]) => {
     const droppedFiles: { [key: string]: File } = {};
-    for (let i = 0; i < f.length; i++) {
-      const file = f[i];
-      if (!FileService.checkValidFile(file, validUploadTypes)) continue;
+    const rejected: { file: File; reason: string }[] = [];
+
+    for (const file of Array.from(f)) {
+      const meta = FileService.convertMimeType(file.type);
+      if (!meta || !validUploadTypes.includes(meta.type)) {
+        rejected.push({ file, reason: l.editor.fileTypeUnsupported });
+        continue;
+      }
+
+      if (file.size > maxFileSizeBytes) {
+        rejected.push({
+          file,
+          reason: `${l.editor.fileTooLarge} (${FileService.formatBytes(maxFileSizeBytes)})`
+        });
+        continue;
+      }
+
+      const currentSize = Object.values(uploadQueueRef.current).reduce(
+        (total, queued) => total + queued.size,
+        0
+      );
+      if (currentSize + file.size > maxUploadSizeBytes) {
+        rejected.push({
+          file,
+          reason: `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(maxUploadSizeBytes)})`
+        });
+        continue;
+      }
+
+      if (file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
+        toast.warning(
+          `${file.name}. ${
+            meta.type === MediaType.Image
+              ? l.editor.imageVeryLarge
+              : l.editor.fileLarge
+          }`
+        );
+      }
 
       const sha256 = await FileService.fileSha256Browser(file);
-      newQueue[sha256] = file;
+      if (uploadQueueRef.current[sha256]) {
+        droppedFiles[sha256] = uploadQueueRef.current[sha256];
+        continue;
+      }
+
+      // Re-check after hashing so concurrent drops cannot push the queue over
+      // the limit.
+      const latestSize = Object.values(uploadQueueRef.current).reduce(
+        (total, queued) => total + queued.size,
+        0
+      );
+      if (latestSize + file.size > maxUploadSizeBytes) {
+        rejected.push({
+          file,
+          reason: `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(maxUploadSizeBytes)})`
+        });
+        continue;
+      }
+
+      uploadQueueRef.current = {
+        ...uploadQueueRef.current,
+        [sha256]: file
+      };
+      setUploadQueue(uploadQueueRef.current);
       droppedFiles[sha256] = file;
     }
-    setUploadQueue(newQueue);
+
+    if (rejected.length > 0) {
+      toast.error(
+        `${l.editor.uploadRejected}. ${rejected
+          .map(({ file, reason }) => `${file.name} (${reason})`)
+          .join(', ')}`
+      );
+    }
+
     return Object.entries(droppedFiles).map(([sha256, file]) => ({
       file,
       url: '/api/media/' + sha256
@@ -165,16 +250,36 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   };
 
   const delFile = (sha256: string) => {
-    const newQueue = { ...uploadQueue };
+    const newQueue = { ...uploadQueueRef.current };
     delete newQueue[sha256];
+    uploadQueueRef.current = newQueue;
     setUploadQueue(newQueue);
   };
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
+    if (submittingRef.current) return;
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+
     try {
+      const queuedFiles = Object.values(uploadQueueRef.current);
+      const totalSize = queuedFiles.reduce(
+        (total, file) => total + file.size,
+        0
+      );
+      if (totalSize > maxUploadSizeBytes) {
+        toast.error(
+          `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(
+            maxUploadSizeBytes
+          )})`
+        );
+        return;
+      }
+
       const formData = new FormData();
-      for (const file of Object.values(uploadQueue)) {
+      for (const file of queuedFiles) {
         formData.append('file', file);
       }
       const publishDate =
@@ -184,7 +289,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       if (newsPost.id !== undefined) {
         await toast.promise(
           edit(
-            newsPost.id!,
+            newsPost.id,
             titleEn,
             titleSv,
             contentEnRef.current!.getMarkdown(),
@@ -198,7 +303,25 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             error: l.editor.saveError
           }
         );
-        postId = newsPost.id!;
+        postId = newsPost.id;
+      } else if (createdPostIdRef.current !== undefined) {
+        await toast.promise(
+          edit(
+            createdPostIdRef.current,
+            titleEn,
+            titleSv,
+            contentEnRef.current!.getMarkdown(),
+            contentSvRef.current!.getMarkdown(),
+            formData,
+            publish === 'now' ? null : publishDate
+          ),
+          {
+            pending: l.editor.saving,
+            success: l.editor.saved,
+            error: l.editor.saveError
+          }
+        );
+        postId = createdPostIdRef.current;
       } else if (group !== 'self') {
         postId = await toast.promise(
           postForGroup(
@@ -234,43 +357,73 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       }
 
-      for (const event of events) {
-        const data = {
-          titleEn: event.titleEn,
-          titleSv: event.titleSv,
-          fullDay: event.fullDay,
-          startTime: event.startTime,
-          endTime: event.endTime,
-          location: event.location,
-          language: event.language,
-          descriptionEn: '',
-          descriptionSv: '',
-          newsPostId: postId
-        };
+      createdPostIdRef.current = postId;
 
-        if (event.id === undefined) {
-          await createEvent(data);
-        } else {
-          await editEvent(event.id, data);
+      const nextEvents = events.map((event) => ({ ...event }));
+      try {
+        for (let i = 0; i < nextEvents.length; i++) {
+          const event = nextEvents[i];
+          const data = {
+            titleEn: event.titleEn,
+            titleSv: event.titleSv,
+            descriptionEn: event.descriptionEn,
+            descriptionSv: event.descriptionSv,
+            fullDay: event.fullDay,
+            startTime: event.startTime,
+            endTime: event.endTime,
+            location: event.location,
+            language: event.language,
+            newsPostId: postId
+          };
+
+          if (event.id === undefined) {
+            const created = await createEvent(data);
+            nextEvents[i] = { ...event, id: created.id };
+          } else {
+            await editEvent(event.id, data);
+          }
         }
+
+        const remainingRemovals: number[] = [];
+        for (const id of removeQueue) {
+          try {
+            await deleteEvent(id);
+          } catch {
+            remainingRemovals.push(id);
+          }
+        }
+        setRemoveQueue(remainingRemovals);
+        if (remainingRemovals.length > 0) {
+          throw new Error('Could not remove all connected events');
+        }
+      } catch {
+        setEvents(nextEvents);
+        toast.error(l.editor.eventSaveError);
+        return;
       }
 
-      for (const id of removeQueue) {
-        await deleteEvent(id);
-      }
-
+      setEvents(nextEvents);
       submitted.current = true;
       clearDraft();
-      router.push('/');
+      router.push(`/post/${postId}`);
     } catch {
       console.log('Failed to post news article');
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   }
 
-  function editEventState(id: number, key: keyof Event, value: any) {
-    const newEvents: Event[] = [...events];
-    newEvents[id][key] = value as never;
-    setEvents(newEvents);
+  function editEventState<K extends keyof Event>(
+    id: number,
+    key: K,
+    value: Event[K]
+  ) {
+    setEvents((prevEvents) =>
+      prevEvents.map((event, index) =>
+        index === id ? { ...event, [key]: value } : event
+      )
+    );
   }
 
   // Handler for date pickers to ensure endTime >= startTime
@@ -322,11 +475,31 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     } catch {}
   }
 
+  const uploadedFiles = Object.entries(uploadQueue);
+  const totalUploadSize = uploadedFiles.reduce(
+    (total, [, file]) => total + file.size,
+    0
+  );
+
+  const getFileWarning = (file: File) => {
+    const isImage = FileService.isMimeEmbeddable(file.type);
+    if (isImage && file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
+      return { message: l.editor.imageVeryLarge, severe: true };
+    }
+    if (isImage && file.size >= LARGE_IMAGE_WARNING_BYTES) {
+      return { message: l.editor.imageLarge, severe: false };
+    }
+    if (file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
+      return { message: l.editor.fileLarge, severe: true };
+    }
+    return null;
+  };
+
   return (
     <>
       <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
       <Divider />
-      <form onSubmit={send}>
+      <form onSubmit={send} aria-busy={isSubmitting}>
         <h2>{l.editor.createAs}</h2>
         <DropdownList
           value={group}
@@ -384,25 +557,53 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <br />
         <h2>{l.editor.uploaded}</h2>
-        {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noFiles}</p>}
+        {uploadedFiles.length === 0 ? (
+          <p>{l.editor.noFiles}</p>
+        ) : (
+          <p
+            className={`${style.uploadSummary} ${
+              totalUploadSize > maxUploadSizeBytes * 0.9
+                ? style.fileWarningStrong
+                : ''
+            }`}
+          >
+            {l.editor.totalSize} {FileService.formatBytes(totalUploadSize)} /{' '}
+            {FileService.formatBytes(maxUploadSizeBytes)}
+          </p>
+        )}
         <ul>
-          {Object.entries(uploadQueue).map(([sha256, file]) => (
-            <li className={style.fileActions} key={sha256}>
-              <p>{file.name}</p>{' '}
-              <CopyButton
-                locale={newsPost.locale}
-                copyContent={createMarkdownLinkToMedia(sha256, file)}
-              />
-              <ActionButton
-                type="button"
-                onClick={() => {
-                  delFile(sha256);
-                }}
-              >
-                {l.general.delete}
-              </ActionButton>
-            </li>
-          ))}
+          {uploadedFiles.map(([sha256, file]) => {
+            const warning = getFileWarning(file);
+            return (
+              <li className={style.fileActions} key={sha256}>
+                <p>{file.name}</p>{' '}
+                <span className={style.fileSize}>
+                  {FileService.formatBytes(file.size)}
+                </span>
+                <CopyButton
+                  locale={newsPost.locale}
+                  copyContent={createMarkdownLinkToMedia(sha256, file)}
+                />
+                <ActionButton
+                  type="button"
+                  onClick={() => {
+                    delFile(sha256);
+                  }}
+                >
+                  {l.general.delete}
+                </ActionButton>
+                {warning && (
+                  <span
+                    className={`${style.fileWarning} ${
+                      warning.severe ? style.fileWarningStrong : ''
+                    }`}
+                  >
+                    {warning.message}
+                  </span>
+                )}
+              </li>
+            );
+          })}
         </ul>
         <ActionButton
           type="button"
@@ -410,8 +611,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         >
           {l.editor.selectFiles}
         </ActionButton>
+        <p className={style.uploadSummary}>
+          {l.editor.maxFileSize} {FileService.formatBytes(maxFileSizeBytes)}
+          <br />
+          {l.editor.maxTotalUploadSize}{' '}
+          {FileService.formatBytes(maxUploadSizeBytes)}
+        </p>
         <input
-          onChange={(e) => dropFiles(e.target.files!)}
+          accept={FileService.getValidMimes(validUploadTypes).join(',')}
+          onChange={(e) => {
+            const files = Array.from(e.target.files ?? []);
+            e.target.value = '';
+            void dropFiles(files);
+          }}
           multiple
           ref={fileInputRef}
           type="file"
@@ -436,6 +648,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           </DropdownList>
           <DatePicker
             hidden={publish === 'now'}
+            required={publish === 'schedule'}
             value={scheduledFor}
             onChange={(e) => setScheduledFor(e)}
           />
@@ -463,16 +676,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
               <h3>{l.events.start}</h3>
               <DatePicker
+                required
                 value={e.startTime}
                 onChange={(d) => handleEventDateChange(i, 'startTime', d)}
               />
               <h3>{l.events.end}</h3>
               <DatePicker
                 disabled={e.fullDay}
+                required
                 value={e.endTime}
                 min={
                   e.startTime
-                    ? e.startTime.toISOString().slice(0, 16)
+                    ? convertToDateTimeLocalString(e.startTime)
                     : undefined
                 }
                 onChange={(d) => handleEventDateChange(i, 'endTime', d)}
@@ -553,8 +768,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <br />
         <br />
         <div className={style.actions}>
-          <ActionButton type="submit">
-            {newsPost.id !== undefined ? l.general.save : l.general.create}
+          <ActionButton type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? newsPost.id !== undefined
+                ? l.editor.saving
+                : l.editor.posting
+              : newsPost.id !== undefined
+                ? l.general.save
+                : l.general.create}
           </ActionButton>
         </div>
       </form>
