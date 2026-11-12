@@ -327,8 +327,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
       <Divider />
       <form onSubmit={send}>
-        <h2>{l.editor.createAs}</h2>
+        <h2>
+          <label htmlFor="news-group">{l.editor.createAs}</label>
+        </h2>
         <DropdownList
+          id="news-group"
           value={group}
           onChange={(e) => setGroup(e.target.value)}
           disabled={newsPost.group !== undefined}
@@ -345,14 +348,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           ))}
         </DropdownList>
 
-        <h2>{l.editor.title} (Eng)</h2>
+        <h2>
+          <label htmlFor="news-title-en">{l.editor.title} (Eng)</label>
+        </h2>
         <TextArea
+          id="news-title-en"
           value={titleEn}
           onChange={(e) => setTitleEn(e.target.value)}
           required
         />
-        <h2>{l.editor.content} (Eng)</h2>
+        <h2 id="news-content-en">{l.editor.content} (Eng)</h2>
         <MarkdownEditor
+          labelledBy="news-content-en"
           defaultMd={draft?.contentEn ?? newsPost.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
@@ -363,16 +370,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           localFiles={uploadQueue}
         />
 
-        <h2>{l.editor.title} (Sv)</h2>
+        <h2>
+          <label htmlFor="news-title-sv">{l.editor.title} (Sv)</label>
+        </h2>
         <TextArea
+          id="news-title-sv"
           value={titleSv}
           onChange={(e) => {
             setTitleSv(e.target.value);
           }}
           required
         />
-        <h2>{l.editor.content} (Sv)</h2>
+        <h2 id="news-content-sv">{l.editor.content} (Sv)</h2>
         <MarkdownEditor
+          labelledBy="news-content-sv"
           defaultMd={draft?.contentSv ?? newsPost.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
@@ -419,9 +430,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
 
         <br />
-        <h2>{l.editor.publish}</h2>
+        <h2>
+          <label htmlFor="news-publish">{l.editor.publish}</label>
+        </h2>
         <div className={style.actions}>
           <DropdownList
+            id="news-publish"
             value={publish}
             onChange={(e) => setPublish(e.target.value)}
             required
@@ -435,6 +449,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             </option>
           </DropdownList>
           <DatePicker
+            aria-label={l.editor.scheduled}
             hidden={publish === 'now'}
             value={scheduledFor}
             onChange={(e) => setScheduledFor(e)}
@@ -447,27 +462,43 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <ul>
           {events.map((e, i) => (
             <li key={i} className={style.listItem}>
-              <h3>{l.editor.title} (Eng)</h3>
+              <h3>
+                <label htmlFor={`event-${i}-title-en`}>
+                  {l.editor.title} (Eng)
+                </label>
+              </h3>
               <TextArea
+                id={`event-${i}-title-en`}
                 value={e.titleEn}
                 onChange={(e) => editEventState(i, 'titleEn', e.target.value)}
                 required
               />
 
-              <h3>{l.editor.title} (Sv)</h3>
+              <h3>
+                <label htmlFor={`event-${i}-title-sv`}>
+                  {l.editor.title} (Sv)
+                </label>
+              </h3>
               <TextArea
+                id={`event-${i}-title-sv`}
                 value={e.titleSv}
                 onChange={(e) => editEventState(i, 'titleSv', e.target.value)}
                 required
               />
 
-              <h3>{l.events.start}</h3>
+              <h3>
+                <label htmlFor={`event-${i}-start`}>{l.events.start}</label>
+              </h3>
               <DatePicker
+                id={`event-${i}-start`}
                 value={e.startTime}
                 onChange={(d) => handleEventDateChange(i, 'startTime', d)}
               />
-              <h3>{l.events.end}</h3>
+              <h3>
+                <label htmlFor={`event-${i}-end`}>{l.events.end}</label>
+              </h3>
               <DatePicker
+                id={`event-${i}-end`}
                 disabled={e.fullDay}
                 value={e.endTime}
                 min={
@@ -488,8 +519,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                 checked={e.fullDay}
                 onChange={(e) => editEventState(i, 'fullDay', e.target.checked)}
               />
-              <h3>{l.events.location}</h3>
+              <h3>
+                <label htmlFor={`event-${i}-location`}>
+                  {l.events.location}
+                </label>
+              </h3>
               <TextArea
+                id={`event-${i}-location`}
                 value={e.location ?? ''}
                 onChange={(e) => editEventState(i, 'location', e.target.value)}
               />

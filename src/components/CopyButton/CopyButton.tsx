@@ -18,7 +18,11 @@ const CopyButton = ({
     toast(l.editor.linkCopied, { type: 'success' });
   };
 
-  return <ActionButton onClick={copyLink}>{l.editor.copyLink}</ActionButton>;
+  return (
+    <ActionButton type="button" onClick={copyLink}>
+      {l.editor.copyLink}
+    </ActionButton>
+  );
 };
 
 export default CopyButton;

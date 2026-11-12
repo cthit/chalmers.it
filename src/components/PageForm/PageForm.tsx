@@ -92,11 +92,18 @@ const PageForm = (description: NewPostFormProps) => {
       <h1>{l.pages.editGroupPage}</h1>
       <Divider />
 
-      <h2>{l.pages.urlSlug}</h2>
-      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
+      <h2>
+        <label htmlFor="group-page-slug">{l.pages.urlSlug}</label>
+      </h2>
+      <TextArea
+        id="group-page-slug"
+        value={slug}
+        onChange={(e) => setSlug(e.target.value)}
+      />
 
-      <h2>{l.editor.content} (En)</h2>
+      <h2 id="group-page-content-en">{l.editor.content} (En)</h2>
       <MarkdownEditor
+        labelledBy="group-page-content-en"
         defaultMd={description.contentEn}
         ref={contentEnRef}
         onUpload={dropFiles}
@@ -104,8 +111,9 @@ const PageForm = (description: NewPostFormProps) => {
         localFiles={uploadQueue}
       />
 
-      <h2>{l.editor.content} (Sv)</h2>
+      <h2 id="group-page-content-sv">{l.editor.content} (Sv)</h2>
       <MarkdownEditor
+        labelledBy="group-page-content-sv"
         defaultMd={description.contentSv}
         ref={contentSvRef}
         onUpload={dropFiles}

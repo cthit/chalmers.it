@@ -161,8 +161,14 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             : l.pages.createPage}
       </h1>
       <Divider />
-      <h2>{l.pages.createUnder}</h2>
-      <DropdownList value={page} onChange={(e) => setPage(+e.target.value)}>
+      <h2>
+        <label htmlFor="page-parent">{l.pages.createUnder}</label>
+      </h2>
+      <DropdownList
+        id="page-parent"
+        value={page}
+        onChange={(e) => setPage(+e.target.value)}
+      >
         <option value={undefined}>{l.pages.topLevel}</option>
         {validPages.map((p) => {
           const pad = '\u00A0'.repeat(p.depth);
@@ -175,20 +181,36 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       </DropdownList>
 
       <br />
-      <h2>{l.pages.urlSlug}</h2>
-      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
+      <h2>
+        <label htmlFor="page-slug">{l.pages.urlSlug}</label>
+      </h2>
+      <TextArea
+        id="page-slug"
+        value={slug}
+        onChange={(e) => setSlug(e.target.value)}
+      />
 
       <br />
-      <h2>{l.pages.sortPrio}</h2>
+      <h2>
+        <label htmlFor="page-prio">{l.pages.sortPrio}</label>
+      </h2>
       <TextArea
+        id="page-prio"
         value={Number.isNaN(prio) ? 0 : prio}
         onChange={(e) => setPrio(+e.target.value)}
       />
 
-      <h2>{l.pages.title} (Eng)</h2>
-      <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>{l.pages.content} (Eng)</h2>
+      <h2>
+        <label htmlFor="page-title-en">{l.pages.title} (Eng)</label>
+      </h2>
+      <TextArea
+        id="page-title-en"
+        value={titleEn}
+        onChange={(e) => setTitleEn(e.target.value)}
+      />
+      <h2 id="page-content-en">{l.pages.content} (Eng)</h2>
       <MarkdownEditor
+        labelledBy="page-content-en"
         defaultMd={divisionPost.contentEn}
         ref={contentEnRef}
         onUpload={dropFiles}
@@ -196,10 +218,17 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         localFiles={uploadQueue}
       />
 
-      <h2>{l.pages.title} (Sv)</h2>
-      <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>{l.pages.content} (Sv)</h2>
+      <h2>
+        <label htmlFor="page-title-sv">{l.pages.title} (Sv)</label>
+      </h2>
+      <TextArea
+        id="page-title-sv"
+        value={titleSv}
+        onChange={(e) => setTitleSv(e.target.value)}
+      />
+      <h2 id="page-content-sv">{l.pages.content} (Sv)</h2>
       <MarkdownEditor
+        labelledBy="page-content-sv"
         defaultMd={divisionPost.contentSv}
         ref={contentSvRef}
         onUpload={dropFiles}
