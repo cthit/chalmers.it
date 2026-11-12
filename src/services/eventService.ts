@@ -63,12 +63,29 @@ export default class EventService {
         startTime: 'asc'
       },
       where: {
-        endTime: {
-          gte: after
-        },
-        startTime: {
-          lte: before
-        }
+        AND: [
+          {
+            OR: [
+              {
+                fullDay: false,
+                endTime: {
+                  gte: after
+                }
+              },
+              {
+                fullDay: true,
+                startTime: {
+                  gte: after
+                }
+              }
+            ]
+          },
+          {
+            startTime: {
+              lte: before
+            }
+          }
+        ]
       },
       select: {
         id: true,
