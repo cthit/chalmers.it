@@ -18,6 +18,7 @@ import { imgMatcher } from '@/utils/mediaLink';
 export const dynamic = 'force-dynamic';
 
 const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
+const iCalendarWeekRange = parseInt(process.env.ICALENDAR_WEEK_RANGE ?? '9');
 
 export async function GET(
   request: NextRequest,
@@ -30,7 +31,7 @@ export async function GET(
     // iCalendar response
     const locale = search.get('locale') ?? 'sv';
 
-    return await createCalendarResponse(locale);
+    return await createCalendarResponse(locale, iCalendarWeekRange);
   } else {
     // JSON response is default
     const page: number = parseInt(search.get('page') ?? '1');
@@ -61,7 +62,7 @@ async function createJsonResponse(
 
 async function createCalendarResponse(
   locale: string,
-  surroundingWeeks: number = 9
+  surroundingWeeks: number
 ): Promise<NextResponse> {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   if (invalidLocale) {
