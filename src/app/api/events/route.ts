@@ -14,10 +14,11 @@ import NewsService from '@/services/newsService';
 import { Event, EventLanguage } from '@prisma/client';
 import GammaService from '@/services/gammaService';
 import { imgMatcher } from '@/utils/mediaLink';
+import { parsePositiveIntEnv } from '@/utils/env';
 
 export const dynamic = 'force-dynamic';
 
-const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
+const maxPageSize = parsePositiveIntEnv(process.env.MAX_PAGE_SIZE, 50);
 
 export async function GET(
   request: NextRequest,

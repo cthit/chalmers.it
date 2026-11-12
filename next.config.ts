@@ -1,5 +1,15 @@
 import { NextConfig } from 'next';
 import path from 'path';
+import {
+  DEFAULT_MAX_UPLOAD_SIZE_BYTES,
+  parsePositiveIntEnv
+} from './src/utils/env';
+
+const maxUploadSizeBytes = parsePositiveIntEnv(
+  process.env.MAX_UPLOAD_SIZE,
+  DEFAULT_MAX_UPLOAD_SIZE_BYTES
+);
+const serverActionOverheadBytes = 1024 * 1024;
 
 const config: NextConfig = {
   agentRules: false,
@@ -16,7 +26,7 @@ const config: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '500mb'
+      bodySizeLimit: maxUploadSizeBytes + serverActionOverheadBytes
     }
   },
   output: 'standalone'

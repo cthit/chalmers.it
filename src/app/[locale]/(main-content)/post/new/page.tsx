@@ -5,6 +5,7 @@ import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
 import Forbidden from '@/components/ErrorPages/403/403';
+import FileService from '@/services/fileService';
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
@@ -25,7 +26,12 @@ export default async function Page(props: {
         left={<MarkdownCheatSheet locale={locale} />}
         middle={
           <ContentPane>
-            <NewsPostForm locale={locale} groups={groups} />
+            <NewsPostForm
+              locale={locale}
+              groups={groups}
+              maxFileSizeBytes={FileService.maxMediaSizeBytes}
+              maxUploadSizeBytes={FileService.maxUploadSizeBytes}
+            />
           </ContentPane>
         }
         right={<ContactCard locale={locale} />}

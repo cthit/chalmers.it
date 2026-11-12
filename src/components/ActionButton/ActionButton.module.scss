@@ -22,6 +22,11 @@
   background-color: var(--primary-hover);
 }
 
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .secondary {
   color: var(--on-surface);
   background-color: var(--surface-container-high);
