@@ -19,7 +19,19 @@ import { imgMatcher } from '@/utils/mediaLink';
 export const dynamic = 'force-dynamic';
 
 const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
-const iCalendarWeekRange = parseInt(process.env.ICALENDAR_WEEK_RANGE ?? '9');
+
+const defaultICalendarWeekRange = 9;
+const rawICalendarWeekRange = process.env.ICALENDAR_WEEK_RANGE
+  ? parseInt(process.env.ICALENDAR_WEEK_RANGE)
+  : defaultICalendarWeekRange;
+const isWeekRangeValid =
+  !isNaN(rawICalendarWeekRange) && rawICalendarWeekRange > 0;
+if (!isWeekRangeValid) {
+  console.warn('Invalid ICALENDAR_WEEK_RANGE, must be a positive integer');
+}
+const iCalendarWeekRange = isWeekRangeValid
+  ? rawICalendarWeekRange
+  : defaultICalendarWeekRange;
 
 export async function GET(
   request: NextRequest,
