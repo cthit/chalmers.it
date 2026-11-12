@@ -8,7 +8,8 @@ import {
   CalendarDate,
   CalendarDateTime,
   CalendarDuration,
-  CalendarEvent
+  CalendarEvent,
+  ONE_WEEK_MS
 } from 'iamcal';
 import NewsService from '@/services/newsService';
 import { Event, EventLanguage } from '@prisma/client';
@@ -72,10 +73,9 @@ async function createCalendarResponse(
   const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
-  const ONE_WEEK_MILLISECONDS = 7 * 24 * 60 * 60 * 1000;
   const now = Date.now();
-  const after = new Date(now - surroundingWeeks * ONE_WEEK_MILLISECONDS);
-  const before = new Date(now + surroundingWeeks * ONE_WEEK_MILLISECONDS);
+  const after = new Date(now - surroundingWeeks * ONE_WEEK_MS);
+  const before = new Date(now + surroundingWeeks * ONE_WEEK_MS);
 
   const events = await EventService.getRange(after, before);
   const calendar = new Calendar(
