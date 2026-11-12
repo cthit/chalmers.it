@@ -123,6 +123,11 @@
     "readMore": "Läs mer",
     "relatedEvents": "Relaterade tillfällen",
     "today": "Idag",
+    "todayHint": {
+      "day": "Idag",
+      "week": "Denna vecka",
+      "month": "Denna månad"
+    },
     "day": "Dag",
     "week": "Vecka",
     "month": "Månad",

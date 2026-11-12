@@ -1,3 +1,16 @@
-.mainCalendar {
-  max-height: 80vh;
+@media (max-width: 25rem) {
+  .calendarCard {
+    position: relative;
+    padding-bottom: 0 !important;
+  }
+
+  .calendarContainer {
+    min-height: 80vh;
+  }
+
+  .calendar {
+    position: absolute;
+    width: 100%;
+    left: 0;
+  }
 }
