@@ -8,7 +8,8 @@ import {
   CalendarDate,
   CalendarDateTime,
   CalendarDuration,
-  CalendarEvent
+  CalendarEvent,
+  ONE_WEEK_MS
 } from 'iamcal';
 import NewsService from '@/services/newsService';
 import { Event, EventLanguage } from '@prisma/client';
@@ -18,6 +19,19 @@ import { imgMatcher } from '@/utils/mediaLink';
 export const dynamic = 'force-dynamic';
 
 const maxPageSize: number = parseInt(process.env.MAX_PAGE_SIZE ?? '50');
+
+const defaultICalendarWeekRange = 9;
+const rawICalendarWeekRange = process.env.ICALENDAR_WEEK_RANGE
+  ? parseInt(process.env.ICALENDAR_WEEK_RANGE)
+  : defaultICalendarWeekRange;
+const isWeekRangeValid =
+  !isNaN(rawICalendarWeekRange) && rawICalendarWeekRange > 0;
+if (!isWeekRangeValid) {
+  console.warn('Invalid ICALENDAR_WEEK_RANGE, must be a positive integer');
+}
+const iCalendarWeekRange = isWeekRangeValid
+  ? rawICalendarWeekRange
+  : defaultICalendarWeekRange;
 
 export async function GET(
   request: NextRequest,
@@ -30,7 +44,7 @@ export async function GET(
     // iCalendar response
     const locale = search.get('locale') ?? 'sv';
 
-    return await createCalendarResponse(locale);
+    return await createCalendarResponse(locale, iCalendarWeekRange);
   } else {
     // JSON response is default
     const page: number = parseInt(search.get('page') ?? '1');
@@ -59,7 +73,10 @@ async function createJsonResponse(
   return NextResponse.json(events);
 }
 
-async function createCalendarResponse(locale: string): Promise<NextResponse> {
+async function createCalendarResponse(
+  locale: string,
+  surroundingWeeks: number
+): Promise<NextResponse> {
   const invalidLocale = !i18nConfig.locales.includes(locale);
   if (invalidLocale) {
     return ApiService.jsonError('Invalid locale');
@@ -68,7 +85,11 @@ async function createCalendarResponse(locale: string): Promise<NextResponse> {
   const l = i18nService.getLocale(locale);
   const isEn = locale === 'en';
 
-  const events = await EventService.getAll();
+  const now = Date.now();
+  const after = new Date(now - surroundingWeeks * ONE_WEEK_MS);
+  const before = new Date(now + surroundingWeeks * ONE_WEEK_MS);
+
+  const events = await EventService.getRange(after, before);
   const calendar = new Calendar(
     `-//cthit//NONSGML chalmers.it//${locale.toUpperCase()}`
   )
