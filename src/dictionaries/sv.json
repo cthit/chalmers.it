@@ -51,6 +51,7 @@
     "loadMore": "Ladda fler",
     "listView": "Listvy",
     "cardView": "Kortvy",
+    "viewMode": "Visningsläge",
     "connectedEvents": "Kopplade evenemang"
   },
   "editor": {
@@ -223,6 +224,7 @@
     "richText": "Richtext",
     "raw": "Markdown",
     "preview": "Förhandsgranskning",
+    "viewMode": "Visningsläge",
     "link": "Länk",
     "image": "Bild"
   },

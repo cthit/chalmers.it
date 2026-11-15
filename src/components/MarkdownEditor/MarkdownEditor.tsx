@@ -35,6 +35,7 @@ import {
 import { Ctx } from '@milkdown/kit/ctx';
 import MarkdownView from '../MarkdownView/MarkdownView';
 import DropdownList from '../DropdownList/DropdownList';
+import SegmentedControl from '../SegmentedControl/SegmentedControl';
 import {
   BsBook,
   BsFileEarmarkRichtext,
@@ -436,32 +437,32 @@ const MilkdownEditor = React.forwardRef<
             </>
           )}
         </div>
-        <div className={styles.buttonGroup}>
-          <button
-            className={viewMode === 'wysiwyg' ? styles.selectedButton : ''}
-            title={l.markdown.richText}
-            type="button"
-            onClick={() => changeView('wysiwyg')}
-          >
-            <BsFileEarmarkRichtext />
-          </button>
-          <button
-            className={viewMode === 'raw' ? styles.selectedButton : ''}
-            title={l.markdown.raw}
-            type="button"
-            onClick={() => changeView('raw')}
-          >
-            <BsMarkdown />
-          </button>
-          <button
-            className={viewMode === 'preview' ? styles.selectedButton : ''}
-            title={l.markdown.preview}
-            type="button"
-            onClick={() => changeView('preview')}
-          >
-            <BsBook />
-          </button>
-        </div>
+        <SegmentedControl
+          value={viewMode}
+          ariaLabel={l.markdown.viewMode}
+          className={styles.viewModes}
+          options={[
+            {
+              value: 'wysiwyg',
+              label: <BsFileEarmarkRichtext />,
+              title: l.markdown.richText,
+              ariaLabel: l.markdown.richText
+            },
+            {
+              value: 'raw',
+              label: <BsMarkdown />,
+              title: l.markdown.raw,
+              ariaLabel: l.markdown.raw
+            },
+            {
+              value: 'preview',
+              label: <BsBook />,
+              title: l.markdown.preview,
+              ariaLabel: l.markdown.preview
+            }
+          ]}
+          onChange={(mode) => changeView(mode as 'wysiwyg' | 'raw' | 'preview')}
+        />
       </div>
       <div className={styles.editor} hidden={viewMode !== 'wysiwyg'}>
         <Milkdown />

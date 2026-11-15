@@ -46,12 +46,11 @@
   }
 }
 
-.selectedButton {
-  background: var(--primary-container) !important;
-  color: var(--on-primary-container);
-  &:hover {
-    color: var(--on-primary-container);
-  }
+.viewModes {
+  --segmented-aspect-ratio: 1;
+  --segmented-font-size: 1.2rem;
+  --segmented-height: 1.75rem;
+  --segmented-padding: 0.2rem;
 }
 
 .toolbarDropdown {

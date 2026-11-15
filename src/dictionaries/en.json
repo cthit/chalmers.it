@@ -51,6 +51,7 @@
     "loadMore": "Load more",
     "listView": "List View",
     "cardView": "Card View",
+    "viewMode": "View mode",
     "connectedEvents": "Connected Events"
   },
   "editor": {
@@ -223,6 +224,7 @@
     "richText": "Rich Text",
     "raw": "Markdown",
     "preview": "Preview",
+    "viewMode": "View mode",
     "link": "Link",
     "image": "Image"
   },

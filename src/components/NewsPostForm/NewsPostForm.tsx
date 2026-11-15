@@ -6,6 +6,7 @@ import ActionButton from '@/components/ActionButton/ActionButton';
 import Divider from '@/components/Divider/Divider';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MediaUploader from '@/components/MediaUploader/MediaUploader';
+import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
 import FileService from '@/services/fileService';
@@ -600,43 +601,38 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     newsPost.id !== undefined || createdPostIdRef.current !== undefined;
 
   const languageToggle = (
-    <div
+    <SegmentedControl
+      value={activeLanguage}
+      ariaLabel={l.events.language}
       className={style.languageToggle}
-      role="group"
-      aria-label={l.events.language}
-    >
-      {languageOrder.map((language) => {
+      options={languageOrder.map((language) => {
         const complete = isLanguageComplete(language);
         const label = languageLabel(language);
         const status = complete
           ? l.editor.languageComplete
           : l.editor.languageIncomplete;
-        return (
-          <button
-            key={language}
-            type="button"
-            data-language-toggle={language}
-            className={`${style.languageButton} ${
-              activeLanguage === language ? style.activeLanguage : ''
-            }`}
-            aria-pressed={activeLanguage === language}
-            aria-label={`${label} ${status}`}
-            title={`${label} ${status}`}
-            onClick={() => changeLanguage(language)}
-          >
-            {language.toUpperCase()}
-            <span
-              className={`${style.languageStatus} ${
-                complete ? '' : style.languageIncomplete
-              }`}
-              aria-hidden="true"
-            >
-              {complete ? '✓' : '•'}
-            </span>
-          </button>
-        );
+        return {
+          value: language,
+          label: (
+            <>
+              {language.toUpperCase()}
+              <span
+                className={`${style.languageStatus} ${
+                  complete ? '' : style.languageIncomplete
+                }`}
+                aria-hidden="true"
+              >
+                {complete ? '✓' : '•'}
+              </span>
+            </>
+          ),
+          ariaLabel: `${label} ${status}`,
+          title: `${label} ${status}`,
+          dataAttributes: { 'data-language-toggle': language }
+        };
       })}
-    </div>
+      onChange={(language) => changeLanguage(language as 'en' | 'sv')}
+    />
   );
 
   return (
@@ -724,23 +720,20 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
         <h2>{l.editor.publish}</h2>
         <div className={style.actions}>
-          <label className={style.srOnly} htmlFor="news-post-publish">
-            {l.editor.publish}
-          </label>
-          <DropdownList
-            id="news-post-publish"
+          <SegmentedControl
             value={publish}
-            onChange={(e) => setPublish(e.target.value)}
-            required
-          >
-            <option value="now">{l.editor.now}</option>
-            <option
-              disabled={newsPost.scheduledPublish === null}
-              value="schedule"
-            >
-              {l.editor.scheduled}
-            </option>
-          </DropdownList>
+            ariaLabel={l.editor.publish}
+            className={style.publishToggle}
+            options={[
+              { value: 'now', label: l.editor.now },
+              {
+                value: 'schedule',
+                label: l.editor.scheduled,
+                disabled: newsPost.scheduledPublish === null
+              }
+            ]}
+            onChange={setPublish}
+          />
           <label className={style.srOnly} htmlFor="news-post-scheduled-for">
             {l.editor.scheduled}
           </label>
@@ -939,10 +932,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <ActionButton
           type="button"
           onClick={() => {
-            setEvents([
-              ...events,
-              { ...emptyEvent, draftId: createEventId() }
-            ]);
+            setEvents([...events, { ...emptyEvent, draftId: createEventId() }]);
           }}
         >
           {l.events.add}
