@@ -146,14 +146,22 @@ interface MilkdownEditorProps {
   };
   locale: string;
   toolbarStart?: React.ReactNode;
+  ariaLabel?: string;
 }
 
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
 >((props, ref) => {
-  const { defaultMd, onUpload, onChange, locale, localFiles, toolbarStart } =
-    props;
+  const {
+    defaultMd,
+    onUpload,
+    onChange,
+    locale,
+    localFiles,
+    toolbarStart,
+    ariaLabel
+  } = props;
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
@@ -362,7 +370,7 @@ const MilkdownEditor = React.forwardRef<
   }));
 
   return (
-    <div>
+    <div role={ariaLabel ? 'group' : undefined} aria-label={ariaLabel}>
       <div className={styles.toolbar}>
         <div>
           {toolbarStart}
@@ -459,6 +467,7 @@ const MilkdownEditor = React.forwardRef<
         <Milkdown />
       </div>
       <textarea
+        aria-label={ariaLabel}
         value={markdown}
         onChange={(e) => {
           setMarkdown(e.target.value);
@@ -498,10 +507,18 @@ export const MarkdownEditor = React.forwardRef<
       [key: string]: File;
     };
     toolbarStart?: React.ReactNode;
+    ariaLabel?: string;
   }
 >((props, ref) => {
-  const { defaultMd, onUpload, onChange, locale, localFiles, toolbarStart } =
-    props;
+  const {
+    defaultMd,
+    onUpload,
+    onChange,
+    locale,
+    localFiles,
+    toolbarStart,
+    ariaLabel
+  } = props;
   return (
     <MilkdownProvider>
       <MilkdownEditor
@@ -512,6 +529,7 @@ export const MarkdownEditor = React.forwardRef<
         locale={locale}
         localFiles={localFiles ?? {}}
         toolbarStart={toolbarStart}
+        ariaLabel={ariaLabel}
       />
     </MilkdownProvider>
   );

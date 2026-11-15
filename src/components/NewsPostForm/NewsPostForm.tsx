@@ -5,31 +5,26 @@ import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import Divider from '@/components/Divider/Divider';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
+import MediaUploader from '@/components/MediaUploader/MediaUploader';
 import TextArea from '@/components/TextArea/TextArea';
-import FileService, { MediaType } from '@/services/fileService';
+import { useUploadQueue } from '@/hooks/useUploadQueue';
+import FileService from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { GammaGroup } from '@/types/gamma';
 import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import CopyButton from '../CopyButton/CopyButton';
 import DatePicker, {
   convertToDateTimeLocalString
 } from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
-import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 import { capitalize } from '@/utils/strings';
 import { EventLanguage } from '@prisma/client';
 
-const validUploadTypes = Object.values(MediaType);
-
 const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
 const LOCAL_LANGUAGE_KEY = 'newsPostEditorLanguage';
-
-const LARGE_IMAGE_WARNING_BYTES = 2 * 1024 * 1024;
-const VERY_LARGE_FILE_WARNING_BYTES = 10 * 1024 * 1024;
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -58,6 +53,8 @@ interface Event {
   location: string | null;
   language: EventLanguage | null;
   id?: number;
+  draftId?: string;
+  open?: boolean;
 }
 
 interface DraftEvent extends Omit<Event, 'startTime' | 'endTime'> {
@@ -88,8 +85,18 @@ const emptyEvent: Event = {
   fullDay: false,
   location: '',
   language: null,
-  id: undefined
+  id: undefined,
+  draftId: undefined,
+  open: true
 };
+
+function createEventId() {
+  return `event-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function getEventKey(event: Event) {
+  return event.draftId ?? `event-${event.id}`;
+}
 
 function eventToDraft(event: Event): DraftEvent {
   return {
@@ -174,6 +181,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     newsPost.maxFileSizeBytes ?? FileService.maxMediaSizeBytes;
   const maxUploadSizeBytes =
     newsPost.maxUploadSizeBytes ?? FileService.maxUploadSizeBytes;
+  const { uploadQueue, dropFiles, removeFile, getQueue } = useUploadQueue({
+    locale: newsPost.locale,
+    maxFileSizeBytes,
+    maxUploadSizeBytes
+  });
 
   const draftKey =
     newsPost.id !== undefined
@@ -236,12 +248,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     parseDraftDate(draft?.scheduledFor, initialScheduledFor)
   );
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadQueue, setUploadQueue] = useState<{
-    [key: string]: File;
-  }>({});
-  const uploadQueueRef = useRef<{ [key: string]: File }>(uploadQueue);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
   const createdPostIdRef = useRef<number | undefined>(
@@ -249,12 +255,17 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
 
   const [events, setEvents] = useState<Event[]>(() => {
-    if (draft?.events) {
-      return draft.events
-        .map(draftToEvent)
-        .filter((event): event is Event => event !== null);
-    }
-    return newsPost.connectedEvents ?? [];
+    const source = draft?.events
+      ? draft.events
+          .map(draftToEvent)
+          .filter((event): event is Event => event !== null)
+      : (newsPost.connectedEvents ?? []);
+
+    return source.map((event) => ({
+      ...event,
+      draftId:
+        event.draftId ?? (event.id === undefined ? createEventId() : undefined)
+    }));
   });
   const [removeQueue, setRemoveQueue] = useState<number[]>(
     draft?.removeQueue ?? []
@@ -311,96 +322,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     serverDraftJson
   ]);
 
-  const dropFiles = async (f: FileList | File[]) => {
-    const droppedFiles: { [key: string]: File } = {};
-    const rejected: { file: File; reason: string }[] = [];
-
-    for (const file of Array.from(f)) {
-      const meta = FileService.convertMimeType(file.type);
-      if (!meta || !validUploadTypes.includes(meta.type)) {
-        rejected.push({ file, reason: l.editor.fileTypeUnsupported });
-        continue;
-      }
-
-      if (file.size > maxFileSizeBytes) {
-        rejected.push({
-          file,
-          reason: `${l.editor.fileTooLarge} (${FileService.formatBytes(maxFileSizeBytes)})`
-        });
-        continue;
-      }
-
-      const currentSize = Object.values(uploadQueueRef.current).reduce(
-        (total, queued) => total + queued.size,
-        0
-      );
-      if (currentSize + file.size > maxUploadSizeBytes) {
-        rejected.push({
-          file,
-          reason: `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(maxUploadSizeBytes)})`
-        });
-        continue;
-      }
-
-      if (file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
-        toast.warning(
-          `${file.name}. ${
-            meta.type === MediaType.Image
-              ? l.editor.imageVeryLarge
-              : l.editor.fileLarge
-          }`
-        );
-      }
-
-      const sha256 = await FileService.fileSha256Browser(file);
-      if (uploadQueueRef.current[sha256]) {
-        droppedFiles[sha256] = uploadQueueRef.current[sha256];
-        continue;
-      }
-
-      // Re-check after hashing so concurrent drops cannot push the queue over
-      // the limit.
-      const latestSize = Object.values(uploadQueueRef.current).reduce(
-        (total, queued) => total + queued.size,
-        0
-      );
-      if (latestSize + file.size > maxUploadSizeBytes) {
-        rejected.push({
-          file,
-          reason: `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(maxUploadSizeBytes)})`
-        });
-        continue;
-      }
-
-      uploadQueueRef.current = {
-        ...uploadQueueRef.current,
-        [sha256]: file
-      };
-      setUploadQueue(uploadQueueRef.current);
-      droppedFiles[sha256] = file;
-    }
-
-    if (rejected.length > 0) {
-      toast.error(
-        `${l.editor.uploadRejected}. ${rejected
-          .map(({ file, reason }) => `${file.name} (${reason})`)
-          .join(', ')}`
-      );
-    }
-
-    return Object.entries(droppedFiles).map(([sha256, file]) => ({
-      file,
-      url: '/api/media/' + sha256
-    }));
-  };
-
-  const delFile = (sha256: string) => {
-    const newQueue = { ...uploadQueueRef.current };
-    delete newQueue[sha256];
-    uploadQueueRef.current = newQueue;
-    setUploadQueue(newQueue);
-  };
-
   async function send(e: React.FormEvent) {
     e.preventDefault();
     if (submittingRef.current) return;
@@ -409,7 +330,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const queuedFiles = Object.values(uploadQueueRef.current);
+      const queuedFiles = Object.values(getQueue());
       const totalSize = queuedFiles.reduce(
         (total, file) => total + file.size,
         0
@@ -605,6 +526,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }
   }
 
+  function setEventOpen(i: number, open: boolean) {
+    setEvents((prevEvents) =>
+      prevEvents.map((event, index) =>
+        index === i ? { ...event, open } : event
+      )
+    );
+  }
+
   function loadDraft(): NewsPostDraft | null {
     try {
       const loaded = localStorage.getItem(draftKey);
@@ -642,6 +571,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       ? titleEn.trim() !== '' && contentEn.trim() !== ''
       : titleSv.trim() !== '' && contentSv.trim() !== '';
 
+  const eventTitle = (event: Event) =>
+    (newsPost.locale === 'en' ? event.titleEn : event.titleSv) ||
+    event.titleEn ||
+    event.titleSv ||
+    l.events.untitled;
+
   const changeLanguage = (language: 'en' | 'sv') => {
     setActiveLanguage(language);
     try {
@@ -663,26 +598,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const isEditing =
     newsPost.id !== undefined || createdPostIdRef.current !== undefined;
-
-  const uploadedFiles = Object.entries(uploadQueue);
-  const totalUploadSize = uploadedFiles.reduce(
-    (total, [, file]) => total + file.size,
-    0
-  );
-
-  const getFileWarning = (file: File) => {
-    const isImage = FileService.isMimeEmbeddable(file.type);
-    if (isImage && file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
-      return { message: l.editor.imageVeryLarge, severe: true };
-    }
-    if (isImage && file.size >= LARGE_IMAGE_WARNING_BYTES) {
-      return { message: l.editor.imageLarge, severe: false };
-    }
-    if (file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
-      return { message: l.editor.fileLarge, severe: true };
-    }
-    return null;
-  };
 
   const languageToggle = (
     <div
@@ -730,7 +645,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       <Divider />
       <form onSubmit={send} aria-busy={isSubmitting}>
         <h2>{l.editor.createAs}</h2>
+        <label className={style.srOnly} htmlFor="news-post-group">
+          {l.editor.createAs}
+        </label>
         <DropdownList
+          id="news-post-group"
           value={group}
           onChange={(e) => setGroup(e.target.value)}
           disabled={newsPost.group !== undefined}
@@ -777,6 +696,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             locale={newsPost.locale}
             localFiles={uploadQueue}
             toolbarStart={languageToggle}
+            ariaLabel={`${l.editor.content} ${languageLabel('en')}`}
           />
         </div>
         <div ref={contentSvContainerRef} hidden={activeLanguage !== 'sv'}>
@@ -790,87 +710,25 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             locale={newsPost.locale}
             localFiles={uploadQueue}
             toolbarStart={languageToggle}
+            ariaLabel={`${l.editor.content} ${languageLabel('sv')}`}
           />
         </div>
-        <br />
-        <h2>{l.editor.uploadQueue}</h2>
-        {uploadedFiles.length === 0 ? (
-          <p>{l.editor.noQueuedFiles}</p>
-        ) : (
-          <p
-            className={`${style.uploadSummary} ${
-              totalUploadSize > maxUploadSizeBytes * 0.9
-                ? style.fileWarningStrong
-                : ''
-            }`}
-          >
-            {l.editor.totalSize} {FileService.formatBytes(totalUploadSize)} /{' '}
-            {FileService.formatBytes(maxUploadSizeBytes)}
-          </p>
-        )}
-        <ul>
-          {uploadedFiles.map(([sha256, file]) => {
-            const warning = getFileWarning(file);
-            return (
-              <li className={style.fileActions} key={sha256}>
-                <p>{file.name}</p>{' '}
-                <span className={style.fileSize}>
-                  {FileService.formatBytes(file.size)}
-                </span>
-                <CopyButton
-                  locale={newsPost.locale}
-                  copyContent={createMarkdownLinkToMedia(sha256, file)}
-                />
-                <ActionButton
-                  type="button"
-                  onClick={() => {
-                    delFile(sha256);
-                  }}
-                >
-                  {l.general.delete}
-                </ActionButton>
-                {warning && (
-                  <span
-                    className={`${style.fileWarning} ${
-                      warning.severe ? style.fileWarningStrong : ''
-                    }`}
-                  >
-                    {warning.message}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        <ActionButton
-          type="button"
-          onClick={() => fileInputRef.current!.click()}
-        >
-          {l.editor.selectFiles}
-        </ActionButton>
-        <p className={style.uploadSummary}>
-          {l.editor.maxFileSize} {FileService.formatBytes(maxFileSizeBytes)}
-          <br />
-          {l.editor.maxTotalUploadSize}{' '}
-          {FileService.formatBytes(maxUploadSizeBytes)}
-        </p>
-        <input
-          accept={FileService.getValidMimes(validUploadTypes).join(',')}
-          onChange={(e) => {
-            const files = Array.from(e.target.files ?? []);
-            e.target.value = '';
-            void dropFiles(files);
-          }}
-          multiple
-          ref={fileInputRef}
-          type="file"
-          hidden
+        <MediaUploader
+          locale={newsPost.locale}
+          uploadQueue={uploadQueue}
+          onSelect={dropFiles}
+          onRemove={removeFile}
+          maxFileSizeBytes={maxFileSizeBytes}
+          maxUploadSizeBytes={maxUploadSizeBytes}
         />
 
-        <br />
         <h2>{l.editor.publish}</h2>
         <div className={style.actions}>
+          <label className={style.srOnly} htmlFor="news-post-publish">
+            {l.editor.publish}
+          </label>
           <DropdownList
+            id="news-post-publish"
             value={publish}
             onChange={(e) => setPublish(e.target.value)}
             required
@@ -883,7 +741,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               {l.editor.scheduled}
             </option>
           </DropdownList>
+          <label className={style.srOnly} htmlFor="news-post-scheduled-for">
+            {l.editor.scheduled}
+          </label>
           <DatePicker
+            id="news-post-scheduled-for"
             hidden={publish === 'now'}
             required={publish === 'schedule'}
             value={scheduledFor}
@@ -894,109 +756,193 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <br />
         <h2>{l.events.events}</h2>
 
-        <ul>
-          {events.map((e, i) => (
-            <li key={i} className={style.listItem}>
-              <h3>{l.editor.title} (Eng)</h3>
-              <TextArea
-                value={e.titleEn}
-                onChange={(e) => editEventState(i, 'titleEn', e.target.value)}
-                required
-              />
-
-              <h3>{l.editor.title} (Sv)</h3>
-              <TextArea
-                value={e.titleSv}
-                onChange={(e) => editEventState(i, 'titleSv', e.target.value)}
-                required
-              />
-
-              <h3>{l.events.start}</h3>
-              <DatePicker
-                required
-                value={e.startTime}
-                onChange={(d) => handleEventDateChange(i, 'startTime', d)}
-              />
-              <h3>{l.events.end}</h3>
-              <DatePicker
-                disabled={e.fullDay}
-                required
-                value={e.endTime}
-                min={
-                  e.startTime
-                    ? convertToDateTimeLocalString(e.startTime)
-                    : undefined
-                }
-                onChange={(d) => handleEventDateChange(i, 'endTime', d)}
-              />
-              <br />
-              <label key={i} htmlFor={'fullDay' + i}>
-                {l.events.fullDay}{' '}
-              </label>
-              <input
-                type="checkbox"
-                id={'fullDay' + i}
-                name="fullDay"
-                checked={e.fullDay}
-                onChange={(e) => editEventState(i, 'fullDay', e.target.checked)}
-              />
-              <h3>{l.events.location}</h3>
-              <TextArea
-                value={e.location ?? ''}
-                onChange={(e) => editEventState(i, 'location', e.target.value)}
-              />
-
-              <h3>{l.events.language}</h3>
-              <div className={style.actions}>
-                <DropdownList
-                  value={e.language?.toString() ?? ''}
-                  onChange={(e) =>
-                    editEventState(
-                      i,
-                      'language',
-                      e.target.value === ''
-                        ? null
-                        : EventLanguage[e.target.value as EventLanguage]
-                    )
-                  }
-                >
-                  <option value="">{l.general.notApplicable}</option>
-                  <option value="SV">
-                    {capitalize(l.events.languages.sv)}
-                  </option>
-                  <option value="EN">
-                    {capitalize(l.events.languages.en)}
-                  </option>
-                  <option value="SV_EN">
-                    {capitalize(l.events.languages.sv_en)}
-                  </option>
-                </DropdownList>
-              </div>
-
-              <br />
-              <br />
-              <ActionButton
-                type="button"
-                onClick={() => removeEventState(i, e.id)}
-              >
-                {l.events.remove}
-              </ActionButton>
-            </li>
-          ))}
-        </ul>
-
         {events.length === 0 ? (
           <p>{l.events.empty}</p>
         ) : (
-          <>
-            <br />
-            <br />
-          </>
+          <ul className={style.eventList}>
+            {events.map((e, i) => {
+              const eventKey = getEventKey(e);
+              return (
+                <li key={eventKey} className={style.eventCardItem}>
+                  <details
+                    className={style.eventCard}
+                    open={e.open ?? e.id === undefined}
+                    onToggle={(event) =>
+                      setEventOpen(i, event.currentTarget.open)
+                    }
+                  >
+                    <summary className={style.eventSummary}>
+                      <span className={style.eventSummaryContent}>
+                        <span
+                          className={style.eventTitle}
+                          role="heading"
+                          aria-level={3}
+                        >
+                          {eventTitle(e)}
+                        </span>
+                        <span className={style.eventDate}>
+                          {i18nService.formatDate(e.startTime)}
+                        </span>
+                      </span>
+                    </summary>
+                    <div className={style.eventBody}>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-title-en-${eventKey}`}
+                        >
+                          {l.editor.title} ({languageLabel('en')})
+                        </label>
+                        <TextArea
+                          id={`event-title-en-${eventKey}`}
+                          value={e.titleEn}
+                          onChange={(ev) =>
+                            editEventState(i, 'titleEn', ev.target.value)
+                          }
+                          required
+                        />
+                      </div>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-title-sv-${eventKey}`}
+                        >
+                          {l.editor.title} ({languageLabel('sv')})
+                        </label>
+                        <TextArea
+                          id={`event-title-sv-${eventKey}`}
+                          value={e.titleSv}
+                          onChange={(ev) =>
+                            editEventState(i, 'titleSv', ev.target.value)
+                          }
+                          required
+                        />
+                      </div>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-start-${eventKey}`}
+                        >
+                          {l.events.start}
+                        </label>
+                        <DatePicker
+                          id={`event-start-${eventKey}`}
+                          required
+                          value={e.startTime}
+                          onChange={(d) =>
+                            handleEventDateChange(i, 'startTime', d)
+                          }
+                        />
+                      </div>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-end-${eventKey}`}
+                        >
+                          {l.events.end}
+                        </label>
+                        <DatePicker
+                          id={`event-end-${eventKey}`}
+                          disabled={e.fullDay}
+                          required
+                          value={e.endTime}
+                          min={
+                            e.startTime
+                              ? convertToDateTimeLocalString(e.startTime)
+                              : undefined
+                          }
+                          onChange={(d) =>
+                            handleEventDateChange(i, 'endTime', d)
+                          }
+                        />
+                      </div>
+                      <label
+                        className={style.eventCheckbox}
+                        htmlFor={`event-full-day-${eventKey}`}
+                      >
+                        <input
+                          type="checkbox"
+                          id={`event-full-day-${eventKey}`}
+                          checked={e.fullDay}
+                          onChange={(ev) =>
+                            editEventState(i, 'fullDay', ev.target.checked)
+                          }
+                        />
+                        {l.events.fullDay}
+                      </label>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-location-${eventKey}`}
+                        >
+                          {l.events.location}
+                        </label>
+                        <TextArea
+                          id={`event-location-${eventKey}`}
+                          value={e.location ?? ''}
+                          onChange={(ev) =>
+                            editEventState(i, 'location', ev.target.value)
+                          }
+                        />
+                      </div>
+                      <div className={style.eventField}>
+                        <label
+                          className={style.eventLabel}
+                          htmlFor={`event-language-${eventKey}`}
+                        >
+                          {l.events.language}
+                        </label>
+                        <DropdownList
+                          id={`event-language-${eventKey}`}
+                          value={e.language?.toString() ?? ''}
+                          onChange={(ev) =>
+                            editEventState(
+                              i,
+                              'language',
+                              ev.target.value === ''
+                                ? null
+                                : EventLanguage[
+                                    ev.target.value as EventLanguage
+                                  ]
+                            )
+                          }
+                        >
+                          <option value="">{l.general.notApplicable}</option>
+                          <option value="SV">
+                            {capitalize(l.events.languages.sv)}
+                          </option>
+                          <option value="EN">
+                            {capitalize(l.events.languages.en)}
+                          </option>
+                          <option value="SV_EN">
+                            {capitalize(l.events.languages.sv_en)}
+                          </option>
+                        </DropdownList>
+                      </div>
+                    </div>
+                    <div className={style.eventFooter}>
+                      <ActionButton
+                        type="button"
+                        variant="secondary"
+                        onClick={() => removeEventState(i, e.id)}
+                      >
+                        {l.events.remove}
+                      </ActionButton>
+                    </div>
+                  </details>
+                </li>
+              );
+            })}
+          </ul>
         )}
+
         <ActionButton
           type="button"
           onClick={() => {
-            setEvents([...events, { ...emptyEvent }]);
+            setEvents([
+              ...events,
+              { ...emptyEvent, draftId: createEventId() }
+            ]);
           }}
         >
           {l.events.add}

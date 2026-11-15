@@ -126,6 +126,7 @@
     "language": "Language",
     "add": "Add event",
     "remove": "Remove event",
+    "untitled": "Untitled event",
     "empty": "No events connected",
     "subscribe": "Subscribe",
     "comingEvents": "Coming Events",
