@@ -3,6 +3,7 @@ import {
   Editor,
   editorViewCtx,
   editorViewOptionsCtx,
+  remarkStringifyOptionsCtx,
   rootCtx
 } from '@milkdown/kit/core';
 import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
@@ -17,11 +18,18 @@ import {
 import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
 import {
-  imageBlockComponent,
-  imageBlockConfig,
-  imageBlockSchema
-} from '@milkdown/kit/component/image-block';
-import { callCommand, getMarkdown, replaceAll } from '@milkdown/utils';
+  $prose,
+  $remark,
+  callCommand,
+  getMarkdown,
+  replaceAll
+} from '@milkdown/utils';
+import { Fragment } from '@milkdown/kit/prose/model';
+import { Selection, TextSelection } from '@milkdown/kit/prose/state';
+import type { EditorState, Transaction } from '@milkdown/kit/prose/state';
+import { keymap } from '@milkdown/kit/prose/keymap';
+import { splitBlock } from '@milkdown/kit/prose/commands';
+import { splitListItem } from '@milkdown/kit/prose/schema-list';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
 import React, { useCallback, useEffect } from 'react';
@@ -47,7 +55,7 @@ import {
   BsTypeStrikethrough
 } from 'react-icons/bs';
 import i18nService from '@/services/i18nService';
-import FileService from '@/services/fileService';
+import FileService, { MediaType } from '@/services/fileService';
 import { listener, listenerCtx } from '@milkdown/kit/plugin/listener';
 
 const setCustomLinkRenderer = (ctx: Ctx) => {
@@ -122,20 +130,73 @@ const insertLink = (ctx: Ctx) => {
   ctx.get(linkTooltipAPI.key).addLink(selection.from, selection.to);
 };
 
-const insertImage = (ctx: Ctx) => {
-  const view = ctx.get(editorViewCtx);
-  const { selection } = view.state;
+const insertHardbreak = (
+  state: EditorState,
+  dispatch?: (tr: Transaction) => void
+) => {
+  const hardbreak = state.schema.nodes.hardbreak;
+  if (!hardbreak) return false;
 
-  const emptyImage = view.state.schema.nodes['image-block'].createAndFill();
-  if (!emptyImage) return;
-
-  const tr = view.state.tr.insert(selection.from, emptyImage);
-  view.dispatch(tr);
+  const { from, to } = state.selection;
+  let tr = state.tr;
+  if (from !== to) tr = tr.delete(from, to);
+  tr = tr.insert(from, hardbreak.create());
+  tr = tr.setSelection(TextSelection.near(tr.doc.resolve(from + 1), 1));
+  dispatch?.(tr.scrollIntoView());
+  return true;
 };
+
+const hardBreaks = $remark('hard-breaks', () => () => (tree: any) => {
+  const convert = (node: any) => {
+    if (!Array.isArray(node.children)) return;
+
+    for (const child of node.children) {
+      if (child.type === 'break') {
+        child.data = { ...child.data, isInline: false };
+      } else {
+        convert(child);
+      }
+    }
+  };
+
+  convert(tree);
+});
+
+const enterKeymap = $prose(() =>
+  keymap({
+    Enter: (state, dispatch, view) => {
+      const { $from } = state.selection;
+      if ($from.parent.type.name === 'code_block') return false;
+      if ($from.parent.type.name === 'heading') {
+        return splitBlock(state, dispatch);
+      }
+
+      if ($from.node(-1)?.type.name === 'list_item') {
+        return splitListItem(state.schema.nodes.list_item)(
+          state,
+          dispatch,
+          view
+        );
+      }
+
+      return insertHardbreak(state, dispatch);
+    },
+    'Shift-Enter': (state, dispatch) => {
+      const { $from } = state.selection;
+      if ($from.parent.type.name === 'code_block') return false;
+
+      if ($from.node(-1)?.type.name === 'list_item') {
+        return insertHardbreak(state, dispatch);
+      }
+
+      return splitBlock(state, dispatch);
+    }
+  })
+);
 
 interface MilkdownEditorProps {
   defaultMd?: string;
-  onUpload?: (files: FileList) => Promise<
+  onUpload?: (files: FileList | File[]) => Promise<
     {
       file: File;
       url: string;
@@ -170,40 +231,84 @@ const MilkdownEditor = React.forwardRef<
   const [viewMode, setViewMode] = React.useState(
     'wysiwyg' as 'wysiwyg' | 'raw' | 'preview'
   );
+  const [formatState, setFormatState] = React.useState({
+    strong: false,
+    emphasis: false,
+    strikethrough: false,
+    block: 'format'
+  });
+  const editorMarkdownRef = React.useRef(defaultMd || '');
+  const editorDirtyRef = React.useRef(false);
+  const syncingRef = React.useRef(true);
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
 
   const uploader: Uploader = useCallback(
     async (files, schema) => {
       if (!onUpload) return [];
 
       const urls = await onUpload(files);
-      return urls
-        .map(({ file, url }) => {
-          return FileService.isMimeEmbeddable(file.type)
-            ? schema.nodes['image-block'].createAndFill({
-                src: url,
-                caption: undefined
-              })
-            : schema.text(file.name || 'File', [
+      return urls.flatMap(({ file, url }) =>
+        FileService.isMimeEmbeddable(file.type)
+          ? [
+              schema.nodes.image.create({ src: url, alt: file.name }),
+              schema.text(' ')
+            ]
+          : [
+              schema.text(file.name || 'File', [
                 schema.marks.link.create({ href: url })
-              ]);
-        })
-        .filter((n) => n !== null);
+              ]),
+              schema.text(' ')
+            ]
+      );
     },
     [onUpload]
   );
 
-  const imageBlockUploader = useCallback(
-    async (file: File) => {
-      if (!onUpload) return '';
+  const updateFormatState = useCallback((ctx: Ctx, selection?: Selection) => {
+    const state = ctx.get(editorViewCtx)?.state;
+    const activeSelection = selection ?? state?.selection;
+    if (!activeSelection) return;
 
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      const [uploadedFile] = await onUpload(dataTransfer.files);
+    const doc = activeSelection.$from.doc;
+    const schema = doc.type.schema;
+    const { from, to, empty } = activeSelection;
+    const marks = empty
+      ? selection
+        ? activeSelection.$from.marks()
+        : (state?.storedMarks ?? activeSelection.$from.marks())
+      : null;
 
-      return uploadedFile?.url ?? '';
-    },
-    [onUpload]
-  );
+    const hasMark = (name: string) => {
+      const mark = schema.marks[name];
+      if (!mark) return false;
+      if (!empty) return doc.rangeHasMark(from, to, mark);
+      return Boolean(marks?.some((markInstance) => markInstance.type === mark));
+    };
+
+    const parent = activeSelection.$from.parent;
+    let block = 'format';
+    if (parent.type.name === 'heading') {
+      block = `heading${parent.attrs.level}`;
+    } else if (parent.type.name === 'paragraph') {
+      block = 'paragraph';
+    }
+
+    const next = {
+      strong: hasMark('strong'),
+      emphasis: hasMark('emphasis'),
+      strikethrough: hasMark('strike_through'),
+      block
+    };
+
+    setFormatState((prev) =>
+      prev.strong === next.strong &&
+      prev.emphasis === next.emphasis &&
+      prev.strikethrough === next.strikethrough &&
+      prev.block === next.block
+        ? prev
+        : next
+    );
+  }, []);
 
   const editor = useEditor((root) =>
     Editor.make()
@@ -219,53 +324,40 @@ const MilkdownEditor = React.forwardRef<
           ...prev,
           uploader
         }));
+        ctx.update(remarkStringifyOptionsCtx, (prev) => ({
+          ...prev,
+          bullet: '-' as const,
+          handlers: {
+            ...prev.handlers,
+            break: () => '  \n'
+          }
+        }));
         ctx.get(listenerCtx).markdownUpdated((_ctx, md) => {
+          editorMarkdownRef.current = md;
+          if (syncingRef.current) return;
+          editorDirtyRef.current = true;
           onChange?.(md);
+        });
+        ctx
+          .get(listenerCtx)
+          .selectionUpdated((ctx, selection) =>
+            updateFormatState(ctx, selection)
+          );
+        ctx.get(listenerCtx).updated((ctx) => updateFormatState(ctx));
+        ctx.get(listenerCtx).mounted((ctx) => {
+          syncingRef.current = false;
+          updateFormatState(ctx);
         });
       })
       .use(listener)
       .use(history)
       .use(clipboard)
+      .use(enterKeymap)
       .use(commonmark)
       .use(gfm)
+      .use(hardBreaks)
       .use(linkTooltipPlugin)
-      .use(imageBlockComponent)
       .use(upload)
-      .config((ctx) => {
-        ctx.update(imageBlockSchema.key, (prev) => (ctx) => ({
-          ...prev(ctx),
-          parseMarkdown: {
-            match: (node: any) =>
-              node.type === 'image-block' || node.type === 'image',
-            runner: (state: any, node: any, type: any) => {
-              state.addNode(type, {
-                src: node.url || node.attrs?.src,
-                caption: node.alt || node.attrs?.caption,
-                title: node.title || node.attrs?.title
-              });
-            }
-          },
-          toMarkdown: {
-            match: (node: any) =>
-              node.type.name === 'image-block' || node.type.name === 'image',
-            runner: (state: any, node: any) => {
-              state.openNode('paragraph');
-              state.addNode('image', undefined, undefined, {
-                url: node.attrs.src,
-                alt: node.attrs.caption || '',
-                title: node.attrs.title || undefined
-              });
-              state.closeNode();
-            }
-          }
-        }));
-
-        ctx.update(imageBlockConfig.key, (prev) => ({
-          ...prev,
-          onUpload: imageBlockUploader,
-          captionPlaceholder: 'Add image caption...'
-        }));
-      })
   );
 
   const action = useCallback(
@@ -274,6 +366,14 @@ const MilkdownEditor = React.forwardRef<
       editor.get()?.action(fn);
     },
     [editor]
+  );
+
+  const applyCommand = useCallback(
+    (fn: (ctx: Ctx) => void) => {
+      action(fn);
+      action((ctx) => updateFormatState(ctx));
+    },
+    [action, updateFormatState]
   );
 
   // Update uploader in editor when onUpload changes
@@ -286,15 +386,8 @@ const MilkdownEditor = React.forwardRef<
           uploader
         }));
       }
-
-      if (ctx.isInjected(imageBlockConfig.key)) {
-        ctx.update(imageBlockConfig.key, (prev) => ({
-          ...prev,
-          onUpload: imageBlockUploader
-        }));
-      }
     });
-  }, [uploader, imageBlockUploader, editor, action]);
+  }, [uploader, editor, action]);
 
   // Update local file replacer in editor when localFiles changes
   useEffect(
@@ -307,18 +400,33 @@ const MilkdownEditor = React.forwardRef<
       if (mode === viewMode) return;
 
       if (mode === 'wysiwyg') {
-        action(replaceAll(markdown));
+        if (markdown !== editorMarkdownRef.current) {
+          syncingRef.current = true;
+          try {
+            action(replaceAll(markdown));
+          } finally {
+            syncingRef.current = false;
+          }
+          editorMarkdownRef.current = markdown;
+          editorDirtyRef.current = false;
+        }
       } else if (viewMode === 'wysiwyg') {
-        const md: string = editor.get()?.action(getMarkdown()) || '';
-        setMarkdown(md);
-      }
+        if (editorDirtyRef.current) {
+          const md: string = editor.get()?.action(getMarkdown()) || '';
+          setMarkdown(md);
+          editorMarkdownRef.current = md;
+          editorDirtyRef.current = false;
 
-      if (mode === 'preview') {
-        const md: string =
-          viewMode === 'wysiwyg'
-            ? editor.get()?.action(getMarkdown()) || ''
-            : markdown;
-        setMarkdownPreview(FileService.replaceLocalFiles(md, localFiles));
+          if (mode === 'preview') {
+            setMarkdownPreview(FileService.replaceLocalFiles(md, localFiles));
+          }
+        } else if (mode === 'preview') {
+          setMarkdownPreview(
+            FileService.replaceLocalFiles(markdown, localFiles)
+          );
+        }
+      } else if (mode === 'preview') {
+        setMarkdownPreview(FileService.replaceLocalFiles(markdown, localFiles));
       }
 
       setViewMode(mode);
@@ -326,44 +434,90 @@ const MilkdownEditor = React.forwardRef<
     [viewMode, markdown, editor, localFiles, action]
   );
 
+  const insertUploadedImages = useCallback(
+    async (files: FileList | File[]) => {
+      if (!onUpload) return;
+
+      const uploaded = await onUpload(files);
+      if (uploaded.length === 0) return;
+
+      action((ctx) => {
+        const view = ctx.get(editorViewCtx);
+        const { state } = view;
+        const images = uploaded
+          .filter(({ file }) => FileService.isMimeEmbeddable(file.type))
+          .flatMap(({ file, url }) => [
+            state.schema.nodes.image.create({ src: url, alt: file.name }),
+            state.schema.text(' ')
+          ]);
+        if (images.length === 0) return;
+
+        const fragment = Fragment.fromArray(images);
+        const { $from, from, to } = state.selection;
+
+        if ($from.parent.type.name === 'code_block') {
+          const paragraph = state.schema.nodes.paragraph.create(null, fragment);
+          const insertPos = $from.after($from.depth);
+          const tr = state.tr.insert(insertPos, paragraph);
+          tr.setSelection(
+            Selection.near(tr.doc.resolve(insertPos + 1 + fragment.size), 1)
+          );
+          view.dispatch(tr.scrollIntoView());
+          view.focus();
+          return;
+        }
+
+        let tr = state.tr;
+        if (from !== to) tr = tr.delete(from, to);
+        tr = tr
+          .insert(from, fragment)
+          .setSelection(
+            Selection.near(tr.doc.resolve(from + fragment.size), 1)
+          );
+        view.dispatch(tr.scrollIntoView());
+        view.focus();
+      });
+    },
+    [onUpload, action]
+  );
+
   const setFormat = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const value = e.target.value;
       switch (value) {
         case 'paragraph':
-          action(callCommand(turnIntoTextCommand.key));
+          applyCommand(callCommand(turnIntoTextCommand.key));
           break;
         case 'heading1':
-          action(callCommand(wrapInHeadingCommand.key, 1));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 1));
           break;
         case 'heading2':
-          action(callCommand(wrapInHeadingCommand.key, 2));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 2));
           break;
         case 'heading3':
-          action(callCommand(wrapInHeadingCommand.key, 3));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 3));
           break;
         case 'heading4':
-          action(callCommand(wrapInHeadingCommand.key, 4));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 4));
           break;
         case 'heading5':
-          action(callCommand(wrapInHeadingCommand.key, 5));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 5));
           break;
         case 'heading6':
-          action(callCommand(wrapInHeadingCommand.key, 6));
+          applyCommand(callCommand(wrapInHeadingCommand.key, 6));
           break;
         default:
           break;
       }
     },
-    [action]
+    [applyCommand]
   );
 
   const getMarkdownContent = useCallback((): string => {
-    if (viewMode === 'wysiwyg') {
+    if (viewMode === 'wysiwyg' && editorDirtyRef.current) {
       return editor.get()?.action(getMarkdown()) || '';
-    } else {
-      return markdown;
     }
+    return markdown;
   }, [viewMode, editor, markdown]);
 
   React.useImperativeHandle(ref, () => ({
@@ -380,22 +534,34 @@ const MilkdownEditor = React.forwardRef<
               <div className={styles.buttonGroup}>
                 <button
                   type="button"
-                  onClick={() => action(callCommand(toggleStrongCommand.key))}
+                  className={formatState.strong ? styles.selectedButton : ''}
+                  aria-pressed={formatState.strong}
+                  onClick={() =>
+                    applyCommand(callCommand(toggleStrongCommand.key))
+                  }
                   title={l.markdown.bold}
                 >
                   <BsTypeBold />
                 </button>
                 <button
                   type="button"
-                  onClick={() => action(callCommand(toggleEmphasisCommand.key))}
+                  className={formatState.emphasis ? styles.selectedButton : ''}
+                  aria-pressed={formatState.emphasis}
+                  onClick={() =>
+                    applyCommand(callCommand(toggleEmphasisCommand.key))
+                  }
                   title={l.markdown.italic}
                 >
                   <BsTypeItalic />
                 </button>
                 <button
                   type="button"
+                  className={
+                    formatState.strikethrough ? styles.selectedButton : ''
+                  }
+                  aria-pressed={formatState.strikethrough}
                   onClick={() =>
-                    action(callCommand(toggleStrikethroughCommand.key))
+                    applyCommand(callCommand(toggleStrikethroughCommand.key))
                   }
                   title={l.markdown.strikethrough}
                 >
@@ -403,7 +569,7 @@ const MilkdownEditor = React.forwardRef<
                 </button>
               </div>
               <DropdownList
-                value="format"
+                value={formatState.block}
                 onChange={setFormat}
                 className={styles.toolbarDropdown}
               >
@@ -427,13 +593,24 @@ const MilkdownEditor = React.forwardRef<
                 <BsLink />
               </button>
               <button
-                onClick={() => action(insertImage)}
+                onClick={() => imageInputRef.current?.click()}
                 type="button"
                 className={styles.toolbarButton}
                 title={l.markdown.image}
               >
                 <BsImage />
               </button>
+              <input
+                accept={FileService.getValidMimes([MediaType.Image]).join(',')}
+                onChange={(e) => {
+                  const files = Array.from(e.target.files ?? []);
+                  e.target.value = '';
+                  if (files.length > 0) void insertUploadedImages(files);
+                }}
+                ref={imageInputRef}
+                type="file"
+                hidden
+              />
             </>
           )}
         </div>
@@ -467,6 +644,9 @@ const MilkdownEditor = React.forwardRef<
       <div className={styles.editor} hidden={viewMode !== 'wysiwyg'}>
         <Milkdown />
       </div>
+      {viewMode === 'wysiwyg' && (
+        <p className={styles.hint}>{l.markdown.enterHint}</p>
+      )}
       <textarea
         aria-label={ariaLabel}
         value={markdown}
@@ -479,7 +659,36 @@ const MilkdownEditor = React.forwardRef<
         onDragOver={(e) => {
           e.preventDefault();
         }}
-        onDrop={(e) => onUpload?.(e.dataTransfer.files)}
+        onDrop={async (e) => {
+          e.preventDefault();
+          const textarea = e.currentTarget;
+          const files = e.dataTransfer.files;
+          if (!onUpload || files.length === 0) return;
+
+          const uploaded = await onUpload(files);
+          if (uploaded.length === 0) return;
+
+          const links = uploaded
+            .map(({ file, url }) =>
+              FileService.isMimeEmbeddable(file.type)
+                ? `![${file.name}](${url})`
+                : `[${file.name}](${url})`
+            )
+            .join(' ');
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const next = `${textarea.value.slice(0, start)}${links}${textarea.value.slice(
+            end
+          )}`;
+          setMarkdown(next);
+          onChange?.(next);
+
+          requestAnimationFrame(() => {
+            textarea.focus();
+            const position = start + links.length;
+            textarea.setSelectionRange(position, position);
+          });
+        }}
       />
       {viewMode === 'preview' && (
         <div className={styles.rawEditor}>
@@ -496,7 +705,7 @@ export const MarkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   {
     defaultMd?: string;
-    onUpload?: (files: FileList) => Promise<
+    onUpload?: (files: FileList | File[]) => Promise<
       {
         file: File;
         url: string;

@@ -225,6 +225,7 @@
     "raw": "Markdown",
     "preview": "Preview",
     "viewMode": "View mode",
+    "enterHint": "Enter adds a line break. Shift+Enter starts a new paragraph.",
     "link": "Link",
     "image": "Image"
   },

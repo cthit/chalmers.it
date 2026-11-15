@@ -225,6 +225,7 @@
     "raw": "Markdown",
     "preview": "Förhandsgranskning",
     "viewMode": "Visningsläge",
+    "enterHint": "Enter ger en radbrytning. Skift+Enter börjar ett nytt stycke.",
     "link": "Länk",
     "image": "Bild"
   },
