@@ -26,6 +26,7 @@ import { EventLanguage } from '@prisma/client';
 const validUploadTypes = Object.values(MediaType);
 
 const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
+const LOCAL_LANGUAGE_KEY = 'newsPostEditorLanguage';
 
 const LARGE_IMAGE_WARNING_BYTES = 2 * 1024 * 1024;
 const VERY_LARGE_FILE_WARNING_BYTES = 10 * 1024 * 1024;
@@ -59,11 +60,22 @@ interface Event {
   id?: number;
 }
 
-interface EventDraft {
+interface DraftEvent extends Omit<Event, 'startTime' | 'endTime'> {
+  startTime: string;
+  endTime: string;
+}
+
+interface NewsPostDraft {
   titleEn: string;
   titleSv: string;
   contentEn: string;
   contentSv: string;
+  group: string;
+  publish: string;
+  scheduledFor: string;
+  events: DraftEvent[];
+  removeQueue: number[];
+  postId?: number;
 }
 
 const emptyEvent: Event = {
@@ -78,6 +90,76 @@ const emptyEvent: Event = {
   language: null,
   id: undefined
 };
+
+function eventToDraft(event: Event): DraftEvent {
+  return {
+    id: event.id,
+    titleEn: event.titleEn,
+    titleSv: event.titleSv,
+    descriptionEn: event.descriptionEn,
+    descriptionSv: event.descriptionSv,
+    startTime: event.startTime.toISOString(),
+    endTime: event.endTime.toISOString(),
+    fullDay: event.fullDay,
+    location: event.location,
+    language: event.language
+  };
+}
+
+function draftToEvent(event: DraftEvent): Event | null {
+  if (!event?.startTime || !event?.endTime) return null;
+
+  const startTime = new Date(event.startTime);
+  const endTime = new Date(event.endTime);
+  if (Number.isNaN(startTime.getTime()) || Number.isNaN(endTime.getTime())) {
+    return null;
+  }
+
+  return {
+    titleEn: event.titleEn ?? '',
+    titleSv: event.titleSv ?? '',
+    descriptionEn: event.descriptionEn ?? '',
+    descriptionSv: event.descriptionSv ?? '',
+    startTime,
+    endTime,
+    fullDay: event.fullDay ?? false,
+    location: event.location ?? null,
+    language: event.language ?? null,
+    id: event.id
+  };
+}
+
+function parseDraftDate(value: string | undefined, fallback: Date) {
+  if (!value) return fallback;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? fallback : date;
+}
+
+function makeDraft(
+  titleEn: string,
+  titleSv: string,
+  contentEn: string,
+  contentSv: string,
+  group: string,
+  publish: string,
+  scheduledFor: Date,
+  events: Event[],
+  removeQueue: number[],
+  postId?: number
+): NewsPostDraft {
+  return {
+    titleEn,
+    titleSv,
+    contentEn,
+    contentSv,
+    group,
+    publish,
+    scheduledFor: scheduledFor.toISOString(),
+    events: events.map(eventToDraft),
+    removeQueue,
+    postId
+  };
+}
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
   marked.use({
@@ -97,10 +179,34 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     newsPost.id !== undefined
       ? `${LOCAL_DRAFT_KEY_PREFIX}:edit:${newsPost.id}`
       : `${LOCAL_DRAFT_KEY_PREFIX}:new`;
+  const [initialScheduledFor] = useState(
+    () => newsPost.scheduledPublish ?? new Date()
+  );
+  const [serverDraftJson] = useState(() =>
+    JSON.stringify(
+      makeDraft(
+        newsPost.titleEn ?? '',
+        newsPost.titleSv ?? '',
+        newsPost.contentEn ?? '',
+        newsPost.contentSv ?? '',
+        newsPost.group ?? '',
+        newsPost.scheduledPublish ? 'schedule' : 'now',
+        initialScheduledFor,
+        newsPost.connectedEvents ?? [],
+        [],
+        newsPost.id
+      )
+    )
+  );
   const [draft] = useState(loadDraft);
+  const [draftRestored, setDraftRestored] = useState(false);
   const submitted = useRef(false);
 
-  const [group, setGroup] = useState(newsPost.group ?? '');
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'sv'>(
+    newsPost.locale === 'en' ? 'en' : 'sv'
+  );
+
+  const [group, setGroup] = useState(newsPost.group ?? draft?.group ?? '');
   const [titleEn, setTitleEn] = useState(
     draft?.titleEn ?? newsPost.titleEn ?? ''
   );
@@ -115,11 +221,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
+  const contentEnContainerRef = useRef<HTMLDivElement>(null);
+  const contentSvContainerRef = useRef<HTMLDivElement>(null);
   const [publish, setPublish] = useState(
-    newsPost.scheduledPublish ? 'schedule' : 'now'
+    newsPost.scheduledPublish === null
+      ? 'now'
+      : draft?.publish === 'schedule' || draft?.publish === 'now'
+        ? draft.publish
+        : newsPost.scheduledPublish
+          ? 'schedule'
+          : 'now'
   );
   const [scheduledFor, setScheduledFor] = useState(
-    newsPost.scheduledPublish ?? new Date()
+    parseDraftDate(draft?.scheduledFor, initialScheduledFor)
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -130,28 +244,57 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
-  const createdPostIdRef = useRef<number | undefined>(undefined);
+  const createdPostIdRef = useRef<number | undefined>(
+    newsPost.id ?? draft?.postId
+  );
 
-  const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
-  const [removeQueue, setRemoveQueue] = useState<number[]>([]);
+  const [events, setEvents] = useState<Event[]>(() => {
+    if (draft?.events) {
+      return draft.events
+        .map(draftToEvent)
+        .filter((event): event is Event => event !== null);
+    }
+    return newsPost.connectedEvents ?? [];
+  });
+  const [removeQueue, setRemoveQueue] = useState<number[]>(
+    draft?.removeQueue ?? []
+  );
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(LOCAL_LANGUAGE_KEY);
+      if (stored === 'en' || stored === 'sv') setActiveLanguage(stored);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    setDraftRestored(
+      draft !== null && JSON.stringify(draft) !== serverDraftJson
+    );
+  }, [draft, serverDraftJson]);
 
   useEffect(() => {
     if (submitted.current) return;
 
-    const unchanged =
-      titleEn === (newsPost.titleEn ?? '') &&
-      titleSv === (newsPost.titleSv ?? '') &&
-      contentEn === (newsPost.contentEn ?? '') &&
-      contentSv === (newsPost.contentSv ?? '');
-
     try {
-      if (unchanged) {
+      const currentDraft = makeDraft(
+        titleEn,
+        titleSv,
+        contentEn,
+        contentSv,
+        group,
+        publish,
+        scheduledFor,
+        events,
+        removeQueue,
+        createdPostIdRef.current
+      );
+
+      if (JSON.stringify(currentDraft) === serverDraftJson) {
         localStorage.removeItem(draftKey);
+        setDraftRestored(false);
       } else {
-        localStorage.setItem(
-          draftKey,
-          JSON.stringify({ titleEn, titleSv, contentEn, contentSv })
-        );
+        localStorage.setItem(draftKey, JSON.stringify(currentDraft));
       }
     } catch {}
   }, [
@@ -160,10 +303,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     titleSv,
     contentEn,
     contentSv,
-    newsPost.titleEn,
-    newsPost.titleSv,
-    newsPost.contentEn,
-    newsPost.contentSv
+    group,
+    publish,
+    scheduledFor,
+    events,
+    removeQueue,
+    serverDraftJson
   ]);
 
   const dropFiles = async (f: FileList | File[]) => {
@@ -460,7 +605,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }
   }
 
-  function loadDraft(): EventDraft | null {
+  function loadDraft(): NewsPostDraft | null {
     try {
       const loaded = localStorage.getItem(draftKey);
       return loaded ? JSON.parse(loaded) : null;
@@ -474,6 +619,50 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       localStorage.removeItem(draftKey);
     } catch {}
   }
+
+  function discardDraft() {
+    submitted.current = true;
+    clearDraft();
+    window.location.reload();
+  }
+
+  function cancel() {
+    const postId = newsPost.id ?? createdPostIdRef.current;
+    router.push(postId !== undefined ? `/post/${postId}` : '/');
+  }
+
+  const languageOrder: ('en' | 'sv')[] =
+    newsPost.locale === 'en' ? ['en', 'sv'] : ['sv', 'en'];
+
+  const languageLabel = (language: 'en' | 'sv') =>
+    capitalize(l.events.languages[language]);
+
+  const isLanguageComplete = (language: 'en' | 'sv') =>
+    language === 'en'
+      ? titleEn.trim() !== '' && contentEn.trim() !== ''
+      : titleSv.trim() !== '' && contentSv.trim() !== '';
+
+  const changeLanguage = (language: 'en' | 'sv') => {
+    setActiveLanguage(language);
+    try {
+      localStorage.setItem(LOCAL_LANGUAGE_KEY, language);
+    } catch {}
+
+    requestAnimationFrame(() => {
+      const container =
+        language === 'en'
+          ? contentEnContainerRef.current
+          : contentSvContainerRef.current;
+      container
+        ?.querySelector<HTMLButtonElement>(
+          `[data-language-toggle="${language}"]`
+        )
+        ?.focus();
+    });
+  };
+
+  const isEditing =
+    newsPost.id !== undefined || createdPostIdRef.current !== undefined;
 
   const uploadedFiles = Object.entries(uploadQueue);
   const totalUploadSize = uploadedFiles.reduce(
@@ -495,9 +684,49 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     return null;
   };
 
+  const languageToggle = (
+    <div
+      className={style.languageToggle}
+      role="group"
+      aria-label={l.events.language}
+    >
+      {languageOrder.map((language) => {
+        const complete = isLanguageComplete(language);
+        const label = languageLabel(language);
+        const status = complete
+          ? l.editor.languageComplete
+          : l.editor.languageIncomplete;
+        return (
+          <button
+            key={language}
+            type="button"
+            data-language-toggle={language}
+            className={`${style.languageButton} ${
+              activeLanguage === language ? style.activeLanguage : ''
+            }`}
+            aria-pressed={activeLanguage === language}
+            aria-label={`${label} ${status}`}
+            title={`${label} ${status}`}
+            onClick={() => changeLanguage(language)}
+          >
+            {language.toUpperCase()}
+            <span
+              className={`${style.languageStatus} ${
+                complete ? '' : style.languageIncomplete
+              }`}
+              aria-hidden="true"
+            >
+              {complete ? '✓' : '•'}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+
   return (
     <>
-      <h1>{newsPost.id ? l.news.edit : l.news.create}</h1>
+      <h1>{isEditing ? l.news.edit : l.news.create}</h1>
       <Divider />
       <form onSubmit={send} aria-busy={isSubmitting}>
         <h2>{l.editor.createAs}</h2>
@@ -518,47 +747,55 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           ))}
         </DropdownList>
 
-        <h2>{l.editor.title} (Eng)</h2>
-        <TextArea
-          value={titleEn}
-          onChange={(e) => setTitleEn(e.target.value)}
-          required
-        />
-        <h2>{l.editor.content} (Eng)</h2>
-        <MarkdownEditor
-          defaultMd={draft?.contentEn ?? newsPost.contentEn}
-          ref={contentEnRef}
-          onUpload={dropFiles}
-          onChange={(contents) => {
-            setContentEn(contents);
-          }}
-          locale={newsPost.locale}
-          localFiles={uploadQueue}
-        />
+        <h2>{l.editor.title}</h2>
+        <div className={style.titleFields}>
+          {languageOrder.map((language) => (
+            <label className={style.titleField} key={language}>
+              <span>{languageLabel(language)}</span>
+              <TextArea
+                value={language === 'en' ? titleEn : titleSv}
+                onChange={(e) =>
+                  language === 'en'
+                    ? setTitleEn(e.target.value)
+                    : setTitleSv(e.target.value)
+                }
+                required
+              />
+            </label>
+          ))}
+        </div>
 
-        <h2>{l.editor.title} (Sv)</h2>
-        <TextArea
-          value={titleSv}
-          onChange={(e) => {
-            setTitleSv(e.target.value);
-          }}
-          required
-        />
-        <h2>{l.editor.content} (Sv)</h2>
-        <MarkdownEditor
-          defaultMd={draft?.contentSv ?? newsPost.contentSv}
-          ref={contentSvRef}
-          onUpload={dropFiles}
-          onChange={(contents) => {
-            setContentSv(contents);
-          }}
-          locale={newsPost.locale}
-          localFiles={uploadQueue}
-        />
+        <h2>{l.editor.content}</h2>
+        <div ref={contentEnContainerRef} hidden={activeLanguage !== 'en'}>
+          <MarkdownEditor
+            defaultMd={draft?.contentEn ?? newsPost.contentEn}
+            ref={contentEnRef}
+            onUpload={dropFiles}
+            onChange={(contents) => {
+              setContentEn(contents);
+            }}
+            locale={newsPost.locale}
+            localFiles={uploadQueue}
+            toolbarStart={languageToggle}
+          />
+        </div>
+        <div ref={contentSvContainerRef} hidden={activeLanguage !== 'sv'}>
+          <MarkdownEditor
+            defaultMd={draft?.contentSv ?? newsPost.contentSv}
+            ref={contentSvRef}
+            onUpload={dropFiles}
+            onChange={(contents) => {
+              setContentSv(contents);
+            }}
+            locale={newsPost.locale}
+            localFiles={uploadQueue}
+            toolbarStart={languageToggle}
+          />
+        </div>
         <br />
-        <h2>{l.editor.uploaded}</h2>
+        <h2>{l.editor.uploadQueue}</h2>
         {uploadedFiles.length === 0 ? (
-          <p>{l.editor.noFiles}</p>
+          <p>{l.editor.noQueuedFiles}</p>
         ) : (
           <p
             className={`${style.uploadSummary} ${
@@ -765,18 +1002,39 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           {l.events.add}
         </ActionButton>
 
-        <br />
-        <br />
-        <div className={style.actions}>
-          <ActionButton type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? newsPost.id !== undefined
-                ? l.editor.saving
-                : l.editor.posting
-              : newsPost.id !== undefined
-                ? l.general.save
-                : l.general.create}
-          </ActionButton>
+        <div className={style.saveBar}>
+          {draftRestored && (
+            <div className={style.saveStatus}>
+              <span role="status">{l.editor.draftRestored}</span>
+              <button
+                type="button"
+                className={style.linkButton}
+                disabled={isSubmitting}
+                onClick={discardDraft}
+              >
+                {l.editor.discardDraft}
+              </button>
+            </div>
+          )}
+          <div className={style.saveActions}>
+            <ActionButton
+              type="button"
+              variant="secondary"
+              disabled={isSubmitting}
+              onClick={cancel}
+            >
+              {l.editor.cancel}
+            </ActionButton>
+            <ActionButton type="submit" disabled={isSubmitting}>
+              {isSubmitting
+                ? isEditing
+                  ? l.editor.saving
+                  : l.editor.posting
+                : isEditing
+                  ? l.general.save
+                  : l.general.create}
+            </ActionButton>
+          </div>
         </div>
       </form>
     </>

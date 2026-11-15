@@ -145,12 +145,15 @@ interface MilkdownEditorProps {
     [key: string]: File;
   };
   locale: string;
+  toolbarStart?: React.ReactNode;
 }
 
 const MilkdownEditor = React.forwardRef<
   { getMarkdown: () => string },
   MilkdownEditorProps
->(({ defaultMd, onUpload, onChange, locale, localFiles }, ref) => {
+>((props, ref) => {
+  const { defaultMd, onUpload, onChange, locale, localFiles, toolbarStart } =
+    props;
   const l = i18nService.getLocale(locale);
 
   const [markdown, setMarkdown] = React.useState(defaultMd || '');
@@ -362,6 +365,7 @@ const MilkdownEditor = React.forwardRef<
     <div>
       <div className={styles.toolbar}>
         <div>
+          {toolbarStart}
           {viewMode === 'wysiwyg' && (
             <>
               <div className={styles.buttonGroup}>
@@ -493,8 +497,11 @@ export const MarkdownEditor = React.forwardRef<
     localFiles?: {
       [key: string]: File;
     };
+    toolbarStart?: React.ReactNode;
   }
->(({ defaultMd, onUpload, onChange, locale, localFiles }, ref) => {
+>((props, ref) => {
+  const { defaultMd, onUpload, onChange, locale, localFiles, toolbarStart } =
+    props;
   return (
     <MilkdownProvider>
       <MilkdownEditor
@@ -504,6 +511,7 @@ export const MarkdownEditor = React.forwardRef<
         ref={ref}
         locale={locale}
         localFiles={localFiles ?? {}}
+        toolbarStart={toolbarStart}
       />
     </MilkdownProvider>
   );

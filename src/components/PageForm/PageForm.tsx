@@ -114,8 +114,8 @@ const PageForm = (description: NewPostFormProps) => {
       />
 
       <br />
-      <h2>{l.editor.uploaded}</h2>
-      {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noFiles}</p>}
+      <h2>{l.editor.uploadQueue}</h2>
+      {Object.keys(uploadQueue).length === 0 && <p>{l.editor.noQueuedFiles}</p>}
       <ul>
         {Object.entries(uploadQueue).map(([sha256, file]) => (
           <li className={styles.fileActions} key={sha256}>

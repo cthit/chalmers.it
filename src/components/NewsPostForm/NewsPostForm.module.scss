@@ -9,6 +9,121 @@
   gap: 1rem;
 }
 
+.languageToggle {
+  align-items: center;
+  background: var(--surface-container);
+  border-radius: 0.25rem;
+  display: inline-flex;
+  gap: 0.125rem;
+  margin-right: 0.5rem;
+  padding: 0.125rem;
+}
+
+.languageButton {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: 0.2rem;
+  color: var(--on-surface);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--text-small);
+  font-weight: 600;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+
+  &:hover {
+    color: var(--link);
+  }
+}
+
+.activeLanguage {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+
+  &:hover {
+    color: var(--on-primary-container);
+  }
+}
+
+.languageStatus {
+  font-size: var(--text-small);
+  line-height: 1;
+}
+
+.languageIncomplete {
+  color: var(--warning);
+}
+
+.titleFields {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.titleField {
+  color: var(--on-surface-variant);
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-small);
+  gap: 0.25rem;
+}
+
+.saveBar {
+  align-items: center;
+  background: var(--surface-container);
+  border-top: 1px solid var(--outline-variant);
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 0;
+  position: sticky;
+  z-index: 10;
+}
+
+.saveStatus {
+  align-items: center;
+  color: var(--on-surface-variant);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--text-small);
+  gap: 0.5rem;
+}
+
+.saveActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: var(--link);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: #{$mobile-layout-breakpoint}) {
+  .titleFields {
+    grid-template-columns: 1fr;
+  }
+}
+
 .fileActions {
   align-items: center;
   display: flex;
