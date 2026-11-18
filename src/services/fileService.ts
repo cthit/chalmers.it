@@ -15,6 +15,8 @@ export enum MediaType {
   Container = 'container'
 }
 
+export const VALID_UPLOAD_TYPES = Object.values(MediaType);
+
 export interface MediaMeta {
   type: MediaType;
   extension: string;

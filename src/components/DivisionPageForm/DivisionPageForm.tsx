@@ -8,7 +8,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MediaUploader from '@/components/MediaUploader/MediaUploader';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import DropdownList from '../DropdownList/DropdownList';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
 import type { DivisionPage } from '@/services/divisionPageService';
@@ -39,17 +39,17 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [page, setPage] = useState(divisionPost.parentId);
   const [titleEn, setTitleEn] = useState(divisionPost.titleEn ?? '');
   const [titleSv, setTitleSv] = useState(divisionPost.titleSv ?? '');
-  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
-  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
+  const [contentEn, setContentEn] = useState(divisionPost.contentEn ?? '');
+  const [contentSv, setContentSv] = useState(divisionPost.contentSv ?? '');
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
-  const { uploadQueue, dropFiles, removeFile, getQueue } = useUploadQueue({
+  const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
     locale: divisionPost.locale
   });
 
   async function apply() {
     const formData = new FormData();
-    for (const file of Object.values(getQueue())) {
+    for (const file of Object.values(uploadQueue)) {
       formData.append('file', file);
     }
     if (divisionPost.editedId !== undefined) {
@@ -59,8 +59,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
             divisionPost.editedId,
             titleEn,
             titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
+            contentEn,
+            contentSv,
             slug,
             prio,
             formData,
@@ -87,8 +87,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
           createPage(
             titleEn,
             titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
+            contentEn,
+            contentSv,
             slug,
             prio,
             formData,
@@ -160,8 +160,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
       <h2>{l.pages.content} (Eng)</h2>
       <MarkdownEditor
-        defaultMd={divisionPost.contentEn}
-        ref={contentEnRef}
+        value={contentEn}
+        onChange={setContentEn}
         onUpload={dropFiles}
         locale={divisionPost.locale}
         localFiles={uploadQueue}
@@ -172,8 +172,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
       <h2>{l.pages.content} (Sv)</h2>
       <MarkdownEditor
-        defaultMd={divisionPost.contentSv}
-        ref={contentSvRef}
+        value={contentSv}
+        onChange={setContentSv}
         onUpload={dropFiles}
         locale={divisionPost.locale}
         localFiles={uploadQueue}

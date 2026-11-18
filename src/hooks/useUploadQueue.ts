@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import FileService, { MediaType } from '@/services/fileService';
+import FileService, {
+  MediaType,
+  VALID_UPLOAD_TYPES
+} from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { VERY_LARGE_FILE_WARNING_BYTES } from '@/utils/uploadWarnings';
-
-const validUploadTypes = Object.values(MediaType);
 
 type RejectionReason = 'type' | 'size' | 'total';
 
@@ -21,6 +22,9 @@ interface UseUploadQueueOptions {
   maxUploadSizeBytes?: number;
 }
 
+const queueSize = (queue: { [key: string]: File }) =>
+  Object.values(queue).reduce((total, file) => total + file.size, 0);
+
 export function useUploadQueue({
   locale,
   maxFileSizeBytes = FileService.maxMediaSizeBytes,
@@ -28,15 +32,15 @@ export function useUploadQueue({
 }: UseUploadQueueOptions) {
   const l = i18nService.getLocale(locale);
   const [uploadQueue, setUploadQueue] = useState<{ [key: string]: File }>({});
-  const queueRef = useRef<{ [key: string]: File }>(uploadQueue);
 
   const dropFiles = async (files: FileList | File[]) => {
     const accepted: { [key: string]: File } = {};
     const rejected: Rejection[] = [];
+    let queue = { ...uploadQueue };
 
     for (const file of Array.from(files)) {
       const meta = FileService.convertMimeType(file.type);
-      if (!meta || !validUploadTypes.includes(meta.type)) {
+      if (!meta || !VALID_UPLOAD_TYPES.includes(meta.type)) {
         rejected.push({ file, reason: 'type' });
         continue;
       }
@@ -46,11 +50,7 @@ export function useUploadQueue({
         continue;
       }
 
-      const currentSize = Object.values(queueRef.current).reduce(
-        (total, queued) => total + queued.size,
-        0
-      );
-      if (currentSize + file.size > maxUploadSizeBytes) {
+      if (queueSize(queue) + file.size > maxUploadSizeBytes) {
         rejected.push({ file, reason: 'total' });
         continue;
       }
@@ -66,26 +66,23 @@ export function useUploadQueue({
       }
 
       const sha256 = await FileService.fileSha256Browser(file);
-      if (queueRef.current[sha256]) {
-        accepted[sha256] = queueRef.current[sha256];
+      const queued = queue[sha256];
+      if (queued) {
+        accepted[sha256] = queued;
         continue;
       }
 
-      const latestSize = Object.values(queueRef.current).reduce(
-        (total, queued) => total + queued.size,
-        0
-      );
-      if (latestSize + file.size > maxUploadSizeBytes) {
+      if (queueSize(queue) + file.size > maxUploadSizeBytes) {
         rejected.push({ file, reason: 'total' });
         continue;
       }
 
-      queueRef.current = {
-        ...queueRef.current,
-        [sha256]: file
-      };
-      setUploadQueue(queueRef.current);
+      queue = { ...queue, [sha256]: file };
       accepted[sha256] = file;
+    }
+
+    if (Object.keys(accepted).length > 0) {
+      setUploadQueue((prev) => ({ ...prev, ...accepted }));
     }
 
     if (rejected.length > 0) {
@@ -112,16 +109,12 @@ export function useUploadQueue({
   };
 
   const removeFile = (sha256: string) => {
-    const next = { ...queueRef.current };
-    delete next[sha256];
-    queueRef.current = next;
-    setUploadQueue(next);
+    setUploadQueue((prev) => {
+      const next = { ...prev };
+      delete next[sha256];
+      return next;
+    });
   };
 
-  return {
-    uploadQueue,
-    dropFiles,
-    removeFile,
-    getQueue: () => queueRef.current
-  };
+  return { uploadQueue, dropFiles, removeFile };
 }

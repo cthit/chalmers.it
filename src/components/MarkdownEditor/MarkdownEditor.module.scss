@@ -29,6 +29,9 @@
 }
 
 .toolbarButton {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
   background: var(--surface-container);
   border: none;
   cursor: pointer;

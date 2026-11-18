@@ -14,7 +14,7 @@ import i18nService from '@/services/i18nService';
 import { GammaGroup } from '@/types/gamma';
 import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import DatePicker, {
   convertToDateTimeLocalString
@@ -25,7 +25,12 @@ import { capitalize } from '@/utils/strings';
 import { EventLanguage } from '@prisma/client';
 
 const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
-const LOCAL_LANGUAGE_KEY = 'newsPostEditorLanguage';
+
+marked.use({
+  pedantic: false,
+  breaks: true,
+  gfm: true
+});
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -90,6 +95,23 @@ const emptyEvent: Event = {
   draftId: undefined,
   open: true
 };
+
+const EventField = ({
+  id,
+  label,
+  children
+}: {
+  id: string;
+  label: React.ReactNode;
+  children: React.ReactNode;
+}) => (
+  <div className={style.eventField}>
+    <label className={style.eventLabel} htmlFor={id}>
+      {label}
+    </label>
+    {children}
+  </div>
+);
 
 function createEventId() {
   return `event-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -170,19 +192,13 @@ function makeDraft(
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
-  marked.use({
-    pedantic: false,
-    breaks: true,
-    gfm: true
-  });
-
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
   const maxFileSizeBytes =
     newsPost.maxFileSizeBytes ?? FileService.maxMediaSizeBytes;
   const maxUploadSizeBytes =
     newsPost.maxUploadSizeBytes ?? FileService.maxUploadSizeBytes;
-  const { uploadQueue, dropFiles, removeFile, getQueue } = useUploadQueue({
+  const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
     locale: newsPost.locale,
     maxFileSizeBytes,
     maxUploadSizeBytes
@@ -212,8 +228,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     )
   );
   const [draft] = useState(loadDraft);
-  const [draftRestored, setDraftRestored] = useState(false);
-  const submitted = useRef(false);
+  const [draftRestored, setDraftRestored] = useState(
+    () => draft !== null && JSON.stringify(draft) !== serverDraftJson
+  );
+  const [submitted, setSubmitted] = useState(false);
 
   const [activeLanguage, setActiveLanguage] = useState<'en' | 'sv'>(
     newsPost.locale === 'en' ? 'en' : 'sv'
@@ -232,10 +250,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const [contentSv, setContentSv] = useState(
     draft?.contentSv ?? newsPost.contentSv ?? ''
   );
-  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
-  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
-  const contentEnContainerRef = useRef<HTMLDivElement>(null);
-  const contentSvContainerRef = useRef<HTMLDivElement>(null);
   const [publish, setPublish] = useState(
     newsPost.scheduledPublish === null
       ? 'now'
@@ -250,8 +264,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const submittingRef = useRef(false);
-  const createdPostIdRef = useRef<number | undefined>(
+  const [createdPostId, setCreatedPostId] = useState<number | undefined>(
     newsPost.id ?? draft?.postId
   );
 
@@ -273,20 +286,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(LOCAL_LANGUAGE_KEY);
-      if (stored === 'en' || stored === 'sv') setActiveLanguage(stored);
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    setDraftRestored(
-      draft !== null && JSON.stringify(draft) !== serverDraftJson
-    );
-  }, [draft, serverDraftJson]);
-
-  useEffect(() => {
-    if (submitted.current) return;
+    if (submitted) return;
 
     try {
       const currentDraft = makeDraft(
@@ -299,7 +299,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         scheduledFor,
         events,
         removeQueue,
-        createdPostIdRef.current
+        createdPostId
       );
 
       if (JSON.stringify(currentDraft) === serverDraftJson) {
@@ -320,18 +320,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     scheduledFor,
     events,
     removeQueue,
+    createdPostId,
+    submitted,
     serverDraftJson
   ]);
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
-    if (submittingRef.current) return;
+    if (isSubmitting) return;
 
-    submittingRef.current = true;
     setIsSubmitting(true);
 
     try {
-      const queuedFiles = Object.values(getQueue());
+      const queuedFiles = Object.values(uploadQueue);
       const totalSize = queuedFiles.reduce(
         (total, file) => total + file.size,
         0
@@ -351,16 +352,17 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       }
       const publishDate =
         publish === 'now' ? undefined : new Date(scheduledFor);
+      const existingPostId = newsPost.id ?? createdPostId;
       let postId: number;
 
-      if (newsPost.id !== undefined) {
+      if (existingPostId !== undefined) {
         await toast.promise(
           edit(
-            newsPost.id,
+            existingPostId,
             titleEn,
             titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
+            contentEn,
+            contentSv,
             formData,
             publish === 'now' ? null : publishDate
           ),
@@ -370,32 +372,14 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             error: l.editor.saveError
           }
         );
-        postId = newsPost.id;
-      } else if (createdPostIdRef.current !== undefined) {
-        await toast.promise(
-          edit(
-            createdPostIdRef.current,
-            titleEn,
-            titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
-            formData,
-            publish === 'now' ? null : publishDate
-          ),
-          {
-            pending: l.editor.saving,
-            success: l.editor.saved,
-            error: l.editor.saveError
-          }
-        );
-        postId = createdPostIdRef.current;
+        postId = existingPostId;
       } else if (group !== 'self') {
         postId = await toast.promise(
           postForGroup(
             titleEn,
             titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
+            contentEn,
+            contentSv,
             group,
             formData,
             publishDate
@@ -411,8 +395,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           post(
             titleEn,
             titleSv,
-            contentEnRef.current!.getMarkdown(),
-            contentSvRef.current!.getMarkdown(),
+            contentEn,
+            contentSv,
             formData,
             publishDate
           ),
@@ -424,7 +408,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         );
       }
 
-      createdPostIdRef.current = postId;
+      setCreatedPostId(postId);
 
       const nextEvents = events.map((event) => ({ ...event }));
       try {
@@ -470,13 +454,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       }
 
       setEvents(nextEvents);
-      submitted.current = true;
+      setSubmitted(true);
       clearDraft();
       router.push(`/post/${postId}`);
     } catch {
       console.log('Failed to post news article');
     } finally {
-      submittingRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -551,13 +534,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   }
 
   function discardDraft() {
-    submitted.current = true;
+    setSubmitted(true);
     clearDraft();
     window.location.reload();
   }
 
   function cancel() {
-    const postId = newsPost.id ?? createdPostIdRef.current;
+    const postId = newsPost.id ?? createdPostId;
     router.push(postId !== undefined ? `/post/${postId}` : '/');
   }
 
@@ -578,27 +561,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     event.titleSv ||
     l.events.untitled;
 
-  const changeLanguage = (language: 'en' | 'sv') => {
-    setActiveLanguage(language);
-    try {
-      localStorage.setItem(LOCAL_LANGUAGE_KEY, language);
-    } catch {}
-
-    requestAnimationFrame(() => {
-      const container =
-        language === 'en'
-          ? contentEnContainerRef.current
-          : contentSvContainerRef.current;
-      container
-        ?.querySelector<HTMLButtonElement>(
-          `[data-language-toggle="${language}"]`
-        )
-        ?.focus();
-    });
-  };
-
   const isEditing =
-    newsPost.id !== undefined || createdPostIdRef.current !== undefined;
+    newsPost.id !== undefined || createdPostId !== undefined;
 
   const languageToggle = (
     <SegmentedControl
@@ -627,11 +591,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
             </>
           ),
           ariaLabel: `${label} ${status}`,
-          title: `${label} ${status}`,
-          dataAttributes: { 'data-language-toggle': language }
+          title: `${label} ${status}`
         };
       })}
-      onChange={(language) => changeLanguage(language as 'en' | 'sv')}
+      onChange={(language) => setActiveLanguage(language as 'en' | 'sv')}
     />
   );
 
@@ -681,34 +644,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </div>
 
         <h2>{l.editor.content}</h2>
-        <div ref={contentEnContainerRef} hidden={activeLanguage !== 'en'}>
-          <MarkdownEditor
-            defaultMd={draft?.contentEn ?? newsPost.contentEn}
-            ref={contentEnRef}
-            onUpload={dropFiles}
-            onChange={(contents) => {
-              setContentEn(contents);
-            }}
-            locale={newsPost.locale}
-            localFiles={uploadQueue}
-            toolbarStart={languageToggle}
-            ariaLabel={`${l.editor.content} ${languageLabel('en')}`}
-          />
-        </div>
-        <div ref={contentSvContainerRef} hidden={activeLanguage !== 'sv'}>
-          <MarkdownEditor
-            defaultMd={draft?.contentSv ?? newsPost.contentSv}
-            ref={contentSvRef}
-            onUpload={dropFiles}
-            onChange={(contents) => {
-              setContentSv(contents);
-            }}
-            locale={newsPost.locale}
-            localFiles={uploadQueue}
-            toolbarStart={languageToggle}
-            ariaLabel={`${l.editor.content} ${languageLabel('sv')}`}
-          />
-        </div>
+        {languageOrder.map((language) => (
+          <div key={language} hidden={activeLanguage !== language}>
+            <MarkdownEditor
+              value={language === 'en' ? contentEn : contentSv}
+              onUpload={dropFiles}
+              onChange={language === 'en' ? setContentEn : setContentSv}
+              locale={newsPost.locale}
+              localFiles={uploadQueue}
+              toolbarStart={languageToggle}
+              ariaLabel={`${l.editor.content} ${languageLabel(language)}`}
+            />
+          </div>
+        ))}
         <MediaUploader
           locale={newsPost.locale}
           uploadQueue={uploadQueue}
@@ -779,13 +727,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                       </span>
                     </summary>
                     <div className={style.eventBody}>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-title-en-${eventKey}`}
-                        >
-                          {l.editor.title} ({languageLabel('en')})
-                        </label>
+                      <EventField
+                        id={`event-title-en-${eventKey}`}
+                        label={`${l.editor.title} (${languageLabel('en')})`}
+                      >
                         <TextArea
                           id={`event-title-en-${eventKey}`}
                           value={e.titleEn}
@@ -794,14 +739,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                           }
                           required
                         />
-                      </div>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-title-sv-${eventKey}`}
-                        >
-                          {l.editor.title} ({languageLabel('sv')})
-                        </label>
+                      </EventField>
+                      <EventField
+                        id={`event-title-sv-${eventKey}`}
+                        label={`${l.editor.title} (${languageLabel('sv')})`}
+                      >
                         <TextArea
                           id={`event-title-sv-${eventKey}`}
                           value={e.titleSv}
@@ -810,14 +752,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                           }
                           required
                         />
-                      </div>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-start-${eventKey}`}
-                        >
-                          {l.events.start}
-                        </label>
+                      </EventField>
+                      <EventField
+                        id={`event-start-${eventKey}`}
+                        label={l.events.start}
+                      >
                         <DatePicker
                           id={`event-start-${eventKey}`}
                           required
@@ -826,14 +765,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                             handleEventDateChange(i, 'startTime', d)
                           }
                         />
-                      </div>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-end-${eventKey}`}
-                        >
-                          {l.events.end}
-                        </label>
+                      </EventField>
+                      <EventField
+                        id={`event-end-${eventKey}`}
+                        label={l.events.end}
+                      >
                         <DatePicker
                           id={`event-end-${eventKey}`}
                           disabled={e.fullDay}
@@ -848,7 +784,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                             handleEventDateChange(i, 'endTime', d)
                           }
                         />
-                      </div>
+                      </EventField>
                       <label
                         className={style.eventCheckbox}
                         htmlFor={`event-full-day-${eventKey}`}
@@ -863,13 +799,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                         />
                         {l.events.fullDay}
                       </label>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-location-${eventKey}`}
-                        >
-                          {l.events.location}
-                        </label>
+                      <EventField
+                        id={`event-location-${eventKey}`}
+                        label={l.events.location}
+                      >
                         <TextArea
                           id={`event-location-${eventKey}`}
                           value={e.location ?? ''}
@@ -877,14 +810,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                             editEventState(i, 'location', ev.target.value)
                           }
                         />
-                      </div>
-                      <div className={style.eventField}>
-                        <label
-                          className={style.eventLabel}
-                          htmlFor={`event-language-${eventKey}`}
-                        >
-                          {l.events.language}
-                        </label>
+                      </EventField>
+                      <EventField
+                        id={`event-language-${eventKey}`}
+                        label={l.events.language}
+                      >
                         <DropdownList
                           id={`event-language-${eventKey}`}
                           value={e.language?.toString() ?? ''}
@@ -911,7 +841,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                             {capitalize(l.events.languages.sv_en)}
                           </option>
                         </DropdownList>
-                      </div>
+                      </EventField>
                     </div>
                     <div className={style.eventFooter}>
                       <ActionButton

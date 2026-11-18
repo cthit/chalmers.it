@@ -32,7 +32,7 @@ import { splitBlock } from '@milkdown/kit/prose/commands';
 import { splitListItem } from '@milkdown/kit/prose/schema-list';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styles from './MarkdownEditor.module.scss';
 import {
   configureLinkTooltip,
@@ -83,24 +83,6 @@ const setCustomLinkRenderer = (ctx: Ctx) => {
         };
       }
     }
-  });
-};
-
-const setLocalImageViewer = (ctx: Ctx, localFiles: { [key: string]: File }) => {
-  ctx.get(listenerCtx).updated((ctx, docChanged) => {
-    if (!docChanged) return;
-    ctx
-      .get(editorViewCtx)
-      .dom.querySelectorAll('img')
-      .forEach((img) => {
-        const match = img
-          .getAttribute('src')
-          ?.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
-        if (match && localFiles[match[1]]) {
-          const localUrl = URL.createObjectURL(localFiles[match[1]]);
-          if (img.src !== localUrl) img.src = localUrl;
-        }
-      });
   });
 };
 
@@ -194,16 +176,18 @@ const enterKeymap = $prose(() =>
   })
 );
 
-interface MilkdownEditorProps {
-  defaultMd?: string;
+const EMPTY_FILES: { [key: string]: File } = {};
+
+export interface MarkdownEditorProps {
+  value: string;
   onUpload?: (files: FileList | File[]) => Promise<
     {
       file: File;
       url: string;
     }[]
   >;
-  onChange?: (markdown: string) => void;
-  localFiles: {
+  onChange: (markdown: string) => void;
+  localFiles?: {
     [key: string]: File;
   };
   locale: string;
@@ -211,23 +195,16 @@ interface MilkdownEditorProps {
   ariaLabel?: string;
 }
 
-const MilkdownEditor = React.forwardRef<
-  { getMarkdown: () => string },
-  MilkdownEditorProps
->((props, ref) => {
-  const {
-    defaultMd,
-    onUpload,
-    onChange,
-    locale,
-    localFiles,
-    toolbarStart,
-    ariaLabel
-  } = props;
+const MilkdownEditorContent = ({
+  value,
+  onUpload,
+  onChange,
+  locale,
+  localFiles = EMPTY_FILES,
+  toolbarStart,
+  ariaLabel
+}: MarkdownEditorProps) => {
   const l = i18nService.getLocale(locale);
-
-  const [markdown, setMarkdown] = React.useState(defaultMd || '');
-  const [markdownPreview, setMarkdownPreview] = React.useState('');
   const [viewMode, setViewMode] = React.useState(
     'wysiwyg' as 'wysiwyg' | 'raw' | 'preview'
   );
@@ -237,10 +214,14 @@ const MilkdownEditor = React.forwardRef<
     strikethrough: false,
     block: 'format'
   });
-  const editorMarkdownRef = React.useRef(defaultMd || '');
-  const editorDirtyRef = React.useRef(false);
-  const syncingRef = React.useRef(true);
-  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  const [syncedValue, setSyncedValue] = React.useState(value);
+  const markdownPreview = useMemo(
+    () =>
+      viewMode === 'preview'
+        ? FileService.replaceLocalFiles(value, localFiles)
+        : '',
+    [viewMode, value, localFiles]
+  );
 
   const uploader: Uploader = useCallback(
     async (files, schema) => {
@@ -313,11 +294,11 @@ const MilkdownEditor = React.forwardRef<
   const editor = useEditor((root) =>
     Editor.make()
       .config((ctx) => {
+        let mounted = false;
         ctx.set(rootCtx, root);
-        ctx.set(defaultValueCtx, markdown);
+        ctx.set(defaultValueCtx, value);
 
         configureLinkTooltip(ctx);
-        setLocalImageViewer(ctx, localFiles);
         setCustomLinkRenderer(ctx);
 
         ctx.update(uploadConfig.key, (prev) => ({
@@ -333,10 +314,9 @@ const MilkdownEditor = React.forwardRef<
           }
         }));
         ctx.get(listenerCtx).markdownUpdated((_ctx, md) => {
-          editorMarkdownRef.current = md;
-          if (syncingRef.current) return;
-          editorDirtyRef.current = true;
-          onChange?.(md);
+          if (!mounted) return;
+          setSyncedValue(md);
+          onChange(md);
         });
         ctx
           .get(listenerCtx)
@@ -345,7 +325,7 @@ const MilkdownEditor = React.forwardRef<
           );
         ctx.get(listenerCtx).updated((ctx) => updateFormatState(ctx));
         ctx.get(listenerCtx).mounted((ctx) => {
-          syncingRef.current = false;
+          mounted = true;
           updateFormatState(ctx);
         });
       })
@@ -389,50 +369,33 @@ const MilkdownEditor = React.forwardRef<
     });
   }, [uploader, editor, action]);
 
-  // Update local file replacer in editor when localFiles changes
-  useEffect(
-    () => action((ctx) => setLocalImageViewer(ctx, localFiles)),
-    [localFiles, editor, action]
-  );
+  useEffect(() => {
+    if (editor.loading || viewMode !== 'wysiwyg' || value === syncedValue) {
+      return;
+    }
 
-  const changeView = useCallback(
-    (mode: 'wysiwyg' | 'raw' | 'preview') => {
-      if (mode === viewMode) return;
+    setSyncedValue(value);
+    const current = editor.get()?.action(getMarkdown()) ?? '';
+    if (current !== value) action(replaceAll(value));
+  }, [syncedValue, value, viewMode, editor, editor.loading, action]);
 
-      if (mode === 'wysiwyg') {
-        if (markdown !== editorMarkdownRef.current) {
-          syncingRef.current = true;
-          try {
-            action(replaceAll(markdown));
-          } finally {
-            syncingRef.current = false;
+  useEffect(() => {
+    if (editor.loading || viewMode !== 'wysiwyg') return;
+    action((ctx) => {
+      ctx
+        .get(editorViewCtx)
+        .dom.querySelectorAll('img')
+        .forEach((img) => {
+          const match = img
+            .getAttribute('src')
+            ?.match(/^\/api\/media\/([A-Za-z0-9_-]+)$/);
+          const file = match ? localFiles[match[1]] : undefined;
+          if (file && !img.src.startsWith('blob:')) {
+            img.src = URL.createObjectURL(file);
           }
-          editorMarkdownRef.current = markdown;
-          editorDirtyRef.current = false;
-        }
-      } else if (viewMode === 'wysiwyg') {
-        if (editorDirtyRef.current) {
-          const md: string = editor.get()?.action(getMarkdown()) || '';
-          setMarkdown(md);
-          editorMarkdownRef.current = md;
-          editorDirtyRef.current = false;
-
-          if (mode === 'preview') {
-            setMarkdownPreview(FileService.replaceLocalFiles(md, localFiles));
-          }
-        } else if (mode === 'preview') {
-          setMarkdownPreview(
-            FileService.replaceLocalFiles(markdown, localFiles)
-          );
-        }
-      } else if (mode === 'preview') {
-        setMarkdownPreview(FileService.replaceLocalFiles(markdown, localFiles));
-      }
-
-      setViewMode(mode);
-    },
-    [viewMode, markdown, editor, localFiles, action]
-  );
+        });
+    });
+  }, [localFiles, value, viewMode, editor, editor.loading, action]);
 
   const insertUploadedImages = useCallback(
     async (files: FileList | File[]) => {
@@ -513,17 +476,6 @@ const MilkdownEditor = React.forwardRef<
     [applyCommand]
   );
 
-  const getMarkdownContent = useCallback((): string => {
-    if (viewMode === 'wysiwyg' && editorDirtyRef.current) {
-      return editor.get()?.action(getMarkdown()) || '';
-    }
-    return markdown;
-  }, [viewMode, editor, markdown]);
-
-  React.useImperativeHandle(ref, () => ({
-    getMarkdown: getMarkdownContent
-  }));
-
   return (
     <div role={ariaLabel ? 'group' : undefined} aria-label={ariaLabel}>
       <div className={styles.toolbar}>
@@ -592,25 +544,21 @@ const MilkdownEditor = React.forwardRef<
               >
                 <BsLink />
               </button>
-              <button
-                onClick={() => imageInputRef.current?.click()}
-                type="button"
-                className={styles.toolbarButton}
-                title={l.markdown.image}
-              >
+              <label className={styles.toolbarButton} title={l.markdown.image}>
                 <BsImage />
-              </button>
-              <input
-                accept={FileService.getValidMimes([MediaType.Image]).join(',')}
-                onChange={(e) => {
-                  const files = Array.from(e.target.files ?? []);
-                  e.target.value = '';
-                  if (files.length > 0) void insertUploadedImages(files);
-                }}
-                ref={imageInputRef}
-                type="file"
-                hidden
-              />
+                <input
+                  accept={FileService.getValidMimes([MediaType.Image]).join(
+                    ','
+                  )}
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files ?? []);
+                    e.target.value = '';
+                    if (files.length > 0) void insertUploadedImages(files);
+                  }}
+                  type="file"
+                  hidden
+                />
+              </label>
             </>
           )}
         </div>
@@ -638,7 +586,7 @@ const MilkdownEditor = React.forwardRef<
               ariaLabel: l.markdown.preview
             }
           ]}
-          onChange={(mode) => changeView(mode as 'wysiwyg' | 'raw' | 'preview')}
+          onChange={(mode) => setViewMode(mode as 'wysiwyg' | 'raw' | 'preview')}
         />
       </div>
       <div className={styles.editor} hidden={viewMode !== 'wysiwyg'}>
@@ -649,11 +597,8 @@ const MilkdownEditor = React.forwardRef<
       )}
       <textarea
         aria-label={ariaLabel}
-        value={markdown}
-        onChange={(e) => {
-          setMarkdown(e.target.value);
-          onChange?.(e.target.value);
-        }}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         hidden={viewMode !== 'raw'}
         className={styles.rawEditor}
         onDragOver={(e) => {
@@ -680,8 +625,7 @@ const MilkdownEditor = React.forwardRef<
           const next = `${textarea.value.slice(0, start)}${links}${textarea.value.slice(
             end
           )}`;
-          setMarkdown(next);
-          onChange?.(next);
+          onChange(next);
 
           requestAnimationFrame(() => {
             textarea.focus();
@@ -697,53 +641,13 @@ const MilkdownEditor = React.forwardRef<
       )}
     </div>
   );
-});
+};
 
-MilkdownEditor.displayName = 'MilkdownEditor';
-
-export const MarkdownEditor = React.forwardRef<
-  { getMarkdown: () => string },
-  {
-    defaultMd?: string;
-    onUpload?: (files: FileList | File[]) => Promise<
-      {
-        file: File;
-        url: string;
-      }[]
-    >;
-    onChange?: (markdown: string) => void;
-    locale: string;
-    localFiles?: {
-      [key: string]: File;
-    };
-    toolbarStart?: React.ReactNode;
-    ariaLabel?: string;
-  }
->((props, ref) => {
-  const {
-    defaultMd,
-    onUpload,
-    onChange,
-    locale,
-    localFiles,
-    toolbarStart,
-    ariaLabel
-  } = props;
-  return (
-    <MilkdownProvider>
-      <MilkdownEditor
-        defaultMd={defaultMd}
-        onUpload={onUpload}
-        onChange={onChange}
-        ref={ref}
-        locale={locale}
-        localFiles={localFiles ?? {}}
-        toolbarStart={toolbarStart}
-        ariaLabel={ariaLabel}
-      />
-    </MilkdownProvider>
-  );
-});
+export const MarkdownEditor = (props: MarkdownEditorProps) => (
+  <MilkdownProvider>
+    <MilkdownEditorContent {...props} />
+  </MilkdownProvider>
+);
 
 MarkdownEditor.displayName = 'MarkdownEditor';
 

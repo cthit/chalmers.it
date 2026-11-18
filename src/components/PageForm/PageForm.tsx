@@ -7,7 +7,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MediaUploader from '@/components/MediaUploader/MediaUploader';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from '../NewsPostForm/NewsPostForm.module.scss';
 import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
@@ -25,24 +25,24 @@ const PageForm = (description: NewPostFormProps) => {
   const l = i18nService.getLocale(description.locale);
   const router = useRouter();
 
-  const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
-  const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
+  const [contentEn, setContentEn] = useState(description.contentEn);
+  const [contentSv, setContentSv] = useState(description.contentSv);
   const [slug, setSlug] = useState(description.slug ?? '');
-  const { uploadQueue, dropFiles, removeFile, getQueue } = useUploadQueue({
+  const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
     locale: description.locale
   });
 
   async function send() {
     try {
       const formData = new FormData();
-      for (const file of Object.values(getQueue())) {
+      for (const file of Object.values(uploadQueue)) {
         formData.append('file', file);
       }
       await toast.promise(
         editGroupRootPage(
           description.id,
-          contentEnRef.current!.getMarkdown(),
-          contentSvRef.current!.getMarkdown(),
+          contentEn,
+          contentSv,
           slug,
           formData
         ),
@@ -68,8 +68,8 @@ const PageForm = (description: NewPostFormProps) => {
 
       <h2>{l.editor.content} (En)</h2>
       <MarkdownEditor
-        defaultMd={description.contentEn}
-        ref={contentEnRef}
+        value={contentEn}
+        onChange={setContentEn}
         onUpload={dropFiles}
         locale={description.locale}
         localFiles={uploadQueue}
@@ -78,8 +78,8 @@ const PageForm = (description: NewPostFormProps) => {
 
       <h2>{l.editor.content} (Sv)</h2>
       <MarkdownEditor
-        defaultMd={description.contentSv}
-        ref={contentSvRef}
+        value={contentSv}
+        onChange={setContentSv}
         onUpload={dropFiles}
         locale={description.locale}
         localFiles={uploadQueue}

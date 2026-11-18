@@ -9,7 +9,6 @@ export interface SegmentedControlOption {
   title?: string;
   ariaLabel?: string;
   disabled?: boolean;
-  dataAttributes?: Record<string, string>;
 }
 
 interface SegmentedControlProps {
@@ -38,7 +37,6 @@ const SegmentedControl = ({
       {options.map((option) => (
         <button
           key={option.value}
-          {...option.dataAttributes}
           type="button"
           className={`${styles.button} ${
             value === option.value ? styles.active : ''

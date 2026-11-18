@@ -2,7 +2,7 @@
 
 import ActionButton from '@/components/ActionButton/ActionButton';
 import CopyButton from '@/components/CopyButton/CopyButton';
-import FileService, { MediaType } from '@/services/fileService';
+import FileService, { VALID_UPLOAD_TYPES } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
 import {
@@ -11,8 +11,6 @@ import {
 } from '@/utils/uploadWarnings';
 import { useRef } from 'react';
 import styles from './MediaUploader.module.scss';
-
-const validUploadTypes = Object.values(MediaType);
 
 interface MediaUploaderProps {
   locale: string;
@@ -109,7 +107,7 @@ const MediaUploader = ({
         {FileService.formatBytes(maxUploadSizeBytes)}
       </p>
       <input
-        accept={FileService.getValidMimes(validUploadTypes).join(',')}
+        accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}
         onChange={(e) => {
           const files = Array.from(e.target.files ?? []);
           e.target.value = '';

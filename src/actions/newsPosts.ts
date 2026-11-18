@@ -5,10 +5,8 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import { PostStatus } from '@prisma/client';
 import MediaService from '@/services/mediaService';
-import FileService, { MediaType } from '@/services/fileService';
+import FileService, { VALID_UPLOAD_TYPES } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
-
-const validUploadTypes = Object.values(MediaType);
 
 function validateUploads(uploads: File[]) {
   const totalSize = uploads.reduce((total, file) => total + file.size, 0);
@@ -17,7 +15,7 @@ function validateUploads(uploads: File[]) {
   }
 
   const invalid = uploads.find(
-    (file) => !FileService.checkValidFile(file, validUploadTypes)
+    (file) => !FileService.checkValidFile(file, VALID_UPLOAD_TYPES)
   );
   if (invalid) {
     throw new Error(`Invalid file ${invalid.name}`);
@@ -29,7 +27,7 @@ async function saveUploadedFiles(files: FormData) {
   validateUploads(uploads);
 
   for (const file of uploads) {
-    const saved = await MediaService.save(file, validUploadTypes);
+    const saved = await MediaService.save(file, VALID_UPLOAD_TYPES);
     if (!saved) {
       throw new Error(`Could not save file ${file.name}`);
     }

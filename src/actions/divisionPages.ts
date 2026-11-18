@@ -3,7 +3,7 @@
 import DivisionPageService from '@/services/divisionPageService';
 import SessionService from '@/services/sessionService';
 import MediaService from '@/services/mediaService';
-import { MediaType } from '@/services/fileService';
+import { VALID_UPLOAD_TYPES } from '@/services/fileService';
 
 async function checkAuthorization(divisionGroupId?: number | null) {
   const isPageEditor = await SessionService.isPageEditor();
@@ -31,7 +31,7 @@ export async function createPage(
   await checkAuthorization(divisionGroupId);
 
   for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
+    await MediaService.save(file, VALID_UPLOAD_TYPES);
   }
 
   await DivisionPageService.post(
@@ -77,7 +77,7 @@ export async function editPage(
   await checkAuthorization(page.divisionGroupId);
 
   for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
+    await MediaService.save(file, VALID_UPLOAD_TYPES);
   }
 
   await DivisionPageService.edit(
