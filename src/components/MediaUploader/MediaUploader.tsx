@@ -10,6 +10,7 @@ import {
   VERY_LARGE_FILE_WARNING_BYTES
 } from '@/utils/uploadWarnings';
 import { BsTrash, BsUpload } from 'react-icons/bs';
+import { useId } from 'react';
 import styles from './MediaUploader.module.scss';
 
 interface MediaUploaderProps {
@@ -30,6 +31,7 @@ const MediaUploader = ({
   maxUploadSizeBytes = FileService.maxUploadSizeBytes
 }: MediaUploaderProps) => {
   const l = i18nService.getLocale(locale);
+  const fileInputId = useId();
   const uploadedFiles = Object.entries(uploadQueue);
   const totalUploadSize = uploadedFiles.reduce(
     (total, [, file]) => total + file.size,
@@ -54,21 +56,15 @@ const MediaUploader = ({
     <div className={styles.uploader}>
       <div className={styles.header}>
         <h2>{l.editor.uploadQueue}</h2>
-        <label className={styles.selectButton} title={l.editor.selectFiles}>
-          <span className={styles.srOnly}>{l.editor.selectFiles}</span>
+        <ActionButton
+          type="button"
+          iconOnly
+          aria-label={l.editor.selectFiles}
+          title={l.editor.selectFiles}
+          onClick={() => document.getElementById(fileInputId)?.click()}
+        >
           <BsUpload aria-hidden="true" />
-          <input
-            accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}
-            onChange={(e) => {
-              const files = Array.from(e.target.files ?? []);
-              e.target.value = '';
-              void onSelect(files);
-            }}
-            multiple
-            type="file"
-            className={styles.fileInput}
-          />
-        </label>
+        </ActionButton>
       </div>
       <p
         className={`${styles.uploadSummary} ${
@@ -97,6 +93,7 @@ const MediaUploader = ({
               <ActionButton
                 type="button"
                 variant="secondary"
+                iconOnly
                 aria-label={l.general.delete}
                 title={l.general.delete}
                 onClick={() => onRemove(sha256)}
@@ -119,6 +116,18 @@ const MediaUploader = ({
       <p className={styles.uploadSummary}>
         {l.editor.maxFileSize} {FileService.formatBytes(maxFileSizeBytes)}
       </p>
+      <input
+        id={fileInputId}
+        accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? []);
+          e.target.value = '';
+          void onSelect(files);
+        }}
+        multiple
+        type="file"
+        hidden
+      />
     </div>
   );
 };

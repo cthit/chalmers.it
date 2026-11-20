@@ -1,4 +1,4 @@
-import NewsPostForm from '@/components/NewsPostForm/NewsPostForm';
+import NewsPostForm from '@/components/Form/NewsPostForm/NewsPostForm';
 import SessionService from '@/services/sessionService';
 import NewsService from '@/services/newsService';
 import { notFound } from 'next/navigation';

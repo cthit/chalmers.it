@@ -3,11 +3,17 @@
 import { createEvent, deleteEvent, editEvent } from '@/actions/events';
 import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import DatePicker from '@/components/DatePicker/DatePicker';
 import Divider from '@/components/Divider/Divider';
-import LocalizedContentEditor from '@/components/LocalizedContentEditor/LocalizedContentEditor';
+import DropdownList from '@/components/DropdownList/DropdownList';
+import {
+  FormActions,
+  LocalizedContentEditor,
+  LocalizedTitleFields,
+  formDataFromUploadQueue,
+  useUploadQueue
+} from '@/components/Form';
 import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
-import TextArea from '@/components/TextArea/TextArea';
-import { useUploadQueue } from '@/hooks/useUploadQueue';
 import FileService from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { GammaGroup } from '@/types/gamma';
@@ -16,8 +22,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { BsPlusLg } from 'react-icons/bs';
-import DatePicker from '../DatePicker/DatePicker';
-import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { capitalize } from '@/utils/strings';
 import EventCard from './EventCard';
@@ -167,11 +171,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const queuedFiles = Object.values(uploadQueue);
-      const formData = new FormData();
-      for (const file of queuedFiles) {
-        formData.append('file', file);
-      }
+      const formData = formDataFromUploadQueue(uploadQueue);
       const publishDate =
         publish === 'now' ? undefined : new Date(scheduledFor);
       const existingPostId = newsPost.id ?? createdPostId;
@@ -348,9 +348,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     router.push(postId !== undefined ? `/post/${postId}` : '/');
   }
 
-  const languageOrder: ('en' | 'sv')[] =
-    newsPost.locale === 'en' ? ['en', 'sv'] : ['sv', 'en'];
-
   const languageLabel = (language: 'en' | 'sv') =>
     capitalize(l.events.languages[language]);
 
@@ -390,22 +387,13 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </DropdownList>
 
         <h2>{l.editor.title}</h2>
-        <div className={style.titleFields}>
-          {languageOrder.map((language) => (
-            <label className={style.titleField} key={language}>
-              <span>{languageLabel(language)}</span>
-              <TextArea
-                value={language === 'en' ? titleEn : titleSv}
-                onChange={(e) =>
-                  language === 'en'
-                    ? setTitleEn(e.target.value)
-                    : setTitleSv(e.target.value)
-                }
-                required
-              />
-            </label>
-          ))}
-        </div>
+        <LocalizedTitleFields
+          locale={newsPost.locale}
+          titleEn={titleEn}
+          titleSv={titleSv}
+          onChangeEn={setTitleEn}
+          onChangeSv={setTitleSv}
+        />
 
         <h2>{l.editor.content}</h2>
         <LocalizedContentEditor
@@ -451,11 +439,11 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           />
         </div>
 
-        <br />
         <div className={style.eventHeader}>
           <h2>{l.events.events}</h2>
           <ActionButton
             type="button"
+            iconOnly
             aria-label={l.events.add}
             title={l.events.add}
             onClick={() => {
@@ -495,40 +483,30 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           </ul>
         )}
 
-        <div className={style.saveBar}>
-          {draftRestored && (
-            <div className={style.saveStatus}>
-              <span role="status">{l.editor.draftRestored}</span>
-              <button
-                type="button"
-                className={style.linkButton}
-                disabled={isSubmitting}
-                onClick={discardDraft}
-              >
-                {l.editor.discardDraft}
-              </button>
-            </div>
-          )}
-          <div className={style.saveActions}>
-            <ActionButton
-              type="button"
-              variant="secondary"
-              disabled={isSubmitting}
-              onClick={cancel}
-            >
-              {l.editor.cancel}
-            </ActionButton>
-            <ActionButton type="submit" disabled={isSubmitting}>
-              {isSubmitting
-                ? isEditing
-                  ? l.editor.saving
-                  : l.editor.posting
-                : isEditing
-                  ? l.general.save
-                  : l.general.create}
-            </ActionButton>
-          </div>
-        </div>
+        <FormActions
+          locale={newsPost.locale}
+          submitLabel={isEditing ? l.general.save : l.general.create}
+          submittingLabel={
+            isEditing ? l.editor.saving : l.editor.posting
+          }
+          isSubmitting={isSubmitting}
+          onCancel={cancel}
+          status={
+            draftRestored ? (
+              <>
+                <span role="status">{l.editor.draftRestored}</span>
+                <button
+                  type="button"
+                  className={style.linkButton}
+                  disabled={isSubmitting}
+                  onClick={discardDraft}
+                >
+                  {l.editor.discardDraft}
+                </button>
+              </>
+            ) : undefined
+          }
+        />
       </form>
     </>
   );

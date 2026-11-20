@@ -1,4 +1,4 @@
-import NewsPostForm from '@/components/NewsPostForm/NewsPostForm';
+import NewsPostForm from '@/components/Form/NewsPostForm/NewsPostForm';
 import SessionService from '@/services/sessionService';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';

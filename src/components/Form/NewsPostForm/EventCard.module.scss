@@ -6,16 +6,33 @@
 }
 
 .eventSummary {
+  align-items: center;
   cursor: pointer;
+  display: flex;
   font-weight: 600;
+  gap: 0.5rem;
+  list-style: none;
+  user-select: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::before {
+    border-bottom: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    content: '';
+    flex: 0 0 auto;
+    height: 0.5rem;
+    margin-left: 0.15rem;
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+    width: 0.5rem;
+  }
 }
 
-.eventSummaryContent {
-  align-items: baseline;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: space-between;
+.eventCard[open] > .eventSummary::before {
+  transform: rotate(-45deg);
 }
 
 .eventTitle {
@@ -26,6 +43,7 @@
   color: var(--on-surface-variant);
   font-size: var(--text-small);
   font-weight: 400;
+  margin-left: auto;
 }
 
 .eventBody {

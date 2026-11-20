@@ -4,11 +4,11 @@ import { EventLanguage } from '@prisma/client';
 import { capitalize } from '@/utils/strings';
 import i18nService from '@/services/i18nService';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import TextArea from '@/components/TextArea/TextArea';
-import DropdownList from '../DropdownList/DropdownList';
 import DatePicker, {
   convertToDateTimeLocalString
-} from '../DatePicker/DatePicker';
+} from '@/components/DatePicker/DatePicker';
+import DropdownList from '@/components/DropdownList/DropdownList';
+import TextArea from '@/components/TextArea/TextArea';
 import { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import style from './EventCard.module.scss';
@@ -65,13 +65,9 @@ const EventCard = ({
       onToggle={(ev) => setIsOpen(ev.currentTarget.open)}
     >
       <summary className={style.eventSummary}>
-        <span className={style.eventSummaryContent}>
-          <span className={style.eventTitle} role="heading" aria-level={3}>
-            {title}
-          </span>
-          <span className={style.eventDate}>
-            {i18nService.formatDate(event.startTime)}
-          </span>
+        {!isOpen && <span className={style.eventTitle}>{title}</span>}
+        <span className={style.eventDate}>
+          {i18nService.formatDate(event.startTime)}
         </span>
       </summary>
       <div className={style.eventBody}>
@@ -170,6 +166,7 @@ const EventCard = ({
         <ActionButton
           type="button"
           variant="secondary"
+          iconOnly
           aria-label={l.events.remove}
           title={l.events.remove}
           onClick={onRemove}

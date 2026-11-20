@@ -1,6 +1,6 @@
 import ContentPane from '@/components/ContentPane/ContentPane';
 import DivisionNavigation from '@/components/DivisionNavigation/DivisionNavigation';
-import DivisionPageForm from '@/components/DivisionPageForm/DivisionPageForm';
+import DivisionPageForm from '@/components/Form/DivisionPageForm/DivisionPageForm';
 import Forbidden from '@/components/ErrorPages/403/403';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionPageService from '@/services/divisionPageService';

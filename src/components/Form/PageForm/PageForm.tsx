@@ -2,12 +2,14 @@
 
 import { editGroupRootPage } from '@/actions/groupRootPages';
 import Divider from '@/components/Divider/Divider';
-import ActionButton from '@/components/ActionButton/ActionButton';
-import LocalizedContentEditor from '@/components/LocalizedContentEditor/LocalizedContentEditor';
+import {
+  FormActions,
+  LocalizedContentEditor,
+  formDataFromUploadQueue,
+  useUploadQueue
+} from '@/components/Form';
 import TextArea from '@/components/TextArea/TextArea';
-import { useUploadQueue } from '@/hooks/useUploadQueue';
 import { useState } from 'react';
-import styles from '../NewsPostForm/NewsPostForm.module.scss';
 import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
@@ -29,25 +31,27 @@ const PageForm = (description: NewPostFormProps) => {
   const [contentEn, setContentEn] = useState(description.contentEn);
   const [contentSv, setContentSv] = useState(description.contentSv);
   const [slug, setSlug] = useState(description.slug ?? '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
     locale: description.locale,
     maxFileSizeBytes: description.maxFileSizeBytes,
     maxUploadSizeBytes: description.maxUploadSizeBytes
   });
 
-  async function send() {
+  async function send(e: React.FormEvent) {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     try {
-      const formData = new FormData();
-      for (const file of Object.values(uploadQueue)) {
-        formData.append('file', file);
-      }
       await toast.promise(
         editGroupRootPage(
           description.id,
           contentEn,
           contentSv,
           slug,
-          formData
+          formDataFromUploadQueue(uploadQueue)
         ),
         {
           pending: l.editor.saving,
@@ -57,38 +61,45 @@ const PageForm = (description: NewPostFormProps) => {
       );
       router.push(`/groups/${slug}`);
     } catch {
-      console.log('Failed to edit group description');
+      toast.error(l.pages.saveError);
+    } finally {
+      setIsSubmitting(false);
     }
   }
+
+  const cancel = () => router.push(`/groups/${description.slug}`);
 
   return (
     <>
       <h1>{l.pages.editGroupPage}</h1>
       <Divider />
+      <form onSubmit={send} aria-busy={isSubmitting}>
+        <h2>{l.pages.urlSlug}</h2>
+        <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
-      <h2>{l.pages.urlSlug}</h2>
-      <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
+        <h2>{l.editor.content}</h2>
+        <LocalizedContentEditor
+          locale={description.locale}
+          label={l.editor.content}
+          contentEn={contentEn}
+          contentSv={contentSv}
+          onChangeEn={setContentEn}
+          onChangeSv={setContentSv}
+          uploadQueue={uploadQueue}
+          onUpload={dropFiles}
+          onRemoveFile={removeFile}
+          maxFileSizeBytes={description.maxFileSizeBytes}
+          maxUploadSizeBytes={description.maxUploadSizeBytes}
+        />
 
-      <h2>{l.editor.content}</h2>
-      <LocalizedContentEditor
-        locale={description.locale}
-        label={l.editor.content}
-        contentEn={contentEn}
-        contentSv={contentSv}
-        onChangeEn={setContentEn}
-        onChangeSv={setContentSv}
-        uploadQueue={uploadQueue}
-        onUpload={dropFiles}
-        onRemoveFile={removeFile}
-        maxFileSizeBytes={description.maxFileSizeBytes}
-        maxUploadSizeBytes={description.maxUploadSizeBytes}
-      />
-
-      <div className={styles.actions}>
-        <ActionButton onClick={send}>
-          {description.id !== undefined ? l.general.save : l.general.create}
-        </ActionButton>
-      </div>
+        <FormActions
+          locale={description.locale}
+          submitLabel={l.general.save}
+          submittingLabel={l.editor.saving}
+          isSubmitting={isSubmitting}
+          onCancel={cancel}
+        />
+      </form>
     </>
   );
 };

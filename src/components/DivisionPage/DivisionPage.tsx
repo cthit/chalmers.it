@@ -2,7 +2,7 @@ import DivisionPageService from '@/services/divisionPageService';
 import ContentArticle from '@/components/ContentArticle/ContentArticle';
 import DeletePageButton from './DeletePageButton/DeletePageButton';
 import ContentPane from '../ContentPane/ContentPane';
-import DivisionPageForm from '../DivisionPageForm/DivisionPageForm';
+import DivisionPageForm from '../Form/DivisionPageForm/DivisionPageForm';
 import SessionService from '@/services/sessionService';
 import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';

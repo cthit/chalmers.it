@@ -1,5 +1,5 @@
 import DivisionGroupService from '@/services/divisionGroupService';
-import PageForm from '@/components/PageForm/PageForm';
+import PageForm from '@/components/Form/PageForm/PageForm';
 import SessionService from '@/services/sessionService';
 import { notFound } from 'next/navigation';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
