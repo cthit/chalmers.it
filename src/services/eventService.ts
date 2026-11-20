@@ -57,6 +57,54 @@ export default class EventService {
     });
   }
 
+  static async getRange(after: Date, before: Date) {
+    return await prisma.event.findMany({
+      orderBy: {
+        startTime: 'asc'
+      },
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                fullDay: false,
+                endTime: {
+                  gte: after
+                }
+              },
+              {
+                fullDay: true,
+                startTime: {
+                  gte: after
+                }
+              }
+            ]
+          },
+          {
+            startTime: {
+              lte: before
+            }
+          }
+        ]
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleSv: true,
+        descriptionEn: true,
+        descriptionSv: true,
+        fullDay: true,
+        startTime: true,
+        endTime: true,
+        location: true,
+        language: true,
+        createdAt: true,
+        updatedAt: true,
+        newsPostId: true
+      }
+    });
+  }
+
   static async create(event: {
     titleEn: string;
     titleSv: string;
