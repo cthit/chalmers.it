@@ -2,7 +2,7 @@
 
 import DivisionGroupService from '@/services/divisionGroupService';
 import MediaService from '@/services/mediaService';
-import { MediaType } from '@/services/fileService';
+import { VALID_UPLOAD_TYPES } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
 
 export async function editGroupRootPage(
@@ -19,7 +19,7 @@ export async function editGroupRootPage(
   }
 
   for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
+    await MediaService.save(file, VALID_UPLOAD_TYPES);
   }
 
   await DivisionGroupService.editInfo({

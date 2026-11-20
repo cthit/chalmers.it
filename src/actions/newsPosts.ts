@@ -5,8 +5,39 @@ import { getServerSession } from 'next-auth/next';
 import { authConfig } from '@/auth/auth';
 import { PostStatus } from '@prisma/client';
 import MediaService from '@/services/mediaService';
-import { MediaType } from '@/services/fileService';
+import FileService, { VALID_UPLOAD_TYPES } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
+
+function validateUploads(uploads: File[]) {
+  let totalSize = 0;
+
+  for (const file of uploads) {
+    const reason = FileService.getUploadRejection(file, {
+      currentTotalBytes: totalSize
+    });
+
+    if (reason === 'total') {
+      throw new Error('Total upload size exceeds the limit');
+    }
+    if (reason) {
+      throw new Error(`Invalid file ${file.name}`);
+    }
+
+    totalSize += file.size;
+  }
+}
+
+async function saveUploadedFiles(files: FormData) {
+  const uploads = files.getAll('file') as unknown as File[];
+  validateUploads(uploads);
+
+  for (const file of uploads) {
+    const saved = await MediaService.save(file, VALID_UPLOAD_TYPES);
+    if (!saved) {
+      throw new Error(`Could not save file ${file.name}`);
+    }
+  }
+}
 
 export async function post(
   titleEn: string,
@@ -21,9 +52,7 @@ export async function post(
     throw new Error('Unauthorized');
   }
 
-  for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
-  }
+  await saveUploadedFiles(files);
 
   const res = await NewsService.post({
     titleEn,
@@ -50,9 +79,7 @@ export async function edit(
     throw new Error('Unauthorized');
   }
 
-  for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
-  }
+  await saveUploadedFiles(files);
 
   await NewsService.edit({
     titleEn,
@@ -79,9 +106,7 @@ export async function postForGroup(
     throw new Error('Unauthorized');
   }
 
-  for (const file of files.getAll('file') as unknown as File[]) {
-    await MediaService.save(file, Object.values(MediaType));
-  }
+  await saveUploadedFiles(files);
 
   const res = await NewsService.post({
     titleEn,

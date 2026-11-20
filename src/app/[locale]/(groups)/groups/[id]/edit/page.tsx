@@ -1,11 +1,12 @@
 import DivisionGroupService from '@/services/divisionGroupService';
-import PageForm from '@/components/PageForm/PageForm';
+import PageForm from '@/components/Form/PageForm/PageForm';
 import SessionService from '@/services/sessionService';
 import { notFound } from 'next/navigation';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import ContactCard from '@/components/ContactCard/ContactCard';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import MarkdownCheatSheet from '@/components/MarkdownCheatSheet/MarkdownCheatSheet';
+import FileService from '@/services/fileService';
 
 export default async function Page(props: {
   params: Promise<{ id: string; locale: string }>;
@@ -28,6 +29,8 @@ export default async function Page(props: {
             contentSv={group.descriptionSv}
             slug={params.id}
             locale={params.locale}
+            maxFileSizeBytes={FileService.maxMediaSizeBytes}
+            maxUploadSizeBytes={FileService.maxUploadSizeBytes}
           />
         </ContentPane>
       }

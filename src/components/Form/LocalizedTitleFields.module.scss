@@ -1,0 +1,20 @@
+.fields {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.field {
+  color: var(--on-surface-variant);
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-small);
+  gap: 0.25rem;
+}
+
+@media (max-width: #{$mobile-layout-breakpoint}) {
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}

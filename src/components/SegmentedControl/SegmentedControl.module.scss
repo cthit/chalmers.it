@@ -1,0 +1,42 @@
+.segmentedControl {
+  align-items: center;
+  background: var(--segmented-background, var(--surface-container));
+  border-radius: var(--segmented-radius, 0.25rem);
+  display: inline-flex;
+  gap: var(--segmented-gap, 0.125rem);
+  padding: var(--segmented-container-padding, 0.125rem);
+}
+
+.button {
+  align-items: center;
+  aspect-ratio: var(--segmented-aspect-ratio, auto);
+  background: transparent;
+  border: none;
+  border-radius: var(--segmented-button-radius, 0.2rem);
+  color: var(--segmented-color, var(--on-surface));
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--segmented-font-size, var(--text-small));
+  font-weight: var(--segmented-font-weight, 600);
+  gap: var(--segmented-button-gap, 0.25rem);
+  height: var(--segmented-height, auto);
+  justify-content: center;
+  padding: var(--segmented-padding, 0.25rem 0.5rem);
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--segmented-hover-background, transparent);
+    color: var(--segmented-hover-color, var(--link));
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.active,
+.active:hover:not(:disabled) {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
