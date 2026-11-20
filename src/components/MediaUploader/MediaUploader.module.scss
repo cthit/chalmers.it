@@ -10,6 +10,51 @@
   justify-content: space-between;
 }
 
+.selectButton {
+  align-items: center;
+  aspect-ratio: 1;
+  background: var(--primary);
+  border-radius: 0.4rem;
+  color: var(--on-primary);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2rem;
+  justify-content: center;
+  padding: 0.4rem;
+
+  &:hover {
+    background: var(--primary-hover);
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.srOnly {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.fileInput {
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .list {
   list-style: none;
   margin: 0;

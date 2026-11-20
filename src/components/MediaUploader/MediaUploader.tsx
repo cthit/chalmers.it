@@ -9,7 +9,6 @@ import {
   LARGE_IMAGE_WARNING_BYTES,
   VERY_LARGE_FILE_WARNING_BYTES
 } from '@/utils/uploadWarnings';
-import { useRef } from 'react';
 import { BsTrash, BsUpload } from 'react-icons/bs';
 import styles from './MediaUploader.module.scss';
 
@@ -31,7 +30,6 @@ const MediaUploader = ({
   maxUploadSizeBytes = FileService.maxUploadSizeBytes
 }: MediaUploaderProps) => {
   const l = i18nService.getLocale(locale);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadedFiles = Object.entries(uploadQueue);
   const totalUploadSize = uploadedFiles.reduce(
     (total, [, file]) => total + file.size,
@@ -56,14 +54,21 @@ const MediaUploader = ({
     <div className={styles.uploader}>
       <div className={styles.header}>
         <h2>{l.editor.uploadQueue}</h2>
-        <ActionButton
-          type="button"
-          aria-label={l.editor.selectFiles}
-          title={l.editor.selectFiles}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <BsUpload />
-        </ActionButton>
+        <label className={styles.selectButton} title={l.editor.selectFiles}>
+          <span className={styles.srOnly}>{l.editor.selectFiles}</span>
+          <BsUpload aria-hidden="true" />
+          <input
+            accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}
+            onChange={(e) => {
+              const files = Array.from(e.target.files ?? []);
+              e.target.value = '';
+              void onSelect(files);
+            }}
+            multiple
+            type="file"
+            className={styles.fileInput}
+          />
+        </label>
       </div>
       <p
         className={`${styles.uploadSummary} ${
@@ -114,18 +119,6 @@ const MediaUploader = ({
       <p className={styles.uploadSummary}>
         {l.editor.maxFileSize} {FileService.formatBytes(maxFileSizeBytes)}
       </p>
-      <input
-        accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}
-        onChange={(e) => {
-          const files = Array.from(e.target.files ?? []);
-          e.target.value = '';
-          void onSelect(files);
-        }}
-        multiple
-        ref={fileInputRef}
-        type="file"
-        hidden
-      />
     </div>
   );
 };

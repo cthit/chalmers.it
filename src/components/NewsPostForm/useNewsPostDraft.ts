@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NewsPostDraft } from './eventDraft';
 
 const DRAFT_SAVE_DELAY_MS = 500;
@@ -25,14 +25,11 @@ export function useNewsPostDraft({
       initialDraft !== null &&
       JSON.stringify(initialDraft) !== serverDraftJson
   );
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
 
   useEffect(() => {
     if (!enabled) return;
 
-    saveTimeoutRef.current = setTimeout(() => {
+    const saveTimeout = setTimeout(() => {
       try {
         if (JSON.stringify(currentDraft) === serverDraftJson) {
           localStorage.removeItem(draftKey);
@@ -43,20 +40,10 @@ export function useNewsPostDraft({
       } catch {}
     }, DRAFT_SAVE_DELAY_MS);
 
-    return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-        saveTimeoutRef.current = undefined;
-      }
-    };
+    return () => clearTimeout(saveTimeout);
   }, [currentDraft, draftKey, enabled, serverDraftJson]);
 
   const clearDraft = useCallback(() => {
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-      saveTimeoutRef.current = undefined;
-    }
-
     try {
       localStorage.removeItem(draftKey);
     } catch {}

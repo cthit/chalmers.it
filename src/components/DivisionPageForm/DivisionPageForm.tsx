@@ -4,8 +4,7 @@ import { checkValidMoveTargets } from '@/utils/pageMoveTargets';
 
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
-import MediaUploader from '@/components/MediaUploader/MediaUploader';
+import LocalizedContentEditor from '@/components/LocalizedContentEditor/LocalizedContentEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
 import { useState } from 'react';
@@ -162,33 +161,21 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
 
       <h2>{l.pages.title} (Eng)</h2>
       <TextArea value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
-      <h2>{l.pages.content} (Eng)</h2>
-      <MarkdownEditor
-        value={contentEn}
-        onChange={setContentEn}
-        onUpload={dropFiles}
-        locale={divisionPost.locale}
-        localFiles={uploadQueue}
-        ariaLabel={`${l.pages.content} ${l.events.languages.en}`}
-      />
 
       <h2>{l.pages.title} (Sv)</h2>
       <TextArea value={titleSv} onChange={(e) => setTitleSv(e.target.value)} />
-      <h2>{l.pages.content} (Sv)</h2>
-      <MarkdownEditor
-        value={contentSv}
-        onChange={setContentSv}
-        onUpload={dropFiles}
-        locale={divisionPost.locale}
-        localFiles={uploadQueue}
-        ariaLabel={`${l.pages.content} ${l.events.languages.sv}`}
-      />
 
-      <MediaUploader
+      <h2>{l.pages.content}</h2>
+      <LocalizedContentEditor
         locale={divisionPost.locale}
+        label={l.pages.content}
+        contentEn={contentEn}
+        contentSv={contentSv}
+        onChangeEn={setContentEn}
+        onChangeSv={setContentSv}
         uploadQueue={uploadQueue}
-        onSelect={dropFiles}
-        onRemove={removeFile}
+        onUpload={dropFiles}
+        onRemoveFile={removeFile}
         maxFileSizeBytes={divisionPost.maxFileSizeBytes}
         maxUploadSizeBytes={divisionPost.maxUploadSizeBytes}
       />

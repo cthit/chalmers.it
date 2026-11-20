@@ -9,7 +9,7 @@ import DropdownList from '../DropdownList/DropdownList';
 import DatePicker, {
   convertToDateTimeLocalString
 } from '../DatePicker/DatePicker';
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import style from './EventCard.module.scss';
 import { getEventKey } from './eventDraft';
@@ -50,7 +50,7 @@ const EventCard = ({
   onRemove
 }: EventCardProps) => {
   const l = i18nService.getLocale(locale);
-  const detailsRef = useRef<HTMLDetailsElement>(null);
+  const [isOpen, setIsOpen] = useState(event.id === undefined);
   const eventKey = getEventKey(event);
   const title =
     (locale === 'en' ? event.titleEn : event.titleSv) ||
@@ -58,14 +58,12 @@ const EventCard = ({
     event.titleSv ||
     l.events.untitled;
 
-  useEffect(() => {
-    if (event.id === undefined && detailsRef.current) {
-      detailsRef.current.open = true;
-    }
-  }, [event.id]);
-
   return (
-    <details ref={detailsRef} className={style.eventCard}>
+    <details
+      className={style.eventCard}
+      open={isOpen}
+      onToggle={(ev) => setIsOpen(ev.currentTarget.open)}
+    >
       <summary className={style.eventSummary}>
         <span className={style.eventSummaryContent}>
           <span className={style.eventTitle} role="heading" aria-level={3}>

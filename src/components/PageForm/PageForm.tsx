@@ -3,8 +3,7 @@
 import { editGroupRootPage } from '@/actions/groupRootPages';
 import Divider from '@/components/Divider/Divider';
 import ActionButton from '@/components/ActionButton/ActionButton';
-import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
-import MediaUploader from '@/components/MediaUploader/MediaUploader';
+import LocalizedContentEditor from '@/components/LocalizedContentEditor/LocalizedContentEditor';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
 import { useState } from 'react';
@@ -70,31 +69,17 @@ const PageForm = (description: NewPostFormProps) => {
       <h2>{l.pages.urlSlug}</h2>
       <TextArea value={slug} onChange={(e) => setSlug(e.target.value)} />
 
-      <h2>{l.editor.content} (En)</h2>
-      <MarkdownEditor
-        value={contentEn}
-        onChange={setContentEn}
-        onUpload={dropFiles}
+      <h2>{l.editor.content}</h2>
+      <LocalizedContentEditor
         locale={description.locale}
-        localFiles={uploadQueue}
-        ariaLabel={`${l.editor.content} ${l.events.languages.en}`}
-      />
-
-      <h2>{l.editor.content} (Sv)</h2>
-      <MarkdownEditor
-        value={contentSv}
-        onChange={setContentSv}
-        onUpload={dropFiles}
-        locale={description.locale}
-        localFiles={uploadQueue}
-        ariaLabel={`${l.editor.content} ${l.events.languages.sv}`}
-      />
-
-      <MediaUploader
-        locale={description.locale}
+        label={l.editor.content}
+        contentEn={contentEn}
+        contentSv={contentSv}
+        onChangeEn={setContentEn}
+        onChangeSv={setContentSv}
         uploadQueue={uploadQueue}
-        onSelect={dropFiles}
-        onRemove={removeFile}
+        onUpload={dropFiles}
+        onRemoveFile={removeFile}
         maxFileSizeBytes={description.maxFileSizeBytes}
         maxUploadSizeBytes={description.maxUploadSizeBytes}
       />

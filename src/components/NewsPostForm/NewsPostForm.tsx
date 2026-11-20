@@ -4,8 +4,7 @@ import { createEvent, deleteEvent, editEvent } from '@/actions/events';
 import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import Divider from '@/components/Divider/Divider';
-import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
-import MediaUploader from '@/components/MediaUploader/MediaUploader';
+import LocalizedContentEditor from '@/components/LocalizedContentEditor/LocalizedContentEditor';
 import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 import TextArea from '@/components/TextArea/TextArea';
 import { useUploadQueue } from '@/hooks/useUploadQueue';
@@ -92,10 +91,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   );
   const [storedDraft] = useState(() => loadDraft(draftKey));
   const [submitted, setSubmitted] = useState(false);
-
-  const [activeLanguage, setActiveLanguage] = useState<'en' | 'sv'>(
-    newsPost.locale === 'en' ? 'en' : 'sv'
-  );
 
   const [group, setGroup] = useState(newsPost.group ?? storedDraft?.group ?? '');
   const [titleEn, setTitleEn] = useState(
@@ -367,23 +362,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const isEditing =
     newsPost.id !== undefined || createdPostId !== undefined;
 
-  const selectAdjacentLanguage = (
-    event: React.KeyboardEvent<HTMLButtonElement>
-  ) => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-
-    event.preventDefault();
-    const direction = event.key === 'ArrowRight' ? 1 : -1;
-    const currentIndex = languageOrder.indexOf(activeLanguage);
-    const nextLanguage =
-      languageOrder[
-        (currentIndex + direction + languageOrder.length) %
-          languageOrder.length
-      ];
-    setActiveLanguage(nextLanguage);
-    document.getElementById(`content-tab-${nextLanguage}`)?.focus();
-  };
-
   return (
     <>
       <h1>{isEditing ? l.news.edit : l.news.create}</h1>
@@ -430,74 +408,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </div>
 
         <h2>{l.editor.content}</h2>
-        <div
-          className={style.contentTabs}
-          role="tablist"
-          aria-label={l.editor.content}
-        >
-          {languageOrder.map((language) => {
-            const complete = isLanguageComplete(language);
-            const label = languageLabel(language);
-            const status = complete
-              ? l.editor.languageComplete
-              : l.editor.languageIncomplete;
-
-            return (
-              <button
-                key={language}
-                id={`content-tab-${language}`}
-                type="button"
-                role="tab"
-                aria-selected={activeLanguage === language}
-                aria-controls={`content-panel-${language}`}
-                tabIndex={activeLanguage === language ? 0 : -1}
-                className={`${style.contentTab} ${
-                  activeLanguage === language ? style.contentTabActive : ''
-                }`}
-                aria-label={`${label} ${status}`}
-                title={`${label} ${status}`}
-                onClick={() => setActiveLanguage(language)}
-                onKeyDown={selectAdjacentLanguage}
-              >
-                {label}
-                <span
-                  className={`${style.languageStatus} ${
-                    complete ? '' : style.languageIncomplete
-                  }`}
-                  aria-hidden="true"
-                >
-                  {complete ? '✓' : '•'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        {languageOrder.map((language) => (
-          <div
-            key={language}
-            id={`content-panel-${language}`}
-            role="tabpanel"
-            aria-labelledby={`content-tab-${language}`}
-            hidden={activeLanguage !== language}
-            className={style.contentPanel}
-          >
-            <MarkdownEditor
-              value={language === 'en' ? contentEn : contentSv}
-              onUpload={dropFiles}
-              onChange={language === 'en' ? setContentEn : setContentSv}
-              locale={newsPost.locale}
-              localFiles={uploadQueue}
-              ariaLabel={`${l.editor.content} ${languageLabel(language)}`}
-            />
-          </div>
-        ))}
-        <MediaUploader
+        <LocalizedContentEditor
           locale={newsPost.locale}
+          label={l.editor.content}
+          contentEn={contentEn}
+          contentSv={contentSv}
+          onChangeEn={setContentEn}
+          onChangeSv={setContentSv}
           uploadQueue={uploadQueue}
-          onSelect={dropFiles}
-          onRemove={removeFile}
+          onUpload={dropFiles}
+          onRemoveFile={removeFile}
           maxFileSizeBytes={maxFileSizeBytes}
           maxUploadSizeBytes={maxUploadSizeBytes}
+          isLanguageComplete={isLanguageComplete}
         />
 
         <h2>{l.editor.publish}</h2>
