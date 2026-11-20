@@ -1,0 +1,72 @@
+.eventCard {
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.eventSummary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.eventSummaryContent {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.eventTitle {
+  overflow-wrap: anywhere;
+}
+
+.eventDate {
+  color: var(--on-surface-variant);
+  font-size: var(--text-small);
+  font-weight: 400;
+}
+
+.eventBody {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 0.75rem;
+}
+
+@media (max-width: #{$mobile-layout-breakpoint}) {
+  .eventBody {
+    grid-template-columns: 1fr;
+  }
+}
+
+.eventField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.eventField input,
+.eventField select {
+  width: 100%;
+}
+
+.eventLabel {
+  color: var(--on-surface-variant);
+  font-size: var(--text-small);
+}
+
+.eventCheckbox {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: var(--text-small);
+  gap: 0.5rem;
+}
+
+.eventFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+}

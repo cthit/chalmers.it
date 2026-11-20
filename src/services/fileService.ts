@@ -22,6 +22,14 @@ export interface MediaMeta {
   extension: string;
 }
 
+export type UploadRejectionReason = 'type' | 'size' | 'total';
+
+interface UploadLimitOptions {
+  currentTotalBytes?: number;
+  maxFileSizeBytes?: number;
+  maxUploadSizeBytes?: number;
+}
+
 const mimeTypes: { [key: string]: MediaMeta } = {
   'image/jpeg': { type: MediaType.Image, extension: 'jpg' },
   'image/png': { type: MediaType.Image, extension: 'png' },
@@ -105,6 +113,21 @@ export default class FileService {
     return (
       file.size <= this.maxMediaSizeBytes && meta && types.includes(meta.type)
     );
+  }
+
+  static getUploadRejection(
+    file: { type: string; size: number },
+    {
+      currentTotalBytes = 0,
+      maxFileSizeBytes = this.maxMediaSizeBytes,
+      maxUploadSizeBytes = this.maxUploadSizeBytes
+    }: UploadLimitOptions = {}
+  ): UploadRejectionReason | null {
+    const meta = this.convertMimeType(file.type);
+    if (!meta || !VALID_UPLOAD_TYPES.includes(meta.type)) return 'type';
+    if (file.size > maxFileSizeBytes) return 'size';
+    if (currentTotalBytes + file.size > maxUploadSizeBytes) return 'total';
+    return null;
   }
 
   static convertMimeType(mimeType: string): MediaMeta | null {

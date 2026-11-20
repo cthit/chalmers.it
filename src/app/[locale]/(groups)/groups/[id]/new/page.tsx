@@ -4,6 +4,7 @@ import DivisionPageForm from '@/components/DivisionPageForm/DivisionPageForm';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionGroupService from '@/services/divisionGroupService';
 import DivisionPageService from '@/services/divisionPageService';
+import FileService from '@/services/fileService';
 
 export default async function Page(props: {
   params: Promise<{ id: string; locale: string }>;
@@ -28,6 +29,8 @@ async function mainContent(id: number, slug: string, locale: string) {
           divisionGroupSlug={slug}
           pages={pages}
           locale={locale}
+          maxFileSizeBytes={FileService.maxMediaSizeBytes}
+          maxUploadSizeBytes={FileService.maxUploadSizeBytes}
         />
       </ContentPane>
     </main>

@@ -9,16 +9,21 @@ import FileService, { VALID_UPLOAD_TYPES } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
 
 function validateUploads(uploads: File[]) {
-  const totalSize = uploads.reduce((total, file) => total + file.size, 0);
-  if (totalSize > FileService.maxUploadSizeBytes) {
-    throw new Error('Total upload size exceeds the limit');
-  }
+  let totalSize = 0;
 
-  const invalid = uploads.find(
-    (file) => !FileService.checkValidFile(file, VALID_UPLOAD_TYPES)
-  );
-  if (invalid) {
-    throw new Error(`Invalid file ${invalid.name}`);
+  for (const file of uploads) {
+    const reason = FileService.getUploadRejection(file, {
+      currentTotalBytes: totalSize
+    });
+
+    if (reason === 'total') {
+      throw new Error('Total upload size exceeds the limit');
+    }
+    if (reason) {
+      throw new Error(`Invalid file ${file.name}`);
+    }
+
+    totalSize += file.size;
   }
 }
 

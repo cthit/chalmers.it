@@ -5,11 +5,6 @@
   gap: 1rem;
 }
 
-.languageToggle {
-  --segmented-height: 1.75rem;
-  margin-right: 0.5rem;
-}
-
 .publishToggle {
   --segmented-background: var(--surface-container-high);
   --segmented-font-size: var(--text-normal);
@@ -24,6 +19,47 @@
 
 .languageIncomplete {
   color: var(--warning);
+}
+
+.contentTabs {
+  align-items: center;
+  border-bottom: 1px solid var(--outline-variant);
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.contentTab {
+  align-items: center;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 600;
+  gap: 0.375rem;
+  margin-bottom: -1px;
+  padding: 0.5rem 0.75rem;
+
+  &:hover {
+    color: var(--link);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+}
+
+.contentTabActive {
+  border-bottom-color: var(--primary);
+  color: var(--on-surface);
+}
+
+.contentPanel {
+  margin-bottom: 1rem;
 }
 
 .titleFields {
@@ -107,6 +143,14 @@
   width: 1px;
 }
 
+.eventHeader {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
 .eventList {
   display: flex;
   flex-direction: column;
@@ -118,71 +162,4 @@
 
 .eventCardItem {
   list-style: none;
-}
-
-.eventCard {
-  background: var(--surface-container-high);
-  border: 1px solid var(--outline-variant);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-}
-
-.eventSummary {
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.eventSummaryContent {
-  align-items: baseline;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: space-between;
-}
-
-.eventTitle {
-  overflow-wrap: anywhere;
-}
-
-.eventDate {
-  color: var(--on-surface-variant);
-  font-size: var(--text-small);
-  font-weight: 400;
-}
-
-.eventBody {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 0.75rem;
-}
-
-.eventField {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.eventField input,
-.eventField select {
-  width: 100%;
-}
-
-.eventLabel {
-  color: var(--on-surface-variant);
-  font-size: var(--text-small);
-}
-
-.eventCheckbox {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  font-size: var(--text-small);
-  gap: 0.5rem;
-}
-
-.eventFooter {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 0.75rem;
 }

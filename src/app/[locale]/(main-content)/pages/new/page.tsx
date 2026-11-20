@@ -4,6 +4,7 @@ import DivisionPageForm from '@/components/DivisionPageForm/DivisionPageForm';
 import Forbidden from '@/components/ErrorPages/403/403';
 import ThreePaneLayout from '@/components/ThreePaneLayout/ThreePaneLayout';
 import DivisionPageService from '@/services/divisionPageService';
+import FileService from '@/services/fileService';
 import SessionService from '@/services/sessionService';
 
 export default async function Page(props: {
@@ -29,7 +30,12 @@ async function mainContent(locale: string) {
   return (
     <main>
       <ContentPane>
-        <DivisionPageForm pages={pages} locale={locale} />
+        <DivisionPageForm
+          pages={pages}
+          locale={locale}
+          maxFileSizeBytes={FileService.maxMediaSizeBytes}
+          maxUploadSizeBytes={FileService.maxUploadSizeBytes}
+        />
       </ContentPane>
     </main>
   );

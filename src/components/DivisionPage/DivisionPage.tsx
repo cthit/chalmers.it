@@ -8,6 +8,7 @@ import i18nService from '@/services/i18nService';
 import ActionLink from '../ActionButton/ActionLink';
 import { notFound } from 'next/navigation';
 import MarkdownView from '../MarkdownView/MarkdownView';
+import FileService from '@/services/fileService';
 
 export default async function DivisionPage(
   locale: string,
@@ -85,6 +86,8 @@ async function editContent(locale: string, slug: string[], id?: number) {
           contentSv={page.contentSv}
           priority={page.priority}
           locale={locale}
+          maxFileSizeBytes={FileService.maxMediaSizeBytes}
+          maxUploadSizeBytes={FileService.maxUploadSizeBytes}
         />
       </ContentPane>
     </main>

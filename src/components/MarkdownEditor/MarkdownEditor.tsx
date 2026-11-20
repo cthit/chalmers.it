@@ -191,7 +191,6 @@ export interface MarkdownEditorProps {
     [key: string]: File;
   };
   locale: string;
-  toolbarStart?: React.ReactNode;
   ariaLabel?: string;
 }
 
@@ -201,7 +200,6 @@ const MilkdownEditorContent = ({
   onChange,
   locale,
   localFiles = EMPTY_FILES,
-  toolbarStart,
   ariaLabel
 }: MarkdownEditorProps) => {
   const l = i18nService.getLocale(locale);
@@ -480,7 +478,6 @@ const MilkdownEditorContent = ({
     <div role={ariaLabel ? 'group' : undefined} aria-label={ariaLabel}>
       <div className={styles.toolbar}>
         <div>
-          {toolbarStart}
           {viewMode === 'wysiwyg' && (
             <>
               <div className={styles.buttonGroup}>

@@ -4,16 +4,14 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import FileService, {
   MediaType,
-  VALID_UPLOAD_TYPES
+  UploadRejectionReason
 } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { VERY_LARGE_FILE_WARNING_BYTES } from '@/utils/uploadWarnings';
 
-type RejectionReason = 'type' | 'size' | 'total';
-
 interface Rejection {
   file: File;
-  reason: RejectionReason;
+  reason: UploadRejectionReason;
 }
 
 interface UseUploadQueueOptions {
@@ -39,21 +37,17 @@ export function useUploadQueue({
     let queue = { ...uploadQueue };
 
     for (const file of Array.from(files)) {
-      const meta = FileService.convertMimeType(file.type);
-      if (!meta || !VALID_UPLOAD_TYPES.includes(meta.type)) {
-        rejected.push({ file, reason: 'type' });
+      const reason = FileService.getUploadRejection(file, {
+        currentTotalBytes: queueSize(queue),
+        maxFileSizeBytes,
+        maxUploadSizeBytes
+      });
+      if (reason) {
+        rejected.push({ file, reason });
         continue;
       }
 
-      if (file.size > maxFileSizeBytes) {
-        rejected.push({ file, reason: 'size' });
-        continue;
-      }
-
-      if (queueSize(queue) + file.size > maxUploadSizeBytes) {
-        rejected.push({ file, reason: 'total' });
-        continue;
-      }
+      const meta = FileService.convertMimeType(file.type)!;
 
       if (file.size >= VERY_LARGE_FILE_WARNING_BYTES) {
         toast.warning(
@@ -72,8 +66,13 @@ export function useUploadQueue({
         continue;
       }
 
-      if (queueSize(queue) + file.size > maxUploadSizeBytes) {
-        rejected.push({ file, reason: 'total' });
+      const finalReason = FileService.getUploadRejection(file, {
+        currentTotalBytes: queueSize(queue),
+        maxFileSizeBytes,
+        maxUploadSizeBytes
+      });
+      if (finalReason) {
+        rejected.push({ file, reason: finalReason });
         continue;
       }
 
@@ -86,7 +85,7 @@ export function useUploadQueue({
     }
 
     if (rejected.length > 0) {
-      const messages: { [key in RejectionReason]: string } = {
+      const messages: { [key in UploadRejectionReason]: string } = {
         type: l.editor.fileTypeUnsupported,
         size: `${l.editor.fileTooLarge} (${FileService.formatBytes(
           maxFileSizeBytes

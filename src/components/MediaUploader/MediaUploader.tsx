@@ -10,6 +10,7 @@ import {
   VERY_LARGE_FILE_WARNING_BYTES
 } from '@/utils/uploadWarnings';
 import { useRef } from 'react';
+import { BsTrash, BsUpload } from 'react-icons/bs';
 import styles from './MediaUploader.module.scss';
 
 interface MediaUploaderProps {
@@ -53,21 +54,28 @@ const MediaUploader = ({
 
   return (
     <div className={styles.uploader}>
-      <h2>{l.editor.uploadQueue}</h2>
-      {uploadedFiles.length === 0 ? (
-        <p>{l.editor.noQueuedFiles}</p>
-      ) : (
-        <p
-          className={`${styles.uploadSummary} ${
-            totalUploadSize > maxUploadSizeBytes * 0.9
-              ? styles.fileWarningStrong
-              : ''
-          }`}
+      <div className={styles.header}>
+        <h2>{l.editor.uploadQueue}</h2>
+        <ActionButton
+          type="button"
+          aria-label={l.editor.selectFiles}
+          title={l.editor.selectFiles}
+          onClick={() => fileInputRef.current?.click()}
         >
-          {l.editor.totalSize} {FileService.formatBytes(totalUploadSize)} /{' '}
-          {FileService.formatBytes(maxUploadSizeBytes)}
-        </p>
-      )}
+          <BsUpload />
+        </ActionButton>
+      </div>
+      <p
+        className={`${styles.uploadSummary} ${
+          totalUploadSize > maxUploadSizeBytes * 0.9
+            ? styles.fileWarningStrong
+            : ''
+        }`}
+      >
+        {l.editor.totalSize} {FileService.formatBytes(totalUploadSize)} /{' '}
+        {FileService.formatBytes(maxUploadSizeBytes)}
+      </p>
+      {uploadedFiles.length === 0 && <p>{l.editor.noQueuedFiles}</p>}
       <ul className={styles.list}>
         {uploadedFiles.map(([sha256, file]) => {
           const warning = getFileWarning(file);
@@ -81,8 +89,14 @@ const MediaUploader = ({
                 locale={locale}
                 copyContent={createMarkdownLinkToMedia(sha256, file)}
               />
-              <ActionButton type="button" onClick={() => onRemove(sha256)}>
-                {l.general.delete}
+              <ActionButton
+                type="button"
+                variant="secondary"
+                aria-label={l.general.delete}
+                title={l.general.delete}
+                onClick={() => onRemove(sha256)}
+              >
+                <BsTrash />
               </ActionButton>
               {warning && (
                 <span
@@ -97,14 +111,8 @@ const MediaUploader = ({
           );
         })}
       </ul>
-      <ActionButton type="button" onClick={() => fileInputRef.current?.click()}>
-        {l.editor.selectFiles}
-      </ActionButton>
       <p className={styles.uploadSummary}>
         {l.editor.maxFileSize} {FileService.formatBytes(maxFileSizeBytes)}
-        <br />
-        {l.editor.maxTotalUploadSize}{' '}
-        {FileService.formatBytes(maxUploadSizeBytes)}
       </p>
       <input
         accept={FileService.getValidMimes(VALID_UPLOAD_TYPES).join(',')}

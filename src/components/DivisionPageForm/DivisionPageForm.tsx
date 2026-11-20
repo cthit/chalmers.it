@@ -30,6 +30,8 @@ interface DivisionPostFormProps {
   contentSv?: string;
   locale: string;
   priority?: number;
+  maxFileSizeBytes?: number;
+  maxUploadSizeBytes?: number;
 }
 
 const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
@@ -44,7 +46,9 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
   const [slug, setSlug] = useState(divisionPost.slug ?? '');
   const [prio, setPrio] = useState(divisionPost.priority ?? 0);
   const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
-    locale: divisionPost.locale
+    locale: divisionPost.locale,
+    maxFileSizeBytes: divisionPost.maxFileSizeBytes,
+    maxUploadSizeBytes: divisionPost.maxUploadSizeBytes
   });
 
   async function apply() {
@@ -185,6 +189,8 @@ const DivisionPageForm = (divisionPost: DivisionPostFormProps) => {
         uploadQueue={uploadQueue}
         onSelect={dropFiles}
         onRemove={removeFile}
+        maxFileSizeBytes={divisionPost.maxFileSizeBytes}
+        maxUploadSizeBytes={divisionPost.maxUploadSizeBytes}
       />
 
       <div className={styles.actions}>

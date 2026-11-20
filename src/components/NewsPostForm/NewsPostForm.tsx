@@ -14,17 +14,26 @@ import i18nService from '@/services/i18nService';
 import { GammaGroup } from '@/types/gamma';
 import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import DatePicker, {
-  convertToDateTimeLocalString
-} from '../DatePicker/DatePicker';
+import { BsPlusLg } from 'react-icons/bs';
+import DatePicker from '../DatePicker/DatePicker';
 import DropdownList from '../DropdownList/DropdownList';
 import style from './NewsPostForm.module.scss';
 import { capitalize } from '@/utils/strings';
-import { EventLanguage } from '@prisma/client';
-
-const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
+import EventCard from './EventCard';
+import {
+  createEventId,
+  draftToEvent,
+  emptyEvent,
+  getDraftKey,
+  getEventKey,
+  loadDraft,
+  makeDraft,
+  parseDraftDate
+} from './eventDraft';
+import type { PostEvent } from './eventDraft';
+import { useNewsPostDraft } from './useNewsPostDraft';
 
 marked.use({
   pedantic: false,
@@ -43,152 +52,9 @@ interface NewPostFormProps {
   writtenByGammaUserId?: string;
   locale: string;
   scheduledPublish?: Date | null;
-  connectedEvents?: Event[];
+  connectedEvents?: PostEvent[];
   maxFileSizeBytes?: number;
   maxUploadSizeBytes?: number;
-}
-
-interface Event {
-  titleEn: string;
-  titleSv: string;
-  descriptionEn: string;
-  descriptionSv: string;
-  startTime: Date;
-  endTime: Date;
-  fullDay: boolean;
-  location: string | null;
-  language: EventLanguage | null;
-  id?: number;
-  draftId?: string;
-  open?: boolean;
-}
-
-interface DraftEvent extends Omit<Event, 'startTime' | 'endTime'> {
-  startTime: string;
-  endTime: string;
-}
-
-interface NewsPostDraft {
-  titleEn: string;
-  titleSv: string;
-  contentEn: string;
-  contentSv: string;
-  group: string;
-  publish: string;
-  scheduledFor: string;
-  events: DraftEvent[];
-  removeQueue: number[];
-  postId?: number;
-}
-
-const emptyEvent: Event = {
-  titleEn: '',
-  titleSv: '',
-  descriptionEn: '',
-  descriptionSv: '',
-  startTime: new Date(),
-  endTime: new Date(),
-  fullDay: false,
-  location: '',
-  language: null,
-  id: undefined,
-  draftId: undefined,
-  open: true
-};
-
-const EventField = ({
-  id,
-  label,
-  children
-}: {
-  id: string;
-  label: React.ReactNode;
-  children: React.ReactNode;
-}) => (
-  <div className={style.eventField}>
-    <label className={style.eventLabel} htmlFor={id}>
-      {label}
-    </label>
-    {children}
-  </div>
-);
-
-function createEventId() {
-  return `event-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function getEventKey(event: Event) {
-  return event.draftId ?? `event-${event.id}`;
-}
-
-function eventToDraft(event: Event): DraftEvent {
-  return {
-    id: event.id,
-    titleEn: event.titleEn,
-    titleSv: event.titleSv,
-    descriptionEn: event.descriptionEn,
-    descriptionSv: event.descriptionSv,
-    startTime: event.startTime.toISOString(),
-    endTime: event.endTime.toISOString(),
-    fullDay: event.fullDay,
-    location: event.location,
-    language: event.language
-  };
-}
-
-function draftToEvent(event: DraftEvent): Event | null {
-  if (!event?.startTime || !event?.endTime) return null;
-
-  const startTime = new Date(event.startTime);
-  const endTime = new Date(event.endTime);
-  if (Number.isNaN(startTime.getTime()) || Number.isNaN(endTime.getTime())) {
-    return null;
-  }
-
-  return {
-    titleEn: event.titleEn ?? '',
-    titleSv: event.titleSv ?? '',
-    descriptionEn: event.descriptionEn ?? '',
-    descriptionSv: event.descriptionSv ?? '',
-    startTime,
-    endTime,
-    fullDay: event.fullDay ?? false,
-    location: event.location ?? null,
-    language: event.language ?? null,
-    id: event.id
-  };
-}
-
-function parseDraftDate(value: string | undefined, fallback: Date) {
-  if (!value) return fallback;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? fallback : date;
-}
-
-function makeDraft(
-  titleEn: string,
-  titleSv: string,
-  contentEn: string,
-  contentSv: string,
-  group: string,
-  publish: string,
-  scheduledFor: Date,
-  events: Event[],
-  removeQueue: number[],
-  postId?: number
-): NewsPostDraft {
-  return {
-    titleEn,
-    titleSv,
-    contentEn,
-    contentSv,
-    group,
-    publish,
-    scheduledFor: scheduledFor.toISOString(),
-    events: events.map(eventToDraft),
-    removeQueue,
-    postId
-  };
 }
 
 const NewsPostForm = (newsPost: NewPostFormProps) => {
@@ -204,75 +70,69 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     maxUploadSizeBytes
   });
 
-  const draftKey =
-    newsPost.id !== undefined
-      ? `${LOCAL_DRAFT_KEY_PREFIX}:edit:${newsPost.id}`
-      : `${LOCAL_DRAFT_KEY_PREFIX}:new`;
+  const draftKey = getDraftKey(newsPost.id);
   const [initialScheduledFor] = useState(
     () => newsPost.scheduledPublish ?? new Date()
   );
   const [serverDraftJson] = useState(() =>
     JSON.stringify(
-      makeDraft(
-        newsPost.titleEn ?? '',
-        newsPost.titleSv ?? '',
-        newsPost.contentEn ?? '',
-        newsPost.contentSv ?? '',
-        newsPost.group ?? '',
-        newsPost.scheduledPublish ? 'schedule' : 'now',
-        initialScheduledFor,
-        newsPost.connectedEvents ?? [],
-        [],
-        newsPost.id
-      )
+      makeDraft({
+        titleEn: newsPost.titleEn ?? '',
+        titleSv: newsPost.titleSv ?? '',
+        contentEn: newsPost.contentEn ?? '',
+        contentSv: newsPost.contentSv ?? '',
+        group: newsPost.group ?? '',
+        publish: newsPost.scheduledPublish ? 'schedule' : 'now',
+        scheduledFor: initialScheduledFor,
+        events: newsPost.connectedEvents ?? [],
+        removeQueue: [],
+        postId: newsPost.id
+      })
     )
   );
-  const [draft] = useState(loadDraft);
-  const [draftRestored, setDraftRestored] = useState(
-    () => draft !== null && JSON.stringify(draft) !== serverDraftJson
-  );
+  const [storedDraft] = useState(() => loadDraft(draftKey));
   const [submitted, setSubmitted] = useState(false);
 
   const [activeLanguage, setActiveLanguage] = useState<'en' | 'sv'>(
     newsPost.locale === 'en' ? 'en' : 'sv'
   );
 
-  const [group, setGroup] = useState(newsPost.group ?? draft?.group ?? '');
+  const [group, setGroup] = useState(newsPost.group ?? storedDraft?.group ?? '');
   const [titleEn, setTitleEn] = useState(
-    draft?.titleEn ?? newsPost.titleEn ?? ''
+    storedDraft?.titleEn ?? newsPost.titleEn ?? ''
   );
   const [titleSv, setTitleSv] = useState(
-    draft?.titleSv ?? newsPost.titleSv ?? ''
+    storedDraft?.titleSv ?? newsPost.titleSv ?? ''
   );
   const [contentEn, setContentEn] = useState(
-    draft?.contentEn ?? newsPost.contentEn ?? ''
+    storedDraft?.contentEn ?? newsPost.contentEn ?? ''
   );
   const [contentSv, setContentSv] = useState(
-    draft?.contentSv ?? newsPost.contentSv ?? ''
+    storedDraft?.contentSv ?? newsPost.contentSv ?? ''
   );
   const [publish, setPublish] = useState(
     newsPost.scheduledPublish === null
       ? 'now'
-      : draft?.publish === 'schedule' || draft?.publish === 'now'
-        ? draft.publish
+      : storedDraft?.publish === 'schedule' || storedDraft?.publish === 'now'
+        ? storedDraft.publish
         : newsPost.scheduledPublish
           ? 'schedule'
           : 'now'
   );
   const [scheduledFor, setScheduledFor] = useState(
-    parseDraftDate(draft?.scheduledFor, initialScheduledFor)
+    parseDraftDate(storedDraft?.scheduledFor, initialScheduledFor)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdPostId, setCreatedPostId] = useState<number | undefined>(
-    newsPost.id ?? draft?.postId
+    newsPost.id ?? storedDraft?.postId
   );
 
-  const [events, setEvents] = useState<Event[]>(() => {
-    const source = draft?.events
-      ? draft.events
+  const [events, setEvents] = useState<PostEvent[]>(() => {
+    const source = storedDraft?.events
+      ? storedDraft.events
           .map(draftToEvent)
-          .filter((event): event is Event => event !== null)
+          .filter((event): event is PostEvent => event !== null)
       : (newsPost.connectedEvents ?? []);
 
     return source.map((event) => ({
@@ -282,35 +142,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     }));
   });
   const [removeQueue, setRemoveQueue] = useState<number[]>(
-    draft?.removeQueue ?? []
+    storedDraft?.removeQueue ?? []
   );
 
-  useEffect(() => {
-    if (submitted) return;
-
-    try {
-      const currentDraft = makeDraft(
-        titleEn,
-        titleSv,
-        contentEn,
-        contentSv,
-        group,
-        publish,
-        scheduledFor,
-        events,
-        removeQueue,
-        createdPostId
-      );
-
-      if (JSON.stringify(currentDraft) === serverDraftJson) {
-        localStorage.removeItem(draftKey);
-        setDraftRestored(false);
-      } else {
-        localStorage.setItem(draftKey, JSON.stringify(currentDraft));
-      }
-    } catch {}
-  }, [
-    draftKey,
+  const currentDraft = makeDraft({
     titleEn,
     titleSv,
     contentEn,
@@ -320,10 +155,15 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     scheduledFor,
     events,
     removeQueue,
-    createdPostId,
-    submitted,
-    serverDraftJson
-  ]);
+    postId: createdPostId
+  });
+  const { draftRestored, clearDraft, discardDraft } = useNewsPostDraft({
+    draftKey,
+    initialDraft: storedDraft,
+    serverDraftJson,
+    currentDraft,
+    enabled: !submitted
+  });
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -333,19 +173,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
     try {
       const queuedFiles = Object.values(uploadQueue);
-      const totalSize = queuedFiles.reduce(
-        (total, file) => total + file.size,
-        0
-      );
-      if (totalSize > maxUploadSizeBytes) {
-        toast.error(
-          `${l.editor.uploadLimitExceeded} (${FileService.formatBytes(
-            maxUploadSizeBytes
-          )})`
-        );
-        return;
-      }
-
       const formData = new FormData();
       for (const file of queuedFiles) {
         formData.append('file', file);
@@ -458,85 +285,67 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       clearDraft();
       router.push(`/post/${postId}`);
     } catch {
-      console.log('Failed to post news article');
+      toast.error(
+        newsPost.id !== undefined ? l.editor.saveError : l.editor.postError
+      );
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  function editEventState<K extends keyof Event>(
-    id: number,
-    key: K,
-    value: Event[K]
+  function updateEvent<K extends keyof PostEvent>(
+    eventKey: string,
+    field: K,
+    value: PostEvent[K]
   ) {
     setEvents((prevEvents) =>
-      prevEvents.map((event, index) =>
-        index === id ? { ...event, [key]: value } : event
+      prevEvents.map((event) =>
+        getEventKey(event) === eventKey
+          ? { ...event, [field]: value }
+          : event
       )
     );
   }
 
-  // Handler for date pickers to ensure endTime >= startTime
   function handleEventDateChange(
-    id: number,
-    key: 'startTime' | 'endTime',
+    eventKey: string,
+    field: 'startTime' | 'endTime',
     value: Date
   ) {
-    setEvents((prevEvents) => {
-      const newEvents = [...prevEvents];
-      const event = { ...newEvents[id] };
-      let newStart = event.startTime;
-      let newEnd = event.endTime;
-      if (key === 'startTime') {
-        newStart = value;
-        if (newEnd < newStart) newEnd = newStart;
-      } else if (key === 'endTime') {
-        newEnd = value < newStart ? newStart : value;
-      }
-      event.startTime = newStart;
-      event.endTime = newEnd;
-      newEvents[id] = event;
-      return newEvents;
-    });
-  }
-
-  function removeEventState(i: number, id?: number) {
-    const newEvents = [...events];
-    newEvents.splice(i, 1);
-    setEvents(newEvents);
-
-    if (id !== undefined) {
-      setRemoveQueue([...removeQueue, id]);
-    }
-  }
-
-  function setEventOpen(i: number, open: boolean) {
     setEvents((prevEvents) =>
-      prevEvents.map((event, index) =>
-        index === i ? { ...event, open } : event
-      )
+      prevEvents.map((event) => {
+        if (getEventKey(event) !== eventKey) return event;
+
+        const startTime = field === 'startTime' ? value : event.startTime;
+        const endTime =
+          field === 'endTime'
+            ? value < startTime
+              ? startTime
+              : value
+            : event.endTime < startTime
+              ? startTime
+              : event.endTime;
+
+        return { ...event, startTime, endTime };
+      })
     );
   }
 
-  function loadDraft(): NewsPostDraft | null {
-    try {
-      const loaded = localStorage.getItem(draftKey);
-      return loaded ? JSON.parse(loaded) : null;
-    } catch {
-      return null;
+  function removeEvent(eventKey: string) {
+    const removed = events.find((event) => getEventKey(event) === eventKey);
+    if (removed === undefined) return;
+
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => getEventKey(event) !== eventKey)
+    );
+    const removedId = removed.id;
+    if (removedId !== undefined) {
+      setRemoveQueue((prevQueue) =>
+        prevQueue.includes(removedId)
+          ? prevQueue
+          : [...prevQueue, removedId]
+      );
     }
-  }
-
-  function clearDraft() {
-    try {
-      localStorage.removeItem(draftKey);
-    } catch {}
-  }
-
-  function discardDraft() {
-    setSubmitted(true);
-    clearDraft();
-    window.location.reload();
   }
 
   function cancel() {
@@ -555,48 +364,25 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
       ? titleEn.trim() !== '' && contentEn.trim() !== ''
       : titleSv.trim() !== '' && contentSv.trim() !== '';
 
-  const eventTitle = (event: Event) =>
-    (newsPost.locale === 'en' ? event.titleEn : event.titleSv) ||
-    event.titleEn ||
-    event.titleSv ||
-    l.events.untitled;
-
   const isEditing =
     newsPost.id !== undefined || createdPostId !== undefined;
 
-  const languageToggle = (
-    <SegmentedControl
-      value={activeLanguage}
-      ariaLabel={l.events.language}
-      className={style.languageToggle}
-      options={languageOrder.map((language) => {
-        const complete = isLanguageComplete(language);
-        const label = languageLabel(language);
-        const status = complete
-          ? l.editor.languageComplete
-          : l.editor.languageIncomplete;
-        return {
-          value: language,
-          label: (
-            <>
-              {language.toUpperCase()}
-              <span
-                className={`${style.languageStatus} ${
-                  complete ? '' : style.languageIncomplete
-                }`}
-                aria-hidden="true"
-              >
-                {complete ? '✓' : '•'}
-              </span>
-            </>
-          ),
-          ariaLabel: `${label} ${status}`,
-          title: `${label} ${status}`
-        };
-      })}
-      onChange={(language) => setActiveLanguage(language as 'en' | 'sv')}
-    />
-  );
+  const selectAdjacentLanguage = (
+    event: React.KeyboardEvent<HTMLButtonElement>
+  ) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+
+    event.preventDefault();
+    const direction = event.key === 'ArrowRight' ? 1 : -1;
+    const currentIndex = languageOrder.indexOf(activeLanguage);
+    const nextLanguage =
+      languageOrder[
+        (currentIndex + direction + languageOrder.length) %
+          languageOrder.length
+      ];
+    setActiveLanguage(nextLanguage);
+    document.getElementById(`content-tab-${nextLanguage}`)?.focus();
+  };
 
   return (
     <>
@@ -644,15 +430,63 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </div>
 
         <h2>{l.editor.content}</h2>
+        <div
+          className={style.contentTabs}
+          role="tablist"
+          aria-label={l.editor.content}
+        >
+          {languageOrder.map((language) => {
+            const complete = isLanguageComplete(language);
+            const label = languageLabel(language);
+            const status = complete
+              ? l.editor.languageComplete
+              : l.editor.languageIncomplete;
+
+            return (
+              <button
+                key={language}
+                id={`content-tab-${language}`}
+                type="button"
+                role="tab"
+                aria-selected={activeLanguage === language}
+                aria-controls={`content-panel-${language}`}
+                tabIndex={activeLanguage === language ? 0 : -1}
+                className={`${style.contentTab} ${
+                  activeLanguage === language ? style.contentTabActive : ''
+                }`}
+                aria-label={`${label} ${status}`}
+                title={`${label} ${status}`}
+                onClick={() => setActiveLanguage(language)}
+                onKeyDown={selectAdjacentLanguage}
+              >
+                {label}
+                <span
+                  className={`${style.languageStatus} ${
+                    complete ? '' : style.languageIncomplete
+                  }`}
+                  aria-hidden="true"
+                >
+                  {complete ? '✓' : '•'}
+                </span>
+              </button>
+            );
+          })}
+        </div>
         {languageOrder.map((language) => (
-          <div key={language} hidden={activeLanguage !== language}>
+          <div
+            key={language}
+            id={`content-panel-${language}`}
+            role="tabpanel"
+            aria-labelledby={`content-tab-${language}`}
+            hidden={activeLanguage !== language}
+            className={style.contentPanel}
+          >
             <MarkdownEditor
               value={language === 'en' ? contentEn : contentSv}
               onUpload={dropFiles}
               onChange={language === 'en' ? setContentEn : setContentSv}
               locale={newsPost.locale}
               localFiles={uploadQueue}
-              toolbarStart={languageToggle}
               ariaLabel={`${l.editor.content} ${languageLabel(language)}`}
             />
           </div>
@@ -695,178 +529,48 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         </div>
 
         <br />
-        <h2>{l.events.events}</h2>
+        <div className={style.eventHeader}>
+          <h2>{l.events.events}</h2>
+          <ActionButton
+            type="button"
+            aria-label={l.events.add}
+            title={l.events.add}
+            onClick={() => {
+              setEvents([
+                ...events,
+                { ...emptyEvent, draftId: createEventId() }
+              ]);
+            }}
+          >
+            <BsPlusLg />
+          </ActionButton>
+        </div>
 
         {events.length === 0 ? (
           <p>{l.events.empty}</p>
         ) : (
           <ul className={style.eventList}>
-            {events.map((e, i) => {
-              const eventKey = getEventKey(e);
+            {events.map((event) => {
+              const eventKey = getEventKey(event);
               return (
                 <li key={eventKey} className={style.eventCardItem}>
-                  <details
-                    className={style.eventCard}
-                    open={e.open ?? e.id === undefined}
-                    onToggle={(event) =>
-                      setEventOpen(i, event.currentTarget.open)
+                  <EventCard
+                    event={event}
+                    locale={newsPost.locale}
+                    languageLabel={languageLabel}
+                    onChange={(field, value) =>
+                      updateEvent(eventKey, field, value)
                     }
-                  >
-                    <summary className={style.eventSummary}>
-                      <span className={style.eventSummaryContent}>
-                        <span
-                          className={style.eventTitle}
-                          role="heading"
-                          aria-level={3}
-                        >
-                          {eventTitle(e)}
-                        </span>
-                        <span className={style.eventDate}>
-                          {i18nService.formatDate(e.startTime)}
-                        </span>
-                      </span>
-                    </summary>
-                    <div className={style.eventBody}>
-                      <EventField
-                        id={`event-title-en-${eventKey}`}
-                        label={`${l.editor.title} (${languageLabel('en')})`}
-                      >
-                        <TextArea
-                          id={`event-title-en-${eventKey}`}
-                          value={e.titleEn}
-                          onChange={(ev) =>
-                            editEventState(i, 'titleEn', ev.target.value)
-                          }
-                          required
-                        />
-                      </EventField>
-                      <EventField
-                        id={`event-title-sv-${eventKey}`}
-                        label={`${l.editor.title} (${languageLabel('sv')})`}
-                      >
-                        <TextArea
-                          id={`event-title-sv-${eventKey}`}
-                          value={e.titleSv}
-                          onChange={(ev) =>
-                            editEventState(i, 'titleSv', ev.target.value)
-                          }
-                          required
-                        />
-                      </EventField>
-                      <EventField
-                        id={`event-start-${eventKey}`}
-                        label={l.events.start}
-                      >
-                        <DatePicker
-                          id={`event-start-${eventKey}`}
-                          required
-                          value={e.startTime}
-                          onChange={(d) =>
-                            handleEventDateChange(i, 'startTime', d)
-                          }
-                        />
-                      </EventField>
-                      <EventField
-                        id={`event-end-${eventKey}`}
-                        label={l.events.end}
-                      >
-                        <DatePicker
-                          id={`event-end-${eventKey}`}
-                          disabled={e.fullDay}
-                          required
-                          value={e.endTime}
-                          min={
-                            e.startTime
-                              ? convertToDateTimeLocalString(e.startTime)
-                              : undefined
-                          }
-                          onChange={(d) =>
-                            handleEventDateChange(i, 'endTime', d)
-                          }
-                        />
-                      </EventField>
-                      <label
-                        className={style.eventCheckbox}
-                        htmlFor={`event-full-day-${eventKey}`}
-                      >
-                        <input
-                          type="checkbox"
-                          id={`event-full-day-${eventKey}`}
-                          checked={e.fullDay}
-                          onChange={(ev) =>
-                            editEventState(i, 'fullDay', ev.target.checked)
-                          }
-                        />
-                        {l.events.fullDay}
-                      </label>
-                      <EventField
-                        id={`event-location-${eventKey}`}
-                        label={l.events.location}
-                      >
-                        <TextArea
-                          id={`event-location-${eventKey}`}
-                          value={e.location ?? ''}
-                          onChange={(ev) =>
-                            editEventState(i, 'location', ev.target.value)
-                          }
-                        />
-                      </EventField>
-                      <EventField
-                        id={`event-language-${eventKey}`}
-                        label={l.events.language}
-                      >
-                        <DropdownList
-                          id={`event-language-${eventKey}`}
-                          value={e.language?.toString() ?? ''}
-                          onChange={(ev) =>
-                            editEventState(
-                              i,
-                              'language',
-                              ev.target.value === ''
-                                ? null
-                                : EventLanguage[
-                                    ev.target.value as EventLanguage
-                                  ]
-                            )
-                          }
-                        >
-                          <option value="">{l.general.notApplicable}</option>
-                          <option value="SV">
-                            {capitalize(l.events.languages.sv)}
-                          </option>
-                          <option value="EN">
-                            {capitalize(l.events.languages.en)}
-                          </option>
-                          <option value="SV_EN">
-                            {capitalize(l.events.languages.sv_en)}
-                          </option>
-                        </DropdownList>
-                      </EventField>
-                    </div>
-                    <div className={style.eventFooter}>
-                      <ActionButton
-                        type="button"
-                        variant="secondary"
-                        onClick={() => removeEventState(i, e.id)}
-                      >
-                        {l.events.remove}
-                      </ActionButton>
-                    </div>
-                  </details>
+                    onDateChange={(field, value) =>
+                      handleEventDateChange(eventKey, field, value)
+                    }
+                    onRemove={() => removeEvent(eventKey)}
+                  />
                 </li>
               );
             })}
           </ul>
         )}
-
-        <ActionButton
-          type="button"
-          onClick={() => {
-            setEvents([...events, { ...emptyEvent, draftId: createEventId() }]);
-          }}
-        >
-          {l.events.add}
-        </ActionButton>
 
         <div className={style.saveBar}>
           {draftRestored && (

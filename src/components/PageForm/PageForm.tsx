@@ -19,6 +19,8 @@ interface NewPostFormProps {
   contentSv: string;
   slug: string;
   locale: string;
+  maxFileSizeBytes?: number;
+  maxUploadSizeBytes?: number;
 }
 
 const PageForm = (description: NewPostFormProps) => {
@@ -29,7 +31,9 @@ const PageForm = (description: NewPostFormProps) => {
   const [contentSv, setContentSv] = useState(description.contentSv);
   const [slug, setSlug] = useState(description.slug ?? '');
   const { uploadQueue, dropFiles, removeFile } = useUploadQueue({
-    locale: description.locale
+    locale: description.locale,
+    maxFileSizeBytes: description.maxFileSizeBytes,
+    maxUploadSizeBytes: description.maxUploadSizeBytes
   });
 
   async function send() {
@@ -91,6 +95,8 @@ const PageForm = (description: NewPostFormProps) => {
         uploadQueue={uploadQueue}
         onSelect={dropFiles}
         onRemove={removeFile}
+        maxFileSizeBytes={description.maxFileSizeBytes}
+        maxUploadSizeBytes={description.maxUploadSizeBytes}
       />
 
       <div className={styles.actions}>
