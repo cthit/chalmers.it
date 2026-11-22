@@ -1,7 +1,7 @@
 import prisma from '@/prisma';
-import { stat, readdir, readFile, writeFile } from 'fs/promises';
-import FileService, { MediaType } from './fileService';
 import { existsSync } from 'fs';
+import { readdir, readFile, stat, writeFile } from 'fs/promises';
+import FileService, { MediaType } from './fileService';
 
 const mediaPath = process.env.MEDIA_PATH || './media';
 

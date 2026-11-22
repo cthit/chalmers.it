@@ -1,3 +1,4 @@
+import FileService from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import MediaService from '@/services/mediaService';
 
@@ -21,7 +22,7 @@ export default async function Page(props: {
         {l.settings.media.stored}: {stats.count}
       </p>
       <p>
-        {l.settings.media.usage}: {stats.size} bytes
+        {l.settings.media.usage}: {FileService.bytesToSize(stats.size)}
       </p>
       <p>
         {l.settings.media.orphaned}: {stats.count - stats.used}
