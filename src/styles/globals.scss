@@ -12,8 +12,8 @@ body {
 }
 
 body {
-  color: var(--text-color);
-  background-color: var(--background-color);
+  color: var(--on-surface);
+  background-color: var(--surface);
 }
 
 html:has(div.popup-content) {
@@ -25,8 +25,20 @@ a {
   text-decoration: none;
 }
 
+// Tells the UA to render native widgets (scrollbars, form controls, caret) for
+// the resolved theme. Keyed off `[data-theme]` so an explicit user choice wins
+// over the OS preference, with a `prefers-color-scheme` fallback for the brief
+// moment before `next-themes` has written the attribute.
+:root {
+  color-scheme: light;
+}
+
 @media (prefers-color-scheme: dark) {
-  html {
+  :root:not([data-theme='light']) {
     color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
 }

@@ -1,0 +1,11 @@
+overrides:
+  '@types/react': 19.3.0
+  '@types/react-dom': 19.3.0
+allowBuilds:
+  '@parcel/watcher': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  sharp: true
+  esbuild: true
+  unrs-resolver: true

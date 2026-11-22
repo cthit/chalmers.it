@@ -1,3 +1,4 @@
+import { checkValidMoveTargets } from '@/utils/pageMoveTargets';
 import prisma from '@/prisma';
 
 export type DivisionPage = {
@@ -70,30 +71,7 @@ export default class DivisionPageService {
     return Object.values(result).sort((a, b) => idx[a.id] - idx[b.id]);
   }
 
-  static checkValidMoveTargets(
-    pages: DivisionPage[],
-    maxDepth: number,
-    editedId?: number
-  ) {
-    const forbiddenIds = editedId ? [editedId] : [];
-    const editedPage = pages.find((p) => p.id === editedId);
-    const editedMoveDepth = editedPage
-      ? editedPage.deepestChild - editedPage.depth
-      : 0;
-
-    for (const page of pages) {
-      if (
-        page.depth + editedMoveDepth >= maxDepth ||
-        (page.parentId && forbiddenIds.includes(page.parentId))
-      ) {
-        forbiddenIds.push(page.id);
-      }
-    }
-    return pages.map((p) => ({
-      ...p,
-      disabled: forbiddenIds.includes(p.id)
-    }));
-  }
+  static checkValidMoveTargets = checkValidMoveTargets;
 
   static async get(id?: number) {
     const pages = await prisma.divisionPage.findMany({

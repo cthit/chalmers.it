@@ -1,3 +1,4 @@
+import { documentTypeKey } from '@/utils/documentType';
 import prisma from '@/prisma';
 import { DocumentType } from '@prisma/client';
 
@@ -16,22 +17,7 @@ export interface DivisionDocument {
 }
 
 export default class DivisionDocumentService {
-  static documentTypeKey(type: DocumentType) {
-    switch (type) {
-      case DocumentType.BUDGET:
-        return 'budget';
-      case DocumentType.BUSINESS_PLAN:
-        return 'businessPlan';
-      case DocumentType.BUSINESS_REPORT:
-        return 'businessReport';
-      case DocumentType.FINANCIAL_REPORT:
-        return 'financialReport';
-      case DocumentType.MISC:
-        return 'misc';
-      case DocumentType.PROTOCOL:
-        return 'protocol';
-    }
-  }
+  static documentTypeKey = documentTypeKey;
 
   static async get(): Promise<DivisionDocument[]> {
     const data = await prisma.divisionDocument.findMany({

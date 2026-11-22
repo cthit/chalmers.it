@@ -83,7 +83,9 @@ export default class MediaService {
   }
 
   static async getStats() {
-    const dir = await readdir(mediaPath, { withFileTypes: true });
+    const dir = await readdir(/* turbopackIgnore: true */ mediaPath, {
+      withFileTypes: true
+    });
 
     let size = 0;
     for (const dirent of dir) {

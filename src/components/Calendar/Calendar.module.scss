@@ -20,7 +20,7 @@
 }
 
 .ongoingText {
-  color: var(--link-color);
+  color: var(--emphasis);
 }
 
 .upcomingEventTitle {
@@ -30,4 +30,8 @@
 
 .upcomingEventDetails {
   font-size: var(--text-small);
+}
+
+.seeAllButton {
+  margin-top: 0.5rem;
 }

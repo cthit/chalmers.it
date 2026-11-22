@@ -11,8 +11,26 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import i18nService from '@/services/i18nService';
 import ActionLink from '@/components/ActionButton/ActionLink';
 import GroupAvatar from '@/components/GroupAvatar/GroupAvatar';
+import { Metadata } from 'next';
 
 export const revalidate = 3600;
+
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+
+  const { locale, id } = params;
+
+  const group = await DivisionGroupService.getInfoBySlug(id).catch(() => {
+    return null;
+  });
+  const l = i18nService.getLocale(locale);
+  return {
+    title: group !== null ? group.prettyName : undefined,
+    description: l.site.siteDescription
+  };
+}
 
 export default async function Page(props: {
   params: Promise<{ locale: string; id: string }>;
@@ -82,12 +100,7 @@ const mainContent = async (locale: string, id: string) => {
         <ul className={style.memberList}>
           {gammaGroup.members.map((member) => (
             <li key={member.user.id}>
-              <GroupMember
-                pfp={GammaService.getUserAvatarURL(member.user.id)}
-                name={member.user.nick}
-                post={en ? member.post.enName : member.post.svName}
-                postStyled={member.unofficialPostName}
-              />
+              <GroupMember member={member} locale={locale} />
             </li>
           ))}
         </ul>

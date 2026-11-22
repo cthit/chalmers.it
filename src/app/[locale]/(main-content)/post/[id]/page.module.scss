@@ -1,0 +1,14 @@
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 2rem;
+}
+
+.calendar {
+  max-height: 20em;
+}
+
+.seeAllEventsButton {
+  margin-top: 1.2em;
+  max-width: 16rem;
+}

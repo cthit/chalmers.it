@@ -3,8 +3,20 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import ContentPane from '@/components/ContentPane/ContentPane';
 import Divider from '@/components/Divider/Divider';
 import i18nService from '@/services/i18nService';
+import { Metadata } from 'next';
 
 export const revalidate = 3600;
+
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await props.params;
+  const l = i18nService.getLocale(locale);
+
+  return {
+    title: l.about.title
+  };
+}
 
 export default async function Home(props: {
   params: Promise<{ locale: string }>;

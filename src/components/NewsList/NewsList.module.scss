@@ -1,5 +1,5 @@
 .list {
-  background-color: var(--content-background-color);
+  background-color: var(--surface-container);
   padding: 1rem;
   border-radius: 0.5rem;
 }
@@ -11,6 +11,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .actions {

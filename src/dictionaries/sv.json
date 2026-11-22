@@ -10,7 +10,8 @@
     "close": "Stäng",
     "save": "Spara",
     "manage": "Hantera",
-    "add": "Lägg till"
+    "add": "Lägg till",
+    "notApplicable": "Inte applicerbart"
   },
   "site": {
     "siteTitle": "IT på Chalmers",
@@ -40,6 +41,7 @@
     "for": "för",
     "by": "av",
     "unknown": "okänd användare",
+    "subscribe": "Prenumerera på nyheter",
     "confirmDelete": "Vill du radera nyheten? Detta går inte att ångra!",
     "deleting": "Raderar...",
     "deleted": "Raderad!",
@@ -48,7 +50,8 @@
     "loadEmpty": "Inga fler inlägg att visa",
     "loadMore": "Ladda fler",
     "listView": "Listvy",
-    "cardView": "Kortvy"
+    "cardView": "Kortvy",
+    "connectedEvents": "Kopplade evenemang"
   },
   "editor": {
     "createAs": "Skapa som",
@@ -106,17 +109,50 @@
     "end": "Slut",
     "fullDay": "Heldag",
     "location": "Plats",
+    "language": "Språk",
     "add": "Lägg till evenemang",
     "remove": "Ta bort evenemang",
     "empty": "Inga evenemang kopplade",
     "subscribe": "Prenumerera",
     "comingEvents": "Kommande evenemang",
-    "ongoing": "Pågående"
+    "seeAll": "Se alla evenemang",
+    "ongoing": "Pågående",
+    "calendarName": "IT:s eventkalender",
+    "calendarDescription": "Hitta evenemang från IT-sektionen på Chalmers",
+    "created": "Skapad",
+    "readMore": "Läs mer",
+    "relatedEvents": "Relaterade tillfällen",
+    "today": "Idag",
+    "todayHint": {
+      "day": "Idag",
+      "week": "Denna vecka",
+      "month": "Denna månad"
+    },
+    "day": "Dag",
+    "week": "Vecka",
+    "month": "Månad",
+    "list": "Lista",
+    "services": {
+      "googleCalendar": "Google Kalender",
+      "appleCalendar": "Apple Kalender",
+      "outlook": "Outlook"
+    },
+    "eventHeldInLanguage": "Evenemanget kommer hållas på",
+    "eventsHeldInLanguage": "Evenemangen kommer hållas på",
+    "asWellAsIn": "samt på",
+    "languages": {
+      "sv": "svenska",
+      "en": "engelska",
+      "sv_en": "svenska och engelska"
+    }
   },
   "groups": {
     "members": "Nuvarande medlemmar",
     "membersError": "Kunde inte hämta medlemmar",
     "membersEmpty": "Inga medlemmar",
+    "memberPosts": "Inlägg",
+    "memberProfile": "Profil",
+    "memberPfpAlt": "Profilbild av",
     "createSubpage": "Skapa undersida"
   },
   "lunch": {
@@ -181,6 +217,9 @@
     "image": "Bild"
   },
   "search": {
+    "newsPlaceholder": "Sök nyhetsinlägg...",
+    "newsHeading": "Sök nyhetsinlägg",
+    "newsResults": "Sökresultat för nyhetsinlägg",
     "search": "Sök",
     "empty": "Inga sökresultat",
     "loading": "Söker...",
@@ -190,8 +229,10 @@
     "query": "Sökfråga",
     "short": "Sökfrågan måste vara minst 3 tecken",
     "group": "Grupp",
+    "eventLanguage": "Språk på evenemang",
     "allTypes": "Alla typer",
     "allGroups": "Alla grupper",
+    "allLanguages": "Alla språk",
     "name": "Namn",
     "filter": "Filter",
     "filterAction": "Filtrera"

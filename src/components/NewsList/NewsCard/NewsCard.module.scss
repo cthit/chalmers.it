@@ -7,9 +7,10 @@
 }
 
 .card {
+  position: relative;
   cursor: pointer;
-  background: var(--background-secondary);
-  border: 2px solid var(--border-color);
+  background: var(--surface-container);
+  border: 0.1rem solid var(--outline);
   border-radius: 0.5rem;
   padding: 1.5rem;
   display: grid;
@@ -25,8 +26,26 @@
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: var(--primary-color);
+    border-color: var(--primary);
   }
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+}
+
+.textColumn :global(a):not(.titleLink),
+.metaLine a {
+  position: relative;
+  z-index: 2;
 }
 
 // When card container is narrow, stack image below text
@@ -77,7 +96,7 @@
   margin: 0;
   font-size: var(--text-large);
   line-height: 1.3;
-  color: var(--text-primary);
+  color: var(--on-surface);
   /* Allow very long words or URLs in titles to break/wrap instead of overflowing */
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -118,12 +137,12 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: var(--border-color);
+      background: var(--outline);
       border-radius: 3px;
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
+      background: var(--on-surface-variant);
     }
   }
 
@@ -159,16 +178,15 @@
 .footer {
   grid-area: footer;
   padding-top: 0.5rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--outline);
 }
 
 .metaLine {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--text-secondary);
+  color: var(--on-surface-variant);
 
   a {
-    color: var(--accent-color);
     text-decoration: none;
     font-weight: 500;
 

@@ -1,15 +1,17 @@
 'use client';
+
+import { documentTypeKey } from '@/utils/documentType';
 import React, { useState } from 'react';
 import { addDocument } from '@/actions/documents';
 import DropdownList from '@/components/DropdownList/DropdownList';
 import { GammaGroup } from '@/types/gamma';
 import TextArea from '@/components/TextArea/TextArea';
 import { DocumentType } from '@prisma/client';
-import DivisionDocumentService from '@/services/divisionDocumentService';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import FileService, { MediaType } from '@/services/fileService';
 import i18nService from '@/services/i18nService';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const validMimes = FileService.getValidMimes([MediaType.Document]);
 
@@ -20,6 +22,8 @@ const AddDocumentForm = ({
   groups: GammaGroup[];
   locale: string;
 }) => {
+  const router = useRouter();
+
   const [groupId, setGroupId] = useState<string | undefined>(undefined);
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [type, setType] = useState<string>(DocumentType.MISC);
@@ -60,6 +64,7 @@ const AddDocumentForm = ({
         error: l.docs.uploadError
       }
     );
+    router.push('/documents');
   };
 
   return (
@@ -82,11 +87,7 @@ const AddDocumentForm = ({
         <DropdownList value={type} onChange={(e) => setType(e.target.value)}>
           {Object.keys(DocumentType).map((type) => (
             <option key={type} value={type}>
-              {
-                l.docTypes[
-                  DivisionDocumentService.documentTypeKey(type as DocumentType)
-                ]
-              }
+              {l.docTypes[documentTypeKey(type as DocumentType)]}
             </option>
           ))}
         </DropdownList>

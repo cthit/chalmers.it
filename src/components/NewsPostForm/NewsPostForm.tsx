@@ -1,23 +1,29 @@
 'use client';
 
-import { edit, post, postForGroup } from '@/actions/newsPosts';
 import { createEvent, deleteEvent, editEvent } from '@/actions/events';
-import Divider from '@/components/Divider/Divider';
+import { edit, post, postForGroup } from '@/actions/newsPosts';
 import ActionButton from '@/components/ActionButton/ActionButton';
+import Divider from '@/components/Divider/Divider';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import TextArea from '@/components/TextArea/TextArea';
-import { GammaGroup } from '@/types/gamma';
-import { useRef, useState } from 'react';
-import DropdownList from '../DropdownList/DropdownList';
-import { marked } from 'marked';
-import style from './NewsPostForm.module.scss';
-import DatePicker from '../DatePicker/DatePicker';
-import i18nService from '@/services/i18nService';
 import FileService, { MediaType } from '@/services/fileService';
+import i18nService from '@/services/i18nService';
+import { GammaGroup } from '@/types/gamma';
+import { marked } from 'marked';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import CopyButton from '../CopyButton/CopyButton';
+import DatePicker from '../DatePicker/DatePicker';
+import DropdownList from '../DropdownList/DropdownList';
+import style from './NewsPostForm.module.scss';
+import { createMarkdownLinkToMedia } from '@/utils/mediaLink';
+import { capitalize } from '@/utils/strings';
+import { EventLanguage } from '@prisma/client';
 
 const validUploadTypes = Object.values(MediaType);
+
+const LOCAL_DRAFT_KEY_PREFIX = 'newsPostDraft';
 
 interface NewPostFormProps {
   groups: GammaGroup[];
@@ -40,7 +46,15 @@ interface Event {
   endTime: Date;
   fullDay: boolean;
   location: string | null;
+  language: EventLanguage | null;
   id?: number;
+}
+
+interface EventDraft {
+  titleEn: string;
+  titleSv: string;
+  contentEn: string;
+  contentSv: string;
 }
 
 const emptyEvent: Event = {
@@ -50,6 +64,7 @@ const emptyEvent: Event = {
   endTime: new Date(),
   fullDay: false,
   location: '',
+  language: null,
   id: undefined
 };
 
@@ -63,9 +78,26 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
   const l = i18nService.getLocale(newsPost.locale);
   const router = useRouter();
 
+  const draftKey =
+    newsPost.id !== undefined
+      ? `${LOCAL_DRAFT_KEY_PREFIX}:edit:${newsPost.id}`
+      : `${LOCAL_DRAFT_KEY_PREFIX}:new`;
+  const [draft] = useState(loadDraft);
+  const submitted = useRef(false);
+
   const [group, setGroup] = useState(newsPost.group ?? '');
-  const [titleEn, setTitleEn] = useState(newsPost.titleEn ?? '');
-  const [titleSv, setTitleSv] = useState(newsPost.titleSv ?? '');
+  const [titleEn, setTitleEn] = useState(
+    draft?.titleEn ?? newsPost.titleEn ?? ''
+  );
+  const [titleSv, setTitleSv] = useState(
+    draft?.titleSv ?? newsPost.titleSv ?? ''
+  );
+  const [contentEn, setContentEn] = useState(
+    draft?.contentEn ?? newsPost.contentEn ?? ''
+  );
+  const [contentSv, setContentSv] = useState(
+    draft?.contentSv ?? newsPost.contentSv ?? ''
+  );
   const contentEnRef = useRef<{ getMarkdown: () => string }>(null);
   const contentSvRef = useRef<{ getMarkdown: () => string }>(null);
   const [publish, setPublish] = useState(
@@ -82,6 +114,37 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
 
   const [events, setEvents] = useState<Event[]>(newsPost.connectedEvents ?? []);
   const [removeQueue, setRemoveQueue] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (submitted.current) return;
+
+    const unchanged =
+      titleEn === (newsPost.titleEn ?? '') &&
+      titleSv === (newsPost.titleSv ?? '') &&
+      contentEn === (newsPost.contentEn ?? '') &&
+      contentSv === (newsPost.contentSv ?? '');
+
+    try {
+      if (unchanged) {
+        localStorage.removeItem(draftKey);
+      } else {
+        localStorage.setItem(
+          draftKey,
+          JSON.stringify({ titleEn, titleSv, contentEn, contentSv })
+        );
+      }
+    } catch {}
+  }, [
+    draftKey,
+    titleEn,
+    titleSv,
+    contentEn,
+    contentSv,
+    newsPost.titleEn,
+    newsPost.titleSv,
+    newsPost.contentEn,
+    newsPost.contentSv
+  ]);
 
   const dropFiles = async (f: FileList) => {
     const newQueue = { ...uploadQueue };
@@ -105,14 +168,6 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     const newQueue = { ...uploadQueue };
     delete newQueue[sha256];
     setUploadQueue(newQueue);
-  };
-
-  const copyFile = (sha256: string, file: File) => {
-    const embed = FileService.isMimeEmbeddable(file.type);
-    navigator.clipboard.writeText(
-      (embed ? '!' : '') + '[Text](/api/media/' + sha256 + ')'
-    );
-    toast(l.editor.linkCopied, { type: 'success' });
   };
 
   async function send(e: React.FormEvent) {
@@ -187,6 +242,7 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           startTime: event.startTime,
           endTime: event.endTime,
           location: event.location,
+          language: event.language,
           descriptionEn: '',
           descriptionSv: '',
           newsPostId: postId
@@ -203,6 +259,8 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         await deleteEvent(id);
       }
 
+      submitted.current = true;
+      clearDraft();
       router.push('/');
     } catch {
       console.log('Failed to post news article');
@@ -215,6 +273,30 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     setEvents(newEvents);
   }
 
+  // Handler for date pickers to ensure endTime >= startTime
+  function handleEventDateChange(
+    id: number,
+    key: 'startTime' | 'endTime',
+    value: Date
+  ) {
+    setEvents((prevEvents) => {
+      const newEvents = [...prevEvents];
+      const event = { ...newEvents[id] };
+      let newStart = event.startTime;
+      let newEnd = event.endTime;
+      if (key === 'startTime') {
+        newStart = value;
+        if (newEnd < newStart) newEnd = newStart;
+      } else if (key === 'endTime') {
+        newEnd = value < newStart ? newStart : value;
+      }
+      event.startTime = newStart;
+      event.endTime = newEnd;
+      newEvents[id] = event;
+      return newEvents;
+    });
+  }
+
   function removeEventState(i: number, id?: number) {
     const newEvents = [...events];
     newEvents.splice(i, 1);
@@ -223,6 +305,21 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
     if (id !== undefined) {
       setRemoveQueue([...removeQueue, id]);
     }
+  }
+
+  function loadDraft(): EventDraft | null {
+    try {
+      const loaded = localStorage.getItem(draftKey);
+      return loaded ? JSON.parse(loaded) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function clearDraft() {
+    try {
+      localStorage.removeItem(draftKey);
+    } catch {}
   }
 
   return (
@@ -256,9 +353,12 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         />
         <h2>{l.editor.content} (Eng)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentEn}
+          defaultMd={draft?.contentEn ?? newsPost.contentEn}
           ref={contentEnRef}
           onUpload={dropFiles}
+          onChange={(contents) => {
+            setContentEn(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -266,14 +366,19 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
         <h2>{l.editor.title} (Sv)</h2>
         <TextArea
           value={titleSv}
-          onChange={(e) => setTitleSv(e.target.value)}
+          onChange={(e) => {
+            setTitleSv(e.target.value);
+          }}
           required
         />
         <h2>{l.editor.content} (Sv)</h2>
         <MarkdownEditor
-          defaultMd={newsPost.contentSv}
+          defaultMd={draft?.contentSv ?? newsPost.contentSv}
           ref={contentSvRef}
           onUpload={dropFiles}
+          onChange={(contents) => {
+            setContentSv(contents);
+          }}
           locale={newsPost.locale}
           localFiles={uploadQueue}
         />
@@ -284,12 +389,10 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
           {Object.entries(uploadQueue).map(([sha256, file]) => (
             <li className={style.fileActions} key={sha256}>
               <p>{file.name}</p>{' '}
-              <ActionButton
-                type="button"
-                onClick={() => copyFile(sha256, file)}
-              >
-                {l.editor.copyLink}
-              </ActionButton>{' '}
+              <CopyButton
+                locale={newsPost.locale}
+                copyContent={createMarkdownLinkToMedia(sha256, file)}
+              />
               <ActionButton
                 type="button"
                 onClick={() => {
@@ -361,13 +464,18 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
               <h3>{l.events.start}</h3>
               <DatePicker
                 value={e.startTime}
-                onChange={(d) => editEventState(i, 'startTime', d)}
+                onChange={(d) => handleEventDateChange(i, 'startTime', d)}
               />
               <h3>{l.events.end}</h3>
               <DatePicker
                 disabled={e.fullDay}
                 value={e.endTime}
-                onChange={(d) => editEventState(i, 'endTime', d)}
+                min={
+                  e.startTime
+                    ? e.startTime.toISOString().slice(0, 16)
+                    : undefined
+                }
+                onChange={(d) => handleEventDateChange(i, 'endTime', d)}
               />
               <br />
               <label key={i} htmlFor={'fullDay' + i}>
@@ -385,6 +493,33 @@ const NewsPostForm = (newsPost: NewPostFormProps) => {
                 value={e.location ?? ''}
                 onChange={(e) => editEventState(i, 'location', e.target.value)}
               />
+
+              <h3>{l.events.language}</h3>
+              <div className={style.actions}>
+                <DropdownList
+                  value={e.language?.toString() ?? ''}
+                  onChange={(e) =>
+                    editEventState(
+                      i,
+                      'language',
+                      e.target.value === ''
+                        ? null
+                        : EventLanguage[e.target.value as EventLanguage]
+                    )
+                  }
+                >
+                  <option value="">{l.general.notApplicable}</option>
+                  <option value="SV">
+                    {capitalize(l.events.languages.sv)}
+                  </option>
+                  <option value="EN">
+                    {capitalize(l.events.languages.en)}
+                  </option>
+                  <option value="SV_EN">
+                    {capitalize(l.events.languages.sv_en)}
+                  </option>
+                </DropdownList>
+              </div>
 
               <br />
               <br />

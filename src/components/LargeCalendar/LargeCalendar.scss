@@ -1,0 +1,38 @@
+:root {
+  /* primary */
+  --fc-forma-primary: var(--primary);
+  --fc-forma-primary-over: var(--primary-hover);
+  --fc-forma-primary-down: color-mix(in srgb, var(--primary) 80%, black);
+  --fc-forma-primary-foreground: var(--on-primary);
+
+  /* calendar content */
+  --fc-forma-event: var(--primary);
+  --fc-forma-event-contrast: var(--on-primary);
+  --fc-forma-background-event: var(--fc-forma-primary);
+  --fc-forma-highlight: color-mix(in srgb, var(--primary) 35%, transparent);
+
+  /* neutral backgrounds */
+  --fc-forma-background: var(--surface-container-low);
+  --fc-forma-faint: color-mix(in srgb, var(--on-surface) 3%, transparent);
+  --fc-forma-muted: color-mix(in srgb, var(--on-surface) 7%, transparent);
+  --fc-forma-strong: color-mix(in srgb, var(--on-surface) 12%, transparent);
+  --fc-forma-stronger: color-mix(in srgb, var(--on-surface) 16%, transparent);
+  --fc-forma-strongest: color-mix(in srgb, var(--on-surface) 20%, transparent);
+
+  /* neutral foregrounds */
+  --fc-forma-foreground: var(--on-surface);
+  --fc-forma-faint-foreground: color-mix(
+    in srgb,
+    var(--on-surface-variant) 65%,
+    var(--surface)
+  );
+  --fc-forma-muted-foreground: var(--on-surface-variant);
+
+  /* neutral borders */
+  --fc-forma-border: var(--outline);
+  --fc-forma-strong-border: color-mix(
+    in srgb,
+    var(--outline) 50%,
+    var(--on-surface-variant)
+  );
+}

@@ -1,12 +1,11 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import DivisionGroupService from '@/services/divisionGroupService';
 import MediaService from '@/services/mediaService';
 import { MediaType } from '@/services/fileService';
 import SessionService from '@/services/sessionService';
 
-export async function edit(
+export async function editGroupRootPage(
   id: number,
   contentEn: string,
   contentSv: string,
@@ -29,5 +28,4 @@ export async function edit(
     id,
     slug
   });
-  redirect(`../${slug}`);
 }

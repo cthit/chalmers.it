@@ -1,6 +1,7 @@
 import prisma from '@/prisma';
-import { PostStatus } from '@prisma/client';
-import NotifyService from './notifyService';
+import { PostStatus, EventLanguage } from '@prisma/client';
+import NotifyService, { SlackWebhookNotifier } from './notifyService';
+import { Language } from '@prisma/client';
 
 export default class NewsService {
   static async getAll() {
@@ -37,7 +38,8 @@ export default class NewsService {
             startTime: true,
             endTime: true,
             fullDay: true,
-            location: true
+            location: true,
+            language: true
           }
         }
       }
@@ -104,7 +106,8 @@ export default class NewsService {
             endTime: true,
             location: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            language: true
           }
         }
       },
@@ -224,9 +227,10 @@ export default class NewsService {
     userId?: string,
     groupIds?: string[],
     writtenByGammaUserId?: string,
-    writtenFor?: string
+    writtenFor?: string,
+    eventLanguage?: EventLanguage
   ) {
-    return await prisma.newsPost.findMany({
+    const results = await prisma.newsPost.findMany({
       orderBy: {
         createdAt: 'desc'
       },
@@ -245,6 +249,11 @@ export default class NewsService {
           select: {
             gammaSuperGroupId: true,
             prettyName: true
+          }
+        },
+        connectedEvents: {
+          select: {
+            language: true
           }
         }
       },
@@ -306,7 +315,16 @@ export default class NewsService {
             writtenFor: {
               gammaSuperGroupId: writtenFor
             }
-          }
+          },
+          eventLanguage != undefined
+            ? {
+                connectedEvents: {
+                  some: {
+                    language: eventLanguage
+                  }
+                }
+              }
+            : {}
         ],
         createdAt: {
           gte: after,
@@ -314,6 +332,7 @@ export default class NewsService {
         }
       }
     });
+    return results;
   }
 
   static async publishScheduled() {
@@ -338,5 +357,23 @@ export default class NewsService {
         })
         .then((res) => NotifyService.notifyNewsPost(res));
     });
+  }
+
+  static async serializeToSlack(id: number, language: Language) {
+    const post = await prisma.newsPost.findUnique({
+      where: {
+        id
+      },
+      include: {
+        writtenFor: true,
+        connectedEvents: true
+      }
+    });
+    if (!post) return null;
+
+    const notifier = new SlackWebhookNotifier('', language);
+    const postData = await notifier.serializeNewsPost(post);
+
+    return postData;
   }
 }

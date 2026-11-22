@@ -1,12 +1,14 @@
 'use client';
 
+import { stripTime } from '@/utils/eventDate';
+
 import './Calendar.scss';
 import styles from './CalendarTiles.module.scss';
 import { Calendar as ReactCalendar, TileArgs } from 'react-calendar';
 import React, { useCallback } from 'react';
 import Dropdown from '../Header/Navigation/Dropdown/Dropdown';
 import i18nService from '@/services/i18nService';
-import EventService from '@/services/eventService';
+import CalendarSubscribeDropdown from '../CalendarSubscribeDropdown/CalendarSubscribeDropdown';
 
 type DateTileArgs = {
   date: Date;
@@ -25,10 +27,12 @@ function DateTile({ date }: DateTileArgs) {
 
 const CalendarClient = ({
   locale,
-  events
+  events,
+  httpBaseUrl
 }: {
   locale: string;
   events: { [key: number]: any[] };
+  httpBaseUrl: string;
 }) => {
   const [value, onChange] = React.useState<Value>(new Date());
 
@@ -38,8 +42,8 @@ const CalendarClient = ({
 
   const mapTileClass = useCallback(
     ({ date }: TileArgs) => {
-      const dayKey = EventService.stripTime(date);
-      const todayKey = EventService.stripTime(new Date());
+      const dayKey = stripTime(date);
+      const todayKey = stripTime(new Date());
       return [
         styles.tile,
         ...(events[dayKey]?.length > 0 ? [styles.tileEvent] : []),
@@ -55,7 +59,7 @@ const CalendarClient = ({
         return null;
       }
       const classNames = `${styles.event} ${styles.dropdown}`;
-      return events.hasOwnProperty(EventService.stripTime(date)) ? (
+      return events.hasOwnProperty(stripTime(date)) ? (
         <Dropdown
           className={styles.dropdown}
           parent={
@@ -63,9 +67,9 @@ const CalendarClient = ({
               <DateTile date={date} />
             </div>
           }
-          id={EventService.stripTime(date).toString()}
+          id={stripTime(date).toString()}
         >
-          {events[EventService.stripTime(date)]?.map((event) => {
+          {events[stripTime(date)]?.map((event) => {
             const i18nFormat = i18nService.formatTime;
             const startTime = i18nFormat(event.startTime);
             const endTime = i18nFormat(event.endTime);
@@ -89,17 +93,20 @@ const CalendarClient = ({
   );
 
   return (
-    <ReactCalendar
-      locale={loc}
-      maxDetail="month"
-      minDetail="decade"
-      onChange={onChange}
-      value={value}
-      className="event-calendar"
-      tileClassName={mapTileClass}
-      calendarType="iso8601"
-      tileContent={mapTileContent}
-    />
+    <>
+      <ReactCalendar
+        locale={loc}
+        maxDetail="month"
+        minDetail="decade"
+        onChange={onChange}
+        value={value}
+        className="event-calendar"
+        tileClassName={mapTileClass}
+        calendarType="iso8601"
+        tileContent={mapTileContent}
+      />
+      <CalendarSubscribeDropdown locale={locale} httpBaseUrl={httpBaseUrl} />
+    </>
   );
 };
 

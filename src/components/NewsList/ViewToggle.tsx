@@ -32,7 +32,6 @@ const ViewToggle = ({
       onViewChange(initialView);
     }
     setMounted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToggle = (view: 'list' | 'grid') => {
@@ -54,7 +53,7 @@ const ViewToggle = ({
         aria-pressed={currentView === 'list'}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M2.5 3.5h11v1h-11v-1zm0 4h11v1h-11v-1zm0 4h11v1h-11v-1z" />
+          <path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h12v2H2z" />
         </svg>
       </button>
       <button

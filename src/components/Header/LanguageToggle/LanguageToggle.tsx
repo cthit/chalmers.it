@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import styles from './LanguageToggle.module.scss';
 
 type Lang = 'sv' | 'en';
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const LanguageToggle = ({ locale, onLocaleChange }: Props) => {
-  const router = useRouter();
   const currentPathname = usePathname();
 
   const detectLocaleFromPath = (p: string) =>
@@ -38,9 +37,9 @@ const LanguageToggle = ({ locale, onLocaleChange }: Props) => {
     if (onLocaleChange) onLocaleChange(next);
 
     if (currentPathname.startsWith('/en')) {
-      router.push(currentPathname.replace(`/en`, `/sv`));
+      window.location.assign(currentPathname.replace(`/en`, `/sv`));
     } else {
-      router.push(`/en${currentPathname}`);
+      window.location.assign(`/en${currentPathname}`);
     }
   };
 

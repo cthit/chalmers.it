@@ -1,6 +1,33 @@
+.groupMember {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.secondaryPost {
+  font-size: var(--text-small);
+  opacity: 0.8;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .picture {
   width: 5.5rem;
   height: 5.5rem;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+
+  & > * {
+    flex: 1;
+  }
 }

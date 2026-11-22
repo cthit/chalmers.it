@@ -1,9 +1,9 @@
 .memberList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   justify-content: center;
   gap: 1rem;
-  margin: 3rem;
+  margin-top: 1rem;
 }
 
 .memberList > li {

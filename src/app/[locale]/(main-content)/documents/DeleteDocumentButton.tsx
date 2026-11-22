@@ -4,6 +4,7 @@ import { deleteDocument } from '@/actions/documents';
 import ActionButton from '@/components/ActionButton/ActionButton';
 import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
+import { useRouter } from 'next/navigation';
 
 interface DeleteDocumentButtonProps {
   id: number;
@@ -11,16 +12,19 @@ interface DeleteDocumentButtonProps {
 }
 
 const DeleteDocumentButton = ({ id, locale }: DeleteDocumentButtonProps) => {
+  const router = useRouter();
   const l = i18nService.getLocale(locale);
 
   async function remove() {
     try {
-      confirm(l.docs.confirmDelete) &&
-        (await toast.promise(deleteDocument(id), {
+      if (confirm(l.docs.confirmDelete)) {
+        await toast.promise(deleteDocument(id), {
           pending: l.docs.deleting,
           success: l.docs.deleted,
           error: l.docs.deleteError
-        }));
+        });
+        router.push('/documents');
+      }
     } catch {
       console.log('Failed to remove document');
     }

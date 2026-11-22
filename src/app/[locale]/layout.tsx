@@ -30,8 +30,14 @@ export async function generateMetadata(props: {
 
   const l = i18nService.getLocale(locale);
   return {
-    title: l.site.siteTitle,
-    description: l.site.siteDescription
+    title: {
+      template: '%s | ' + l.site.siteTitle,
+      default: l.site.siteTitle
+    },
+    description: l.site.siteDescription,
+    appleWebApp: {
+      title: 'Chalmers IT'
+    }
   };
 }
 
@@ -55,7 +61,7 @@ export default async function RootLayout(props: {
 
   const invalidLocale = !i18nConfig.locales.includes(locale);
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body
         style={{ display: 'unset' }}
         className={poppins.variable + ' ' + bitter.variable}

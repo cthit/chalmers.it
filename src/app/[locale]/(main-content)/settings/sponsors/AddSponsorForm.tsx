@@ -6,9 +6,11 @@ import { toast } from 'react-toastify';
 import i18nService from '@/services/i18nService';
 import TextArea from '@/components/TextArea/TextArea';
 import DropdownList from '@/components/DropdownList/DropdownList';
+import { useRouter } from 'next/navigation';
 
 const AddSponsorForm = ({ locale }: { locale: string }) => {
   const l = i18nService.getLocale(locale);
+  const router = useRouter();
   const [sponsorUrl, setSponsorUrl] = useState('');
   const [sponsorName, setSponsorName] = useState('');
   const [sponsorImage, setSponsorImage] = useState<File | null>(null);
@@ -53,6 +55,7 @@ const AddSponsorForm = ({ locale }: { locale: string }) => {
           error: 'Failed to add sponsor'
         }
       );
+      router.push('/settings/sponsors');
     } catch (e) {
       console.error(e);
     }

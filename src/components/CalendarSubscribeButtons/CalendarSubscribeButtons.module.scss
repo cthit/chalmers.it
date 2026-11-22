@@ -1,0 +1,16 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.3rem;
+}
+
+.listItem {
+  width: 100%;
+  list-style: none;
+}
+
+.link {
+  width: 100%;
+}

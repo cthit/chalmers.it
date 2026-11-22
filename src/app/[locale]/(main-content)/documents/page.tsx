@@ -13,6 +13,18 @@ import ContactCard from '@/components/ContactCard/ContactCard';
 import FilterDocumentsForm from './FilterDocumentsForm';
 import DivisionGroupService from '@/services/divisionGroupService';
 import { DocumentType } from '@prisma/client';
+import { Metadata } from 'next';
+
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await props.params;
+  const l = i18nService.getLocale(locale);
+
+  return {
+    title: l.docs.operational
+  };
+}
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;

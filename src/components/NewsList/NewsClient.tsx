@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import NewsPost from './NewsPost/NewsPost';
-import NewsCard from './NewsCard/NewsCard';
-import Divider from '../Divider/Divider';
-import InfiniteScroller from './InfiniteScroller';
-import ViewToggle from './ViewToggle';
-import ActionLink from '../ActionButton/ActionLink';
 import { getData } from '@/actions/newsList';
 import i18nService from '@/services/i18nService';
+import React, { useState } from 'react';
+import ActionLink from '../ActionButton/ActionLink';
+import Divider from '../Divider/Divider';
+import InfiniteScroller from './InfiniteScroller';
+import NewsCard from './NewsCard/NewsCard';
 import styles from './NewsList.module.scss';
 import clientStyles from './NewsListClient.module.scss';
+import NewsPost from './NewsPost/NewsPost';
+import RssFeedButton from './RssFeedButton';
+import ViewToggle from './ViewToggle';
 
 interface NewsClientProps {
   news: Awaited<ReturnType<typeof getData>>[];
@@ -31,7 +32,10 @@ const NewsClient = ({ news, canPost, locale }: NewsClientProps) => {
   return (
     <>
       <div className={styles.title}>
-        <h1>{l.news.title}</h1>
+        <div className={styles.heading}>
+          <h1>{l.news.title}</h1>
+          <RssFeedButton locale={locale} />
+        </div>
         <div className={styles.actions}>
           <ViewToggle
             locale={locale}

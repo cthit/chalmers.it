@@ -10,7 +10,8 @@
     "close": "Close",
     "save": "Save",
     "manage": "Manage",
-    "add": "Add"
+    "add": "Add",
+    "notApplicable": "Not applicable"
   },
   "site": {
     "siteTitle": "IT at Chalmers",
@@ -40,6 +41,7 @@
     "for": "for",
     "by": "by",
     "unknown": "unknown author",
+    "subscribe": "Subscribe to news feed",
     "confirmDelete": "Are you sure you want to delete this post? This action cannot be undone.",
     "deleting": "Deleting...",
     "deleted": "Deleted!",
@@ -48,7 +50,8 @@
     "loadEmpty": "No more posts to show",
     "loadMore": "Load more",
     "listView": "List View",
-    "cardView": "Card View"
+    "cardView": "Card View",
+    "connectedEvents": "Connected Events"
   },
   "editor": {
     "createAs": "Create as",
@@ -106,17 +109,50 @@
     "end": "End",
     "fullDay": "Full day",
     "location": "Location",
+    "language": "Language",
     "add": "Add event",
     "remove": "Remove event",
     "empty": "No events connected",
     "subscribe": "Subscribe",
     "comingEvents": "Coming Events",
-    "ongoing": "Ongoing"
+    "seeAll": "See all events",
+    "ongoing": "Ongoing",
+    "calendarName": "Events at IT, the Software Engineering Student Division",
+    "calendarDescription": "Find events at the Software Engineering Student Division (IT) at Chalmers",
+    "created": "Created",
+    "readMore": "Read more",
+    "relatedEvents": "Related events",
+    "today": "Today",
+    "todayHint": {
+      "day": "Today",
+      "week": "This week",
+      "month": "This month"
+    },
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "list": "List",
+    "services": {
+      "googleCalendar": "Google Calendar",
+      "appleCalendar": "Apple Calendar",
+      "outlook": "Outlook"
+    },
+    "eventHeldInLanguage": "The event will be held in",
+    "eventsHeldInLanguage": "The events will be held in",
+    "asWellAsIn": "as well as in",
+    "languages": {
+      "sv": "Swedish",
+      "en": "English",
+      "sv_en": "Swedish and English"
+    }
   },
   "groups": {
     "members": "Current members",
     "membersError": "Could not fetch members",
     "membersEmpty": "No members",
+    "memberPosts": "Posts",
+    "memberProfile": "Profile",
+    "memberPfpAlt": "Profile picture of",
     "createSubpage": "Create subpage"
   },
   "lunch": {
@@ -181,6 +217,9 @@
     "image": "Image"
   },
   "search": {
+    "newsPlaceholder": "Search news posts...",
+    "newsHeading": "Search news posts",
+    "newsResults": "News search results",
     "search": "Search",
     "empty": "No search results",
     "loading": "Searching...",
@@ -190,8 +229,10 @@
     "query": "Query",
     "short": "Search query must be at least 3 characters long",
     "group": "Group",
+    "eventLanguage": "Language at event",
     "allTypes": "All types",
     "allGroups": "All groups",
+    "allLanguages": "All languages",
     "name": "Name",
     "filter": "Filter",
     "filterAction": "Filter"

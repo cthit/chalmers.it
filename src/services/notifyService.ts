@@ -6,6 +6,7 @@ import { MessageAttachment } from '@slack/types';
 import htmlToSlack from 'html-to-slack';
 import { marked } from 'marked';
 import { baseUrl } from 'marked-base-url';
+import { cleanSlackBlocks, slackHeaderText } from '@/utils/slackBlocks';
 
 interface Notifier {
   notifyNewsPost(_post: Prisma.NewsPostGetPayload<{}>): void;
@@ -119,32 +120,7 @@ class SlackWebhookNotifier implements Notifier {
     this.language = language;
   }
 
-  private cleanSections(blocks: ReturnType<typeof htmlToSlack>) {
-    return blocks
-      .filter((block) => block.type !== undefined)
-      .map((block) => {
-        if (block.type === 'rich_text') {
-          block.elements = block.elements
-            .filter((sec) => sec.type !== undefined)
-            .map((sec) => {
-              if (sec.type === 'rich_text_section') {
-                sec.elements = sec.elements
-                  .filter((el) => el.type !== undefined)
-                  .map((el) => {
-                    if (el.type === 'text' && el.text.trim().length === 0) {
-                      el.text = '\n';
-                    }
-                    return el;
-                  });
-              }
-              return sec;
-            });
-        }
-        return block;
-      });
-  }
-
-  async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+  public async serializeNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
     const nick =
       (await GammaService.getNick(post.writtenByGammaUserId)) ||
       (this.language === Language.EN ? 'Unknown user' : 'Okänd användare');
@@ -164,7 +140,7 @@ class SlackWebhookNotifier implements Notifier {
     const cHtml = await marked.parse(
       this.language === Language.EN ? post.contentEn : post.contentSv
     );
-    const content = this.cleanSections(
+    const content = cleanSlackBlocks(
       htmlToSlack(cHtml.replaceAll('</p>', '</p><p> </p>'))
     );
 
@@ -173,49 +149,134 @@ class SlackWebhookNotifier implements Notifier {
         ? `News published: *${post.titleEn}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
         : `Nyhet publicerad: *${post.titleSv}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
 
+    return {
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: msg
+          }
+        }
+      ],
+      attachments: [
+        {
+          color: '#00a8d3',
+          blocks: [
+            {
+              type: 'header',
+              text: {
+                type: 'plain_text',
+                text: slackHeaderText(title)
+              }
+            },
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*<${process.env.BASE_URL ?? 'http://localhost:3000'}/post/${post.id}|${
+                  this.language === Language.EN
+                    ? 'Read on chalmers.it'
+                    : 'Läs på chalmers.it'
+                }>*`
+              }
+            },
+            {
+              type: 'divider'
+            },
+            ...content
+          ]
+        }
+      ] as MessageAttachment[]
+    };
+  }
+
+  async serializeNewsPostFallback(post: Prisma.NewsPostGetPayload<{}>) {
+    const nick =
+      (await GammaService.getNick(post.writtenByGammaUserId)) ||
+      (this.language === Language.EN ? 'Unknown user' : 'Okänd användare');
+    const group =
+      post.divisionGroupId !== null
+        ? await DivisionGroupService.getInfo(post.divisionGroupId)
+        : null;
+    const title = this.language === Language.EN ? post.titleEn : post.titleSv;
+    const msg =
+      this.language === Language.EN
+        ? `News published: *${post.titleEn}*${group ? ` for *${group.prettyName}*` : ''} by *${nick}*`
+        : `Nyhet publicerad: *${post.titleSv}*${group ? ` för *${group.prettyName}*` : ''} av *${nick}*`;
+
+    return {
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: msg
+          }
+        }
+      ],
+      attachments: [
+        {
+          color: '#00a8d3',
+          blocks: [
+            {
+              type: 'header',
+              text: {
+                type: 'plain_text',
+                text: slackHeaderText(title)
+              }
+            },
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*<${process.env.BASE_URL ?? 'http://localhost:3000'}/post/${post.id}|${
+                  this.language === Language.EN
+                    ? 'Read on chalmers.it'
+                    : 'Läs på chalmers.it'
+                }>*`
+              }
+            }
+          ]
+        }
+      ] as MessageAttachment[]
+    };
+  }
+
+  async notifyNewsPost(post: Prisma.NewsPostGetPayload<{}>) {
+    const postData = await this.serializeNewsPost(post);
     const res = await fetch(this.webhook, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        text: msg,
-        attachments: [
-          {
-            color: '#00a8d3',
-            blocks: [
-              {
-                type: 'header',
-                text: {
-                  type: 'plain_text',
-                  text: title
-                }
-              },
-              {
-                type: 'section',
-                text: {
-                  type: 'mrkdwn',
-                  text: `*<${process.env.BASE_URL ?? 'http://localhost:3000'}/post/${post.id}|${
-                    this.language === Language.EN
-                      ? 'Read on chalmers.it'
-                      : 'Läs på chalmers.it'
-                  }>*`
-                }
-              },
-              {
-                type: 'divider'
-              },
-              ...content
-            ]
-          }
-        ] as MessageAttachment[]
-      })
+      body: JSON.stringify(postData)
     });
-    if (!res.ok)
+    if (!res.ok) {
       console.trace(
-        'Request failed with response:',
+        'Failed to notify news post',
+        post.id,
+        'with response:',
         res.status,
         await res.text()
       );
+
+      if (res.status === 400) {
+        console.warn(
+          'Falling back to simpler message format for news post',
+          post.id
+        );
+        const fallbackData = await this.serializeNewsPostFallback(post);
+        await fetch(this.webhook, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(fallbackData)
+        });
+      }
+    }
   }
 }
+
+export { SlackWebhookNotifier };
