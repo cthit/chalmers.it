@@ -105,4 +105,14 @@ export default class FileService {
     const meta = this.convertMimeType(mime);
     return meta?.type === MediaType.Image;
   }
+
+  static bytesToSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.min(
+      Math.floor(Math.log(bytes) / Math.log(1000)),
+      sizes.length - 1
+    );
+    return (bytes / 1000 ** i).toFixed(2) + ' ' + sizes[i];
+  }
 }
