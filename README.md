@@ -99,6 +99,7 @@ The following environment variables are used:
 | SLACK_BOT_TOKEN           | Slack bot token used to post, edit and delete news notifications                             | `xoxb-numbers-and-letters`                                             |
 | SLACK_CHANNEL_SV          | Slack channel that receives Swedish news notifications (unset = disabled)                    | `C0123456789`                                                          |
 | SLACK_CHANNEL_EN          | Slack channel that receives English news notifications (unset = disabled)                    | `C0123456789`                                                          |
+| ICALENDAR_WEEK_RANGE      | How many weeks before and after the current date are returned from iCalendar endpoints       | `9`                                                                    |
 
 ### Slack notifications
 

@@ -14,19 +14,19 @@
 }
 
 .primary {
-  color: white;
-  background-color: var(--primary-color);
+  color: var(--on-primary);
+  background-color: var(--primary);
 }
 
 .primary:hover {
-  background-color: var(--primary-color-highlight);
+  background-color: var(--primary-hover);
 }
 
 .secondary {
-  color: var(--text-color);
-  background-color: var(--secondary-color);
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
 }
 
 .secondary:hover {
-  background-color: var(--secondary-color-highlight);
+  background-color: var(--surface-container-highest);
 }

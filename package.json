@@ -18,6 +18,7 @@
     "@milkdown/utils": "7.22.3",
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
+    "clsx": "^2.1.1",
     "html-to-slack": "0.3.7",
     "iamcal": "^4.1.2",
     "marked": "18.1.1",

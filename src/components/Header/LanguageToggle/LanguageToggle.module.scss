@@ -8,14 +8,14 @@
   align-items: center;
   gap: 0.75rem; // Increased gap for larger elements
   border: none;
-  background: var(--background-secondary);
-  color: var(--text-color);
+  background: transparent;
+  color: var(--on-surface);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    color: var(--text-hover-color);
+    color: var(--link);
   }
 
   p {

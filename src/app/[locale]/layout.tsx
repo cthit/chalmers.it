@@ -34,7 +34,10 @@ export async function generateMetadata(props: {
       template: '%s | ' + l.site.siteTitle,
       default: l.site.siteTitle
     },
-    description: l.site.siteDescription
+    description: l.site.siteDescription,
+    appleWebApp: {
+      title: 'Chalmers IT'
+    }
   };
 }
 
