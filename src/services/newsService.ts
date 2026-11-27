@@ -35,6 +35,8 @@ export default class NewsService {
             id: true,
             titleEn: true,
             titleSv: true,
+            descriptionEn: true,
+            descriptionSv: true,
             startTime: true,
             endTime: true,
             fullDay: true,

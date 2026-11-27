@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from './ViewToggle.module.scss';
 import i18nService from '@/services/i18nService';
+import SegmentedControl from '@/components/SegmentedControl/SegmentedControl';
 
 interface ViewToggleProps {
   locale: string;
@@ -44,30 +45,47 @@ const ViewToggle = ({
   if (!mounted) return null;
 
   return (
-    <div className={styles.toggle}>
-      <button
-        type="button"
-        className={`${styles.button} ${currentView === 'list' ? styles.active : ''}`}
-        onClick={() => handleToggle('list')}
-        title={l.news.listView}
-        aria-pressed={currentView === 'list'}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h12v2H2z" />
-        </svg>
-      </button>
-      <button
-        type="button"
-        className={`${styles.button} ${currentView === 'grid' ? styles.active : ''}`}
-        onClick={() => handleToggle('grid')}
-        title={l.news.cardView}
-        aria-pressed={currentView === 'grid'}
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z" />
-        </svg>
-      </button>
-    </div>
+    <SegmentedControl
+      value={currentView}
+      ariaLabel={l.news.viewMode}
+      className={styles.toggle}
+      buttonClassName={styles.button}
+      options={[
+        {
+          value: 'list',
+          label: (
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+            >
+              <path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h12v2H2z" />
+            </svg>
+          ),
+          title: l.news.listView,
+          ariaLabel: l.news.listView
+        },
+        {
+          value: 'grid',
+          label: (
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+            >
+              <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z" />
+            </svg>
+          ),
+          title: l.news.cardView,
+          ariaLabel: l.news.cardView
+        }
+      ]}
+      onChange={(view) => handleToggle(view as 'list' | 'grid')}
+    />
   );
 };
 

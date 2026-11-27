@@ -114,7 +114,7 @@ export default class EventService {
     startTime: Date;
     endTime: Date;
     newsPostId?: number;
-    location?: string;
+    location?: string | null;
     language?: EventLanguage | null;
   }) {
     return await prisma.event.create({
@@ -143,6 +143,7 @@ export default class EventService {
       fullDay: boolean;
       startTime: Date;
       endTime: Date;
+      location?: string | null;
       language?: EventLanguage | null;
       newsPostId?: number;
     }
@@ -159,6 +160,7 @@ export default class EventService {
         fullDay: event.fullDay,
         startTime: event.startTime,
         endTime: event.endTime,
+        location: event.location,
         language: event.language,
         newsPostId: event.newsPostId
       }

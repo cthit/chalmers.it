@@ -1,0 +1,52 @@
+.uploader {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fileActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.fileActions p {
+  display: inline-block;
+  flex-grow: 1;
+}
+
+.fileSize {
+  color: var(--on-surface-variant);
+  font-size: var(--text-small);
+  white-space: nowrap;
+}
+
+.fileWarning {
+  color: var(--warning);
+  flex-basis: 100%;
+  font-size: var(--text-small);
+}
+
+.fileWarningStrong {
+  color: var(--error);
+}
+
+.uploadSummary {
+  color: var(--on-surface-variant);
+  font-size: var(--text-small);
+  margin-bottom: 0.5rem;
+}

@@ -1,5 +1,13 @@
-// Default max size is 100 MiB
-const maxMediaSize = parseInt(process.env.MAX_MEDIA_SIZE ?? '104857600');
+import {
+  DEFAULT_MAX_MEDIA_SIZE_BYTES,
+  DEFAULT_MAX_UPLOAD_SIZE_BYTES,
+  parsePositiveIntEnv
+} from '@/utils/env';
+
+const maxMediaSizeBytes = parsePositiveIntEnv(
+  process.env.MAX_MEDIA_SIZE,
+  DEFAULT_MAX_MEDIA_SIZE_BYTES
+);
 
 export enum MediaType {
   Image = 'image',
@@ -7,9 +15,19 @@ export enum MediaType {
   Container = 'container'
 }
 
+export const VALID_UPLOAD_TYPES = Object.values(MediaType);
+
 export interface MediaMeta {
   type: MediaType;
   extension: string;
+}
+
+export type UploadRejectionReason = 'type' | 'size' | 'total';
+
+interface UploadLimitOptions {
+  currentTotalBytes?: number;
+  maxFileSizeBytes?: number;
+  maxUploadSizeBytes?: number;
 }
 
 const mimeTypes: { [key: string]: MediaMeta } = {
@@ -41,7 +59,28 @@ const mimeTypes: { [key: string]: MediaMeta } = {
  * Helper class for media operations common to client and server
  */
 export default class FileService {
-  static readonly maxMediaSize = maxMediaSize;
+  static readonly maxMediaSizeBytes = maxMediaSizeBytes;
+
+  static get maxUploadSizeBytes() {
+    return parsePositiveIntEnv(
+      process.env.MAX_UPLOAD_SIZE,
+      DEFAULT_MAX_UPLOAD_SIZE_BYTES
+    );
+  }
+
+  static formatBytes(bytes: number) {
+    if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
+
+    const units = ['B', 'KiB', 'MiB', 'GiB'];
+    let value = bytes;
+    let unit = 0;
+    while (value >= 1024 && unit < units.length - 1) {
+      value /= 1024;
+      unit++;
+    }
+
+    return `${parseFloat(value.toFixed(1))} ${units[unit]}`;
+  }
 
   /**
    * Calculate SHA-256 hash of file on server
@@ -71,7 +110,24 @@ export default class FileService {
 
   static checkValidFile(file: Blob | File, types: MediaType[]) {
     const meta = this.convertMimeType(file.type);
-    return file.size <= this.maxMediaSize && meta && types.includes(meta.type);
+    return (
+      file.size <= this.maxMediaSizeBytes && meta && types.includes(meta.type)
+    );
+  }
+
+  static getUploadRejection(
+    file: { type: string; size: number },
+    {
+      currentTotalBytes = 0,
+      maxFileSizeBytes = this.maxMediaSizeBytes,
+      maxUploadSizeBytes = this.maxUploadSizeBytes
+    }: UploadLimitOptions = {}
+  ): UploadRejectionReason | null {
+    const meta = this.convertMimeType(file.type);
+    if (!meta || !VALID_UPLOAD_TYPES.includes(meta.type)) return 'type';
+    if (file.size > maxFileSizeBytes) return 'size';
+    if (currentTotalBytes + file.size > maxUploadSizeBytes) return 'total';
+    return null;
   }
 
   static convertMimeType(mimeType: string): MediaMeta | null {

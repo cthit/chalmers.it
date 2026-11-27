@@ -1,37 +1,24 @@
 .toggle {
-  display: flex;
-  gap: 0.25rem;
-  background: var(--surface-container);
+  --segmented-background: var(--surface-container);
+  --segmented-container-padding: 0.25rem;
+  --segmented-gap: 0.25rem;
+  --segmented-radius: 6px;
   border: 1px solid var(--outline);
-  border-radius: 6px;
-  padding: 0.25rem;
 }
 
 .button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  color: var(--on-surface-variant);
-  border-radius: 4px;
-  cursor: pointer;
+  --segmented-aspect-ratio: 1;
+  --segmented-button-radius: 4px;
+  --segmented-color: var(--on-surface-variant);
+  --segmented-font-size: 1rem;
+  --segmented-height: 2rem;
+  --segmented-hover-background: var(--secondary-container);
+  --segmented-hover-color: var(--on-secondary-container);
+  --segmented-padding: 0;
   transition: all 0.2s ease;
 
-  &:hover {
-    background: var(--secondary-container);
-    color: var(--on-secondary-container);
-  }
-
-  &.active {
-    background: var(--primary-container);
-    color: var(--on-primary-container);
-  }
-
   svg {
-    width: 16px;
-    height: 16px;
+    height: 1rem;
+    width: 1rem;
   }
 }

@@ -1,0 +1,29 @@
+.saveBar {
+  align-items: center;
+  background: var(--surface-container);
+  border-top: 1px solid var(--outline-variant);
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 0;
+  position: sticky;
+  z-index: 10;
+}
+
+.saveStatus {
+  align-items: center;
+  color: var(--on-surface-variant);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--text-small);
+  gap: 0.5rem;
+}
+
+.saveActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
