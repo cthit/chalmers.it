@@ -286,10 +286,6 @@
       "item": "Item",
       "newItem": "New Item"
     },
-    "notifiers": {
-      "name": "Notifiers",
-      "language": "Language"
-    },
     "sponsors": {
       "name": "Sponsors",
       "link": "Open link",
